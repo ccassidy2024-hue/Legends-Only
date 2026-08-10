@@ -1,54 +1,62 @@
 # CLAUDE.md — Legends-Only / grainsys
 
-Persistent instructions for AI assistants working in this repository.
+Persistent instructions for AI assistants in this repository.
 
-## Project
+## Canonical path
 
-**Legends-Only**: mechanism-aware quantitative discovery for U.S. grain logistics. Goal: identify delayed physical/behavioral cascades, validate real mechanisms, and assess falsifiable trade theses. Negative results are valid.
+`C:\dev\Legends-Only` is the only development root. Do not create a second project root.
 
-**Not** a generic ML prediction project.
+## Document hierarchy
 
-Research chain:
+1. `PROJECT_BLUEPRINT.md` — original vision
+2. `BLUEPRINT_REVIEW.md` — methodological amendments (**wins** on methodology / milestone order)
+3. `WORKFLOW.md` — operating agreement
+4. This file + `.cursor/rules/project.mdc` — concise implementation rules
 
-`physical shock → operational response → participant adaptation → inventory/flow → market effect → possible underreaction → trade thesis`
+## Objective
 
-## Current phase
+Mechanism-aware discovery for U.S. grain logistics — not generic ML prediction.
+Negative results are valid.
 
-Repository scaffold only. Do **not** build the real screener, hunt datasets, fabricate data, ABMs, system-dynamics models, optimizers, trading systems, fancy UI, or deep learning unless the user explicitly authorizes that phase.
+Chain: physical/logistics shock → operational response → participant adaptation →
+inventory/flow → market → possible delayed underreaction → falsifiable trade thesis.
 
-## Hard research rules
+Separate always: what data show | why we think it | what we expect next | how traded.
 
-1. **Pairwise lag scans ≠ evidence.** Autocorrelated weekly series + many lags = severe false discovery.
-2. **Episode Ledger first.** Identify physical/logistics stress episodes without looking at subsequent market outcomes whenever practical.
-3. **Screening is exploratory only** (hypothesis-generating).
-4. **Flag accounting / near-accounting identities**; do not treat them as discoveries (e.g., basis ≈ transport cost).
-5. Prefer **residuals, persistence/duration, deviations** from expected relationships when justified.
-6. Include **substitution channels**: Gulf vs PNW/rail; U.S. vs Brazil origin.
-7. For dynamics, prefer **Jordà local projections** (direct shock-response), not chained pairwise correlations.
-8. Record **publication / information availability** for every time-dependent series. **No look-ahead.** Do not invent source IDs or release delays.
-9. Panel construction, as-of joins, lag direction, release timing → **synthetic tests with known ground truth**.
-10. Always separate: **what data show** | **why we think it happens** | **what we expect next** | **how it could be traded**.
+## Milestone order
 
-## Data rules
+0 setup → 1 Episode Ledger → 2 as-of panel → 3 exploratory screener → 4 local projections →
+5 mechanism + lit review → 6 stronger ID → 7 historical replay → 8 thesis or negative result.
 
-- `data/raw/` is **immutable** — never overwrite raw files.
-- One YAML per series under `catalog/series/`.
-- Large/raw data, outputs, notebooks, secrets, and env files are gitignored.
-- Do not invent metadata values.
+No early NetworkX cascade graph. No ABM / SD / optimizer / trading UI / DL scope creep.
+
+## Hard rules
+
+1. No look-ahead. Schema: `series_id, period_end, release_ts, value`. `release_ts` mandatory for real timed obs.
+2. `build_asof_panel(obs, anchors)` → `.values`, `.age_days`. Reject `release_ts > anchor`.
+3. `lag=+k` means X_t predicts Y_(t+k) (X leads Y). Defined once; enforce with synthetic tests.
+4. Screener is exploratory. Naive min p across lags ≠ ordinary significance. Prefer max-t / permutation correction.
+5. Episodes are the important research unit; identify from physical evidence before market outcomes when practical.
+6. Accounting / near-accounting identities are not discoveries; prefer residuals, duration, deviations.
+7. Seasonality is a major confounder; OOS transforms must not use future info.
+8. When testing X→Y, account for Y's own history where appropriate.
+9. Never silently interpolate across large missing periods.
+10. Transforms reproducible and documented.
+11. Export Sales ≠ Export Inspections; Grain Stocks ≠ fresh weekly info.
+12. Navigation-basin weather ≠ crop-growing-region weather.
+13. Substitution channels: Gulf vs PNW, barge vs rail, U.S. vs Brazil/other origins.
+14. No invented source IDs or release delays.
+15. No memo number unless regenerable from committed code (`make all`).
+16. Do not weaken panel/timing/lag tests — fix the implementation.
 
 ## Code layout
 
-- Package: `src/grainsys/` (`ingest`, `transforms`, `screening`, `modeling`, `utils`)
-- Tests: `tests/` with fixtures in `tests/fixtures/`
-- Config: `config/settings.yaml`
-- Episodes: `research/episodes/EPISODE_LEDGER.md`
-- Blueprint: `PROJECT_BLUEPRINT.md`
+`src/grainsys/`: `panel.py`, `catalog.py`, `ingest/`, `transforms/`, `screening/`, `modeling/`, `utils/`
 
-## Python
+One YAML per series under `catalog/series/`. Raw data immutable. Notebooks gitignored.
 
-- Python ≥ 3.11, src layout, pytest
-- Keep dependencies minimal (pandas, numpy, scipy, statsmodels, pyyaml, matplotlib, pytest)
+## Frozen A/B interface
 
-## Statement discipline
+Observations columns above + `build_asof_panel`. See `TASKS_A.md` / `TASKS_B.md`.
 
-Never conflate empirical description, causal interpretation, forward expectation, and tradeability in the same claim without labeling which is which.
+Changes to `panel.py`, screening lag logic, or core leakage tests need careful dual review.

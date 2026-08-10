@@ -1,3 +1,10 @@
 # Docs
 
-Project documentation lives here. Research rules and architecture are in `PROJECT_BLUEPRINT.md`, `CLAUDE.md`, and `.cursor/rules/project.mdc` at the repo root.
+| Path | Role |
+|------|------|
+| `EPISODE_METHODOLOGY.md` | How episodes are defined and used |
+| `decisions/` | Architecture Decision Records |
+| `sources/` | Source discovery notes (URLs, calendars) |
+
+Governing docs live at repo root: `PROJECT_BLUEPRINT.md`, `BLUEPRINT_REVIEW.md`,
+`WORKFLOW.md`, `CLAUDE.md`.

@@ -1,0 +1,37 @@
+# TASKS_A.md — Person A: data / plumbing
+
+## Ownership
+
+- Source verification and documentation (`docs/sources/`)
+- `catalog/series/*.yaml` (one file per series; no invented IDs/delays)
+- `src/grainsys/ingest/`
+- Release timing / vintage assumptions (recorded in YAML, never guessed in notebooks)
+- `src/grainsys/panel.py` and as-of panel construction
+- Episode physical-data research (`research/episodes/`)
+
+## Frozen interface to Person B
+
+```python
+# long-format observations
+columns = ["series_id", "period_end", "release_ts", "value"]
+
+# panel builder
+Panel = build_asof_panel(obs, anchors)  # .values, .age_days
+```
+
+Ship synthetic fixtures first so B is never blocked on real data.
+
+## Current milestone focus
+
+**Milestone 1 — Episode Ledger / pre-registration**
+
+- Populate episodes from documented physical/logistics evidence only
+- Leave market outcomes blank
+- Record contemporaneous knowability and sources
+
+Then **Milestone 2 — As-of panel + leakage protection** on real series once catalogued.
+
+## Review sensitivity
+
+Changes touching `src/grainsys/panel.py` or core leakage tests require
+especially careful human review with Person B. Do not weaken leakage tests.

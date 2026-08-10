@@ -1,0 +1,29 @@
+# _template.yaml — series metadata skeleton
+#
+# Copy this file to <series_id>.yaml and fill ONLY known values.
+# Do NOT invent source IDs, URLs, or release delays.
+# Leave unknowns as null or the string "unknown" / "TODO".
+
+series_id: null  # must match filename stem when real
+name: null
+description: null
+
+source: null
+source_identifier: null  # do not invent
+source_url: null
+
+frequency: null  # e.g. weekly, monthly, quarterly — only if known
+units: null
+geography: null
+
+economic_role: unknown  # trigger|constraint|constraint_price|stock|flow|signal|adaptation|outcome|unknown|TODO
+transformation: level
+
+period_definition: null  # what period_end means for this series
+release_schedule: null  # publication timing / information availability
+release_delay_days: null  # ONLY if actually known; never guess
+revision_behavior: null  # e.g. preliminary then revised; vintage source if any
+staleness_limit_days: null  # optional max age for as-of use
+
+verified: false
+notes: null

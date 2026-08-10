@@ -1,5 +1,10 @@
 # Legends-Only — Project Blueprint
 
+> **Document status:** This is the original project vision. Methodological
+> amendments and milestone reordering live in `BLUEPRINT_REVIEW.md`, which
+> takes precedence where the two conflict on methodology or milestone order.
+> Operating rules live in `WORKFLOW.md`. See `README.md` for the hierarchy.
+
 ## Objective
 
 Build a mechanism-aware quantitative discovery engine for the U.S. grain logistics system. Identify delayed physical and behavioral cascades, validate whether the strongest mechanisms are real, and determine whether any produce a falsifiable trade thesis.

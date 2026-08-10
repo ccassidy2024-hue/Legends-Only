@@ -5,38 +5,46 @@ alwaysApply: true
 
 # Legends-Only project rules
 
-## Identity
+## Canonical root
 
-Mechanism-aware discovery for U.S. grain logistics — not generic ML prediction.
+`C:\dev\Legends-Only` only. No second project root. No OneDrive development copies.
 
-Chain: physical shock → operational response → participant adaptation → inventory/flow → market → possible underreaction → trade thesis.
+## Hierarchy
 
-Negative results are valid.
+`PROJECT_BLUEPRINT.md` ← vision;
+`BLUEPRINT_REVIEW.md` ← methodology/milestone precedence;
+`WORKFLOW.md` ← operating agreement;
+this file ← concise enforcement.
 
-## Phase gate
+## Objective
 
-Scaffold first. Do not build screener, hunt/fabricate datasets, ABMs, SD models, optimizers, trading systems, fancy UI, or deep learning unless the user explicitly authorizes that work.
+Mechanism-aware U.S. grain logistics discovery — not generic ML.
+Chain: shock → ops response → adaptation → inventory/flow → market → possible underreaction → thesis.
+Negative results valid. Separate: data show | why | expect next | how traded.
 
-## Research constraints
+## Milestones
 
-- Pairwise lag scans are **exploratory only**, never statistical evidence (autocorrelation + multiple testing).
-- First artifact: **Episode Ledger**; identify episodes **blind to market outcomes** when practical.
-- Flag **accounting / near-accounting** relationships; they are not discoveries.
-- Prefer residuals, persistence/duration, deviations from expected relationships when justified.
-- Plan for substitution: Gulf vs PNW/rail; U.S. vs Brazil origin.
-- Prefer **Jordà local projections** for serious dynamics over chained pairwise correlations.
-- Every timed series needs **publication / as-of availability** metadata. No look-ahead. Do not invent source IDs or release delays.
-- Panel, as-of, lag direction, release timing → **synthetic ground-truth tests**.
-- Separate always: what data show | why we think it | what we expect next | how traded.
+0 setup → 1 Episode Ledger → 2 as-of panel → 3 exploratory screener → 4 LPs →
+5 mechanism+lit → 6 stronger ID → 7 replay → 8 thesis or negative result.
 
-## Data & code
+No early NetworkX graph, ABM, SD, optimizer, trading UI, or DL.
 
-- Never overwrite `data/raw/`.
-- One YAML per series in `catalog/series/`.
-- Package under `src/grainsys/` (ingest, transforms, screening, modeling, utils).
-- Python 3.11+, pytest, minimal deps (pandas/numpy/scipy/statsmodels/pyyaml/matplotlib).
-- Keep generated outputs, notebooks, secrets, env files out of git.
+## Non-negotiable
 
-## Scope discipline
+- Schema: `series_id, period_end, release_ts, value`; no look-ahead
+- `build_asof_panel` respects `release_ts`; expose `.values` / `.age_days`
+- `lag=+k` ⇒ X leads Y (X_t → Y_{t+k}); synthetic tests enforce
+- Screener exploratory; naive best-lag p ≠ validation; prefer max-t correction
+- Episodes from physical evidence before market outcomes when practical
+- Accounting identities ≠ discoveries
+- No invented source IDs / release delays
+- No silent interpolation; transforms reproducible
+- Export Sales ≠ Inspections; Grain Stocks not fresh weekly; basin ≠ crop weather
+- Substitution: Gulf/PNW, barge/rail, U.S./Brazil
+- Memo numbers must survive `make all`
+- Never weaken leakage/lag tests — fix code
 
-Prefer small, testable increments. Do not expand into execution, UI, or modeling frameworks ahead of authorized research phases.
+## Layout
+
+`src/grainsys/{panel.py,catalog.py,ingest,transforms,screening,modeling,utils}`
+`catalog/series/` one YAML each; `tests/fixtures/` synthetic only.

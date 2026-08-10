@@ -2,77 +2,96 @@
 
 Mechanism-aware quantitative discovery for the **U.S. grain logistics system**.
 
-The goal is to identify delayed physical and behavioral cascades, validate whether the strongest mechanisms are real, and determine whether any produce a falsifiable trade thesis. A **negative result is a valid outcome**.
+Goal: identify delayed physical and behavioral cascades, validate whether the
+strongest mechanisms are real, and determine whether any produce a falsifiable
+trade thesis. A **written negative result is a valid final outcome**.
 
 This is **not** a generic machine-learning prediction project.
 
-## Research chain
-
-```
-physical shock
+```text
+physical/logistics shock
 → operational response
 → participant adaptation
-→ downstream inventory / flow effect
+→ downstream inventory/flow effect
 → market effect
-→ possible market underreaction
-→ trade thesis
+→ possible delayed market underreaction
+→ falsifiable trade thesis
 ```
 
-## Current phase
+Always separate: **what the data show** | **why we think it happens** |
+**what we expect next** | **how it could potentially be traded**.
 
-**Repository scaffold only.**
+## Document hierarchy (source of truth)
 
-No real screener, dataset acquisition, fabricated series, agent-based models, system-dynamics models, optimization engines, trading execution systems, fancy UI, or deep-learning models yet.
+| Priority | Document | Governs |
+|----------|----------|---------|
+| 1 | `PROJECT_BLUEPRINT.md` | Original vision and research objective |
+| 2 | `BLUEPRINT_REVIEW.md` | Methodological amendments; **takes precedence** on methodology and milestone order where it conflicts with the original blueprint |
+| 3 | `WORKFLOW.md` | Operating agreement, repo conventions, collaboration, AI usage |
+| 4 | `CLAUDE.md` + `.cursor/rules/project.mdc` | Concise persistent implementation rules derived from the above |
 
-Next research artifact (when authorized): an **Episode Ledger** of independently identified physical/logistics stress episodes, identified without looking at subsequent market outcomes whenever practical.
+Intellectual history is preserved: the blueprint is not rewritten to pretend
+the later critique never existed.
 
-## Repository layout
+## Research milestone order
 
-| Path | Role |
-|------|------|
-| `catalog/series/` | One YAML metadata file per series |
-| `config/` | Project settings |
-| `data/raw/` | Immutable raw archives (never overwrite) |
-| `data/interim/` | Intermediate transforms |
-| `data/processed/` | Analysis-ready panels |
-| `research/episodes/` | Episode Ledger and related notes |
-| `src/grainsys/` | Python package (ingest, transforms, screening, modeling, utils) |
-| `tests/fixtures/` | Synthetic fixtures with known ground truth |
-| `outputs/` | Generated tables, charts, reports (gitignored contents) |
-| `docs/` | Project documentation |
+0. Repository / research setup ← **current foundation complete after reconciliation**
+1. Episode Ledger / pre-registration
+2. As-of panel + leakage protection (real series)
+3. Exploratory screener with honest multiple-testing treatment
+4. Direct shock-response modeling / local projections
+5. Mechanism research + literature review
+6. Stronger causal/dynamic identification where justified
+7. Historical replay
+8. Trade thesis **or** written negative result
 
-## Python environment
+Do **not** reintroduce a NetworkX cascade graph as an early milestone.
+Do **not** build ABM / system-dynamics / optimizer / trading UI / deep learning
+merely because they sound sophisticated.
 
-- Python **3.11+**
-- src-layout package `grainsys`
-- pytest
+## Canonical interfaces
+
+```python
+# observations
+["series_id", "period_end", "release_ts", "value"]
+
+# panel
+from grainsys.panel import build_asof_panel
+panel = build_asof_panel(obs, anchors)  # .values, .age_days
+```
+
+Lag convention (defined once): **`lag = +k` means X at t predicts Y at t+k**
+(X leads Y).
+
+## Setup
+
+Python 3.11+. Canonical clone path: `C:\dev\Legends-Only` (not OneDrive).
 
 ```bash
 python -m venv .venv
-# Windows:
-.venv\Scripts\activate
-# Unix:
-# source .venv/bin/activate
-
+# Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
-pytest
+make test          # or: pytest -q
+make all           # lint + tests (no proprietary data required)
 ```
 
-## Critical research rules (summary)
+## Ownership
 
-1. Naive pairwise lag scans are **not** statistical evidence (autocorrelation + multiple testing → false discovery).
-2. Episode identification should be **blind to market outcomes** when practical.
-3. Pairwise screening is **exploratory / hypothesis-generating only**.
-4. Explicitly flag **accounting / near-accounting** relationships; they are not independent discoveries.
-5. Prefer **residuals, persistence/duration, and deviations** from expected relationships when justified.
-6. Include **substitution channels** (Gulf vs PNW/rail; U.S. vs Brazil origin) in the system view.
-7. Prefer **Jordà local projections** (or similar direct shock-response methods) for serious dynamics.
-8. Every time-dependent series must record **publication / information availability** timing — no look-ahead.
-9. Panel construction, as-of joins, lag direction, and release timing require **synthetic tests with known ground truth**.
-10. Always separate: **what data show** / **why we think it happens** / **what we expect next** / **how it could be traded**.
+- Person A (data/plumbing): `TASKS_A.md`
+- Person B (statistics/models): `TASKS_B.md`
 
-See `PROJECT_BLUEPRINT.md`, `CLAUDE.md`, and `.cursor/rules/project.mdc` for the full persistent rules.
+## Critical rules (short)
+
+- No look-ahead: `release_ts` gates as-of membership
+- Screener is exploratory; naive best-lag p-values are not ordinary significance
+- Episode identification before market-outcome mining whenever practical
+- Accounting identities are not discoveries
+- Do not invent source IDs or release delays
+- No memo number unless regenerable via `make all` from a clean clone
+- Synthetic tests protect panel/timing/lag logic — never weaken them
 
 ## Status
 
-Scaffold created. Do not proceed beyond setup until explicitly authorized.
+Research foundation is tested (synthetic panel, leakage, lag recovery).
+**Next human task:** begin Milestone 1 — populate the Episode Ledger from
+documented physical/logistics evidence only (market outcomes blank).

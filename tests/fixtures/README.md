@@ -1,14 +1,8 @@
 # Test fixtures
 
-Synthetic datasets with **planted** relationships and known ground truth (lag, direction, as-of availability).
+Synthetic datasets with **planted** relationships and known ground truth
+(lag, direction, as-of availability).
 
-Use these to protect:
+Primary factory: `make_synthetic_panel.py`
 
-- lag direction
-- no future leakage
-- as-of availability
-- transformation reproducibility
-- missing-data handling
-- accounting-identity handling
-
-No real market data here.
+ALL fixture data is SYNTHETIC — not empirical market data.
