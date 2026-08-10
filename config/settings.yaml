@@ -1,0 +1,36 @@
+# Legends-Only / grainsys project settings
+# Paths are relative to the repository root unless absolute.
+
+project:
+  name: Legends-Only
+  package: grainsys
+  phase: repository_scaffold
+
+paths:
+  catalog_series: catalog/series
+  data_raw: data/raw
+  data_interim: data/interim
+  data_processed: data/processed
+  episode_ledger: research/episodes/EPISODE_LEDGER.md
+  outputs_tables: outputs/tables
+  outputs_charts: outputs/charts
+  outputs_reports: outputs/reports
+  fixtures: tests/fixtures
+
+data_policy:
+  # Raw files under data/raw must never be overwritten in place.
+  raw_immutable: true
+  # No look-ahead: every time-dependent series needs publication timing metadata.
+  require_publication_timing: true
+  # Do not invent source IDs or release delays.
+  invent_source_metadata: false
+
+research_policy:
+  pairwise_screening_is_exploratory_only: true
+  episode_identification_blind_to_market_outcomes: true
+  prefer_local_projections_for_dynamics: true
+  separate_statements:
+    - what_the_data_show
+    - why_we_think_it_happens
+    - what_we_expect_next
+    - how_it_could_be_traded

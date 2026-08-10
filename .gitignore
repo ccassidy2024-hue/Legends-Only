@@ -1,0 +1,78 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+pip-wheel-metadata/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+*.pem
+secrets/
+credentials.json
+*.key
+
+# IDE / editor
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+.cache/
+
+# Data: never commit raw/large/generated datasets
+# Keep directory structure via .gitkeep; ignore everything else under data/
+data/raw/**
+!data/raw/.gitkeep
+data/interim/**
+!data/interim/.gitkeep
+data/processed/**
+!data/processed/.gitkeep
+
+# Outputs: generated tables, charts, reports
+outputs/tables/**
+!outputs/tables/.gitkeep
+outputs/charts/**
+!outputs/charts/.gitkeep
+outputs/reports/**
+!outputs/reports/.gitkeep
+
+# Temporary / scratch
+tmp/
+temp/
+*.tmp
+*.temp
+*.log
+*.bak
+.scratch/
+
+# OS
+Desktop.ini
+$RECYCLE.BIN/

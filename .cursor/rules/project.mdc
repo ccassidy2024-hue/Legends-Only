@@ -1,0 +1,42 @@
+---
+description: Legends-Only / grainsys persistent research and architecture rules
+alwaysApply: true
+---
+
+# Legends-Only project rules
+
+## Identity
+
+Mechanism-aware discovery for U.S. grain logistics — not generic ML prediction.
+
+Chain: physical shock → operational response → participant adaptation → inventory/flow → market → possible underreaction → trade thesis.
+
+Negative results are valid.
+
+## Phase gate
+
+Scaffold first. Do not build screener, hunt/fabricate datasets, ABMs, SD models, optimizers, trading systems, fancy UI, or deep learning unless the user explicitly authorizes that work.
+
+## Research constraints
+
+- Pairwise lag scans are **exploratory only**, never statistical evidence (autocorrelation + multiple testing).
+- First artifact: **Episode Ledger**; identify episodes **blind to market outcomes** when practical.
+- Flag **accounting / near-accounting** relationships; they are not discoveries.
+- Prefer residuals, persistence/duration, deviations from expected relationships when justified.
+- Plan for substitution: Gulf vs PNW/rail; U.S. vs Brazil origin.
+- Prefer **Jordà local projections** for serious dynamics over chained pairwise correlations.
+- Every timed series needs **publication / as-of availability** metadata. No look-ahead. Do not invent source IDs or release delays.
+- Panel, as-of, lag direction, release timing → **synthetic ground-truth tests**.
+- Separate always: what data show | why we think it | what we expect next | how traded.
+
+## Data & code
+
+- Never overwrite `data/raw/`.
+- One YAML per series in `catalog/series/`.
+- Package under `src/grainsys/` (ingest, transforms, screening, modeling, utils).
+- Python 3.11+, pytest, minimal deps (pandas/numpy/scipy/statsmodels/pyyaml/matplotlib).
+- Keep generated outputs, notebooks, secrets, env files out of git.
+
+## Scope discipline
+
+Prefer small, testable increments. Do not expand into execution, UI, or modeling frameworks ahead of authorized research phases.
