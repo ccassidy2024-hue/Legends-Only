@@ -1,0 +1,23 @@
+# Source-coverage record template (archive existence / date-range only).
+#
+# Copy to a real filename ONLY when recording a coverage census row.
+# Do NOT store navigation-notice titles, summaries, or event content here.
+# Do NOT invent endpoints or districts — leave null until verified.
+
+schema_version: "0.1"
+record_kind: source_coverage
+
+# Required conceptual fields (see grainsys.discovery.coverage)
+source_family: null          # e.g. S1 — only when the sweep family is registered
+authority: null              # e.g. USACE — only when known
+district: null               # district / office name — do not invent
+vehicle: null                # publication vehicle name — do not invent
+endpoint: null               # archive URL or locator — do not invent
+earliest_available: null     # YYYY-MM-DD of earliest reachable listing/page, if known
+latest_available: null       # YYYY-MM-DD of latest reachable listing/page, if known
+retrieved_on: null           # YYYY-MM-DD when the coverage check was performed
+coverage_status: null        # present | absent | unknown — unknown is explicit, not silent
+notes: null                  # coverage logistics only; no event narratives
+
+# Forbidden in coverage records (enforced by validator):
+# event_name, episode_id, market_*, price_*, outcome_*, severity_class, etc.
