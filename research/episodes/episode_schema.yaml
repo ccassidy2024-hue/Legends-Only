@@ -1,0 +1,382 @@
+# episode_schema.yaml — machine-readable field spec for the Episode Ledger.
+#
+# SINGLE SOURCE OF TRUTH. `EPISODE_PROTOCOL.md` is the human-readable rendering;
+# on any discrepancy this file wins. Consumed by `grainsys.episodes`.
+#
+# requirement:
+#   always     required in every entry file, whatever the status
+#   accept     required when status == accepted
+#   conditional required when the stated condition holds
+#   optional   may be null / absent
+#   derived    MUST be null/empty in the file; written only by committed code
+#
+# Do not add fields without an ADR. Do not relax a rule to make CI green.
+
+schema_version: "1.1"
+supported_versions: ["1.0", "1.1"]
+
+# ---------------------------------------------------------------------------
+# Sample construction (pre-registered; see EPISODE_PROTOCOL.md sec. E.4)
+# ---------------------------------------------------------------------------
+sample:
+  primary_contamination_classes: [A, B]
+  extended_contamination_classes: [C]
+  excluded_contamination_classes: [D]
+  target_accepted_min: 15
+  target_accepted_max: 25
+  kill_condition_primary_sample_min: 6   # WORKFLOW.md: below this, say so and stop
+  # No privileged episodes-per-driver ratio. Primary inferential reporting:
+  # N_episodes and N_independent_driver_clusters. N_underlying_drivers is
+  # descriptive metadata only. Do not auto-delete physically distinct rows.
+  example_ids_excluded: ["EP-0000-000"]
+
+  # Starter examples for driver_class (NOT a closed enum — grow deliberately).
+  driver_class_examples:
+    - hydrological_low_water
+    - hydrological_high_water
+    - mechanical_infrastructure_failure
+    - tropical_cyclone_logistics
+    - rail_service_crisis
+    - channel_obstruction
+    - other_physical
+    - fictional_example_only
+
+# ---------------------------------------------------------------------------
+# Severity scoring (sec. D)
+# ---------------------------------------------------------------------------
+severity:
+  dimensions:
+    - d1_magnitude
+    - d2_duration
+    - d3_scope
+    - d4_throughput
+    - d5_restrictiveness
+  subscore_min: 0
+  subscore_max: 3
+  bands:                       # inclusive [lo, hi] on the 0-15 sum
+    S0: [0, 3]
+    S1: [4, 7]
+    S2: [8, 11]
+    S3: [12, 15]
+  boundary_review_margin: 1    # within N points of a band edge -> needs_review
+  completeness_floor: 0.6      # share of dimensions with evidence
+
+  # Deterministic ordinal mapping for the definitional dimension.
+  restrictiveness_ordinal:
+    unrestricted: 0
+    advisory: 0
+    partial_restriction: 1     # draft / tow-size / daylight-only / one-way
+    intermittent_closure: 2
+    full_closure: 3
+
+  # Percentile cutpoints remain UNREGISTERED until a Phase 0 / ADR decision.
+  # cutpoints_registered must stay false; severity_class/score stay null.
+  # Raw physical severity_metrics may still be collected. Do not invent cutpoints.
+  cutpoints_registered: false
+  cutpoints_adr: "docs/decisions/0002-episode-preregistration.md"
+  cutpoints_reference_period: null   # set only when Phase 0 ADR registers them
+  cutpoints_percentiles: [50, 90, 99]
+  cutpoints: {}                      # empty until registered
+
+  # How a derived severity_class was computed, once cutpoints exist.
+  # Full-sample percentile bands are ex_post_descriptive by default: they may
+  # use physical history after an episode and MUST NOT be labelled contemporaneous.
+  # A contemporaneous class is allowed only when registered cutpoints/methods use
+  # information available as of the episode's public_anchor (and metric as_of dates).
+  default_classification_kind: ex_post_descriptive
+  classification_kinds: [contemporaneous, ex_post_descriptive]
+
+  # severity_metrics[] are RAW physical evidence only. severity_class is DERIVED.
+  raw_evidence_role: raw_physical
+
+  prohibited_inputs:
+    - futures_price
+    - futures_spread
+    - cash_basis
+    - barge_freight_rate
+    - ocean_freight_rate
+    - export_premium
+    - volume_or_open_interest
+    - positioning
+    - market_commentary
+
+# ---------------------------------------------------------------------------
+# Controlled vocabularies
+# ---------------------------------------------------------------------------
+vocabularies:
+  status: [draft, needs_review, accepted, rejected, superseded, regime_context]
+  decision: [accept, reject, review]
+  event_class:
+    - low_water
+    - high_water_flood
+    - lock_outage
+    - channel_obstruction
+    - waterway_closure_other
+    - gulf_terminal_disruption
+    - hurricane_logistics
+    - rail_service_disruption
+    - port_infrastructure_outage
+    - bridge_or_landside_outage
+    - ice_or_seasonal_closure
+    - other_physical            # requires ADR before use
+  anticipation_status: [unscheduled, partially_anticipated, pre_announced_scheduled]
+  # Calendar uncertainty of the public_anchor day (not the same as date-vs-timestamp).
+  anchor_precision_days: [0, 1, 3, 7]
+  # What the primary source actually supports for public_anchor:
+  #   date       — calendar date only; do NOT invent a clock time
+  #   timestamp  — exact publication timestamp/timezone is documented
+  public_anchor_precision: [date, timestamp]
+  severity_class_kind: [contemporaneous, ex_post_descriptive]
+  anchor_agreement: [exact, within_precision, disagree]
+  growing_region_overlap: [none, minor, partial, substantial]
+  contamination_class: [A, B, C, D]
+  contamination_direction: [aggravating, attenuating, ambiguous]
+  crop_calendar_stage:
+    [pre_plant, planting, vegetative, pollination, grain_fill, harvest, post_harvest]
+  source_confidence: [high, medium, low]
+  source_tier: [1, 2]           # tier 3 may never appear as a source
+  discovery_origin: [sweep, llm, press, colleague, memory]
+  availability: ["yes", "no", "unknown"]
+  documented_use: [not_assessed, documented, documented_absent]
+  recorder: [A, B]
+  navigation_basin:
+    - lower_mississippi
+    - middle_mississippi
+    - upper_mississippi
+    - ohio
+    - illinois
+    - arkansas_white
+    - tennessee_cumberland
+    - missouri
+    - gulf_intracoastal
+    - columbia_snake
+    - great_lakes_seaway
+    - texas_gulf_coast
+    - rail_network            # non-waterway classes
+    - other                   # requires ADR
+    - fictional_blue_river    # example entry only
+  substitution_channel:
+    - alt_river_reach
+    - alt_inland_waterway
+    - rail_to_gulf
+    - rail_to_pnw
+    - truck_short_haul
+    - pnw_export
+    - alt_gulf_terminal
+    - texas_gulf
+    - great_lakes_seaway
+    - storage_on_farm
+    - storage_commercial
+    - export_deferral
+    - destination_switching
+    - origin_substitution_south_america
+  decision_reason:
+    R1:  "Anchor undatable (anchor_precision_days > 7)"
+    R2:  "Insufficient source tier / two-source rule fails"
+    R3:  "No documented material grain-logistics consequence (driver only)"
+    R4:  "Duplicate or subsumed by another episode"
+    R5:  "Too gradual - regime, not event"
+    R6:  "Outcome-selected (surfaced via market memory, unconfirmed by sweep)"
+    R7:  "Not publicly knowable at the anchor"
+    R8:  "Irreducible contamination (class D)"
+    R9:  "Physical evidence insufficient or Tier 1 sources contradictory"
+    R10: "Outside pre-registered sample period or source coverage"
+    R11: "Proposed post-freeze without an ADR"
+    R12: "Fabricated or unverifiable source"
+    R13: "Reviewer disagreement unresolved at freeze deadline"
+
+# ---------------------------------------------------------------------------
+# Fields
+# ---------------------------------------------------------------------------
+fields:
+
+  # -- identity and lifecycle ------------------------------------------------
+  - {name: schema_version,      type: str,  requirement: always, vocab: supported_versions}
+  - {name: example,             type: bool, requirement: optional,
+     notes: "true only for the fictional worked example; excluded from all samples"}
+  - {name: episode_id,          type: str,  requirement: always,
+     pattern: "^EP-[0-9]{4}-[0-9]{3}$", notes: "YYYY = anchor year; filename stem must start with this"}
+  - {name: slug,                type: str,  requirement: always, pattern: "^[a-z0-9-]+$"}
+  - {name: event_name,          type: str,  requirement: always,
+     notes: "physical and neutral; no market language"}
+  - {name: status,              type: enum, requirement: always, vocab: status}
+  - {name: event_class,         type: enum, requirement: always, vocab: event_class}
+  - {name: event_subclass,      type: str,  requirement: optional}
+  - {name: anticipation_status, type: enum, requirement: always, vocab: anticipation_status}
+  - {name: post_freeze,         type: bool, requirement: always, default: false}
+
+  # -- timing ---------------------------------------------------------------
+  - {name: public_anchor,        type: date, requirement: always, notes: "t = 0 (primary anchor); store as a date, not a fabricated midnight timestamp"}
+  - {name: public_anchor_precision, type: enum, requirement: always, vocab: public_anchor_precision,
+     notes: "date = date-level evidence only; timestamp = source documents an exact publication time"}
+  - {name: anchor_precision_days, type: int, requirement: always, vocab: anchor_precision_days,
+     notes: "uncertainty window around the anchor day (0/1/3/7); orthogonal to date-vs-timestamp"}
+  - {name: anchor_basis,         type: str,  requirement: always}
+  - {name: anchor_source_ref,    type: str,  requirement: always, ref_into: primary_sources}
+  - {name: anchor_ts,            type: datetime, requirement: conditional,
+     condition: "public_anchor_precision == timestamp",
+     notes: "required when precision is timestamp; MUST be null when precision is date — never invent a clock time"}
+  - {name: physical_onset,       type: date, requirement: conditional,
+     condition: "determinable from Tier 1 physical data"}
+  - {name: official_announcement, type: date, requirement: conditional,
+     condition: "an official notice exists"}
+  - {name: peak_severity_date,   type: date, requirement: conditional,
+     condition: "a severity metric has a datable maximum"}
+  - {name: end_date,             type: date, requirement: conditional,
+     condition: "ongoing_at_sample_end is false"}
+  - {name: end_date_basis,       type: str,  requirement: always}
+  - {name: relief_confirmed_date, type: date, requirement: optional}
+  - {name: ongoing_at_sample_end, type: bool, requirement: always, default: false}
+  - {name: duration_days,        type: int,  requirement: derived}
+
+  # -- geography and mechanism ----------------------------------------------
+  - {name: navigation_basin,      type: list, item_vocab: navigation_basin,
+     requirement: always, min_items: 1}
+  - {name: river_reaches,         type: list, requirement: conditional,
+     condition: "event_class in {low_water, high_water_flood, lock_outage, channel_obstruction, waterway_closure_other, ice_or_seasonal_closure}"}
+  - {name: geography,             type: str,  requirement: always}
+  - {name: states,                type: list, requirement: always, min_items: 1}
+  - {name: ports_or_nodes,        type: list, requirement: conditional,
+     condition: "event_class in {gulf_terminal_disruption, port_infrastructure_outage, rail_service_disruption, bridge_or_landside_outage}"}
+  - {name: growing_region_overlap, type: enum, requirement: always, vocab: growing_region_overlap}
+  - {name: growing_regions,       type: list, requirement: conditional,
+     condition: "growing_region_overlap != none"}
+  - {name: affected_infrastructure, type: list, requirement: always, min_items: 1}
+  - {name: physical_mechanism,    type: str,  requirement: always, max_words: 150,
+     notes: "what physically happened and what it prevented; no market language"}
+
+  # -- severity -------------------------------------------------------------
+  # severity_metrics = RAW physical evidence (river stage, draft, closure days,
+  # capacity offline, backlog, tonnage restriction, ...). Never market prices.
+  - {name: severity_metrics,      type: list, requirement: always, min_items_accept: 2,
+     item_fields: [dimension, name, value, units, as_of_date, source_ref, quote_ref],
+     notes: "RAW physical evidence only; humans record these"}
+  - {name: severity_subscores,    type: obj,  requirement: derived}
+  - {name: severity_score,        type: int,  requirement: derived}
+  - {name: severity_class,        type: enum, requirement: derived,
+     notes: "DERIVED ordinal; null until Phase 0 cutpoints are registered"}
+  - {name: severity_class_kind,   type: enum, requirement: derived, vocab: severity_class_kind,
+     notes: "null while unscored; contemporaneous vs ex_post_descriptive when scored"}
+  - {name: severity_completeness, type: float, requirement: derived}
+
+  # -- sources --------------------------------------------------------------
+  - {name: primary_sources,   type: list, requirement: always, min_tier1_accept: 2,
+     item_fields: [ref, tier, publisher, title, identifier, url, retrieved_on,
+                   sha256, archive_path, quote, supports]}
+  - {name: secondary_sources, type: list, requirement: optional,
+     item_fields: [ref, tier, publisher, title, identifier, url, retrieved_on,
+                   sha256, archive_path, quote, supports]}
+  - {name: discovery_trail,   type: list, requirement: always, min_items: 1,
+     item_fields: [origin, detail]}
+  - {name: source_conflicts,  type: list, requirement: optional,
+     notes: "any entry forces needs_review"}
+  - {name: source_confidence, type: enum, requirement: always, vocab: source_confidence,
+     notes: "'low' may never be accepted"}
+
+  # -- contamination --------------------------------------------------------
+  - {name: crop_contamination_class,  type: enum, requirement: always, vocab: contamination_class}
+  - {name: macro_contamination_class, type: enum, requirement: always, vocab: contamination_class}
+  - {name: contamination_rationale,   type: str,  requirement: conditional,
+     condition: "either contamination class in {C, D}"}
+  - {name: contamination_direction,   type: enum, requirement: always, vocab: contamination_direction}
+  - {name: crop_calendar_stage,       type: enum, requirement: always, vocab: crop_calendar_stage}
+  - {name: concurrent_shocks,         type: list, requirement: always,
+     notes: "may be empty only when sweep_performed is true"}
+  - {name: sweep_performed,           type: bool, requirement: always}
+  - {name: sample_membership,         type: enum, requirement: derived}
+
+  # -- substitution ---------------------------------------------------------
+  - {name: substitution_channels, type: list, requirement: always, min_items_accept: 3,
+     item_fields: [channel, available, basis, documented_use, source_ref],
+     notes: "documented_use may leave not_assessed; never inferred from flow data"}
+  - {name: substitution_state,    type: obj,  requirement: always,
+     obj_fields: [great_lakes_season_open, sa_export_season_active,
+                  harvest_window, concurrent_substitute_disruption]}
+
+  # -- knowability and independence -----------------------------------------
+  - {name: publicly_knowable_at_anchor, type: bool, requirement: always,
+     must_equal_for_accept: true}
+  - {name: publication_vehicle,     type: str,  requirement: always}
+  - {name: knowability_evidence_ref, type: str, requirement: always}
+  - {name: episode_independence_notes, type: str, requirement: always}
+  - {name: driver_class,            type: str,  requirement: always,
+     notes: "broad causal-driver category; grow deliberately via sweeps/RULINGS — not a closed premature enum"}
+  - {name: underlying_driver_id,    type: str,  requirement: always,
+     notes: "stable id for the underlying physical shock; distinct episodes may share a driver"}
+  - {name: cluster_id,              type: str,  requirement: always,
+     notes: "statistical dependence grouping; DEFAULT = underlying_driver_id unless documented otherwise"}
+  - {name: parent_episode_id,       type: str,  requirement: always, nullable: true,
+     notes: "null unless this is a child entry under H5"}
+  - {name: related_episode_ids,     type: list, requirement: always}
+  - {name: dedup_rule_applied,      type: str,  requirement: always,
+     notes: "which A.5 / H rule produced this partition"}
+
+  # -- governance -----------------------------------------------------------
+  - {name: market_outcomes_reviewed, type: bool, requirement: always,
+     must_equal_pre_freeze: false, notes: "true before freeze FAILS the build"}
+  - {name: outcome_exposure_log, type: list, requirement: always,
+     notes: "may be empty; accidental exposure is logged, not hidden"}
+  - {name: recorded_by,   type: enum, requirement: always, vocab: recorder}
+  - {name: recorded_date, type: date, requirement: always}
+  - {name: reviewed_by,   type: enum, requirement: conditional, vocab: recorder,
+     condition: "status in {accepted, rejected}", must_differ_from: recorded_by}
+  - {name: reviewed_date, type: date, requirement: conditional,
+     condition: "status in {accepted, rejected}"}
+  - {name: anchor_agreement, type: enum, requirement: conditional, vocab: anchor_agreement,
+     condition: "status in {accepted, rejected}"}
+  - {name: decision,      type: enum, requirement: always, vocab: decision}
+  - {name: decision_reasons, type: list, requirement: conditional, item_vocab: decision_reason,
+     condition: "decision in {reject, review}"}
+  - {name: researcher_notes, type: str, requirement: optional}
+  - {name: preregistration_frozen_at, type: datetime, requirement: derived}
+  - {name: freeze_commit,  type: str, requirement: derived}
+  - {name: content_hash,   type: str, requirement: derived}
+
+# ---------------------------------------------------------------------------
+# Validation rules enforced by grainsys.episodes
+# ---------------------------------------------------------------------------
+rules:
+  errors:
+    - {id: E01, rule: "schema_version must be in supported_versions"}
+    - {id: E02, rule: "episode_id must match pattern and prefix the filename"}
+    - {id: E03, rule: "episode_id must be unique across entries"}
+    - {id: E04, rule: "all always-required fields present and non-null"}
+    - {id: E05, rule: "enum fields must use the controlled vocabulary"}
+    - {id: E06, rule: "derived fields must be null/empty in the entry file"}
+    - {id: E07, rule: "market_outcomes_reviewed must be false before the freeze tag"}
+    - {id: E08, rule: "anchor_precision_days must be one of 0, 1, 3, 7"}
+    - {id: E09, rule: "date ordering: physical_onset <= public_anchor <= end_date; peak_severity_date within [public_anchor, end_date]"}
+    - {id: E10, rule: "accepted requires >= 2 tier-1 primary_sources"}
+    - {id: E11, rule: "every source needs url, retrieved_on, sha256, quote, supports"}
+    - {id: E12, rule: "accepted requires >= 2 severity_metrics"}
+    - {id: E13, rule: "accepted requires >= 3 substitution_channels"}
+    - {id: E14, rule: "accepted requires publicly_knowable_at_anchor == true"}
+    - {id: E15, rule: "accepted requires source_confidence != low"}
+    - {id: E16, rule: "accepted/rejected requires reviewed_by != recorded_by"}
+    - {id: E17, rule: "reject/review requires >= 1 decision_reason from the code list"}
+    - {id: E18, rule: "conditional fields required when their condition holds"}
+    - {id: E19, rule: "concurrent_shocks may be empty only when sweep_performed is true"}
+    - {id: E20, rule: "anchor_source_ref must resolve to a primary_sources ref"}
+    - {id: E21, rule: "severity_metrics dimensions must be in the dimension list"}
+    - {id: E22, rule: "no severity metric name may match a prohibited market input"}
+    - {id: E23, rule: "physical_mechanism <= 150 words"}
+    - {id: E24, rule: "source tier must be 1 or 2 (tier 3 may never be cited)"}
+    - {id: E25, rule: "example entries may not have status accepted outside the example id list"}
+    - {id: E26, rule: "ledger generated summary must be current (make episodes-write)"}
+    - {id: E27, rule: "public_anchor_precision=date requires anchor_ts null; timestamp requires anchor_ts"}
+    - {id: E28, rule: "severity_class_kind contemporaneous cannot use metric as_of_date after public_anchor"}
+    - {id: E29, rule: "hand-entered severity_class_kind is forbidden (derived only)"}
+  warnings:
+    - {id: W01, rule: "anchor_precision_days in {4..7} -> needs_review"}
+    - {id: W02, rule: "single tier-1 source or source_confidence medium -> needs_review"}
+    - {id: W03, rule: "contamination class C or D on either axis -> needs_review"}
+    - {id: W04, rule: "severity_score within boundary_review_margin of a band edge"}
+    - {id: W05, rule: "severity_completeness below completeness_floor"}
+    - {id: W06, rule: "discovery_trail origin memory/llm without a sweep entry"}
+    - {id: W07, rule: "two accepted entries share a cluster_id"}
+    - {id: W08, rule: "source_conflicts non-empty"}
+    - {id: W09, rule: "anchor_agreement == disagree"}
+    - {id: W10, rule: "accepted count outside [target_accepted_min, target_accepted_max]"}
+    - {id: W11, rule: "multiple accepted episodes share an underlying_driver_id (preserve rows; N_underlying_drivers is descriptive)"}
+    - {id: W12, rule: "primary sample below kill_condition_primary_sample_min"}
+    - {id: W15, rule: "cluster_id != underlying_driver_id without documented independence notes"}
