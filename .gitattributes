@@ -1,0 +1,21 @@
+# Cross-platform text / line-ending policy
+# Prefer LF for source-controlled text so Windows autocrlf does not create
+# spurious working-tree churn. Do not renormalize the whole history unless a
+# human explicitly requests an isolated EOL-only commit.
+
+* text=auto eol=lf
+
+# Windows scripts that conventionally use CRLF when present
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=lf
+
+# Keep binaries untouched
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.parquet binary
+*.zip binary
+*.gz binary

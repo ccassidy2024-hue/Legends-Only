@@ -1,55 +1,80 @@
 # Episode Methodology
 
+**The operative document is `research/episodes/EPISODE_PROTOCOL.md`.** This page
+is the short summary; on any conflict, the protocol and
+`research/episodes/episode_schema.yaml` win.
+
 ## Purpose
 
-The Episode Ledger is the pre-registration unit for mechanism research in
-Legends-Only. Weekly series are highly autocorrelated; independent stress
-episodes are closer to the effective sample for cascade questions.
+The Episode Ledger is the pre-registration unit for mechanism research. Weekly
+series are highly autocorrelated; independent physical stress episodes are much
+closer to the effective sample for cascade questions
+(`BLUEPRINT_REVIEW.md` §1).
 
 ## Order of work
 
-1. Identify physical/logistics stress from operational evidence.
-2. Record contemporaneously knowable information and sources.
-3. Leave market outcomes blank during initial identification.
-4. Only later, in a labeled pass, document market outcomes and test mechanisms.
+1. Pre-register the rules — thresholds, severity cutpoints, event windows — and
+   tag them, before writing down a single candidate.
+2. Generate candidates by mechanically sweeping primary sources. Never from
+   memory: recall of grain events is filtered through market salience, which is
+   outcome selection with extra steps.
+3. Verify physical evidence, fix the anchor, score severity from physical
+   metrics, assess contamination and substitution.
+4. Second-researcher review, then freeze.
+5. Only after the freeze tag may market outcomes be examined, in an explicitly
+   labelled pass.
 
 ## What counts as an episode
 
-A dated interval when the grain logistics system experienced a material
-physical or operational stress that could, in principle, propagate through:
+A dated interval when a documented physical or operational constraint
+materially degraded a U.S. grain logistics corridor's capability to move, load,
+transfer or hold grain, with an anchor date that was publicly observable at the
+time.
 
-physical/logistics shock → operational response → participant adaptation →
-inventory/flow → market effect → possible delayed underreaction.
-
-Candidate classes include Mississippi low-water events, navigation-basin
-precipitation shocks, lock closures, barge disruptions, Gulf terminal
-disruptions, logistics-affecting hurricanes, rail disruptions, and extreme
-congestion.
+A gauge reading or storm track is a **driver**, not an episode. It becomes an
+episode only when a primary source documents an operational consequence.
 
 ## Identification discipline
 
-- Prefer evidence that does not require looking at futures/cash outcomes.
-- Start date = first **publicly observable** constraint date when practical.
-- Severity from physical metrics only.
-- Explicitly log confounders (drought that also hits yields; simultaneous
-  Panama Canal limits; macro shocks; etc.).
-- Distinguish navigation-basin weather from crop-growing-region weather.
-- Record substitution options: Gulf vs PNW, barge vs rail, U.S. vs Brazil /
-  other origins.
-- Export Sales ≠ Export Inspections; Grain Stocks are slow/revised — do not
-  treat them as fresh weekly signals.
+- `public_anchor` (first publicly observable date) is t = 0; physical onset,
+  official announcement and peak severity are recorded separately.
+- `public_anchor_precision` records whether the source supports a **date** or an
+  exact **timestamp**. Date-only evidence must not invent a clock time. Primary
+  mapping: first analysis anchor **strictly after** the public_anchor date
+  (`first_usable_analysis_anchor`).
+- Severity metrics are **raw physical evidence**; `severity_class` is **derived**
+  and stays null until Phase 0 cutpoints are registered. Ex-post descriptive
+  classes must not masquerade as contemporaneous.
+- Primary reporting: `N_episodes` and `N_independent_driver_clusters`.
+  `N_underlying_drivers` is descriptive. Default
+  `cluster_id = underlying_driver_id`. Preserve physically distinct rows.
+- Severity from physical metrics only — never prices, and never barge freight
+  rates, which are a price.
+- Navigation-basin geography is recorded separately from growing-region
+  geography; that distinction is what makes the precipitation instrument
+  defensible (`BLUEPRINT_REVIEW.md` §5).
+- Contamination classes stratify the sample rather than filtering it after the
+  fact.
+- Substitution channels record ex-ante availability; usage only where
+  documented.
+- Export Sales ≠ Export Inspections; Grain Stocks are slow and revised.
 
-## Relationship to screening and modeling
+## Enforcement
+
+`python -m grainsys.episodes` (in `make all`) validates every entry against the
+schema, refuses to let a human hand-assign severity, regenerates the ledger
+summary, and fails the build if any entry has `market_outcomes_reviewed: true`
+before the freeze.
+
+## Relationship to screening and modelling
 
 - Pairwise screening around episodes is exploratory / hypothesis-generating.
-- Serious dynamics should prefer direct shock-response methods (e.g., Jordà
-  local projections) over chained pairwise correlations.
-- Accounting identities are not discoveries; prefer residuals, duration, and
-  deviations from expected relationships when justified.
+- Serious dynamics use direct shock-response methods (Jordà local projections)
+  off an identified shock, not chained pairwise correlations.
+- Accounting identities are not discoveries; prefer residuals, duration and
+  deviations.
 
 ## Statement separation
 
-Always keep separate: what the data show | why we think it happens | what we
-expect next | how it could be traded.
-
-A written negative result is a valid final outcome.
+Always separate: what the data show | why we think it happens | what we expect
+next | how it could be traded. A written negative result is a valid outcome.

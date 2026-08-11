@@ -1,144 +1,124 @@
 # Episode Ledger (pre-registration)
 
-Hand-built primarily from **physical / logistics evidence**, before examining
-downstream market outcomes whenever practical.
+The project's pre-registration artifact. Built from **physical / logistics
+evidence only**, before any market outcome is examined.
 
-This table is the project's pre-registration artifact. Effective sample size for
-mechanism work is closer to the number of independent episodes than to the
-number of weekly observations.
+Effective sample size for mechanism work is the number of *independent
+episodes* — closer to the driver count than to the number of weekly rows
+(`BLUEPRINT_REVIEW.md` §1). This table is that sample.
 
-During initial identification, **market outcomes remain intentionally blank**.
+| Artifact | Role |
+|---|---|
+| `EPISODE_PROTOCOL.md` | **How to research an episode.** Rules, tiers, anchors, severity, dedup |
+| `episode_schema.yaml` | Machine-readable field spec — single source of truth |
+| `ADMISSION_CHECKLIST.md` | The one-page gate applied per candidate |
+| `entries/*.yaml` | One file per candidate, accepted **and** rejected |
+| `RULINGS.md` | Append-only precedent log |
+| This file | Ledger of record + generated summary |
 
 Do not invent sources, dates, or release delays. Do not populate episodes from
-memory during scaffolding — add rows only from documented physical evidence.
-
-See also: `docs/EPISODE_METHODOLOGY.md`.
-
----
-
-## Identification rules
-
-1. Define episodes from physical/logistics stress, not from market moves.
-2. Prefer contemporaneously knowable information; record what was knowable as-of which dates.
-3. Assign severity from physical metrics only (stage, closures, tonnage capacity), never from the size of a price move.
-4. Log confounders and exclusion-restriction concerns explicitly.
-5. Note substitution channels (PNW, rail, Brazil/other origins) when relevant.
-6. Flag crop-production contamination risk for navigation-basin weather episodes.
-7. Once market data has been inspected for a research pass, new episode definitions require an ADR.
-
-## Candidate event classes (not yet populated as episodes)
-
-- Mississippi low-water events
-- Ohio / Upper Mississippi navigation-basin precipitation shocks
-- Lock closures
-- Barge disruptions
-- Gulf terminal disruptions
-- Hurricanes affecting logistics infrastructure
-- Rail disruptions
-- Extreme logistics congestion
+memory — candidates come from the Phase 1 source sweeps
+(`EPISODE_PROTOCOL.md` §J), never from recall, because recall of grain events is
+filtered through market salience.
 
 ---
 
-## Ledger summary
+## Status
 
-| episode_id | event_name | event_class | start_date | end_date | geography | severity | defined_before_market_inspection | market_outcomes |
-|------------|------------|-------------|------------|----------|-----------|----------|----------------------------------|-----------------|
-|            |            |             |            |          |           |          |                                  | *blank during pre-registration* |
+| Item | State |
+|---|---|
+| Protocol | drafted, pending ADR-0002 acceptance |
+| Phase 0 — rules pre-registered (thresholds, cutpoints, windows) | **not started** |
+| Phase 1 — source sweeps | not started |
+| Candidates recorded | 0 (plus 1 fictional example, excluded) |
+| Pre-registration freeze | **not frozen** — no market data may be opened |
+| Freeze tag | — |
+| Freeze commit | — |
 
----
+## Standing rules
 
-## Episode detail template
+1. Episodes are defined from physical/logistics stress, never from market moves.
+2. `public_anchor` — the first publicly observable date — is t = 0. Physical
+   onset, official announcement and peak severity are recorded separately and
+   used only as pre-registered robustness anchors.
+3. Severity comes from physical metrics only. Barge freight rates are a
+   **price**, not a severity metric.
+4. `market_outcomes_reviewed` stays `false` on every entry until the freeze tag
+   exists. The validator fails the build otherwise.
+5. Contamination classes stratify the sample (Sample P / Sample X); they are
+   pre-registered, not applied after the fact.
+6. Substitution channels record ex-ante *availability*; usage only where a
+   contemporaneous source documents it.
+7. Rejected candidates are retained as files. Deleting them destroys the audit
+   trail that shows the ledger was not curated.
+8. After the freeze, any new or altered episode requires an ADR and is analysed
+   as a separately labelled sample.
 
-Copy one block per episode. Fill only evidence-backed fields.
+## Generated summary
 
-### episode_id
+Regenerate with `make episodes-write`. `make episodes` fails if this block is
+stale, so the table is always reproducible from committed entries
+(`CLAUDE.md` hard rule 15).
 
-`EP-YYYY-###` (assign when recording a real episode)
+<!-- BEGIN GENERATED: episode-summary -->
 
-### event_name
+<!-- Regenerate with `make episodes-write`. Do not hand-edit this block. -->
 
-### event_class
+| episode_id | event_name | event_class | public_anchor | end_date | navigation_basin | severity_class | sample | status | outcomes_reviewed |
+|---|---|---|---|---|---|---|---|---|---|
+| *(none yet)* | | | | | | | | | *blank during pre-registration* |
 
-One of the candidate classes above, or a clearly named new class.
+**Independence audit (protocol H.2)**
 
-### start_date / end_date
+- N_episodes (accepted rows): **0**
+- N_independent_driver_clusters: **0** (primary inferential effective-N concept)
+- N_underlying_drivers (descriptive only): **0**
+- max episodes in one cluster: **0** · max episodes for one driver: **0**
+- primary sample (Sample P): **0** · extended (Sample X): **0**
+- shared driver present: **false** · below kill condition: **n/a**
 
-`YYYY-MM-DD` — first date the constraint was **publicly observable**, not merely when it physically began if that was unknowable.
+Primary reporting: N_episodes and N_independent_driver_clusters. Do not auto-drop physically distinct rows that share a driver.
 
-### geography
+Excluded from counts: 1 fictional example entry/entries.
 
-### navigation_basin
+<!-- END GENERATED: episode-summary -->
 
-If applicable (e.g., Lower Mississippi, Ohio, Upper Mississippi, Columbia-Snake). Distinguish navigation-basin geography from crop-growing-region geography.
+## Freeze record
 
-### physical_shock
+Completed at Phase 8. Until then this section stays empty.
 
-What physically happened.
+| Item | Value |
+|---|---|
+| `preregistration_frozen_at` | — |
+| `freeze_commit` | — |
+| Git tag | — |
+| Accepted episodes / distinct drivers | — |
+| Sample P size | — |
+| Pre-registered event window and horizons | — |
+| Robustness anchor set | — |
 
-### severity
+## Adversarial pass (required before freeze)
 
-From physical/logistics evidence only.
+Verbatim response from a different model family, per `EPISODE_PROTOCOL.md` §L.4,
+with each point dispositioned.
 
-### physical_logistics_evidence
+*(not yet run)*
 
-Observable operational facts (flows, inventories, congestion, outages, stages, lock status, terminal status, etc.).
+## Inter-rater agreement
 
-### information_available_at_the_time
+Recorded at freeze, per §K.3.
 
-What was knowable contemporaneously, with publication timing where known.
-
-### source_citations_urls
-
-Named sources only if known. No fabricated IDs.
-
-### lock_river_terminal_rail_impacts
-
-### crop_production_contamination_risk
-
-Especially for weather: does the shock also hit yields/acreage, or is it primarily a transport/navigation shock?
-
-### other_contemporaneous_macro_agricultural_shocks
-
-### pnw_substitution_available
-
-yes / no / unknown — with notes
-
-### rail_substitution_available
-
-yes / no / unknown — with notes
-
-### brazil_or_other_origin_substitution_available
-
-yes / no / unknown — with notes
-
-### possible_confounders
-
-### exclusion_restriction_concerns
-
-### episode_defined_before_market_inspection
-
-yes / no
-
-### researcher_notes
-
-### market_outcomes
-
-**Intentionally left blank during initial identification.**
-
-Populate only in a later, explicitly labeled outcome-documentation pass — never as the reason the episode was selected.
-
----
+| Metric | Value |
+|---|---|
+| Exact anchor agreement | — |
+| Mean absolute anchor difference (days) | — |
+| Severity-class agreement | — |
+| Calibration-set entries dual-coded | — |
 
 ## Four-statement reminder
 
-When later analyzing an episode, keep separate:
-
-1. What the data show
-2. Why we think it happens
-3. What we expect next
-4. How it could be traded
-
----
+When later analysing an episode, keep separate: what the data show | why we
+think it happens | what we expect next | how it could be traded.
 
 ## Change log
 

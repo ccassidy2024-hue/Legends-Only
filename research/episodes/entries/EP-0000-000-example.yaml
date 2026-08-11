@@ -1,0 +1,223 @@
+# EP-0000-000 — FICTIONAL worked example. Not a historical event.
+# Every river, lock, port, agency, document number, hash and URL below is invented.
+# URLs use the reserved .invalid TLD so they can never resolve.
+# `example: true` excludes this entry from every sample count.
+# Structure reference for research/episodes/EPISODE_PROTOCOL.md section M.
+
+schema_version: "1.1"
+example: true                      # FICTIONAL — never counted in any sample
+
+episode_id: EP-0000-000
+slug: example
+event_name: "FICTIONAL — Blue River Lock 99 lower gate failure"
+status: accepted
+event_class: lock_outage
+event_subclass: "miter gate mechanical failure"
+anticipation_status: unscheduled
+post_freeze: false
+
+# ---- timing -------------------------------------------------------------
+public_anchor: 2099-03-14
+public_anchor_precision: date      # source supports a calendar date only
+anchor_precision_days: 1
+anchor_basis: >-
+  FICTIONAL District navigation notice NTNI-0000-99, published 2099-03-14,
+  states Lock 99 is closed to all traffic effective immediately.
+anchor_source_ref: src_ntni_0000_99
+anchor_ts: null                    # date-only evidence — do not invent a clock time
+physical_onset: 2099-03-13         # gate failure logged in fictional LPMS record
+official_announcement: 2099-03-14
+peak_severity_date: 2099-03-19     # maximum queued tows in fictional record
+end_date: 2099-04-02
+end_date_basis: >-
+  FICTIONAL District notice NTNI-0000-104 documents return to unrestricted
+  two-way traffic; no further restriction notices for 21+ days.
+relief_confirmed_date: 2099-04-02
+ongoing_at_sample_end: false
+
+# ---- geography and mechanism -------------------------------------------
+navigation_basin: [fictional_blue_river]
+river_reaches: ["Blue River Mile 000-000 (FICTIONAL)"]
+geography: "Fictional Blue River, single pool above Lock 99"
+states: [ZZ]
+ports_or_nodes: ["Port of Nowhere (FICTIONAL)"]
+growing_region_overlap: none
+growing_regions: []
+affected_infrastructure:
+  - "Lock 99 (FICTIONAL) lower miter gate"
+  - "Nowhere Transfer Elevator (FICTIONAL)"
+physical_mechanism: >-
+  A lower miter gate at Lock 99 fractured during a lockage, preventing chamber
+  operation. Lock 99 is the only navigable passage on this fictional reach, so
+  all loaded and empty barge traffic between the upper river and the transfer
+  elevator halted. Tows queued above and below the lock; no alternative water
+  route exists around this pool. The constraint was mechanical and unrelated to
+  river stage, precipitation, or any agricultural condition.
+
+# ---- severity: raw metrics in; class out (computed) ---------------------
+severity_metrics:
+  - dimension: d2_duration
+    name: days_closed_total
+    value: 19
+    units: days
+    as_of_date: 2099-04-02
+    source_ref: src_ntni_0000_104
+    quote_ref: q_relief_notice
+  - dimension: d3_scope
+    name: locks_affected
+    value: 1
+    units: count
+    as_of_date: 2099-03-14
+    source_ref: src_ntni_0000_99
+    quote_ref: q_closure_notice
+  - dimension: d4_throughput
+    name: tows_queued_peak
+    value: 00
+    units: count
+    as_of_date: 2099-03-19
+    source_ref: src_lpms_0000
+    quote_ref: q_queue_record
+  - dimension: d5_restrictiveness
+    name: operating_condition
+    value: full_closure
+    units: ordinal
+    as_of_date: 2099-03-14
+    source_ref: src_ntni_0000_99
+    quote_ref: q_closure_notice
+severity_subscores: {}             # DERIVED — leave empty, code fills it
+severity_score: null               # DERIVED — null until Phase 0 cutpoints registered
+severity_class: null               # DERIVED ordinal classification
+severity_class_kind: null          # DERIVED: contemporaneous | ex_post_descriptive | null
+severity_completeness: null        # DERIVED
+
+# ---- sources ------------------------------------------------------------
+primary_sources:
+  - ref: src_ntni_0000_99
+    tier: 1
+    publisher: "FICTIONAL Corps District"
+    title: "Notice to Navigation Interests NTNI-0000-99 (FICTIONAL)"
+    identifier: "NTNI-0000-99"
+    url: "https://fictional-district.example.invalid/ntni/0000-99"
+    retrieved_on: 2099-05-01
+    sha256: "0000000000000000000000000000000000000000000000000000000000000000"
+    archive_path: "$GRAIN_DATA_ROOT/episodes/EP-0000-000/ntni-0000-99.pdf"
+    quote: >-
+      FICTIONAL QUOTE. "Lock 99 is closed to all vessel traffic effective
+      immediately due to a lower miter gate failure. No estimated reopening."
+    supports: [public_anchor, official_announcement, affected_infrastructure, d5]
+  - ref: src_lpms_0000
+    tier: 1
+    publisher: "FICTIONAL Corps lock performance record"
+    title: "Lock 99 daily queue and tonnage extract (FICTIONAL)"
+    identifier: "LPMS-FICTIONAL-0000"
+    url: "https://fictional-district.example.invalid/lpms/lock99"
+    retrieved_on: 2099-05-01
+    sha256: "1111111111111111111111111111111111111111111111111111111111111111"
+    archive_path: "$GRAIN_DATA_ROOT/episodes/EP-0000-000/lpms-lock99.csv"
+    quote: >-
+      FICTIONAL QUOTE. Daily record showing queued tows above and below the
+      chamber for the closure period.
+    supports: [d4_throughput, peak_severity_date]
+  - ref: src_ntni_0000_104
+    tier: 1
+    publisher: "FICTIONAL Corps District"
+    title: "Notice to Navigation Interests NTNI-0000-104 (FICTIONAL)"
+    identifier: "NTNI-0000-104"
+    url: "https://fictional-district.example.invalid/ntni/0000-104"
+    retrieved_on: 2099-05-01
+    sha256: "2222222222222222222222222222222222222222222222222222222222222222"
+    archive_path: "$GRAIN_DATA_ROOT/episodes/EP-0000-000/ntni-0000-104.pdf"
+    quote: >-
+      FICTIONAL QUOTE. "Lock 99 has returned to normal two-way operation."
+    supports: [end_date, relief_confirmed_date, d2_duration]
+secondary_sources:
+  - ref: src_press_0000
+    tier: 2
+    publisher: "FICTIONAL Regional Wire"
+    title: "Blue River lock closed after gate failure (FICTIONAL)"
+    identifier: null
+    url: "https://fictional-wire.example.invalid/2099/03/14/lock-99"
+    retrieved_on: 2099-05-01
+    sha256: "3333333333333333333333333333333333333333333333333333333333333333"
+    archive_path: "$GRAIN_DATA_ROOT/episodes/EP-0000-000/wire-2099-03-14.html"
+    quote: >-
+      FICTIONAL QUOTE. Same-day report naming the district engineer and the
+      closure; establishes contemporaneous public knowability.
+    supports: [publicly_knowable_at_anchor]
+discovery_trail:
+  - origin: sweep
+    detail: "Sweep S1, FICTIONAL district notice archive, year 2099, keyword 'closed'"
+  - origin: sweep
+    detail: "Sweep S6, LPMS outage records exceeding pre-registered threshold"
+source_conflicts: []
+source_confidence: high
+
+# ---- contamination ------------------------------------------------------
+crop_contamination_class: A
+macro_contamination_class: A
+contamination_rationale: null      # only required for class C or D
+contamination_direction: ambiguous
+crop_calendar_stage: pre_plant
+concurrent_shocks: []
+sweep_performed: true
+
+# ---- substitution -------------------------------------------------------
+substitution_channels:
+  - channel: alt_river_reach
+    available: "no"
+    basis: "Lock 99 is the only navigable passage on this fictional pool"
+    documented_use: not_assessed
+    source_ref: src_ntni_0000_99
+  - channel: rail_to_gulf
+    available: unknown
+    basis: "No evidence retrieved on rail access at the fictional transfer elevator"
+    documented_use: not_assessed
+    source_ref: null
+  - channel: truck_short_haul
+    available: "yes"
+    basis: "Highway access to the fictional elevator is documented as unaffected"
+    documented_use: not_assessed
+    source_ref: src_press_0000
+  - channel: storage_on_farm
+    available: unknown
+    basis: "Not assessed; no contemporaneous evidence retrieved"
+    documented_use: not_assessed
+    source_ref: null
+substitution_state:
+  great_lakes_season_open: unknown
+  sa_export_season_active: unknown
+  harvest_window: "no"
+  concurrent_substitute_disruption: "no"
+
+# ---- knowability and independence --------------------------------------
+publicly_knowable_at_anchor: true
+publication_vehicle: "FICTIONAL District navigation notice, same-day wire report"
+knowability_evidence_ref: src_press_0000
+episode_independence_notes: >-
+  Mechanical failure with no shared driver with any other candidate. Nearest
+  other fictional candidate is 8 months away in a different basin.
+driver_class: mechanical_infrastructure_failure
+underlying_driver_id: fictional_blue_river_gate_failure
+cluster_id: fictional_blue_river_gate_failure   # default == underlying_driver_id
+parent_episode_id: null
+related_episode_ids: []
+dedup_rule_applied: H1
+
+# ---- governance ---------------------------------------------------------
+market_outcomes_reviewed: false
+outcome_exposure_log: []
+recorded_by: A
+recorded_date: 2099-05-01
+reviewed_by: B
+reviewed_date: 2099-05-03
+anchor_agreement: exact
+decision: accept
+decision_reasons: []
+researcher_notes: >-
+  FICTIONAL example entry. Illustrates required structure only. The interesting
+  property of this shape of episode is that it is contamination class A — a
+  purely mechanical failure with no weather driver — which is the rarest and
+  most valuable kind of entry for identification.
+preregistration_frozen_at: null    # DERIVED at freeze
+freeze_commit: null                # DERIVED at freeze
+content_hash: null                 # DERIVED
