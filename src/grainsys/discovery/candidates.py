@@ -1,4 +1,4 @@
-"""Candidate-hit schema and deterministic ID minting."""
+"""Candidate-hit schema and deterministic ID minting (N1)."""
 
 from __future__ import annotations
 
@@ -41,6 +41,7 @@ class CandidateHit:
     endpoint: str | None = None
     retrieved_on: str | None = None
     notes: str | None = None
+    stable_source_id: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -51,7 +52,7 @@ class CandidateValidationError(ValueError):
 
 
 class CandidateIdError(ValueError):
-    """Ordering / minting rule incomplete."""
+    """Ordering / minting / dedup rule incomplete or violated."""
 
 
 def validate_candidate_hit(data: Mapping[str, Any]) -> CandidateHit:
@@ -84,6 +85,7 @@ def validate_candidate_hit(data: Mapping[str, Any]) -> CandidateHit:
         endpoint=data.get("endpoint"),
         retrieved_on=data.get("retrieved_on"),
         notes=data.get("notes"),
+        stable_source_id=data.get("stable_source_id"),
     )
 
 
@@ -99,16 +101,63 @@ def _ordering_tuple(row: Mapping[str, Any], ordering_keys: Sequence[str]) -> tup
     return tuple(values)
 
 
+def _canonical_row(row: Mapping[str, Any]) -> tuple[tuple[str, str], ...]:
+    """Stable comparable form of sweep-relevant metadata (all provided keys)."""
+    items: list[tuple[str, str]] = []
+    for key in sorted(row.keys()):
+        val = row[key]
+        items.append((key, "" if val is None else str(val)))
+    return tuple(items)
+
+
+def _dedupe_stable_source_ids(
+    hits: Sequence[Mapping[str, Any]],
+    *,
+    stable_id_key: str,
+) -> list[dict[str, Any]]:
+    """Collapse exact duplicate representations of the same source-native ID.
+
+    Distinct records must not share a stable ID with conflicting metadata.
+    Rows lacking the key (or with empty id) are left untouched — no invented IDs.
+    """
+    groups: dict[str, list[dict[str, Any]]] = {}
+    passthrough: list[dict[str, Any]] = []
+    for row in hits:
+        raw = row.get(stable_id_key) if stable_id_key in row else None
+        if raw in (None, ""):
+            passthrough.append(dict(row))
+            continue
+        sid = str(raw)
+        groups.setdefault(sid, []).append(dict(row))
+
+    out: list[dict[str, Any]] = []
+    for sid, rows in groups.items():
+        canon = _canonical_row(rows[0])
+        for other in rows[1:]:
+            if _canonical_row(other) != canon:
+                raise CandidateIdError(
+                    f"conflicting representations for {stable_id_key}={sid!r}; "
+                    "refuse silent merge of distinct records."
+                )
+        out.append(rows[0])
+    out.extend(passthrough)
+    return out
+
+
 def mint_candidate_ids(
     hits: Sequence[Mapping[str, Any]],
     *,
     ordering_keys: Sequence[str],
     id_prefix: str,
+    stable_id_key: str | None = None,
 ) -> list[dict[str, Any]]:
     """Assign deterministic candidate_ids under an explicit ordering rule.
 
-    ``ordering_keys`` and ``id_prefix`` must be supplied by the caller (from
-    committed prereg config). This function does not choose a default rule.
+    Ordering is determined **only** by ``ordering_keys``. Duplicate ordering
+    tuples raise ``CandidateIdError`` — input position never breaks ties.
+
+    Optional ``stable_id_key`` enables source-native deduplication before minting
+    when the source provides an ID. No ID is invented when the key is absent.
     """
     if not ordering_keys:
         raise CandidateIdError(
@@ -117,7 +166,6 @@ def mint_candidate_ids(
     if not id_prefix:
         raise CandidateIdError("id_prefix is required (D5); no silent default.")
 
-    # Reject contamination fields on input rows before minting.
     for i, row in enumerate(hits):
         forbidden = FORBIDDEN_CANDIDATE_FIELDS.intersection(row.keys())
         if forbidden:
@@ -125,14 +173,31 @@ def mint_candidate_ids(
                 f"hits[{i}] contains forbidden fields: {sorted(forbidden)}"
             )
 
-    indexed = list(enumerate(hits))
-    indexed.sort(key=lambda item: (_ordering_tuple(item[1], ordering_keys), item[0]))
+    working: list[dict[str, Any]] = [dict(r) for r in hits]
+    if stable_id_key is not None:
+        if not stable_id_key:
+            raise CandidateIdError("stable_id_key must be a non-empty field name when set.")
+        working = _dedupe_stable_source_ids(working, stable_id_key=stable_id_key)
+
+    keyed: list[tuple[tuple[str, ...], dict[str, Any]]] = []
+    seen: dict[tuple[str, ...], int] = {}
+    for row in working:
+        ot = _ordering_tuple(row, ordering_keys)
+        if ot in seen:
+            raise CandidateIdError(
+                f"duplicate ordering tuple {ot!r} after stable-id dedup; "
+                "input/enumeration position must not break ties (N1)."
+            )
+        seen[ot] = 1
+        keyed.append((ot, row))
+
+    keyed.sort(key=lambda item: item[0])
 
     out: list[dict[str, Any]] = []
-    width = max(4, len(str(len(indexed))))
-    for seq, (_orig_i, row) in enumerate(indexed, start=1):
+    width = max(4, len(str(len(keyed))))
+    for seq, (ot, row) in enumerate(keyed, start=1):
         minted = dict(row)
         minted["candidate_id"] = f"{id_prefix}-{seq:0{width}d}"
-        minted["ordering_key"] = "|".join(_ordering_tuple(row, ordering_keys))
+        minted["ordering_key"] = "|".join(ot)
         out.append(minted)
     return out

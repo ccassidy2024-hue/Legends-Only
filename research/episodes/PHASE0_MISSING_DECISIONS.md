@@ -68,7 +68,23 @@ These need no further decision; they are not the blocker.
 - **Blocks:** X8 / `R10` ("outside pre-registered sample period") is
   unevaluable; §A.5's "> ~40% of the sample period is in episode ⇒ the class is a
   regime" test has no denominator.
-- **Named as open in:** ADR-0002 L69.
+- **Named as open in:** ADR-0002 L69; architecture hardened in ADR-0003.
+- **Values remain unresolved:** do **not** invent `sample_start` / `sample_end`.
+- **Jointly reviewed architecture (ADR-0003) — no dates chosen:**
+  1. One global preregistered `sample_start` / `sample_end` remains mandatory.
+  2. Per-source/per-class coverage masks supplement the global period.
+  3. Masks affect R10 eligibility, exposure denominators, zero-event
+     interpretation, and cross-source/class comparability.
+  4. An uncovered interval is **unknown/unobservable** exposure, not zero events.
+  5. A source/class beginning after global `sample_start` contributes no eligible
+     coverage before its coverage start.
+  6. Cross-class/source rates must use explicitly defined covered exposure or an
+     explicitly defined common-mask intersection.
+  7. §A.5 regime-duration denominators use applicable **covered exposure**, not
+     blindly the full calendar length when coverage is incomplete.
+  8. Do **not** move `sample_end` earlier merely to guarantee a full post-event
+     estimation horizon; right-edge insufficient outcome horizon is an
+     analysis-layer right-censoring / eligibility issue to preregister later.
 - **Note for the decision:** the start date should be fixed by *archive
   coverage*, not by which years look eventful. See §5 for the permitted way to
   establish coverage without touching event content.
@@ -192,3 +208,24 @@ and a candidate without a `sweep` origin is rejected `R2` under §L.3 regardless
 of how well-evidenced it looks.
 
 **Sign-off required:** A ☐   B ☐   ADR committed ☐   tag created ☐
+
+---
+
+## 7. Source-timing safety notes (no values invented)
+
+### ESMIS release timestamps
+
+An API timestamp field is not automatically evidence of an observed publication
+clock time. For ESMIS, Person A observed identical `12:00:00+0000` time
+components across all checked release records. Until official USDA documentation
+establishes that clock component as the true publication instant, it MUST NOT be
+treated as an observed intraday `release_ts`. Supported date information may be
+retained at date precision. No clock time may be fabricated from the ESMIS field.
+(Recorded in ADR-0003.)
+
+### Follow-up blocker (out of scope for discovery branches)
+
+`panel.synthesise_release_ts` currently defaults `release_hour=12`. Changing
+that shared leakage-sensitive helper requires a **separate** dual-reviewed PR
+touching `src/grainsys/panel.py`. Do not attempt it on Phase-0 discovery /
+hardening branches.

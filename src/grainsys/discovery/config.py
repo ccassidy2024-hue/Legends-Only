@@ -42,12 +42,15 @@ def load_prereg_rules(repo_root: Path | None = None) -> dict[str, Any]:
 
     Fail closed if the file is absent or required blocks are empty/null.
     Does not invent districts, keywords, dates, or ordering keys.
+
+    Note: loading a structurally complete config does **not** authorize a sweep.
+    See ``grainsys.discovery.governance.assert_sweep_authorized`` (N3).
     """
     path = prereg_rules_path(repo_root)
     if not path.is_file():
         raise DiscoveryConfigError(
             f"Missing live preregistration config: {path}. "
-            "Copy _prereg_rules.template.yaml only after A+B close D1–D11. "
+            "Copy _prereg_rules.template.yaml only after A+B close Phase 0 decisions. "
             "Sweeps are blocked until then."
         )
 
@@ -57,11 +60,22 @@ def load_prereg_rules(repo_root: Path | None = None) -> dict[str, Any]:
     if not isinstance(data, dict):
         raise DiscoveryConfigError(f"{path} must contain a YAML mapping")
 
-    sample = _require_mapping(data, "sample_period")
-    if sample.get("start_date") in (None, "") or sample.get("end_date") in (None, ""):
+    if data.get("governing_adr") in (None, ""):
         raise DiscoveryConfigError(
-            "sample_period.start_date and end_date must be set (D1); no defaults."
+            "governing_adr is required (N3); live config must name its ADR."
         )
+
+    sample = _require_mapping(data, "sample_period")
+    # Jointly reviewed names: sample_start / sample_end (D1 architecture).
+    start = sample.get("sample_start", sample.get("start_date"))
+    end = sample.get("sample_end", sample.get("end_date"))
+    if start in (None, "") or end in (None, ""):
+        raise DiscoveryConfigError(
+            "sample_period.sample_start and sample_end must be set (D1); no defaults."
+        )
+    # Normalize to canonical keys without inventing values.
+    sample["sample_start"] = start
+    sample["sample_end"] = end
 
     corridors = _require_mapping(data, "corridors")
     _require_non_empty_list(corridors, "navigation_basins", where="corridors")

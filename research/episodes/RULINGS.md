@@ -126,3 +126,20 @@ names the one it replaces.
 - **Generalises to:** All market-response event studies and local projections.
 - **Decided by:** Person B review requirement on PR #1 (awaiting re-audit)
 - **Supersedes:** illustrative “e.g. h = 0…26 weeks” language in Phase 0
+
+### 2026-08-11 · R-008 · PR #1 re-audit complete — R-004–R-007 operative
+
+- **Situation:** R-004 through R-007 still carried “awaiting re-audit” governance
+  wording after PR #1 was approved and merged to `main`. Append-only policy
+  forbids rewriting those ruling bodies.
+- **Rule invoked:** `RULINGS.md` append-only / supersession semantics; ADR-0002
+- **Ruling:** PR #1 re-audit is complete. R-004, R-005, R-006, and R-007 are
+  **operative**. No substantive rule text in those entries is changed by this
+  ruling. Stale “awaiting re-audit” phrases in their “Decided by” lines are
+  superseded for governance-status purposes only. ADR-0002 remains **proposed**
+  because Phase 0 open items are still unresolved; merging PR #1 does not accept
+  the full open-item package.
+- **Generalises to:** Governance metadata for R-004–R-007 after PR #1 merge.
+- **Decided by:** A + B (post-merge governance cleanup)
+- **Supersedes:** governance-status implication of “awaiting re-audit” on
+  R-004–R-007 only (not their substantive rulings)
