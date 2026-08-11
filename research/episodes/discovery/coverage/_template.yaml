@@ -16,7 +16,7 @@ endpoint: null               # archive URL or locator — do not invent
 earliest_available: null     # YYYY-MM-DD of earliest reachable listing/page, if known
 latest_available: null       # YYYY-MM-DD of latest reachable listing/page, if known
 retrieved_on: null           # YYYY-MM-DD when the coverage check was performed
-coverage_status: null        # present | absent | unknown — unknown is explicit, not silent
+coverage_status: null        # present (= covered) | absent | unknown — never silent
 notes: null                  # coverage logistics only; no event narratives
 
 # Forbidden in coverage records (enforced by validator):

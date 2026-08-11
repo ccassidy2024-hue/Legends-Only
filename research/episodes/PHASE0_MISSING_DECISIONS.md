@@ -144,6 +144,21 @@ though S1 could technically run without them.
   condition (E19).
 - **D12 · Severity calibration** stays deliberately unregistered per R-003 —
   listed here only so it is not mistaken for an oversight.
+- **D13 · Analysis-anchor grid** — **unresolved.** Date-only `public_anchor`
+  mapping (R-001 / §B.3) depends on a registered analysis grid. Freeze, at
+  minimum:
+  - frequency
+  - weekday / calendar convention
+  - cutoff time
+  - timezone
+  - holiday treatment
+  - missing-anchor handling
+  
+  **Do not invent these values here.** They depend on Person A's verified
+  release-calendar audit and joint A+B ratification. The governing date-only
+  mapping rule itself (first analysis anchor **strictly after** the calendar
+  date; no invented clock times) is already settled and must not be altered
+  by this decision.
 
 ---
 
@@ -158,7 +173,8 @@ though S1 could technically run without them.
 2. **Write the sweep enumerator code.** Permitted explicitly by §L.1 and
    §L.5.4 — "coding agents may write sweep and validation code; they may not
    write entry YAML content."
-3. **Draft the ADR** closing D1–D11 for A + B to review, decide and commit.
+3. **Draft the ADR** closing D1–D11 and D13 for A + B to review, decide and
+   commit (D12 stays deliberately unregistered per R-003).
 
 Note on division of labour for when S1 does run: under §L.5.2 a **human opens
 every URL** and records `retrieved_on`, `sha256` and the verbatim quote. An
@@ -169,9 +185,10 @@ author the evidence that a hit is real.
 
 ## 6. Recommended next action
 
-Close D1–D7 (minimum) and D8–D11 (for the tag) in an ADR, commit, tag
-`prereg-rules-v1`, then run S1. Until the tag exists, `discovery_trail` cannot
-honestly carry `origin: sweep` for anything, and a candidate without a `sweep`
-origin is rejected `R2` under §L.3 regardless of how well-evidenced it looks.
+Close D1–D7 (minimum) and D8–D11 plus D13 (for the tag / honest anchor
+mapping) in an ADR, commit, tag `prereg-rules-v1`, then run S1. Until the tag
+exists, `discovery_trail` cannot honestly carry `origin: sweep` for anything,
+and a candidate without a `sweep` origin is rejected `R2` under §L.3 regardless
+of how well-evidenced it looks.
 
 **Sign-off required:** A ☐   B ☐   ADR committed ☐   tag created ☐

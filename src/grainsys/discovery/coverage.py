@@ -29,6 +29,7 @@ FORBIDDEN_COVERAGE_FIELDS = frozenset(
 )
 
 ALLOWED_COVERAGE_STATUS = frozenset({"present", "absent", "unknown"})
+# present = covered / archive reachable; absent = unavailable; unknown = not yet verified.
 
 
 @dataclass(frozen=True)

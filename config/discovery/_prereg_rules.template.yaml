@@ -1,8 +1,10 @@
 # config/discovery/_prereg_rules.template.yaml
 #
 # TEMPLATE ONLY — not loaded as live configuration.
-# Copy to prereg_rules.yaml and fill ONLY after A+B Phase 0 decisions (D1–D11).
-# Do not invent districts, endpoints, keywords, sample dates, or ordering rules.
+# Copy to prereg_rules.yaml and fill ONLY after A+B Phase 0 decisions
+# (see research/episodes/PHASE0_MISSING_DECISIONS.md — D1–D11, D13; D12 stays
+# deliberately unregistered). Do not invent districts, endpoints, keywords,
+# sample dates, ordering rules, or analysis-anchor grid values.
 #
 # grainsys.discovery FAIL CLOSED if config/discovery/prereg_rules.yaml is missing
 # or any required block below is null/empty.
@@ -57,3 +59,15 @@ coverage:
   absent_must_be_explicit: true
   # How missing archives are recorded is a Phase 0 decision beyond this flag.
   gap_policy_notes: null
+
+# D13 — analysis-anchor grid (documentation stub only; not selected here).
+# Required for honest date-only public_anchor mapping (R-001 / §B.3).
+# Values depend on Person A's verified release-calendar audit + A+B ratification.
+# Do NOT invent frequency, weekday, cutoff, timezone, holiday, or missing-anchor rules.
+# analysis_anchor_grid:
+#   frequency: null
+#   weekday_or_calendar_convention: null
+#   cutoff_time: null
+#   timezone: null
+#   holiday_treatment: null
+#   missing_anchor_handling: null
