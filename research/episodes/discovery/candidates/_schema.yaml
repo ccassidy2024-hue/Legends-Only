@@ -1,0 +1,45 @@
+# Candidate-hit schema (scaffolding only).
+#
+# No real candidate rows are stored in this repository until Phase 0
+# preregistration is committed and a live sweep is authorized.
+# This file documents required columns for a future candidates table.
+
+schema_version: "0.1"
+record_kind: candidate_hit
+
+# Required fields after a registered sweep produces a hit:
+required_fields:
+  - candidate_id          # minted by grainsys.discovery.candidates under a supplied ordering rule
+  - sweep_id              # e.g. S1 — from registered config only
+  - source_reference      # locator/ref string for the document (not episode content)
+  - raw_capture_pointer   # path under pre-episode capture root (may be null until captured)
+  - document_date         # document date if knowable from listing metadata without opening body
+  - ordering_key          # deterministic sort key used at mint time (opaque string)
+
+optional_fields:
+  - authority
+  - district
+  - vehicle
+  - endpoint
+  - retrieved_on
+  - notes                 # logistics only
+
+# Explicitly forbidden columns (validator rejects):
+forbidden_fields:
+  - episode_id
+  - event_name
+  - market_outcomes_reviewed
+  - market_outcome
+  - price
+  - futures
+  - basis
+  - freight_rate
+  - severity_class
+  - public_anchor
+  - decision
+  - accept
+  - reject
+
+# Live table path is configured in config/discovery/prereg_rules.yaml (D5).
+# Until that file exists with non-empty ordering_keys and table_path, minting
+# against a live table FAIL CLOSED.

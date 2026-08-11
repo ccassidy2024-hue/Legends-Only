@@ -1,0 +1,73 @@
+# config/discovery/_prereg_rules.template.yaml
+#
+# TEMPLATE ONLY — not loaded as live configuration.
+# Copy to prereg_rules.yaml and fill ONLY after A+B Phase 0 decisions
+# (see research/episodes/PHASE0_MISSING_DECISIONS.md — D1–D11, D13; D12 stays
+# deliberately unregistered). Do not invent districts, endpoints, keywords,
+# sample dates, ordering rules, or analysis-anchor grid values.
+#
+# grainsys.discovery FAIL CLOSED if config/discovery/prereg_rules.yaml is missing
+# or any required block below is null/empty.
+
+schema_version: "0.1"
+
+# D1 — sample period (do not invent)
+sample_period:
+  start_date: null
+  end_date: null
+
+# D2 — corridor / basin scope (do not invent)
+corridors:
+  navigation_basins: []
+
+# D3 — S1 (and later) search universe (do not invent districts or URLs)
+# Each archive entry must eventually carry: sweep_id, authority, district,
+# vehicle, endpoint. Empty list means sweep cannot run.
+source_archives: []
+# Example shape (NOT live data):
+# - sweep_id: S1
+#   authority: USACE
+#   district: null
+#   vehicle: notices_to_navigation_interests
+#   endpoint: null
+
+# D4 — keyword policy (do not invent)
+keyword_policy:
+  terms: []
+  match: null          # e.g. substring | stem — unset until decided
+  case_sensitive: null
+  fields: []           # e.g. title | full_text — unset until decided
+
+# D5 — candidate table + deterministic ID minting (do not invent)
+candidates:
+  table_path: null     # e.g. research/episodes/discovery/candidates/candidates.csv
+  id_prefix: null      # e.g. CAND
+  # Ordering keys applied to hit records before minting IDs.
+  # Must be an explicit non-empty list in the live file.
+  ordering_keys: []
+
+# D6 — pre-episode raw capture roots (paths only; no downloads)
+capture:
+  # Relative to $GRAIN_DATA_ROOT (or an explicit absolute root in settings).
+  # Hits are stored under sweeps/<sweep_id>/<candidate_id>/ — no episode_id.
+  sweeps_subdir: sweeps
+  rehome_policy: null  # when/how a hit moves under episodes/<episode_id>/ — D6
+
+# D7 — coverage gap policy
+coverage:
+  records_dir: research/episodes/discovery/coverage
+  absent_must_be_explicit: true
+  # How missing archives are recorded is a Phase 0 decision beyond this flag.
+  gap_policy_notes: null
+
+# D13 — analysis-anchor grid (documentation stub only; not selected here).
+# Required for honest date-only public_anchor mapping (R-001 / §B.3).
+# Values depend on Person A's verified release-calendar audit + A+B ratification.
+# Do NOT invent frequency, weekday, cutoff, timezone, holiday, or missing-anchor rules.
+# analysis_anchor_grid:
+#   frequency: null
+#   weekday_or_calendar_convention: null
+#   cutoff_time: null
+#   timezone: null
+#   holiday_treatment: null
+#   missing_anchor_handling: null
