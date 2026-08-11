@@ -35,8 +35,13 @@ truth. Load-bearing choices:
    second lock binds the researchers' information set, not just the files —
    accidental exposure is logged in `outcome_exposure_log`, not hidden.
 2. **`public_anchor` is t = 0.** The episode-level analogue of `release_ts`.
-   `physical_onset`, `official_announcement` and `peak_severity_date` are
-   recorded separately and reserved as pre-registered robustness anchors.
+   `physical_onset` and `official_announcement` may be recorded separately and
+   used as pre-registered robustness anchors where the protocol allows.
+   `peak_severity_date` is ex-post: it must never be used as t=0 alignment for
+   market-response event studies / LPs, and must never be a conditioning
+   covariate in those estimators. It may remain descriptive and/or an
+   explicitly preregistered duration-response target, consistent with
+   `EPISODE_PROTOCOL.md` §B.5 / R-006.
 3. **Candidates come from mechanical source sweeps (S1–S8), never from recall.**
    LLM-suggested candidates require independent sweep confirmation or are
    rejected `R2`.

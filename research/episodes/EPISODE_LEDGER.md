@@ -38,9 +38,11 @@ filtered through market salience.
 ## Standing rules
 
 1. Episodes are defined from physical/logistics stress, never from market moves.
-2. `public_anchor` — the first publicly observable date — is t = 0. Physical
-   onset, official announcement and peak severity are recorded separately and
-   used only as pre-registered robustness anchors.
+2. `public_anchor` — the first publicly observable date — is primary t = 0.
+   Physical onset and official announcement are recorded separately and may be
+   preregistered robustness anchors as governed by the protocol. Peak severity
+   is ex-post only and cannot be a t=0 market-response anchor or conditioning
+   covariate.
 3. Severity comes from physical metrics only. Barge freight rates are a
    **price**, not a severity metric.
 4. `market_outcomes_reviewed` stays `false` on every entry until the freeze tag
