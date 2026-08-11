@@ -41,13 +41,22 @@ episode only when a primary source documents an operational consequence.
 - `public_anchor_precision` records whether the source supports a **date** or an
   exact **timestamp**. Date-only evidence must not invent a clock time. Primary
   mapping: first analysis anchor **strictly after** the public_anchor date
-  (`first_usable_analysis_anchor`).
+  (`first_usable_analysis_anchor`). Pre-treatment baseline: last analysis
+  anchor **strictly before** `public_anchor` (not t=−1 after remapping).
 - Severity metrics are **raw physical evidence**; `severity_class` is **derived**
   and stays null until Phase 0 cutpoints are registered. Ex-post descriptive
   classes must not masquerade as contemporaneous.
+- `peak_severity_date`, `end_date`, and `duration_days` are ex-post fields: not
+  t=0 anchors and not conditioning covariates in market-response event studies
+  / LPs.
 - Primary reporting: `N_episodes` and `N_independent_driver_clusters`.
   `N_underlying_drivers` is descriptive. Default
   `cluster_id = underlying_driver_id`. Preserve physically distinct rows.
+  Downstream market event studies / IRFs / LPs must collapse to cluster level
+  or use inverse-cluster weights with cluster-robust SEs.
+- Before market-response estimation, Phase 0 must preregister pre-event,
+  post-event, and reference/baseline horizons (numerical values are an A+B
+  decision; not invented in the protocol).
 - Severity from physical metrics only — never prices, and never barge freight
   rates, which are a price.
 - Navigation-basin geography is recorded separately from growing-region

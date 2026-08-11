@@ -54,14 +54,20 @@ truth. Load-bearing choices:
    `N_underlying_drivers` is descriptive only. Default
    `cluster_id = underlying_driver_id` unless a documented ruling says
    otherwise. No privileged episodes-per-driver ratio. Preserve physically
-   distinct rows; use cluster-aware inference later where justified.
+   distinct rows. Downstream market event studies / IRFs / LPs **must** either
+   collapse to `cluster_id` or use inverse-cluster weights with cluster-robust
+   SEs (`EPISODE_PROTOCOL.md` §H.2).
 8. **Date-only public anchors use the conservative mapping:** first analysis
    anchor strictly after the public_anchor calendar date
-   (`first_usable_analysis_anchor`). Timestamp precision allows same-day use
-   only when `anchor_ts <= analysis_anchor_ts`.
-9. **Rejected candidates are retained** with reason codes, so a reviewer can
+   (`first_usable_analysis_anchor`). Pre-treatment baseline is the last analysis
+   anchor strictly before `public_anchor` (not t=−1 after remapping). Timestamp
+   precision allows same-day use only when `anchor_ts <= analysis_anchor_ts`.
+9. **Ex-post fields** (`peak_severity_date`, `end_date`, `duration_days`) are
+   not t=0 anchors and not conditioning covariates in market-response event
+   studies / LPs (`EPISODE_PROTOCOL.md` §B.5).
+10. **Rejected candidates are retained** with reason codes, so a reviewer can
    audit the rejection pattern.
-10. **Enforcement in code.** `python -m grainsys.episodes` runs in `make all`; a
+11. **Enforcement in code.** `python -m grainsys.episodes` runs in `make all`; a
    `market_outcomes_reviewed: true` entry fails the build.
 
 ## Open items — must be closed in Phase 0 before any candidate is recorded
@@ -70,12 +76,20 @@ truth. Load-bearing choices:
 - Severity calibration ADR: metrics by class, reference period, as-of vs
   ex-post, cutpoints, combination rule, missing-data treatment; only then set
   `cutpoints_registered: true`
-- Event window and horizon set for later local projections
+- Market-response horizons to preregister **before corresponding estimation**
+  (numerical values are an A+B decision; not invented here):
+  - pre-event horizon
+  - post-event horizon
+  - reference / baseline horizon
 - The three-candidate calibration set for inter-rater alignment
 
 Until cutpoints are registered, the validator deliberately leaves
 `severity_class` null rather than guessing. Raw physical metrics may still be
 collected.
+
+**Note:** ADR-0002 remains **proposed**. Person B CHANGES_REQUESTED items on
+PR #1 are encoded in the protocol / `RULINGS.md` (R-004–R-007) and await
+re-audit; this ADR is not falsely marked accepted.
 
 ## Consequences
 

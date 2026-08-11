@@ -195,7 +195,7 @@ not chosen afterwards:
 | `public_anchor` | **Primary.** All headline results. |
 | `official_announcement` | Pure news-shock robustness; narrower and cleaner, but misses constraints that became known before officialdom acted |
 | `physical_onset` | Physical-mechanism and instrument work (§E); the right clock for "did the river actually fall," the wrong clock for "did anyone know" |
-| `peak_severity_date` | Dose-response / intensity robustness only |
+| `peak_severity_date` | **Ex-post descriptive / duration-response target only** — never t=0 alignment and never a conditioning covariate in market-response event studies or LPs (see §B.5) |
 
 Reporting on a non-primary anchor without declaring it at freeze is a
 specification search. Pick the anchor set now; report all of them later.
@@ -255,6 +255,29 @@ assumptions only**, must be explicitly labeled, and are **not** the
 preregistered primary mapping. This mapping does not invent timestamps in the
 ledger and does not change `panel.py`.
 
+##### Pre-treatment baseline when `public_anchor_precision == "date"` (PRIMARY)
+
+When t=0 is mapped to the first analysis anchor **strictly after**
+`public_anchor`, the pre-treatment baseline **MUST** be the last analysis
+anchor **strictly before** `public_anchor`.
+
+It must **NOT** be defined simply as t=−1 after event-anchor mapping.
+
+**Example:**
+
+- `public_anchor` = Oct 19
+- first analysis anchor strictly after `public_anchor` = Oct 26 → **t=0**
+- Oct 19 is **NOT** an eligible pre-treatment baseline
+- Oct 12 is the baseline
+
+**Rationale:** a same-calendar-date analysis observation may contain information
+that became public during that date, so it cannot automatically be treated as
+uncontaminated pre-treatment data.
+
+This baseline rule is specific to the date-only primary mapping above. It does
+not invent a timestamp-specific baseline rule, and it does not invent behavior
+involving `anchor_precision_days`.
+
 ### B.4 Rules that keep the anchor honest
 
 1. The anchor is fixed **before** severity is scored and **before** any
@@ -272,6 +295,28 @@ ledger and does not change `panel.py`.
    earlier document date and let `anchor_precision_days` carry the uncertainty.
    Do not shift anchors onto trading days — that is an analysis-layer decision,
    and making it here couples the sample definition to market structure.
+
+### B.5 Ex-post variables: not treatment clocks or covariates
+
+The following are known only after the episode unfolds:
+
+- `peak_severity_date`
+- `end_date`
+- `duration_days` (derived)
+
+They **MUST NOT** be used as:
+
+1. the t=0 alignment anchor, or
+2. conditioning covariates in downstream market-response event studies or local
+   projections.
+
+They **MAY** remain available as:
+
+- ex-post descriptive variables, and/or
+- preregistered duration-response **targets** where appropriate.
+
+**Reason:** using quantities that are only knowable after the episode unfolds to
+define or condition the treatment creates look-ahead / post-treatment leakage.
 
 ---
 
@@ -800,9 +845,29 @@ Taxonomy:
   otherwise
 
 There is **no privileged ratio threshold**. Physically distinct episode rows are
-**preserved** even when they share an underlying driver or cluster. Downstream
-methods may use cluster-aware inference where justified; do not automatically
-delete rows merely because they share a driver.
+**preserved** even when they share an underlying driver or cluster. Do not
+automatically delete rows merely because they share a driver.
+
+#### Downstream cluster-level inference (mandatory)
+
+For all downstream **market event studies**, **impulse-response plots**, and
+**local projections**, analysis **MUST** either:
+
+**A.** collapse / average accepted episode observations to `cluster_id` level,
+
+**OR**
+
+**B.** use inverse-cluster weighting
+
+```text
+w_i = 1 / K_c
+```
+
+where `K_c` is the number of accepted episodes in cluster `c`, **and** use
+cluster-robust standard errors clustered by `cluster_id`.
+
+This is a downstream statistical requirement. It is not optional language
+("may"), and it is not enforced by inventing new episode-entry schema fields.
 
 ---
 
@@ -875,10 +940,19 @@ Commit, then tag:
 - Sample period and corridor list
 - `event_class` vocabulary and the physical thresholds per class
 - Severity dimensions, percentile reference period, cutpoint rule, band edges
+  (remain unregistered until the severity-calibration ADR; see §D.3)
 - Anchor rule and the robustness anchor set
 - Contamination classes and the Sample P / Sample X split
-- **Event window and horizon set** for later analysis (e.g. h = 0…26 weeks) —
-  pre-registering the window now is what stops it being chosen later to fit
+- **Market-response horizons (required before corresponding estimation):**
+  BEFORE any market-response event study / local-projection estimation, Phase 0
+  **MUST** preregister:
+  - pre-event horizon
+  - post-event horizon
+  - reference / baseline horizon
+  Numerical values for these horizons are a **Phase-0 human (A+B) decision**.
+  Do **not** treat example ranges in chat, drafts, or review comments as adopted.
+  Until A+B records the chosen values in an ADR / `prereg-rules` tag, estimation
+  that depends on those horizons is blocked.
 - Target count, and the kill condition (< 6 usable ⇒ the question is
   unanswerable with this data; say so and stop)
 

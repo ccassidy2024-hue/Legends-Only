@@ -68,3 +68,61 @@ names the one it replaces.
 - **Generalises to:** All severity scoring until that ADR exists.
 - **Decided by:** A + B (methodology approval)
 - **Supersedes:** none
+
+### 2026-08-11 · R-004 · Date-only pre-treatment baseline (Person B PR #1)
+
+- **Situation:** PR #1 CHANGES_REQUESTED — date-only t=0 mapping needs an
+  explicit pre-treatment baseline rule.
+- **Rule invoked:** EPISODE_PROTOCOL.md §B.3 (date-only mapping + baseline)
+- **Ruling:** When `public_anchor_precision == "date"` and t=0 is the first
+  analysis anchor strictly after `public_anchor`, the pre-treatment baseline
+  MUST be the last analysis anchor strictly before `public_anchor` — not t=−1
+  after remapping. Example: public_anchor Oct 19 → t=0 Oct 26; Oct 19 is not
+  baseline; Oct 12 is. Same-calendar-date observations may contain same-day
+  public information and are not automatically clean pre-treatment data.
+  No timestamp-specific baseline rule and no `anchor_precision_days` behavior
+  are invented here.
+- **Generalises to:** All date-only primary event-study / LP alignments.
+- **Decided by:** Person B review requirement on PR #1 (awaiting re-audit)
+- **Supersedes:** none (extends R-001)
+
+### 2026-08-11 · R-005 · Mandatory cluster-level downstream inference (Person B PR #1)
+
+- **Situation:** PR #1 CHANGES_REQUESTED — “may use cluster-aware inference”
+  is too weak for market event studies / IRFs / LPs.
+- **Rule invoked:** EPISODE_PROTOCOL.md §H.2
+- **Ruling:** Downstream market event studies, impulse-response plots, and
+  local projections MUST either (A) collapse/average to `cluster_id`, or
+  (B) use inverse-cluster weights `w_i = 1/K_c` and cluster-robust SEs by
+  `cluster_id`. This is a downstream statistical requirement, not an episode
+  schema change.
+- **Generalises to:** All market-response estimation using the Episode Ledger.
+- **Decided by:** Person B review requirement on PR #1 (awaiting re-audit)
+- **Supersedes:** soft “may” language previously in §H.2
+
+### 2026-08-11 · R-006 · Ex-post variables barred from t=0 / covariates (Person B PR #1)
+
+- **Situation:** PR #1 CHANGES_REQUESTED — post-unfolding quantities can
+  create look-ahead if used as treatment clocks or covariates.
+- **Rule invoked:** EPISODE_PROTOCOL.md §B.5
+- **Ruling:** `peak_severity_date`, `end_date`, and `duration_days` MUST NOT
+  be used as the t=0 alignment anchor or as conditioning covariates in
+  market-response event studies / LPs. They MAY be ex-post descriptive
+  variables and/or preregistered duration-response targets.
+- **Generalises to:** All market-response designs using the Episode Ledger.
+- **Decided by:** Person B review requirement on PR #1 (awaiting re-audit)
+- **Supersedes:** none
+
+### 2026-08-11 · R-007 · Horizon preregistration before estimation (Person B PR #1)
+
+- **Situation:** PR #1 CHANGES_REQUESTED — pre/post/reference horizons must
+  be preregistered before market-response estimation.
+- **Rule invoked:** EPISODE_PROTOCOL.md §J Phase 0
+- **Ruling:** Before corresponding market-response estimation, Phase 0 MUST
+  preregister pre-event horizon, post-event horizon, and reference/baseline
+  horizon. Numerical values are an A+B Phase-0 human decision and are **not**
+  invented here. Until recorded in an ADR / `prereg-rules` tag, estimation
+  depending on those horizons is blocked.
+- **Generalises to:** All market-response event studies and local projections.
+- **Decided by:** Person B review requirement on PR #1 (awaiting re-audit)
+- **Supersedes:** illustrative “e.g. h = 0…26 weeks” language in Phase 0
