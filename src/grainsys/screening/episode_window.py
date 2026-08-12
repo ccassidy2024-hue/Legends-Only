@@ -13,6 +13,9 @@ policy. Timestamp episodes may still locate t=0 and extract relative windows,
 but ``baseline_available`` is False and ``status`` reports
 ``timestamp_baseline_unratified``.
 
+Offsets are grid **steps** on the caller-supplied analysis anchors. This module
+does not decide D13 frequency and does not assume a weekly default.
+
 Ex-post fields (``peak_severity_date``, ``end_date``, ``duration_days``) are
 never used for alignment (R-006).
 """
@@ -34,13 +37,16 @@ _VALID_PRECISION = frozenset({"date", "timestamp"})
 class EpisodeWindowPanel:
     """Event-relative panel slice across one or more episodes.
 
-    values / age_days: MultiIndex (episode_id, relative_week), columns = series_id
+    values / age_days: MultiIndex (episode_id, relative_step), columns = series_id
+    analysis_anchor / pretreatment_eligible: Series aligned to that MultiIndex
     metadata: index = episode_id
     """
 
     values: pd.DataFrame
     age_days: pd.DataFrame
     metadata: pd.DataFrame
+    analysis_anchor: pd.Series
+    pretreatment_eligible: pd.Series
 
 
 def _to_calendar_date(value: object) -> dt.date:
@@ -108,11 +114,29 @@ def _anchor_index(anchors: pd.DatetimeIndex, target: object) -> int:
     )
 
 
+def _row_timing(
+    analysis_ts: object | None,
+    public_anchor: object,
+) -> tuple[pd.Timestamp, bool]:
+    """Row-level analysis timing and clean-pretreatment eligibility.
+
+    Clean pretreatment requires the analysis calendar date to be strictly before
+    the (date-only) public_anchor calendar date. Same-calendar-day rows remain
+    present but are not pretreatment-eligible. Missing analysis anchors are
+    ineligible.
+    """
+    if analysis_ts is None or pd.isna(analysis_ts):
+        return pd.NaT, False
+    analysis_anchor = pd.Timestamp(analysis_ts)
+    eligible = _to_calendar_date(analysis_anchor) < _to_calendar_date(public_anchor)
+    return analysis_anchor, bool(eligible)
+
+
 def extract_episode_windows(
     panel,
     episodes: pd.DataFrame | Iterable[dict],
-    pre_weeks: int,
-    post_weeks: int,
+    pre_steps: int,
+    post_steps: int,
 ) -> EpisodeWindowPanel:
     """Extract event-relative windows on a caller-supplied analysis grid.
 
@@ -124,11 +148,12 @@ def extract_episode_windows(
         Records with required ``episode_id``, ``public_anchor``, and
         ``public_anchor_precision``. Timestamp precision also requires
         ``anchor_ts`` (passed through to ``first_usable_analysis_anchor``).
-    pre_weeks / post_weeks :
-        Required grid-step counts (not a preregistered horizon policy).
+    pre_steps / post_steps :
+        Required grid-step counts on the supplied analysis anchors (not a
+        preregistered horizon policy; D13 frequency remains unresolved).
     """
-    if pre_weeks < 0 or post_weeks < 0:
-        raise ValueError("pre_weeks and post_weeks must be non-negative")
+    if pre_steps < 0 or post_steps < 0:
+        raise ValueError("pre_steps and post_steps must be non-negative")
 
     if isinstance(episodes, pd.DataFrame):
         ep_df = episodes.copy()
@@ -156,11 +181,13 @@ def extract_episode_windows(
     anchors = validate_analysis_anchors(pd.DatetimeIndex(panel.anchors))
     n_anchors = len(anchors)
     series_cols = list(panel.values.columns)
-    rel_weeks = list(range(-pre_weeks, post_weeks + 1))
+    rel_steps = list(range(-pre_steps, post_steps + 1))
     anchor_list = list(anchors)
 
     rows_values: list[pd.Series] = []
     rows_age: list[pd.Series] = []
+    rows_analysis_anchor: list[pd.Timestamp] = []
+    rows_pretreatment_eligible: list[bool] = []
     ep_index: list[tuple[object, int]] = []
     metadata_rows: list[dict] = []
 
@@ -181,7 +208,7 @@ def extract_episode_windows(
             raise
 
         if t0_anchor is None:
-            i0 = n_anchors
+            i0 = -1
             t0_ok = False
         else:
             i0 = _anchor_index(anchors, t0_anchor)
@@ -197,17 +224,19 @@ def extract_episode_windows(
             baseline_ok = False
             baseline_status_ok = False
 
-        window_complete = t0_ok and (0 <= i0 - pre_weeks) and (i0 + post_weeks < n_anchors)
+        window_complete = t0_ok and (0 <= i0 - pre_steps) and (i0 + post_steps < n_anchors)
 
         # Grid-relative location of the R-004 baseline vs t=0 (date precision only).
-        # Never invent a timestamp baseline relative week.
+        # Never invent a timestamp baseline relative step.
         if precision == "date" and baseline_ok and t0_ok:
-            baseline_relative_week: int | float = int(i_base - i0)
-            baseline_in_window = bool(-pre_weeks <= baseline_relative_week <= post_weeks)
+            baseline_relative_step: int | float = int(i_base - i0)
+            baseline_in_window = bool(-pre_steps <= baseline_relative_step <= post_steps)
         else:
-            baseline_relative_week = np.nan
+            baseline_relative_step = np.nan
             baseline_in_window = False
 
+        # Precedence: structural / ratification failures before pretreatment-window
+        # validity; independent completeness fields remain available regardless.
         if not t0_ok:
             status = "no_t0_anchor"
         elif not baseline_status_ok:
@@ -216,6 +245,8 @@ def extract_episode_windows(
             status = "insufficient_baseline"
         elif not window_complete:
             status = "insufficient_window"
+        elif precision == "date" and not baseline_in_window:
+            status = "baseline_outside_window"
         else:
             status = "ok"
 
@@ -224,9 +255,10 @@ def extract_episode_windows(
             "public_anchor": public_anchor,
             "public_anchor_precision": precision,
             "anchor_date": anchors[i0] if t0_ok else pd.NaT,
+            "t0_available": bool(t0_ok),
             "baseline_date": anchors[i_base] if baseline_ok else pd.NaT,
             "baseline_available": bool(baseline_ok),
-            "baseline_relative_week": baseline_relative_week,
+            "baseline_relative_step": baseline_relative_step,
             "baseline_in_window": bool(baseline_in_window),
             "window_complete": bool(window_complete),
             "status": status,
@@ -250,51 +282,84 @@ def extract_episode_windows(
             meta[c] = ep[c]
         metadata_rows.append(meta)
 
-        for k in rel_weeks:
-            idx = i0 + int(k)
-            if 0 <= idx < n_anchors:
-                row_vals = panel.values.iloc[idx].copy()
-                row_age = panel.age_days.iloc[idx].copy()
-            else:
+        for k in rel_steps:
+            # No usable t=0: emit structural relative cells, but never map offsets
+            # onto real panel rows (i0=n_anchors would leak end-of-panel values).
+            if not t0_ok:
                 row_vals = pd.Series(np.nan, index=series_cols, dtype=float)
                 row_age = pd.Series(np.nan, index=series_cols, dtype=float)
+                analysis_ts = None
+            else:
+                idx = i0 + int(k)
+                if 0 <= idx < n_anchors:
+                    row_vals = panel.values.iloc[idx].copy()
+                    row_age = panel.age_days.iloc[idx].copy()
+                    analysis_ts = anchors[idx]
+                else:
+                    row_vals = pd.Series(np.nan, index=series_cols, dtype=float)
+                    row_age = pd.Series(np.nan, index=series_cols, dtype=float)
+                    analysis_ts = None
+
+            analysis_anchor, pretreatment_eligible = _row_timing(analysis_ts, public_anchor)
             rows_values.append(row_vals)
             rows_age.append(row_age)
+            rows_analysis_anchor.append(analysis_anchor)
+            rows_pretreatment_eligible.append(pretreatment_eligible)
             ep_index.append((eid, int(k)))
 
-    multi = pd.MultiIndex.from_tuples(ep_index, names=["episode_id", "relative_week"])
+    multi = pd.MultiIndex.from_tuples(ep_index, names=["episode_id", "relative_step"])
     values_df = pd.DataFrame(rows_values, index=multi).reindex(columns=series_cols)
     age_df = pd.DataFrame(rows_age, index=multi).reindex(columns=series_cols)
+    analysis_anchor_s = pd.Series(rows_analysis_anchor, index=multi, name="analysis_anchor")
+    pretreatment_eligible_s = pd.Series(
+        rows_pretreatment_eligible, index=multi, name="pretreatment_eligible", dtype=bool
+    )
     metadata_df = pd.DataFrame(metadata_rows).set_index("episode_id")
 
-    return EpisodeWindowPanel(values=values_df, age_days=age_df, metadata=metadata_df)
+    return EpisodeWindowPanel(
+        values=values_df,
+        age_days=age_df,
+        metadata=metadata_df,
+        analysis_anchor=analysis_anchor_s,
+        pretreatment_eligible=pretreatment_eligible_s,
+    )
 
 
 def to_long_format(ep_panel: EpisodeWindowPanel) -> pd.DataFrame:
-    """Long format with per-episode alignment state preserved.
+    """Long format with per-episode and per-row alignment state preserved.
 
-    Columns: episode_id, relative_week, anchor_date, series_id, value, age_days,
-    status, baseline_available, baseline_date, baseline_relative_week,
-    baseline_in_window.
+    Columns include episode_id, relative_step, analysis_anchor,
+    pretreatment_eligible, series_id, value, age_days, and independent
+    completeness / baseline fields (not only summary status).
     """
     vals = ep_panel.values.reset_index()
     long_vals = vals.melt(
-        id_vars=["episode_id", "relative_week"], var_name="series_id", value_name="value"
+        id_vars=["episode_id", "relative_step"], var_name="series_id", value_name="value"
     )
     ages = ep_panel.age_days.reset_index()
     long_ages = ages.melt(
-        id_vars=["episode_id", "relative_week"], var_name="series_id", value_name="age_days"
+        id_vars=["episode_id", "relative_step"], var_name="series_id", value_name="age_days"
     )
     merged = pd.merge(
-        long_vals, long_ages, on=["episode_id", "relative_week", "series_id"], how="left"
+        long_vals, long_ages, on=["episode_id", "relative_step", "series_id"], how="left"
     )
+    row_timing = pd.DataFrame(
+        {
+            "analysis_anchor": ep_panel.analysis_anchor,
+            "pretreatment_eligible": ep_panel.pretreatment_eligible,
+        }
+    ).reset_index()
+    merged = pd.merge(merged, row_timing, on=["episode_id", "relative_step"], how="left")
+
     state_cols = [
         "episode_id",
         "anchor_date",
         "status",
+        "t0_available",
+        "window_complete",
         "baseline_available",
         "baseline_date",
-        "baseline_relative_week",
+        "baseline_relative_step",
         "baseline_in_window",
     ]
     meta = ep_panel.metadata.reset_index()[state_cols]
@@ -302,15 +367,19 @@ def to_long_format(ep_panel: EpisodeWindowPanel) -> pd.DataFrame:
     return out[
         [
             "episode_id",
-            "relative_week",
+            "relative_step",
+            "analysis_anchor",
+            "pretreatment_eligible",
             "anchor_date",
             "series_id",
             "value",
             "age_days",
             "status",
+            "t0_available",
+            "window_complete",
             "baseline_available",
             "baseline_date",
-            "baseline_relative_week",
+            "baseline_relative_step",
             "baseline_in_window",
         ]
     ]
