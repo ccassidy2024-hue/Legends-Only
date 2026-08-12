@@ -55,13 +55,81 @@ Load-bearing interpretation files (smallest explicit set):
 - `src/grainsys/discovery/candidates.py`
 - `src/grainsys/discovery/coverage.py`
 - `src/grainsys/discovery/governance.py`
+- `src/grainsys/discovery/archive_listing.py`
+- `src/grainsys/discovery/capture.py`
+- `src/grainsys/episodes.py`
 - `research/episodes/EPISODE_PROTOCOL.md`
+- `research/episodes/ADMISSION_CHECKLIST.md`
+- `research/episodes/episode_schema.yaml`
+- `research/episodes/discovery/candidates/_schema.yaml`
 - `docs/decisions/0002-episode-preregistration.md`
 - `docs/decisions/0003-phase0-prereg-hardening.md`
 - `docs/decisions/0005-source-handling-and-vintage-rules.md`
 
+`research/episodes/RULINGS.md` is **not** whole-file digest-bound (it must keep
+growing under §I.4). Instead the N3 manifest binds each concrete `R-NNN`
+section digest and bound order at canonical path
+`research/episodes/RULINGS.md`: later appends after the bound tail are allowed;
+edits, deletions, reorders, or insertions into the bound prefix fail closed.
+Headings inside fenced examples are ignored; fenced content **inside** a real
+ruling body is part of that ruling's digest. Each concrete section body is
+canonicalized by stripping trailing blank CR/LF separator lines and ending with
+exactly one LF (interior / fenced content and substantive trailing spaces are
+preserved) so natural blank-line append and immediate-heading append remain
+prefix-stable.
+
+Manifest digests (`prereg_config_digest`, every interpretation digest, every
+ruling digest) must be actual lowercase `[0-9a-f]{64}` strings — never
+str-coerced. Unknown top-level manifest keys and extra/missing interpretation
+paths fail closed.
+
+**Fresh normalized checkout required for manifest build:** before digests are
+computed, the live `config/discovery/prereg_rules.yaml` and every load-bearing
+working-tree file must match its committed `HEAD` blob byte-for-byte (byte-safe
+`git show`). Dirty trees and CRLF drift block. Ratify only from a clean,
+normalized checkout.
+
+At manifest build **and** authorization, every load-bearing
+`docs/decisions/*.md` ADR in this list must have status `accepted`. The
+governing ADR must resolve to a repo-relative path from this list (absolute /
+out-of-repo / unbound paths fail closed).
+
+ADR-0004 is **deferred** on branches where the file is absent (e.g. until PR #6
+merges). It **must** be added to this load-bearing list before the real
+`prereg-rules-v1` tag.
+
 Future Phase-1 rows/captures must be stampable with
 `SweepProvenance{prereg_tag, prereg_config_digest, execution_commit_sha, governing_adr}`.
+`assert_sweep_authorized` always validates **actual HEAD**. An optional
+`execution_commit` argument, if supplied, must be the full lowercase 40-hex SHA
+of that HEAD; a caller-claimed different commit is refused. After HEAD is
+resolved, the live prereg config and every load-bearing working-tree file must
+match the corresponding actual-HEAD blob byte-for-byte; only then are those
+bytes compared to the tagged manifest. Restoring old ratified file bytes over a
+HEAD that already contains committed drift does not authorize a sweep.
+
+Live `prereg_rules.yaml` is the ratified authority: exact keys at every mapping
+and list-entry, no YAML duplicate keys, no unknown/missing keys, no duplicate
+source-archive identities, no silently retained untrimmed strings.
+
+Lock-1 remaining decisions D8, D9, D10, D11 and D13 target-date mapping M must
+be present as explicit live blocks (value-empty in the template; no defaults).
+D8 chooses `registered_thresholds` vs `binding_operational_restriction_only`.
+D9 carries pre-event / reference / response horizons and mapping disposition.
+D10 binds `count: 3` plus a deterministic selection rule. D11 carries nonempty
+shock types plus a sweep rule. D12 remains deliberately unregistered.
+
+P5 inputs live in config: `coverage.absence_generating_families` (nonempty
+S1–S8 subset) and `coverage.source_identity_keys` (nonempty unique subset of
+allowed identity fields). Covered exposure is clipped to the registered D1
+sample period. Per-event-class coverage masks (item 2 below) are **not** yet a
+mechanical input to `compute_covered_exposure`; when registered they must
+intersect net exposure. Do not describe current clipping as applying class
+masks.
+
+D6 `capture.sweeps_subdir` and D7 `coverage.records_dir` are unset in the
+template; live files must supply explicit safe paths. `gap_policy_notes` is the
+D7 policy text and must be an actual nonempty string in the live file.
 
 ### D1 architecture — global sample period + coverage masks
 
