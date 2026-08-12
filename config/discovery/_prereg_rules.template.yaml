@@ -8,13 +8,21 @@
 #
 # grainsys.discovery FAIL CLOSED if config/discovery/prereg_rules.yaml is missing
 # or any required block below is null/empty.
+#
+# N3: a complete live file still does NOT authorize a sweep until
+# governing ADR is accepted, tag prereg-rules-v1 exists with a digest
+# manifest, digests match, and HEAD descends from the tagged commit.
 
-schema_version: "0.1"
+schema_version: "0.2"
 
-# D1 — sample period (do not invent)
+# N3 — governing ADR path or docs/decisions filename (required in live file)
+governing_adr: null
+
+# D1 — global sample period (do not invent dates)
+# Per-source/per-class coverage masks supplement this period (ADR-0003).
 sample_period:
-  start_date: null
-  end_date: null
+  sample_start: null
+  sample_end: null
 
 # D2 — corridor / basin scope (do not invent)
 corridors:
@@ -31,10 +39,12 @@ source_archives: []
 #   vehicle: notices_to_navigation_interests
 #   endpoint: null
 
-# D4 — keyword policy (do not invent)
+# D4 — keyword policy (do not invent terms/fields)
+# Algorithm capability includes: substring | whole_word (N4 / ADR-0003).
+# Unsupported modes fail closed. No stemmer; explicit variants are listed terms.
 keyword_policy:
   terms: []
-  match: null          # e.g. substring | stem — unset until decided
+  match: null          # e.g. substring | whole_word — unset until decided
   case_sensitive: null
   fields: []           # e.g. title | full_text — unset until decided
 
@@ -44,7 +54,11 @@ candidates:
   id_prefix: null      # e.g. CAND
   # Ordering keys applied to hit records before minting IDs.
   # Must be an explicit non-empty list in the live file.
+  # Duplicate ordering tuples raise (N1); no positional tie-break.
   ordering_keys: []
+  # Optional source-native id field name for dedup before minting (N1).
+  # Null means unused — do not invent source IDs.
+  stable_id_key: null
 
 # D6 — pre-episode raw capture roots (paths only; no downloads)
 capture:

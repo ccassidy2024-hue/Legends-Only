@@ -1,17 +1,27 @@
-"""Sweep enumerator interface — config-driven, fail closed, no content fetch."""
+"""Sweep enumerator interface — config-driven, fail closed, no content fetch.
+
+Match modes (algorithm capability only — D4 terms/fields remain unset in live config):
+
+* ``substring`` — literal substring
+* ``whole_word`` — whole-word boundaries; case folding only when configured;
+  no stemmer; no hidden morphological expansion; explicit variants are just
+  additional configured terms
+"""
 
 from __future__ import annotations
 
+import re
 from collections.abc import Iterator, Mapping
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 from grainsys.discovery.config import DiscoveryConfigError, load_prereg_rules
+from grainsys.discovery.governance import RatificationError, assert_sweep_authorized
 
 
 class SweepError(RuntimeError):
-    """Sweep cannot proceed under current configuration."""
+    """Sweep cannot proceed under current configuration / ratification."""
 
 
 @dataclass(frozen=True)
@@ -31,12 +41,23 @@ class KeywordPolicy:
     fields: tuple[str, ...]
 
 
+_WORD_BOUNDARY_LEFT = r"(?<!\w)"
+_WORD_BOUNDARY_RIGHT = r"(?!\w)"
+
+
+def _whole_word_match(haystack: str, term: str) -> bool:
+    if not term:
+        return False
+    pattern = _WORD_BOUNDARY_LEFT + re.escape(term) + _WORD_BOUNDARY_RIGHT
+    return re.search(pattern, haystack) is not None
+
+
 class SweepEnumerator:
     """Enumerate registered archives and apply a registered keyword policy.
 
     This class does **not** open remote archives or download documents.
-    Callers that later add network I/O must keep that outside this module until
-    Phase 0 is closed; here we only expose config-backed iteration and matching.
+    ``from_repo`` requires the N3 ratification guard (tag + digests + ancestry).
+    Unit tests of matching may construct via ``SweepEnumerator(config)`` only.
     """
 
     def __init__(self, config: Mapping[str, Any]) -> None:
@@ -64,6 +85,11 @@ class SweepEnumerator:
 
     @classmethod
     def from_repo(cls, repo_root: Path | None = None) -> SweepEnumerator:
+        """Load live config only after fail-closed ratification succeeds."""
+        try:
+            assert_sweep_authorized(repo_root)
+        except RatificationError as exc:
+            raise SweepError(f"ratification guard blocked sweep: {exc}") from exc
         try:
             cfg = load_prereg_rules(repo_root)
         except DiscoveryConfigError as exc:
@@ -93,16 +119,19 @@ class SweepEnumerator:
             raise SweepError(
                 f"field {field!r} is not in registered keyword_policy.fields; fail closed."
             )
-        haystack = text if self._keywords.case_sensitive else text.casefold()
-        terms = (
-            self._keywords.terms
-            if self._keywords.case_sensitive
-            else tuple(t.casefold() for t in self._keywords.terms)
-        )
         match = self._keywords.match
+        if self._keywords.case_sensitive:
+            haystack = text
+            terms = self._keywords.terms
+        else:
+            haystack = text.casefold()
+            terms = tuple(t.casefold() for t in self._keywords.terms)
+
         if match == "substring":
             return any(term in haystack for term in terms)
+        if match == "whole_word":
+            return any(_whole_word_match(haystack, term) for term in terms)
         raise SweepError(
-            f"keyword_policy.match={match!r} is not implemented in this scaffold; "
+            f"keyword_policy.match={match!r} is not implemented; "
             "only explicitly coded match modes may run (no silent fallback)."
         )

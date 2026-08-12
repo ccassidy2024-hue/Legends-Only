@@ -1,15 +1,15 @@
 # Candidate-hit schema (scaffolding only).
 #
 # No real candidate rows are stored in this repository until Phase 0
-# preregistration is committed and a live sweep is authorized.
+# preregistration is committed, ratified (N3), and a live sweep is authorized.
 # This file documents required columns for a future candidates table.
 
-schema_version: "0.1"
+schema_version: "0.2"
 record_kind: candidate_hit
 
 # Required fields after a registered sweep produces a hit:
 required_fields:
-  - candidate_id          # minted by grainsys.discovery.candidates under a supplied ordering rule
+  - candidate_id          # minted under explicit ordering_keys only (N1)
   - sweep_id              # e.g. S1 — from registered config only
   - source_reference      # locator/ref string for the document (not episode content)
   - raw_capture_pointer   # path under pre-episode capture root (may be null until captured)
@@ -17,12 +17,15 @@ required_fields:
   - ordering_key          # deterministic sort key used at mint time (opaque string)
 
 optional_fields:
+  - stable_source_id      # source-native id when provided — dedup only; never invented
   - authority
   - district
   - vehicle
   - endpoint
   - retrieved_on
   - notes                 # logistics only
+  # Future emitters should also stamp SweepProvenance fields (N3):
+  # prereg_tag, prereg_config_digest, execution_commit_sha, governing_adr
 
 # Explicitly forbidden columns (validator rejects):
 forbidden_fields:
@@ -41,5 +44,5 @@ forbidden_fields:
   - reject
 
 # Live table path is configured in config/discovery/prereg_rules.yaml (D5).
-# Until that file exists with non-empty ordering_keys and table_path, minting
-# against a live table FAIL CLOSED.
+# Until that file exists with non-empty ordering_keys and table_path, and N3
+# ratification passes, live sweeps FAIL CLOSED.
