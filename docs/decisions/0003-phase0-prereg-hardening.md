@@ -58,6 +58,7 @@ Load-bearing interpretation files (smallest explicit set):
 - `research/episodes/EPISODE_PROTOCOL.md`
 - `docs/decisions/0002-episode-preregistration.md`
 - `docs/decisions/0003-phase0-prereg-hardening.md`
+- `docs/decisions/0005-source-handling-and-vintage-rules.md`
 
 Future Phase-1 rows/captures must be stampable with
 `SweepProvenance{prereg_tag, prereg_config_digest, execution_commit_sha, governing_adr}`.
