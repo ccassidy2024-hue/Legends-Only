@@ -43,6 +43,7 @@ LOAD_BEARING_RELATIVE_PATHS: tuple[str, ...] = (
     "research/episodes/EPISODE_PROTOCOL.md",
     "docs/decisions/0002-episode-preregistration.md",
     "docs/decisions/0003-phase0-prereg-hardening.md",
+    "docs/decisions/0005-source-handling-and-vintage-rules.md",
 )
 
 

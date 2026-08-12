@@ -176,6 +176,27 @@ though S1 could technically run without them.
   date; no invented clock times) is already settled and must not be altered
   by this decision.
 
+### D14 · Source handling, anchor evidence, and historical-release rules — **CLOSED**
+
+- **Status:** **CLOSED** by ADR-0005 (P1–P6) with append-only lookup entries
+  R-009…R-014. Independently ratified by A and B; no disagreement.
+- **Pointers:** `docs/decisions/0005-source-handling-and-vintage-rules.md`;
+  `RULINGS.md` R-009 (P1), R-010 (P2), R-011 (P3), R-012 (P4), R-013 (P5),
+  R-014 (P6).
+- **Summary of what closed:**
+  - anchor-fixing evidence (public-by ≠ public-on; republication early-bound
+    rules; fail-closed `needs_review` / `R1`)
+  - nonzero `anchor_precision_days` downstream market-response / LP alignment
+    firewall pending separate A+B preregistration
+  - originating-record independence (clarifying §C.2)
+  - document-lifecycle / relief firewall (clarifying §A.5 / H1–H9)
+  - release-identity invariant for leakage-sensitive historical as-of values
+  - coverage zero-semantics for absence-generating sweeps
+  - LNM supplementary / non-discovery / non-absence-generating classification
+- **Explicit non-choice:** D14 chooses **no** parameter, endpoint, clock, or
+  D13 value. Remaining Phase-0 open items stay D1–D11 and D13 (D12 remains
+  deliberately unregistered).
+
 ---
 
 ## 5. What may be done now without breaking either lock
@@ -190,7 +211,8 @@ though S1 could technically run without them.
    §L.5.4 — "coding agents may write sweep and validation code; they may not
    write entry YAML content."
 3. **Draft the ADR** closing D1–D11 and D13 for A + B to review, decide and
-   commit (D12 stays deliberately unregistered per R-003).
+   commit (D12 stays deliberately unregistered per R-003; D14 source-handling
+   is already closed by ADR-0005 / R-009–R-014).
 
 Note on division of labour for when S1 does run: under §L.5.2 a **human opens
 every URL** and records `retrieved_on`, `sha256` and the verbatim quote. An
@@ -201,11 +223,13 @@ author the evidence that a hit is real.
 
 ## 6. Recommended next action
 
-Close D1–D7 (minimum) and D8–D11 plus D13 (for the tag / honest anchor
-mapping) in an ADR, commit, tag `prereg-rules-v1`, then run S1. Until the tag
-exists, `discovery_trail` cannot honestly carry `origin: sweep` for anything,
-and a candidate without a `sweep` origin is rejected `R2` under §L.3 regardless
-of how well-evidenced it looks.
+D14 (source handling / vintage rules) is closed via ADR-0005 and R-009–R-014.
+Close remaining open items **D1–D11 and D13** (D1–D7 minimum for S1 mechanics;
+D8–D11 plus D13 for the tag / honest anchor mapping) in an ADR, commit, tag
+`prereg-rules-v1`, then run S1. D12 stays deliberately unregistered. Until the
+tag exists, `discovery_trail` cannot honestly carry `origin: sweep` for
+anything, and a candidate without a `sweep` origin is rejected `R2` under §L.3
+regardless of how well-evidenced it looks.
 
 **Sign-off required:** A ☐   B ☐   ADR committed ☐   tag created ☐
 
@@ -221,7 +245,9 @@ components across all checked release records. Until official USDA documentation
 establishes that clock component as the true publication instant, it MUST NOT be
 treated as an observed intraday `release_ts`. Supported date information may be
 retained at date precision. No clock time may be fabricated from the ESMIS field.
-(Recorded in ADR-0003.)
+(Recorded in ADR-0003; generalized by ADR-0005 P4 / R-012 release-identity
+invariant — platform/API timestamps establish publication availability only
+when source documentation establishes that semantic.)
 
 ### Follow-up blocker (out of scope for discovery branches)
 

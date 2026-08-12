@@ -129,6 +129,7 @@ def _build_ratified_repo(
     create_tag: bool = True,
     mutate_config_after_tag: bool = False,
     mutate_interpretation_after_tag: bool = False,
+    mutate_adr0005_after_tag: bool = False,
     orphan_head: bool = False,
 ) -> Path:
     """Isolated git repo for N3 tests — never touches the real repository."""
@@ -171,6 +172,12 @@ def _build_ratified_repo(
         target.write_text(target.read_text(encoding="utf-8") + "\n# drift\n", encoding="utf-8")
         _git(root, "add", "-A")
         _git(root, "commit", "-m", "mutate-interp")
+
+    if mutate_adr0005_after_tag:
+        target = root / "docs/decisions/0005-source-handling-and-vintage-rules.md"
+        target.write_text(target.read_text(encoding="utf-8") + "\n# adr0005-drift\n", encoding="utf-8")
+        _git(root, "add", "-A")
+        _git(root, "commit", "-m", "mutate-adr0005")
 
     if orphan_head:
         _git(root, "checkout", "--orphan", "orphan-branch")
@@ -645,6 +652,35 @@ def test_n3_blocks_on_interpretation_digest_drift(tmp_path: Path) -> None:
     root = _build_ratified_repo(tmp_path, mutate_interpretation_after_tag=True)
     with pytest.raises(RatificationError, match="interpretation digest"):
         assert_sweep_authorized(root)
+
+
+def test_n3_adr0005_is_load_bearing_and_post_tag_drift_blocks(tmp_path: Path) -> None:
+    """ADR-0005 must be digest-bound; post-tag edits fail closed (N3 architecture)."""
+    adr5 = "docs/decisions/0005-source-handling-and-vintage-rules.md"
+    adr4_inference = "docs/decisions/0004-phase0-inference-rules.md"
+    assert adr5 in LOAD_BEARING_RELATIVE_PATHS
+    assert "research/episodes/RULINGS.md" not in LOAD_BEARING_RELATIVE_PATHS
+    assert "research/episodes/episode_schema.yaml" not in LOAD_BEARING_RELATIVE_PATHS
+    assert adr4_inference not in LOAD_BEARING_RELATIVE_PATHS
+
+    root = _build_ratified_repo(tmp_path)
+    assert (root / adr5).is_file()
+    assert not (root / adr4_inference).is_file()
+    digests = build_interpretation_digests(root)
+    assert adr5 in digests
+    manifest = yaml.safe_load((root / MANIFEST_RELATIVE).read_text(encoding="utf-8"))
+    assert adr5 in manifest["interpretation_digests"]
+    assert manifest["interpretation_digests"][adr5] == digests[adr5]
+    assert_sweep_authorized(root)
+
+    drift_base = tmp_path / "drift"
+    drift_base.mkdir()
+    drifted = _build_ratified_repo(drift_base, mutate_adr0005_after_tag=True)
+    with pytest.raises(
+        RatificationError,
+        match=r"interpretation digest drift for docs/decisions/0005-source-handling-and-vintage-rules\.md",
+    ):
+        assert_sweep_authorized(drifted)
 
 
 def test_n3_blocks_when_head_not_descendant(tmp_path: Path) -> None:

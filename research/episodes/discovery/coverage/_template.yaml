@@ -7,6 +7,18 @@
 # Axis A — archive existence: coverage_status, earliest_available, latest_available
 # Axis B — sweep execution: sweep_status, records_matched, scope_start, scope_end
 # Do NOT reinterpret earliest/latest_available as sweep scope.
+#
+# P5 / ADR-0005 zero-semantics (comments only — no new keys):
+# - Multiple interval-scoped rows per source are permitted.
+# - Known gaps are explicit absent/unknown interval rows (not prose in notes).
+#   For an affirmatively known gap, the absent/unknown coverage row must carry
+#   explicit scope_start and scope_end identifying the gap interval.
+# - Covered exposure = enumerated scopes minus declared known gaps.
+# - records_matched: 0 applies to accessible records actually enumerated over
+#   the row / net covered scope; it is not proof of real-world event absence.
+# - Endpoint reachability does not prove archive retention completeness.
+# - Supplementary sources (e.g. current LNM classification) do not create
+#   absence exposure / swept-zero claims.
 
 schema_version: "0.2"
 record_kind: source_coverage
