@@ -2,7 +2,7 @@
 
 - **Date:** 2026-08-12
 - **Author:** A | B
-- **Status:** proposed
+- **Status:** accepted
 - **Gate:** A(data) | B(statistics) — Person B must cross-review the implementing PR
 - **Ratification:** Propositions P1–P6 were independently ratified by both
   researchers with **no disagreement**. This ADR is the operative normative home
