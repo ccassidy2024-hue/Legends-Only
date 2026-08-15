@@ -39,6 +39,16 @@ class ScanConfig:
 
 
 def _hac_maxlags(cfg: ScanConfig) -> int:
+    """Determine HAC bandwidth (maxlags).
+
+    Default: 1.5 * max(lags) with a floor of 4. This is a heuristic used in
+    the exploratory screening context. We do NOT silently allow maxlags that
+    approach the sample size; the caller (scan_lags) enforces a simple guard
+    to prevent an overly-large bandwidth relative to the configured minimum
+    sample size (cfg.min_obs). If a human decision is required, the code
+    refuses to proceed so the analysts can consult and preregister an
+    alternative.
+    """
     if cfg.hac_lags is not None:
         return int(cfg.hac_lags)
     return max(4, int(1.5 * max(cfg.lags)))
@@ -90,6 +100,15 @@ def scan_lags(
     x = panel[x_id].astype(float)
     y = panel[y_id].astype(float)
     maxlags = _hac_maxlags(cfg)
+    # Guard: do not allow the HAC bandwidth to be as large as or larger than the
+    # available sample. Such configurations require explicit human review; a
+    # bandwidth that consumes the sample is not defensible for this screening
+    # code path.
+    if maxlags >= cfg.min_obs:
+        raise RuntimeError(
+            f"HAC maxlags ({maxlags}) is too large relative to cfg.min_obs ({cfg.min_obs}). "
+            "Please adjust ScanConfig.hac_lags or min_obs after methodological review."
+        )
 
     rows = []
     for lag in cfg.lags:
@@ -106,7 +125,10 @@ def scan_lags(
         b, se = res.params[1], res.bse[1]
         scale = 1.0
         if cfg.standardize:
-            sx, sy = x.reindex(idx).std(ddof=1), y.reindex(idx).std(ddof=1)
+            x_lag_sample = x.shift(lag).reindex(idx)
+            y_sample = y.reindex(idx)
+            sx = x_lag_sample.std(ddof=1)
+            sy = y_sample.std(ddof=1)
             scale = (sx / sy) if (sy and np.isfinite(sy) and sy > 0) else 1.0
 
         rows.append(
@@ -121,7 +143,7 @@ def scan_lags(
                 "t": float(b / se) if se > 0 else np.nan,
                 "p_naive": float(res.pvalues[1]),
                 "r2": float(res.rsquared),
-                "corr": float(pd.Series(x.shift(lag)).corr(y)),
+                "corr": float(x.shift(lag).reindex(idx).corr(y.reindex(idx))),
                 "inferential_status": "exploratory",
             }
         )
@@ -154,17 +176,31 @@ def maxt_pvalue(
     n_boot: int = 500,
     mean_block: float = 26.0,
     seed: int = 0,
+    *,
+    min_boot_success: int | None = None,
 ) -> dict:
     """Lag-mining-corrected p-value for the best lag in a scan.
 
     Null: x carries no predictive information about y at any lag. Simulated by
     block-resampling x (preserving its own autocorrelation, destroying its
     alignment with y), re-running the full scan, and recording max |t|.
+
+    Optional ``min_boot_success`` lets callers require a minimum number of
+    successful bootstrap replicates before treating ``p_maxt`` as reliable.
+    When ``None`` (default), no minimum is enforced and behavior matches prior
+    releases. Callers who want a defensible floor can compute one explicitly,
+    e.g. ``max(200, ceil(3 * len(cfg.lags) / alpha))`` for target FDR ``alpha``.
     """
     cfg = cfg or ScanConfig()
+    min_required = min_boot_success
     observed = scan_lags(panel, x_id, y_id, cfg)
     if observed.empty:
-        return {"x": x_id, "y": y_id, "status": "insufficient_data"}
+        return {
+            "x": x_id,
+            "y": y_id,
+            "status": "insufficient_data",
+            "min_boot_success_required": min_required,
+        }
 
     best = observed.loc[observed["t"].abs().idxmax()]
     obs_max_t = float(abs(best["t"]))
@@ -172,8 +208,9 @@ def maxt_pvalue(
     rng = np.random.default_rng(seed)
     x_vals = panel[x_id].to_numpy(dtype=float)
     n = len(x_vals)
-    null_max_t = np.empty(n_boot)
+    null_max_t = np.full(n_boot, np.nan)
 
+    n_success = 0
     for b in range(n_boot):
         boot_x = pd.Series(
             x_vals[_stationary_bootstrap_index(n, mean_block, rng)],
@@ -183,9 +220,44 @@ def maxt_pvalue(
         boot_panel = panel.copy()
         boot_panel[x_id] = boot_x
         r = scan_lags(boot_panel, x_id, y_id, cfg)
-        null_max_t[b] = r["t"].abs().max() if not r.empty else 0.0
+        if r.empty:
+            # Record failed replicate as NaN. Do not inject a zero which would
+            # artificially lower the null distribution.
+            null_max_t[b] = np.nan
+            continue
+        null_max_t[b] = r["t"].abs().max()
+        n_success += 1
 
-    p_maxt = float((null_max_t >= obs_max_t).mean())
+    if n_success == 0:
+        return {
+            "x": x_id,
+            "y": y_id,
+            "status": "bootstrap_all_failed",
+            "n_boot": n_boot,
+            "n_boot_success": 0,
+            "inferential_status": "bootstrap_failed",
+            "min_boot_success_required": min_required,
+            "valid": False,
+        }
+
+    if min_required is not None and n_success < min_required:
+        return {
+            "x": x_id,
+            "y": y_id,
+            "status": "bootstrap_low_success",
+            "n_boot": n_boot,
+            "n_boot_success": n_success,
+            "inferential_status": "bootstrap_low_success",
+            "min_boot_success_required": min_required,
+            "p_maxt": float("nan"),
+            "valid": False,
+        }
+
+    # Finite-sample correction: avoid returning p=0 when no null replicate
+    # exceeds the observed statistic. Use (1 + count_ge) / (1 + n_success).
+    null_vals = null_max_t[~np.isnan(null_max_t)]
+    count_ge = int((null_vals >= obs_max_t).sum())
+    p_maxt = float((count_ge + 1) / (n_success + 1))
 
     return {
         "x": x_id,
@@ -198,9 +270,12 @@ def maxt_pvalue(
         "p_maxt": p_maxt,
         "n": int(best["n"]),
         "n_boot": n_boot,
-        "null_max_t_p95": float(np.quantile(null_max_t, 0.95)),
+        "n_boot_success": n_success,
+        "null_max_t_p95": float(np.quantile(null_vals, 0.95)),
         "status": "ok",
         "inferential_status": "exploratory_with_maxt_correction",
+        "min_boot_success_required": min_required,
+        "valid": True,
     }
 
 
@@ -231,8 +306,21 @@ def scan_universe(
     return out.sort_values("t", key=lambda s: s.abs(), ascending=False).reset_index(drop=True)
 
 
-def benjamini_hochberg(p: pd.Series, alpha: float = 0.10) -> pd.Series:
-    """BH false-discovery-rate flags. Apply across the whole scan, once."""
+def benjamini_hochberg(p: pd.Series, alpha: float = 0.10, *, exploratory_ok: bool = False) -> pd.Series:
+    """BH false-discovery-rate flags.
+
+    By default this function refuses to operate silently on p-values that are the
+    result of a best-over-lags selection (the exploratory `scan_universe`/
+    `scan_lags` workflow). Applying BH to naive best-lag p-values after
+    selecting the best lag is not a valid FDR procedure. To proceed despite
+    that, pass `exploratory_ok=True` and accept responsibility.
+    """
+    if not exploratory_ok:
+        raise ValueError(
+            "benjamini_hochberg refuses to run unless exploratory_ok=True. "
+            "Do not apply BH to selected best-of-many-lags naive p-values without "
+            "an appropriate correction or pre-registered analysis plan."
+        )
     p = p.astype(float)
     order = p.sort_values().index
     m = len(p)
