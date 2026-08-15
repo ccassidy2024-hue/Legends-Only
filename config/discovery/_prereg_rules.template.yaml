@@ -4,14 +4,16 @@
 # Copy to prereg_rules.yaml and fill ONLY after A+B Phase 0 decisions
 # (see research/episodes/PHASE0_MISSING_DECISIONS.md — D1–D11, D13; D12 stays
 # deliberately unregistered). Do not invent districts, endpoints, keywords,
-# sample dates, ordering rules, or analysis-anchor grid values.
+# sample dates, ordering rules, thresholds, horizons, or analysis-anchor values.
 #
 # grainsys.discovery FAIL CLOSED if config/discovery/prereg_rules.yaml is missing
-# or any required block below is null/empty.
+# or any required block below is null/empty. Exact keys only; unknown/duplicate
+# YAML keys fail closed. Strings must be canonical (no untrimmed retain).
 #
 # N3: a complete live file still does NOT authorize a sweep until
 # governing ADR is accepted, tag prereg-rules-v1 exists with a digest
-# manifest, digests match, and HEAD descends from the tagged commit.
+# manifest, digests match, HEAD descends from the tagged commit, and the
+# working tree matches actual HEAD blobs byte-for-byte.
 
 schema_version: "0.2"
 
@@ -20,6 +22,7 @@ governing_adr: null
 
 # D1 — global sample period (do not invent dates)
 # Per-source/per-class coverage masks supplement this period (ADR-0003).
+# Event-class masks are not yet a mechanical exposure input (future obligation).
 sample_period:
   sample_start: null
   sample_end: null
@@ -50,38 +53,73 @@ keyword_policy:
 
 # D5 — candidate table + deterministic ID minting (do not invent)
 candidates:
+  # Live loader requires a safe repo-relative path contained under the repo root.
   table_path: null     # e.g. research/episodes/discovery/candidates/candidates.csv
+  # Live loader requires a safe single path component (no separators / traversal).
   id_prefix: null      # e.g. CAND
   # Ordering keys applied to hit records before minting IDs.
   # Must be an explicit non-empty list in the live file.
   # Duplicate ordering tuples raise (N1); no positional tie-break.
   ordering_keys: []
-  # Optional source-native id field name for dedup before minting (N1).
-  # Null means unused — do not invent source IDs.
+  # Optional source-native raw field name; value is copied only into
+  # stable_source_id for dedup (N1). Null means unused — do not invent IDs.
+  # Rejects forbidden / post-mint / sweep_id control / unsafe names.
   stable_id_key: null
 
 # D6 — pre-episode raw capture roots (paths only; no downloads)
+# Live loader requires explicit nonempty values; template stays unset.
 capture:
-  # Relative to $GRAIN_DATA_ROOT (or an explicit absolute root in settings).
-  # Hits are stored under sweeps/<sweep_id>/<candidate_id>/ — no episode_id.
-  sweeps_subdir: sweeps
+  # Safe relative path under $GRAIN_DATA_ROOT (or an explicit absolute data root).
+  # Hits are stored under <sweeps_subdir>/<sweep_id>/<candidate_id>/ — no episode_id.
+  sweeps_subdir: null
   rehome_policy: null  # when/how a hit moves under episodes/<episode_id>/ — D6
 
 # D7 — coverage gap policy
+# Live loader requires explicit records_dir, P5 family/identity keys, and
+# nonempty gap_policy_notes (the D7 policy text). Template stays unset.
 coverage:
-  records_dir: research/episodes/discovery/coverage
+  records_dir: null
   absent_must_be_explicit: true
-  # How missing archives are recorded is a Phase 0 decision beyond this flag.
   gap_policy_notes: null
+  absence_generating_families: []
+  source_identity_keys: []
 
-# D13 — analysis-anchor grid (documentation stub only; not selected here).
-# Required for honest date-only public_anchor mapping (R-001 / §B.3).
+# D8 — per-class physical thresholds vs binding-operational-restriction-only
+# Live must choose exactly one mode. registered_thresholds requires a nonempty
+# class_thresholds list; binding_operational_restriction_only requires empty.
+physical_thresholds:
+  mode: null
+  class_thresholds: []
+
+# D9 — event window / horizon set (do not invent lengths)
+event_windows:
+  pre_event_horizon: null
+  reference_horizon: null
+  response_horizon: null
+  mapping_disposition: null
+
+# D10 — three-candidate calibration set (§K.3.1)
+# Live count must be the actual integer 3 plus a nonempty selection_rule.
+calibration_set:
+  count: null
+  selection_rule: null
+
+# D11 — concurrent-shock types driving §E.3 mechanical contamination sweep
+concurrent_shocks:
+  shock_types: []
+  sweep_rule: null
+
+# D12 is deliberately absent/unregistered (R-003). Do not add a block here.
+
+# D13 — analysis-anchor grid + target-date mapping M (R-001 / §B.3).
 # Values depend on Person A's verified release-calendar audit + A+B ratification.
-# Do NOT invent frequency, weekday, cutoff, timezone, holiday, or missing-anchor rules.
-# analysis_anchor_grid:
-#   frequency: null
-#   weekday_or_calendar_convention: null
-#   cutoff_time: null
-#   timezone: null
-#   holiday_treatment: null
-#   missing_anchor_handling: null
+# Do NOT invent frequency, weekday, cutoff, timezone, holiday, missing-anchor,
+# or mapping values. Live loader requires this mapping and these keys.
+analysis_anchor_grid:
+  frequency: null
+  weekday_or_calendar_convention: null
+  cutoff_time: null
+  timezone: null
+  holiday_treatment: null
+  missing_anchor_handling: null
+  target_date_mapping: null
