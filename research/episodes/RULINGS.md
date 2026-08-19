@@ -275,3 +275,89 @@ names the one it replaces.
   and public-knowability evidence.
 - **Decided by:** A + B (independent ratification; no disagreement)
 - **Supersedes:** none
+
+### 2026-08-18 · R-015 · H7 deterministic resolution and relief-only exception
+
+- **Situation:** H7 states ≤1 episode per `(corridor, driver)` per 60 days
+  without a written exception, but does not define the driver key, the 60-day
+  window arithmetic, survivor selection, or admissible exception conditions.
+  In addition, §A.5 requires two episodes after an affirmatively documented
+  return to unrestricted or explicitly pre-episode-baseline operation for
+  ≥21 consecutive days followed by recurrence, creating a direct 21–60 day
+  governance tension that must be resolved before candidate discovery.
+- **Rule invoked:** EPISODE_PROTOCOL.md §A.5 and H1–H9; R-002; R-009;
+  R-010; R-011; H7-GOVERNANCE-v1 joint A+B ratification.
+- **Ruling:** H7 uses the key
+  `(canonical corridor_id, underlying_driver_id)`.
+  `driver_class` is never the H7 driver component.
+
+  H1–H9 retain their canonical ordering. Cases already established as one
+  episode by §A.5/H1/H2/H3 do not create an H7 survivor contest. H5 remains
+  controlling for parent/child primary-sample treatment, and H6 review remains
+  additive where applicable.
+
+  For otherwise-admissible entries within one H7 key, sort by recorded
+  `public_anchor` ascending. Admit the earliest. Thereafter admit an entry only
+  when its recorded `public_anchor` is at least 60 calendar days after the
+  `public_anchor` of the most recently admitted entry. An entry admitted under
+  the exception below resets the 60-day window. The result is a derived
+  function of committed fields and must be re-run when an input public_anchor
+  changes pre-freeze. Discovery order confers no priority.
+
+  Exact-public_anchor ties use ascending `candidate_id` only after D5 has
+  frozen deterministic minting/order and deterministic candidate-to-episode
+  lineage. If that lineage is unavailable, tied H7 resolution fails closed
+  until A+B preregister another deterministic tie-break. This ruling chooses
+  no D5 value.
+
+  The sole ordinary H7 exception is documented relief and renewed onset:
+  Tier-1 originating evidence must affirmatively establish restoration to
+  unrestricted or explicitly pre-episode-baseline operation for at least
+  21 consecutive days, followed by a later episode with its own independently
+  evidenced public_anchor under R-009. The evidence may consist of one or
+  multiple qualifying originating operational records, but silence between
+  observations cannot manufacture continuity. Silence, cancellation, expiry,
+  supersession, disappearance, non-reissue, and publication migration do not
+  constitute relief.
+
+  There is no residual H7 exception. Independent infrastructure within one
+  canonical corridor and a claimed distinct physical mechanism are not H7
+  exceptions. Driver/corridor identity errors are corrected through normal
+  governance and H7 is re-run; they are never laundered as exceptions.
+
+  Survivor/exception decisions may not use market outcomes, downstream
+  statistical results, severity rankings, importance, document counts,
+  salience, sample-size needs, power, estimator feasibility, identification
+  convenience, or ex-post fields as selectors. D12 remains unregistered.
+
+  Either researcher may propose the relief exception before acceptance; the
+  other must review independently; A+B unanimity is required with no market
+  data open. If disagreement remains unresolved at freeze, no exception is
+  granted and the non-survivor carries R4 and R13.
+
+  An H7 non-survivor is retained as:
+  `status: rejected`;
+  `decision: reject`;
+  `decision_reasons: [R4]` (or `[R4, R13]` for unresolved exception
+  disagreement);
+  `dedup_rule_applied: H7`;
+  with related entries cross-linked.
+  This intentionally engages the existing accepted/rejected dual-review
+  requirements. No schema change is required by this disposition itself.
+
+  Entries admitted through the relief exception share `cluster_id`; an H7
+  exception never establishes statistical independence or splits a cluster.
+
+  The ruling is ratified now but remains operationally inert until
+  D2-MEMBERSHIP/canonical corridor persistence and the required D5 deterministic
+  lineage are closed.
+
+  Pre-freeze anchor/evidence changes trigger deterministic re-resolution.
+  Post-ledger-freeze changes never rewrite the frozen sample in place and require
+  separately governed post-freeze versioning / ADR treatment.
+- **Generalises to:** Every H7 collision, survivor determination, and H7
+  exception adjudication after the required D2/D5 activation dependencies
+  close.
+- **Decided by:** A + B (joint human ratification of H7-GOVERNANCE-v1,
+  2026-08-18; no disagreement)
+- **Supersedes:** none
