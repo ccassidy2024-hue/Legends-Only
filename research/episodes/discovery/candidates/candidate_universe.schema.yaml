@@ -1,0 +1,64 @@
+# Candidate-universe manifest schema (D5 / ADR-0008).
+#
+# Documents the runtime manifest shape for a future authorized universe build.
+# This file is SCHEMA ONLY — no live manifest instance is created by PR-A.
+# Not yet added to LOAD_BEARING_RELATIVE_PATHS (deferred to final pre-tag binding).
+
+schema_version: "0.1"
+record_kind: candidate_universe_manifest
+
+# Future authorized build MUST persist BOTH canonical artifacts coherently:
+#   1. research/episodes/discovery/candidates/candidates.csv
+#   2. research/episodes/discovery/candidates/candidate_universe.yaml
+# Schema for (2) is this file. No live instance in PR-A.
+# Existing table OR existing manifest ⇒ fail-closed refusal (no partial overwrite).
+# Partial failure must not leave one new canonical artifact without the other.
+
+# Required properties of a future runtime manifest instance:
+required_properties:
+  candidate_universe_version:  # d5cu-<full 64-hex SHA-256 of hit_set_digest>
+    type: string
+  hit_set_digest:              # SHA-256 hex of canonical frozen hit-set payload
+    type: string
+  candidates_digest:           # SHA-256 hex of exact candidates.csv bytes
+    type: string
+  id_prefix:                   # must be CAND under D5-CANDIDATE-IDENTITY-v1
+    type: string
+    const: CAND
+  ordering_keys:               # must be [sweep_id, source_reference]
+    type: array
+    items: { type: string }
+    const: [sweep_id, source_reference]
+  stable_id_key:               # must be null under D5-CANDIDATE-IDENTITY-v1
+    type: "null"
+  required_sweep_families:     # from authorized/registered context (no hidden default)
+    type: array
+    items: { type: string }
+    minItems: 1
+  completed_sweep_families:    # attested-complete subset; must cover required set
+    type: array
+    items: { type: string }
+    minItems: 1
+  candidate_count:
+    type: integer
+    minimum: 0
+  frozen_at:                   # optional explicit caller observation; null if absent
+    type: ["string", "null"]
+  supersedes:                  # MUST be null in this implementation
+    type: "null"
+
+notes:
+  - Live D5 construction binds id_prefix/ordering_keys/stable_id_key in code;
+    they are not caller-overridable through the project-specific API.
+  - Cross-version supersession is unsupported; non-null supersedes fails closed.
+  - candidate_universe_version retains the FULL hit-set SHA-256 identity
+    (d5cu-<64 hex>); it is not truncated and is not a sequential/persistent
+    version across changed universes.
+  - hit_set_digest, candidates_digest, and candidate_universe_version MUST NOT
+    depend on frozen_at. Same frozen hits + identical CSV ⇒ same scientific
+    identity regardless of when the build executes.
+  - Absence of frozen_at means no freeze-time observation was recorded by the
+    caller; it must not be fabricated from wall-clock time in the mint/identity layer.
+  - Canonical table path: research/episodes/discovery/candidates/candidates.csv
+  - Canonical future manifest path:
+      research/episodes/discovery/candidates/candidate_universe.yaml
