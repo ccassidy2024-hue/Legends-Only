@@ -481,6 +481,20 @@ def test_repo_has_live_prereg_rules() -> None:
     assert template.is_file()
 
 
+def test_live_prereg_rules_loads_without_error() -> None:
+    """Live prereg_rules.yaml must load and pass all schema/key validation.
+
+    This guards against key typos (e.g. response_horizons vs response_horizon),
+    unknown keys, and invalid vocabulary tokens in the live configuration.
+    """
+    cfg = load_prereg_rules(REPO)
+    assert cfg["schema_version"] == "0.2"
+    assert cfg["sample_period"]["sample_start"] is not None
+    assert cfg["sample_period"]["sample_end"] is not None
+    assert len(cfg["corridors"]["navigation_basins"]) > 0
+    assert "response_horizon" in cfg["event_windows"]
+
+
 # ---------------------------------------------------------------------------
 # N1 — deterministic minting
 # ---------------------------------------------------------------------------
