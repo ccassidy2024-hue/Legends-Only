@@ -119,9 +119,11 @@ D9 carries pre-event / reference / response horizons and mapping disposition.
 D10 binds `count: 3` plus a deterministic selection rule. D11 carries nonempty
 shock types plus a sweep rule. D12 remains deliberately unregistered.
 
-P5 inputs live in config: `coverage.absence_generating_families` (nonempty
-S1–S8 subset) and `coverage.source_identity_keys` (nonempty unique subset of
-allowed identity fields). Covered exposure is clipped to the registered D1
+P5 inputs live in config: `coverage.absence_generating_families` (S1–S8
+subset that may be empty; an empty set means no family is permitted to
+generate absence evidence and unknown remains unknown) and
+`coverage.source_identity_keys` (nonempty unique subset of allowed identity
+fields). Covered exposure is clipped to the registered D1
 sample period. Per-event-class coverage masks (item 2 below) are **not** yet a
 mechanical input to `compute_covered_exposure`; when registered they must
 intersect net exposure. Do not describe current clipping as applying class
