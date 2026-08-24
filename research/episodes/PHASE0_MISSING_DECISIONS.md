@@ -126,11 +126,15 @@ These need no further decision; they are not the blocker.
   order must be deterministic and specified (e.g. a stated sort key) — otherwise
   the workload split is a function of the order documents happened to be read.
 
-### D6 · Raw-capture path for Phase 1 hits
+### D6 · Raw-capture path for Phase 1 hits — **CLOSED**
 
-- **Blocks:** §C.2.4 archives under `$GRAIN_DATA_ROOT/episodes/<episode_id>/`,
-  but Phase 1 hits have no `episode_id` yet. Register the pre-episode capture
-  path and the point at which a hit is rehomed under an episode id.
+- **Status:** **CLOSED** by ADR-0010 (D6-CAPTURE-LIFECYCLE-v1 architecture) +
+  ADR-0013 (D6-CONCRETE-VALUES-v1 concrete values); merged in PR #18.
+- **Canonical path:** `$GRAIN_DATA_ROOT/sweeps/<sweep_id>/<candidate_id>/`
+  (candidate-keyed, `capture.sweeps_subdir = "sweeps"`).
+- **Rehome policy:** `capture.rehome_policy = "candidate_keyed_no_move"` — canonical
+  evidence stays candidate-keyed; no physical move to `<episode_id>/` occurs.
+- **D6 mechanical implementation:** remains OPEN.
 
 ### D7 · Source-coverage map and the gap policy
 
@@ -224,9 +228,10 @@ author the evidence that a hit is real.
 ## 6. Recommended next action
 
 D14 (source handling / vintage rules) is closed via ADR-0005 and R-009–R-014.
-Close remaining open items **D1–D11 and D13** (D1–D7 minimum for S1 mechanics;
-D8–D11 plus D13 for the tag / honest anchor mapping) in an ADR, commit, tag
-`prereg-rules-v1`, then run S1. D12 stays deliberately unregistered. Until the
+D6 (raw-capture path) is closed via ADR-0010 + ADR-0013 and merged PR #18.
+Close remaining open items **D1–D5, D7–D11, and D13** (D1–D5 and D7 minimum for
+S1 mechanics; D8–D11 plus D13 for the tag / honest anchor mapping) in an ADR,
+commit, tag `prereg-rules-v1`, then run S1. D12 stays deliberately unregistered. Until the
 tag exists, `discovery_trail` cannot honestly carry `origin: sweep` for
 anything, and a candidate without a `sweep` origin is rejected `R2` under §L.3
 regardless of how well-evidenced it looks.
