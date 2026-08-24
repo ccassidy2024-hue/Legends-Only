@@ -2,7 +2,7 @@
 
 - **Date:** 2026-08-24
 - **Author:** A | B
-- **Status:** accepted / jointly ratified
+- **Status:** accepted
 - **Decision scope:** D3 active NTNI source rows and D4 normalized field
 - **Review class:** Tier A decision; Tier B implementing code
 
