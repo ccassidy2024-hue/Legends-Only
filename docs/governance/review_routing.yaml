@@ -1,0 +1,83 @@
+# REVIEW-ROUTING-v1 — machine-readable companion to ADR-0014 / WORKFLOW.md
+#
+# review_tier and agent_delegatable are independent axes.
+# Do not invent Tier D. Fail closed for unclassified scientific/load-bearing work.
+# This file is not executable automation.
+
+schema_version: "1.0"
+contract: REVIEW-ROUTING-v1
+adr: docs/decisions/0014-review-routing-v1.md
+human_authority: WORKFLOW.md
+ratified: "2026-08-24"
+
+review_tiers:
+  A:
+    name: joint_scientific_decision
+    counterpart_agreement_required: true
+    description: >
+      Explicit Person A + Person B agreement before choosing/changing
+      scientific rules, sample construction, inference methodology,
+      discovery/freeze authorization, or reopening CLOSED decisions.
+  B:
+    name: load_bearing_implementation
+    counterpart_agreement_required: false
+    exact_head_review_before_merge: true
+    owner_may_design_implement_push_open_pr: true
+    either_may_merge_after_valid_approval: true
+    approval_binds_to_exact_commit_sha: true
+    title_body_only_changes_do_not_invalidate: true
+    description: >
+      High-blast-radius shared implementation of an already-settled contract.
+      Counterpart exact-head review is required before merge.
+  C:
+    name: routine_implementation
+    counterpart_agreement_required: false
+    owner_may_self_merge_after_ci: true
+    description: >
+      Faithful implementation of an already-settled contract with no new
+      scientific choice. Escalate to A if a new scientific choice appears.
+
+# Independent of A/B/C — never reduces review requirements.
+agent_delegation:
+  concept: agent_delegatable
+  is_review_tier: false
+  reduces_review_requirements: false
+  allowed_mechanical_actions:
+    - create_branches
+    - implement_settled_specs
+    - run_tests
+    - fix_mechanical_lint_type_failures
+    - generate_deterministic_artifacts
+    - open_prs
+    - summarize_diffs
+    - monitor_ci
+    - sync_branches
+    - produce_status_handoff_reports
+    - retrieve_from_exact_authorized_endpoint_or_query
+  prohibited_independent_actions:
+    - choose_scientific_values
+    - infer_source_completeness
+    - interpret_silence_or_unknown_as_zero
+    - choose_episodes
+    - inspect_forbidden_market_outcomes
+    - weaken_tests
+    - reinterpret_closed_adr
+
+known_load_bearing_surfaces:
+  review_tier: B
+  paths:
+    - src/grainsys/panel.py
+    - src/grainsys/screening/
+    - src/grainsys/lineage.py
+    - src/grainsys/episodes.py
+    - src/grainsys/discovery/candidates.py
+    - src/grainsys/discovery/candidate_universe.py
+    - src/grainsys/discovery/capture.py
+    - src/grainsys/discovery/governance.py
+    - research/episodes/episode_schema.yaml
+    - tests/  # especially leakage / lag / freeze-accounting tests
+
+default_escalation:
+  unclassified_scientific_or_load_bearing: fail_closed
+  new_scientific_choice_during_implementation: escalate_to_A
+  no_tier_D: true

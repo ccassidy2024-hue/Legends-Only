@@ -2,6 +2,9 @@
 
 ## Ownership
 
+Ownership means **default work assignment**. It never exempts a change from
+REVIEW-ROUTING-v1 (ADR-0014 / `WORKFLOW.md`) Tier A/B/C requirements.
+
 - Synthetic validation and ground-truth fixtures (`tests/fixtures/`)
 - `src/grainsys/screening/` (exploratory only; honest multiple-testing treatment)
 - Robustness checks
@@ -33,5 +36,6 @@ Milestone 1–3 without running a real-data universe screen until authorized.
 
 ## Review sensitivity
 
-Changes touching screening lag logic, `panel.py`, or core leakage/lag-direction
-tests require especially careful human review with Person A. Do not weaken those tests.
+Follow REVIEW-ROUTING-v1. Screening lag / panel / leakage / inference /
+freeze-gate work is typically Tier B (exact-head counterpart review before
+merge). New scientific choices escalate to Tier A. Do not weaken those tests.
