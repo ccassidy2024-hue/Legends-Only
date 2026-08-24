@@ -143,7 +143,7 @@ def _complete_prereg(**overrides) -> dict:
         },
         "capture": {
             "sweeps_subdir": "sweeps",
-            "rehome_policy": "SYNTHETIC_TEST_ONLY_UNSET",
+            "rehome_policy": "candidate_keyed_no_move",
         },
         "coverage": {
             "records_dir": "research/episodes/discovery/coverage",
@@ -1049,6 +1049,34 @@ def test_a_rehome_policy_empty_whitespace_fail_closed(tmp_path: Path, bad: str) 
     _write_live_cfg(tmp_path, cfg)
     with pytest.raises(DiscoveryConfigError, match="rehome_policy"):
         load_prereg_rules(tmp_path)
+
+
+@pytest.mark.parametrize(
+    "bad",
+    [
+        "move",
+        "copy",
+        "none",
+        "reference_view",
+        "verified_copy",
+        "SYNTHETIC_TEST_ONLY_UNSET",
+        "arbitrary_custom",
+    ],
+)
+def test_a_rehome_policy_unauthorized_token_fail_closed(tmp_path: Path, bad: str) -> None:
+    cfg = _complete_prereg()
+    cfg["capture"]["rehome_policy"] = bad
+    _write_live_cfg(tmp_path, cfg)
+    with pytest.raises(DiscoveryConfigError, match="rehome_policy|unauthorized"):
+        load_prereg_rules(tmp_path)
+
+
+def test_a_rehome_policy_candidate_keyed_no_move_accepted(tmp_path: Path) -> None:
+    cfg = _complete_prereg()
+    cfg["capture"]["rehome_policy"] = "candidate_keyed_no_move"
+    _write_live_cfg(tmp_path, cfg)
+    loaded = load_prereg_rules(tmp_path)
+    assert loaded["capture"]["rehome_policy"] == "candidate_keyed_no_move"
 
 
 def test_a_sample_dates_reject_placeholder(tmp_path: Path) -> None:
