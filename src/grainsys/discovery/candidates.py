@@ -201,3 +201,31 @@ def mint_candidate_ids(
         minted["ordering_key"] = "|".join(ot)
         out.append(minted)
     return out
+
+
+def researcher_parity_for_candidate_id(candidate_id: str) -> str:
+    """Map a minted candidate_id sequence to researcher parity (pure).
+
+    Odd sequence numbers → ``"A"``; even sequence numbers → ``"B"``.
+    Derives only from the numeric suffix of ``candidate_id``. Does not read
+    config, filesystem, or clocks, and does not alter mint ordering.
+    """
+    if not isinstance(candidate_id, str) or not candidate_id.strip():
+        raise CandidateIdError(
+            f"candidate_id must be a nonempty string (got {candidate_id!r})"
+        )
+    if "-" not in candidate_id:
+        raise CandidateIdError(
+            f"candidate_id {candidate_id!r} lacks a '-' sequence separator"
+        )
+    _, _, seq_text = candidate_id.rpartition("-")
+    if not seq_text.isdigit():
+        raise CandidateIdError(
+            f"candidate_id {candidate_id!r} has non-numeric sequence {seq_text!r}"
+        )
+    seq = int(seq_text, 10)
+    if seq < 1:
+        raise CandidateIdError(
+            f"candidate_id {candidate_id!r} sequence must be >= 1 (got {seq})"
+        )
+    return "A" if (seq % 2 == 1) else "B"
