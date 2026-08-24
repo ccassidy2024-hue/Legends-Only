@@ -1,0 +1,196 @@
+# config/discovery/prereg_rules.yaml
+#
+# LIVE CONFIGURATION — ratified A+B Phase 0 values.
+# Persistence of durable Slack ratifications per Task C orchestration (2026-08-24).
+#
+# D12 is deliberately absent/unregistered per R-003.
+# This file does NOT authorize a sweep by itself. N3 guards must pass:
+# - governing ADR status accepted
+# - tag prereg-rules-v1 exists with digest manifest
+# - digests match
+# - HEAD descends from tagged commit
+# - working tree matches actual HEAD blobs byte-for-byte
+
+schema_version: "0.2"
+
+# N3 — governing ADR
+governing_adr: docs/decisions/0002-episode-preregistration.md
+
+# D1 — global sample period (ratified 2026-08-24)
+sample_period:
+  sample_start: "2010-01-01"
+  sample_end: "2024-12-31"
+
+# D2 — corridor / basin scope
+# Eligible corridors derived from D2-EXACT-v1 profile (d2_waterborne.py).
+# These are the waterborne basins covered by D3 S1 NTNI source districts.
+corridors:
+  navigation_basins:
+    - lower_mississippi
+    - middle_mississippi
+    - upper_mississippi
+    - ohio
+    - illinois
+    - tennessee_cumberland
+
+# D3 — S1 source archives (ratified per ADR-0015 / ntni.py)
+# Positive-evidence-only; never absence-generating.
+source_archives:
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "St. Paul District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/MVP"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "Rock Island District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/MVR"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "St. Louis District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/MVS"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "Memphis District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/MVM"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "Vicksburg District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/MVK"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "New Orleans District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/MVN"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "Louisville District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/LRL"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "Huntington District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/LRH"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "Pittsburgh District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/LRP"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "Nashville District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/LRN"
+
+# D4 — keyword policy (ratified from 03:26 checklist at 04:38 + later amendments)
+# match=whole_word per ADR-0015; case_sensitive=false per later ratification.
+# fields=[full_text] is the normalized local field from D3/D4-A (ADR-0015).
+keyword_policy:
+  terms:
+    - closure
+    - restriction
+    - "draft restriction"
+    - lockage
+    - "high water"
+    - "low water"
+    - dredging
+    - outage
+    - grounding
+    - allision
+    - breach
+  match: whole_word
+  case_sensitive: false
+  fields:
+    - full_text
+
+# D5 — candidate table + deterministic ID minting (ratified per ADR-0008)
+candidates:
+  table_path: research/episodes/discovery/candidates/candidates.csv
+  id_prefix: CAND
+  ordering_keys:
+    - sweep_id
+    - source_reference
+  stable_id_key: null
+
+# D6 — pre-episode raw capture roots (ratified per ADR-0013)
+capture:
+  sweeps_subdir: sweeps
+  rehome_policy: candidate_keyed_no_move
+
+# D7 — coverage gap policy (ratified from 10:35/10:34 joint packet)
+# absence_generating_families=[] means positive-evidence-only; no family
+# generates absence evidence.
+coverage:
+  records_dir: research/episodes/discovery/coverage
+  absent_must_be_explicit: true
+  gap_policy_notes: >-
+    Preserves unknown; permits absence only over explicitly registered
+    covered intervals. An empty or unavailable result remains unknown,
+    not zero. No S1 source generates absence evidence under this config.
+  absence_generating_families: []
+  source_identity_keys:
+    - source_family
+    - authority
+    - district
+    - vehicle
+    - endpoint
+
+# D8 — per-class physical thresholds vs binding-operational-restriction-only
+# Mode = binding_operational_restriction_only (ratified); class_thresholds empty.
+physical_thresholds:
+  mode: binding_operational_restriction_only
+  class_thresholds: []
+
+# D9 — event window / horizon set (ratified from 03:26 checklist at 04:38)
+# Strictly-after registered-grid mapping; no fill/imputation.
+event_windows:
+  pre_event_horizon: "4 weeks"
+  reference_horizon: "prior-year same calendar weeks"
+  response_horizons:
+    - "1 week"
+    - "2 weeks"
+    - "4 weeks"
+    - "8 weeks"
+    - "13 weeks"
+    - "26 weeks"
+  mapping_disposition: "strictly-after registered-grid; no fill/imputation"
+
+# D10 — three-candidate calibration set (§K.3.1; ratified)
+calibration_set:
+  count: 3
+  selection_rule: >-
+    Select the first three candidates in frozen D5 deterministic ordering
+    (lowest deterministic CAND IDs after the complete candidate universe
+    is minted). Fail closed if fewer than 3 candidates exist.
+
+# D11 — concurrent-shock types driving §E.3 mechanical contamination sweep
+# (ratified from 03:26 + 10:35)
+concurrent_shocks:
+  shock_types:
+    - "drought (crop)"
+    - "macro (rates/USD)"
+    - "competing-origin (Brazil/Argentina)"
+    - other
+  sweep_rule: >-
+    Every candidate receives the same mechanical sweep across every
+    preregistered concurrent-shock class. Absence only under registered
+    coverage, otherwise UNKNOWN. Never add classes from memory.
+
+# D12 is deliberately absent/unregistered per R-003.
+
+# D13 — analysis-anchor grid + target-date mapping (ratified 2026-08-24)
+# This is ANALYSIS POLICY only — never asserted as a source-release fact.
+# Strictly-after target mapping and genuine release_ts firewall per R-001.
+analysis_anchor_grid:
+  frequency: weekly
+  weekday_or_calendar_convention: Friday
+  cutoff_time: "23:59"
+  timezone: UTC
+  holiday_treatment: rollback
+  missing_anchor_handling: drop
+  target_date_mapping: strictly-after

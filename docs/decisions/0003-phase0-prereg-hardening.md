@@ -2,7 +2,7 @@
 
 - **Date:** 2026-08-11
 - **Author:** A | B (jointly reviewed rules; Person A implements)
-- **Status:** proposed
+- **Status:** accepted
 - **Gate:** A(data) | B(statistics) — Person B must cross-review the implementing PR
 
 ## Context
@@ -176,9 +176,12 @@ and must not be attempted on a discovery-only branch.
 
 ## Status of ADR-0002
 
-ADR-0002 remains **proposed**. Merging PR #1 / encoding R-004–R-007 does **not**
-accept the unresolved Phase 0 open-item package (sample period values, corridors,
-thresholds, horizons, calibration set, etc.). See `RULINGS.md` R-008.
+ADR-0002 is now **accepted**. Merging PR #1 / encoding R-004–R-007 made them
+operative. Phase 0 open items (sample period values, corridors, thresholds,
+horizons, calibration set, etc.) were resolved via durable A+B Slack
+ratifications and persisted to `config/discovery/prereg_rules.yaml` (2026-08-24).
+D12 (severity calibration) remains deliberately unregistered per R-003.
+See `RULINGS.md` R-008.
 
 ## Consequences
 

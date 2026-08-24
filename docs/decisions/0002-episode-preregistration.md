@@ -2,7 +2,7 @@
 
 - **Date:** 2026-08-10
 - **Author:** A | B
-- **Status:** proposed
+- **Status:** accepted
 - **Gate:** A(data) | B(statistics)
 
 ## Context
@@ -92,10 +92,12 @@ Until cutpoints are registered, the validator deliberately leaves
 `severity_class` null rather than guessing. Raw physical metrics may still be
 collected.
 
-**Note:** ADR-0002 remains **proposed**. PR #1 was approved and merged; Person B
+**Note:** ADR-0002 is now **accepted**. PR #1 was approved and merged; Person B
 CHANGES_REQUESTED items (R-004–R-007) are operative per `RULINGS.md` R-008.
-This ADR is **not** marked accepted: Phase 0 open items (sample period values,
-corridors, thresholds, horizons, calibration set, etc.) remain unresolved.
+Phase 0 open items (sample period values, corridors, thresholds, horizons,
+calibration set, etc.) were resolved via durable A+B Slack ratifications and
+persisted to `config/discovery/prereg_rules.yaml` (2026-08-24). D12 (severity
+calibration) remains deliberately unregistered per R-003.
 See also ADR-0003 for pre-S1 hardening rules (N1–N4, D1 mask architecture).
 
 ## Consequences

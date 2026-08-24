@@ -473,8 +473,9 @@ def test_no_live_no_episode_dispositions_csv() -> None:
     ).exists()
 
 
-def test_no_prereg_rules_yaml_in_repo() -> None:
-    assert not (REPO / "config/discovery/prereg_rules.yaml").exists()
+def test_prereg_rules_yaml_exists_in_repo() -> None:
+    """After Phase 0 ratification, live prereg_rules.yaml must exist."""
+    assert (REPO / "config/discovery/prereg_rules.yaml").exists()
 
 
 def test_load_bearing_relative_paths_unchanged() -> None:

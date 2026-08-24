@@ -310,8 +310,9 @@ def test_no_episode_keyed_storage_created(tmp_path: Path) -> None:
     assert (tmp_path / "sweeps" / "S1" / "CAND-0001").is_dir()
 
 
-def test_no_live_prereg_rules_yaml_created() -> None:
-    assert not (REPO / "config/discovery/prereg_rules.yaml").exists()
+def test_live_prereg_rules_yaml_exists() -> None:
+    """After Phase 0 ratification, live prereg_rules.yaml must exist."""
+    assert (REPO / "config/discovery/prereg_rules.yaml").exists()
 
 
 def test_d5_artifacts_not_modified_by_capture(tmp_path: Path) -> None:
