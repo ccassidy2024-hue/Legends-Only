@@ -2406,6 +2406,87 @@ def test_pass4b_coverage_unknown_key_rejected() -> None:
         validate_coverage_record(row)
 
 
+# ---------------------------------------------------------------------------
+# D7 empty-absence amendment (ADR-0003 N3 amendment)
+# ---------------------------------------------------------------------------
+
+
+def test_d7_empty_absence_generating_families_accepted(tmp_path: Path) -> None:
+    """Empty absence_generating_families is valid per D7 amendment."""
+    cfg = _complete_prereg()
+    cfg["coverage"]["absence_generating_families"] = []
+    _write_live_cfg(tmp_path, cfg)
+    loaded = load_prereg_rules(tmp_path)
+    assert loaded["coverage"]["absence_generating_families"] == []
+
+
+def test_d7_valid_nonempty_s1_s8_subset_still_accepted(tmp_path: Path) -> None:
+    """Valid nonempty S1-S8 subsets remain accepted."""
+    cfg = _complete_prereg()
+    cfg["coverage"]["absence_generating_families"] = ["S1", "S3", "S8"]
+    _write_live_cfg(tmp_path, cfg)
+    loaded = load_prereg_rules(tmp_path)
+    assert loaded["coverage"]["absence_generating_families"] == ["S1", "S3", "S8"]
+
+
+def test_d7_duplicate_family_still_rejected(tmp_path: Path) -> None:
+    """Duplicates in absence_generating_families still fail closed."""
+    cfg = _complete_prereg()
+    cfg["coverage"]["absence_generating_families"] = ["S1", "S1"]
+    _write_live_cfg(tmp_path, cfg)
+    with pytest.raises(DiscoveryConfigError, match="duplicate"):
+        load_prereg_rules(tmp_path)
+
+
+def test_d7_invalid_family_still_rejected(tmp_path: Path) -> None:
+    """Invalid family names still fail closed."""
+    cfg = _complete_prereg()
+    cfg["coverage"]["absence_generating_families"] = ["S1", "NOT_A_FAMILY"]
+    _write_live_cfg(tmp_path, cfg)
+    with pytest.raises(DiscoveryConfigError, match="outside S1–S8"):
+        load_prereg_rules(tmp_path)
+
+
+def test_d7_out_of_range_family_still_rejected(tmp_path: Path) -> None:
+    """S9 and beyond are outside protocol families and still fail closed."""
+    cfg = _complete_prereg()
+    cfg["coverage"]["absence_generating_families"] = ["S9"]
+    _write_live_cfg(tmp_path, cfg)
+    with pytest.raises(DiscoveryConfigError, match="outside S1–S8"):
+        load_prereg_rules(tmp_path)
+
+
+@pytest.mark.parametrize("bad", [None, "S1", 1, {"S1": True}])
+def test_d7_non_list_absence_generating_families_rejected(
+    tmp_path: Path, bad
+) -> None:
+    """Non-list values for absence_generating_families still fail closed."""
+    cfg = _complete_prereg()
+    cfg["coverage"]["absence_generating_families"] = bad
+    _write_live_cfg(tmp_path, cfg)
+    with pytest.raises(DiscoveryConfigError, match="absence_generating_families"):
+        load_prereg_rules(tmp_path)
+
+
+@pytest.mark.parametrize("bad_entry", [None, 1, True, [], {}])
+def test_d7_non_string_family_entry_rejected(tmp_path: Path, bad_entry) -> None:
+    """Non-string entries in nonempty absence_generating_families fail closed."""
+    cfg = _complete_prereg()
+    cfg["coverage"]["absence_generating_families"] = ["S1", bad_entry]
+    _write_live_cfg(tmp_path, cfg)
+    with pytest.raises(DiscoveryConfigError, match="absence_generating_families"):
+        load_prereg_rules(tmp_path)
+
+
+def test_d7_untrimmed_family_rejected(tmp_path: Path) -> None:
+    """Untrimmed strings in absence_generating_families fail closed."""
+    cfg = _complete_prereg()
+    cfg["coverage"]["absence_generating_families"] = [" S1"]
+    _write_live_cfg(tmp_path, cfg)
+    with pytest.raises(DiscoveryConfigError, match="untrimmed"):
+        load_prereg_rules(tmp_path)
+
+
 @pytest.mark.parametrize(
     "bad",
     ["CON", "PRN", "AUX", "NUL", "COM1", "LPT9", "CON.txt", "com1.foo", "file."],

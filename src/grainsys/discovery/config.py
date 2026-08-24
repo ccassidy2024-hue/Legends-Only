@@ -439,14 +439,37 @@ def _load_navigation_basin_vocab(repo_root: Path) -> frozenset[str]:
     return frozenset(names)
 
 
-def _require_s1_s8_subset(value: Any, *, field: str) -> list[str]:
-    families = require_unique_nonempty_str_list(value, field=field)
-    unknown = sorted(set(families) - PROTOCOL_SWEEP_FAMILIES)
+def _require_s1_s8_subset(
+    value: Any, *, field: str, allow_empty: bool = False
+) -> list[str]:
+    """Validate a list as a subset of protocol sweep families S1-S8.
+
+    When allow_empty is True, an empty list is valid (meaning no family is
+    permitted to generate absence evidence and unknown remains unknown).
+    When allow_empty is False, the list must be nonempty.
+    Every nonempty member must still be unique and within S1-S8.
+    """
+    if not isinstance(value, list):
+        raise DiscoveryConfigError(f"{field} must be a list")
+    if len(value) == 0:
+        if allow_empty:
+            return []
+        raise DiscoveryConfigError(f"{field} must be a nonempty list")
+    # Nonempty list: validate each member is unique and in S1-S8
+    out: list[str] = []
+    seen: set[str] = set()
+    for i, item in enumerate(value):
+        text = require_nonempty_str(item, field=f"{field}[{i}]")
+        if text in seen:
+            raise DiscoveryConfigError(f"{field} contains duplicate {text!r}")
+        seen.add(text)
+        out.append(text)
+    unknown = sorted(set(out) - PROTOCOL_SWEEP_FAMILIES)
     if unknown:
         raise DiscoveryConfigError(
             f"{field} contains values outside S1–S8: {unknown}"
         )
-    return families
+    return out
 
 
 def _require_identity_key_subset(value: Any, *, field: str) -> list[str]:
@@ -691,6 +714,7 @@ def load_prereg_rules(repo_root: Path | None = None) -> dict[str, Any]:
     coverage["absence_generating_families"] = _require_s1_s8_subset(
         coverage.get("absence_generating_families"),
         field="coverage.absence_generating_families",
+        allow_empty=True,
     )
     coverage["source_identity_keys"] = _require_identity_key_subset(
         coverage.get("source_identity_keys"),
