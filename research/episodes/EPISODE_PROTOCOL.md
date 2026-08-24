@@ -761,6 +761,17 @@ required (condition stated) · ⚙ derived by code, never hand-entered.
 | `parent_episode_id` | str \| null | ● | Null unless a child entry |
 | `related_episode_ids` | list[str] | ● | May be empty |
 | `dedup_rule_applied` | str | ● | Which §A.5/§H rule produced this partition |
+| `candidate_ids` | list[str] | ● | Nonempty D5 ancestry; unique; ascending frozen D5 order; many-to-many allowed |
+| `candidate_universe_version` | str | ● | Frozen D5 universe token (`d5cu-{64hex}`) for lineage provenance |
+
+**Lineage (ADR-0009, mechanical):** One YAML file per **episode record**, not one
+per raw candidate hit. `candidate_ids` is the canonical stored episode→candidate
+ancestry. No-episode candidates remain in frozen `candidates.csv` plus a separate
+disposition ledger (`no_episode_dispositions.schema.yaml`). Reverse
+candidate→episode mapping is **derived** — never written into `candidates.csv`.
+`lineage_candidate_id` is **computed** as `min(candidate_ids)` under D5 numeric
+order; it is never stored in YAML. No new scientific selection rule beyond
+ADR-0009.
 
 #### Governance
 
@@ -792,7 +803,9 @@ direction + crop stage + swept `concurrent_shocks` · ≥ 3
 `substitution_channels` + `substitution_state` ·
 `publicly_knowable_at_anchor: true` + vehicle + evidence ·
 `episode_independence_notes` + `driver_class` + `underlying_driver_id` +
-`cluster_id` + `dedup_rule_applied` · `recorded_by` ≠ `reviewed_by` ·
+`cluster_id` + `dedup_rule_applied` · nonempty `candidate_ids` (D5-valid,
+unique, ascending order) + `candidate_universe_version` · `recorded_by` ≠
+`reviewed_by` ·
 `source_confidence` ≠ `low` · `market_outcomes_reviewed: false`.
 
 Everything else is optional or derived. If a required field cannot be filled

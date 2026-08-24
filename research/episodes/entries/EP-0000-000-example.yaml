@@ -4,7 +4,7 @@
 # `example: true` excludes this entry from every sample count.
 # Structure reference for research/episodes/EPISODE_PROTOCOL.md section M.
 
-schema_version: "1.1"
+schema_version: "1.2"
 example: true                      # FICTIONAL — never counted in any sample
 
 episode_id: EP-0000-000
@@ -202,6 +202,12 @@ cluster_id: fictional_blue_river_gate_failure   # default == underlying_driver_i
 parent_episode_id: null
 related_episode_ids: []
 dedup_rule_applied: H1
+
+# ---- candidate lineage (fictional D5 IDs; not in any live universe) ------
+candidate_ids:
+  - CAND-0001
+  - CAND-0002
+candidate_universe_version: d5cu-0000000000000000000000000000000000000000000000000000000000000000
 
 # ---- governance ---------------------------------------------------------
 market_outcomes_reviewed: false
