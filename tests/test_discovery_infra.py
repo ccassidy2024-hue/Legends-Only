@@ -806,6 +806,33 @@ def test_n3_adr0005_is_load_bearing_and_post_tag_drift_blocks(tmp_path: Path) ->
         assert_sweep_authorized(drifted)
 
 
+def test_n3_positive_only_s1_contract_is_load_bearing_and_drift_blocks(
+    tmp_path: Path,
+) -> None:
+    """The approved S1 evidence rule and its adapter cannot drift after N3."""
+    adr15 = "docs/decisions/0015-d3-d4-positive-only-s1.md"
+    adapter = "src/grainsys/ingest/ntni.py"
+    assert adr15 in LOAD_BEARING_RELATIVE_PATHS
+    assert adapter in LOAD_BEARING_RELATIVE_PATHS
+
+    root = _build_ratified_repo(tmp_path)
+    digests = build_interpretation_digests(root)
+    manifest = yaml.safe_load((root / MANIFEST_RELATIVE).read_text(encoding="utf-8"))
+    assert manifest["interpretation_digests"][adr15] == digests[adr15]
+    assert manifest["interpretation_digests"][adapter] == digests[adapter]
+    assert_sweep_authorized(root)
+
+    target = root / adr15
+    target.write_bytes(target.read_bytes() + b"\n# positive-only-contract-drift\n")
+    _git(root, "add", "-A")
+    _git(root, "commit", "-m", "mutate-positive-only-contract")
+    with pytest.raises(
+        RatificationError,
+        match=r"interpretation digest drift for docs/decisions/0015-d3-d4-positive-only-s1\.md",
+    ):
+        assert_sweep_authorized(root)
+
+
 def test_n3_blocks_when_head_not_descendant(tmp_path: Path) -> None:
     root = _build_ratified_repo(tmp_path, orphan_head=True)
     with pytest.raises(RatificationError, match="descendant"):

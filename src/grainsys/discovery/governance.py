@@ -55,6 +55,7 @@ LOAD_BEARING_RELATIVE_PATHS: tuple[str, ...] = (
     "src/grainsys/discovery/governance.py",
     "src/grainsys/discovery/archive_listing.py",
     "src/grainsys/discovery/capture.py",
+    "src/grainsys/ingest/ntni.py",
     "src/grainsys/episodes.py",
     "research/episodes/EPISODE_PROTOCOL.md",
     "research/episodes/ADMISSION_CHECKLIST.md",
@@ -63,6 +64,7 @@ LOAD_BEARING_RELATIVE_PATHS: tuple[str, ...] = (
     "docs/decisions/0002-episode-preregistration.md",
     "docs/decisions/0003-phase0-prereg-hardening.md",
     "docs/decisions/0005-source-handling-and-vintage-rules.md",
+    "docs/decisions/0015-d3-d4-positive-only-s1.md",
 )
 
 LOAD_BEARING_ADR_RELATIVE_PATHS: tuple[str, ...] = tuple(
