@@ -33,7 +33,7 @@ from grainsys.discovery.candidates import (
 )
 from grainsys.discovery.governance import LOAD_BEARING_RELATIVE_PATHS
 
-# Frozen at PR-A baseline — must not change in this PR.
+# Frozen N3 boundary. Any change must be explicit here and in governance tests.
 _EXPECTED_LOAD_BEARING = (
     "src/grainsys/discovery/config.py",
     "src/grainsys/discovery/sweep.py",
@@ -42,6 +42,7 @@ _EXPECTED_LOAD_BEARING = (
     "src/grainsys/discovery/governance.py",
     "src/grainsys/discovery/archive_listing.py",
     "src/grainsys/discovery/capture.py",
+    "src/grainsys/ingest/ntni.py",
     "src/grainsys/episodes.py",
     "research/episodes/EPISODE_PROTOCOL.md",
     "research/episodes/ADMISSION_CHECKLIST.md",
@@ -50,6 +51,7 @@ _EXPECTED_LOAD_BEARING = (
     "docs/decisions/0002-episode-preregistration.md",
     "docs/decisions/0003-phase0-prereg-hardening.md",
     "docs/decisions/0005-source-handling-and-vintage-rules.md",
+    "docs/decisions/0015-d3-d4-positive-only-s1.md",
 )
 
 _FAMILIES = ("S1", "S2")
@@ -77,7 +79,7 @@ def _ok_auth(repo_root, *, execution_commit=None):
     return None
 
 
-def test_n3_load_bearing_tuple_untouched() -> None:
+def test_n3_load_bearing_tuple_matches_explicit_boundary() -> None:
     assert LOAD_BEARING_RELATIVE_PATHS == _EXPECTED_LOAD_BEARING
     assert "candidate_universe.schema.yaml" not in LOAD_BEARING_RELATIVE_PATHS
     assert "candidate_universe.py" not in " ".join(LOAD_BEARING_RELATIVE_PATHS)
