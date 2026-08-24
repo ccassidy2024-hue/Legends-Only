@@ -24,6 +24,9 @@ optional_fields:
   - endpoint
   - retrieved_on
   - notes                 # logistics only
+  - full_text             # D3/D4: local normalized extracted linked-document text
+                          # NOT a source-native NTNI field; extracted at retrieval time
+                          # from captured linked documents; null until retrieval completes
   # Future emitters should also stamp SweepProvenance fields (N3):
   # prereg_tag, prereg_config_digest, execution_commit_sha, governing_adr
 

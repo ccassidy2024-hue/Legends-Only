@@ -42,6 +42,7 @@ class CandidateHit:
     retrieved_on: str | None = None
     notes: str | None = None
     stable_source_id: str | None = None
+    full_text: str | None = None  # D3/D4: local normalized extracted linked-document text
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -86,6 +87,7 @@ def validate_candidate_hit(data: Mapping[str, Any]) -> CandidateHit:
         retrieved_on=data.get("retrieved_on"),
         notes=data.get("notes"),
         stable_source_id=data.get("stable_source_id"),
+        full_text=data.get("full_text"),
     )
 
 

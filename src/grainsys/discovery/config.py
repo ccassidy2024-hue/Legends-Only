@@ -120,6 +120,7 @@ PRE_MINT_CANDIDATE_FIELDS = frozenset(
         "endpoint",
         "retrieved_on",
         "notes",
+        "full_text",  # D3/D4: local normalized extracted linked-document text
     }
 )
 

@@ -227,6 +227,11 @@ def normalize_archive_listing(
                 row["retrieved_on"] if "retrieved_on" in row else ctx_retrieved,
                 field=f"listings[{i}].retrieved_on",
             ),
+            # D3/D4: full_text is local normalized extracted linked-document text
+            # NOT a source-native NTNI field; null until retrieval completes
+            "full_text": _optional_text(
+                row.get("full_text"), field=f"listings[{i}].full_text"
+            ),
         }
         # Ensure validated ordering keys are present with str-or-null discipline.
         for key in keys:

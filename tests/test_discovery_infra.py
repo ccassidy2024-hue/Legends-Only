@@ -2537,3 +2537,194 @@ def test_pass4b_malformed_provenance_rejected() -> None:
             execution_commit_sha="A" * 40,
             governing_adr="docs/decisions/0003-phase0-prereg-hardening.md",
         )
+
+
+# ---------------------------------------------------------------------------
+# D3/D4 positive-evidence-only S1 semantics and full_text contract
+# ---------------------------------------------------------------------------
+
+
+def test_d3d4_full_text_field_in_candidate_hit() -> None:
+    """D3/D4: full_text field is optional on CandidateHit and populated at retrieval."""
+    hit = validate_candidate_hit(
+        {
+            "candidate_id": "CAND-0001",
+            "sweep_id": "S1",
+            "source_reference": "synthetic-ref",
+            "raw_capture_pointer": None,
+            "document_date": "2099-01-01",
+            "ordering_key": "2099-01-01|synthetic-ref",
+            "full_text": "Normalized extracted document content",
+        }
+    )
+    assert hit.full_text == "Normalized extracted document content"
+
+
+def test_d3d4_full_text_null_until_retrieval() -> None:
+    """D3/D4: full_text is null until retrieval completes."""
+    hit = validate_candidate_hit(
+        {
+            "candidate_id": "CAND-0001",
+            "sweep_id": "S1",
+            "source_reference": "synthetic-ref",
+            "raw_capture_pointer": None,
+            "document_date": "2099-01-01",
+            "ordering_key": "2099-01-01|synthetic-ref",
+        }
+    )
+    assert hit.full_text is None
+
+
+def test_d3d4_full_text_in_archive_listing() -> None:
+    """D3/D4: full_text can be populated via archive listing normalization."""
+    listings = [
+        {
+            "source_reference": "ref-a",
+            "document_date": "2099-01-01",
+            "full_text": "Local normalized extracted text",
+        }
+    ]
+    hits = normalize_and_mint_archive_listing(
+        listings,
+        sweep_id="S1",
+        ordering_keys=["document_date", "source_reference"],
+        id_prefix="CAND",
+    )
+    assert len(hits) == 1
+    assert hits[0].full_text == "Local normalized extracted text"
+
+
+def test_d3d4_full_text_null_in_listing() -> None:
+    """D3/D4: full_text null is preserved through listing normalization."""
+    listings = [
+        {
+            "source_reference": "ref-a",
+            "document_date": "2099-01-01",
+        }
+    ]
+    hits = normalize_and_mint_archive_listing(
+        listings,
+        sweep_id="S1",
+        ordering_keys=["document_date", "source_reference"],
+        id_prefix="CAND",
+    )
+    assert len(hits) == 1
+    assert hits[0].full_text is None
+
+
+def test_d3d4_full_text_semantics_is_retrieval_time() -> None:
+    """D3/D4: full_text is semantically retrieval-time; null in listings until captured."""
+    # full_text is a pre-mint field that CAN be included but is semantically
+    # populated at retrieval/capture time. When provided at listing time, it
+    # should pass through unchanged. When absent, it should be null.
+    listings_with = [
+        {"source_reference": "a", "document_date": "2099-01-01", "full_text": "Extracted text"}
+    ]
+    listings_without = [
+        {"source_reference": "b", "document_date": "2099-02-01"}
+    ]
+    norm_with = normalize_archive_listing(
+        listings_with,
+        sweep_id="S1",
+        ordering_keys=["document_date", "source_reference"],
+    )
+    norm_without = normalize_archive_listing(
+        listings_without,
+        sweep_id="S1",
+        ordering_keys=["document_date", "source_reference"],
+    )
+    assert norm_with[0]["full_text"] == "Extracted text"
+    assert norm_without[0]["full_text"] is None
+
+
+def test_d3d4_positive_evidence_only_s1_no_absence() -> None:
+    """D3/D4: positive-evidence-only S1 is supplementary when excluded from absence families."""
+    # When a source family is NOT in absence_generating_families, it acts as supplementary
+    # and generates no absence exposure (intervals=()) even with records_matched=0
+    rows = [
+        _base_identity(
+            source_family="S1",
+            coverage_status="present",
+            endpoint="https://example.invalid/a",
+            sweep_status="enumerated",
+            records_matched=0,
+            scope_start="2015-01-01",
+            scope_end="2015-12-31",
+        )
+    ]
+    # S1 NOT in absence_generating_families (use S2 as the absence family)
+    exposure = _exposure(rows, families=frozenset({"S2"}))  # S1 acts as supplementary
+    assert len(exposure) == 1
+    assert exposure[0].is_absence_generating is False  # S1 not in {"S2"}
+    assert exposure[0].intervals == ()  # No absence exposure for supplementary
+    assert exposure[0].is_swept_zero_eligible is False
+
+
+def test_d3d4_positive_evidence_only_supplementary_never_absence() -> None:
+    """D3/D4: supplementary sources never generate absence exposure regardless of records."""
+    rows = [
+        _base_identity(
+            source_family="S8",  # S8 not in _TEST_ABSENCE_FAMILIES
+            coverage_status="present",
+            endpoint="https://example.invalid/a",
+            sweep_status="enumerated",
+            records_matched=0,
+            scope_start="2015-01-01",
+            scope_end="2015-12-31",
+        )
+    ]
+    exposure = _exposure(rows, families=_TEST_ABSENCE_FAMILIES)  # S1 only
+    assert len(exposure) == 1
+    assert exposure[0].is_absence_generating is False
+    assert exposure[0].intervals == ()  # No absence exposure
+    assert exposure[0].is_swept_zero_eligible is False
+
+
+def test_d3d4_extraction_ambiguity_fails_closed_on_conflicting_stable_ids() -> None:
+    """D3/D4: extraction/retrieval ambiguity fails closed when stable IDs conflict."""
+    a = {
+        "stable_source_id": "SRC-1",
+        "source_reference": "ref-a",
+        "document_date": "2099-01-01",
+    }
+    b = {
+        "stable_source_id": "SRC-1",
+        "source_reference": "ref-b",  # Different ref for same stable ID
+        "document_date": "2099-01-01",
+    }
+    with pytest.raises(CandidateIdError, match="conflicting representations"):
+        mint_candidate_ids(
+            [a, b],
+            ordering_keys=["document_date", "source_reference"],
+            id_prefix="C",
+            stable_id_key="stable_source_id",
+        )
+
+
+def test_d3d4_unknown_coverage_preserved_not_coerced() -> None:
+    """D3/D4: unknown coverage semantics preserved; never coerced to absent/zero."""
+    row = validate_coverage_record(
+        _base_identity(
+            coverage_status="unknown",
+            sweep_status="not_attempted",
+        )
+    )
+    assert row.coverage_status == "unknown"
+    assert row.records_matched is None  # Cannot be zero when unknown
+
+
+def test_d3d4_uncovered_interval_stays_unknown() -> None:
+    """D3/D4: uncovered intervals remain UNKNOWN, not zero exposure."""
+    rows = [
+        _base_identity(
+            coverage_status="unknown",
+            sweep_status="not_attempted",
+            scope_start="2015-01-01",
+            scope_end="2015-12-31",
+        )
+    ]
+    exposure = _exposure(rows)
+    assert len(exposure) == 1
+    assert exposure[0].has_enumeration is False
+    assert exposure[0].intervals == ()
+    assert exposure[0].is_swept_zero_eligible is False
