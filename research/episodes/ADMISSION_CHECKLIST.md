@@ -4,7 +4,18 @@ One page. One candidate. Work down. **Every box must be YES.**
 Any NO ⇒ `rejected` or `needs_review` — never `accepted`.
 Rules: `EPISODE_PROTOCOL.md`. Fields: `episode_schema.yaml`.
 
-`candidate_id: ________`  ·  `recorded_by: ___`  ·  `reviewed_by: ___`  ·  `date: __________`
+`candidate_ids: ________________` (≥1 D5 ID, ascending)  ·
+`candidate_universe_version: ________________`  ·
+`recorded_by: ___`  ·  `reviewed_by: ___`  ·  `date: __________`
+
+### 0 · Lineage (ADR-0009)
+
+- [ ] This YAML is one **episode record**, not one raw candidate hit
+- [ ] `candidate_ids` lists every contributing D5 candidate ID (union under H1/H2/H3/H8)
+- [ ] IDs are **unique**, **D5-valid**, **same width**, stored in **ascending D5 numeric order**
+- [ ] `candidate_universe_version` matches the frozen `candidate_universe.yaml` for this build
+- [ ] Do **not** store `lineage_candidate_id` — it is derived as `min(candidate_ids)` by code
+- [ ] Candidates dropped without an episode will be recorded separately in the no-episode disposition ledger (not in this file)
 
 ### 1 · Is it an episode at all?
 

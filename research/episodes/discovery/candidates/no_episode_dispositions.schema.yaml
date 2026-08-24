@@ -1,0 +1,51 @@
+# No-episode disposition ledger schema (ADR-0009 scaffolding).
+#
+# Records every frozen candidate that never appears in episode YAML ancestry.
+# SCHEMA ONLY — no live no_episode_dispositions.csv in this repository yet.
+#
+# The ledger is interpreted against the one adjacent frozen candidate universe
+# represented by research/episodes/discovery/candidates/candidate_universe.yaml
+# during an explicit freeze-accounting check. Do NOT duplicate
+# candidate_universe_version on each row.
+
+schema_version: "1.0"
+record_kind: no_episode_disposition
+
+required_fields:
+  - candidate_id
+  - reason_code
+
+optional_fields:
+  - note
+
+# Reuses the existing episode decision_reason vocabulary unchanged (R1–R13).
+vocabularies:
+  decision_reason:
+    R1:  "Anchor undatable (anchor_precision_days > 7)"
+    R2:  "Insufficient source tier / two-source rule fails"
+    R3:  "No documented material grain-logistics consequence (driver only)"
+    R4:  "Duplicate or subsumed by another episode"
+    R5:  "Too gradual - regime, not event"
+    R6:  "Outcome-selected (surfaced via market memory, unconfirmed by sweep)"
+    R7:  "Not publicly knowable at the anchor"
+    R8:  "Irreducible contamination (class D)"
+    R9:  "Physical evidence insufficient or Tier 1 sources contradictory"
+    R10: "Outside pre-registered sample period or source coverage"
+    R11: "Proposed post-freeze without an ADR"
+    R12: "Fabricated or unverifiable source"
+    R13: "Reviewer disagreement unresolved at freeze deadline"
+
+fields:
+  - name: candidate_id
+    type: str
+    requirement: always
+    notes: "D5-shaped ID from the frozen candidates.csv; ledger is candidate-keyed"
+  - name: reason_code
+    type: enum
+    requirement: always
+    vocab: decision_reason
+    notes: "Existing project rejection/drop reason; required on every row"
+  - name: note
+    type: str
+    requirement: optional
+    notes: "Optional factual or logistical note"

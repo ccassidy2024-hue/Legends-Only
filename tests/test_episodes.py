@@ -527,3 +527,22 @@ def test_cluster_differs_from_driver_warns(entry: dict, schema: dict) -> None:
 def test_cutpoints_remain_unregistered(schema: dict) -> None:
     assert schema["severity"]["cutpoints_registered"] is False
     assert schema["severity"]["cutpoints"] == {} or not schema["severity"]["cutpoints"]
+
+
+def test_lineage_fields_required_on_example(entry: dict, schema: dict) -> None:
+    assert entry["candidate_ids"] == ["CAND-0001", "CAND-0002"]
+    assert entry["candidate_universe_version"].startswith("d5cu-")
+    assert entry["schema_version"] == "1.2"
+    assert "1.2" in schema["supported_versions"]
+
+
+def test_stored_lineage_candidate_id_rejected(entry: dict, schema: dict) -> None:
+    bad = copy.deepcopy(entry)
+    bad["lineage_candidate_id"] = "CAND-0001"
+    assert "E06" in codes(run(bad, schema))
+
+
+def test_unsorted_candidate_ids_rejected(entry: dict, schema: dict) -> None:
+    bad = copy.deepcopy(entry)
+    bad["candidate_ids"] = ["CAND-0002", "CAND-0001"]
+    assert "E30" in codes(run(bad, schema))

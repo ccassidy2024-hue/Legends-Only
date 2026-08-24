@@ -29,6 +29,12 @@ from typing import Any
 
 import yaml
 
+from grainsys.lineage import (
+    LineageError,
+    validate_candidate_ids_shape,
+    validate_candidate_universe_version,
+)
+
 SCHEMA_PATH = Path("research/episodes/episode_schema.yaml")
 ENTRIES_DIR = Path("research/episodes/entries")
 LEDGER_PATH = Path("research/episodes/EPISODE_LEDGER.md")
@@ -47,6 +53,7 @@ DERIVED_FIELDS = (
     "preregistration_frozen_at",
     "freeze_commit",
     "content_hash",
+    "lineage_candidate_id",
 )
 
 BANNED_METRIC_TOKENS = (
@@ -356,6 +363,18 @@ def validate_entry(entry: dict[str, Any], schema: dict[str, Any], fx: Findings) 
             "cluster_id differs from underlying_driver_id; default is equality "
             "unless a documented independence/dependence ruling justifies otherwise",
         )
+
+    try:
+        validate_candidate_ids_shape(entry.get("candidate_ids"))
+    except LineageError as exc:
+        fx.error(where, "E30", str(exc))
+
+    cu_version = entry.get("candidate_universe_version")
+    if not _is_blank(cu_version):
+        try:
+            validate_candidate_universe_version(cu_version)
+        except LineageError as exc:
+            fx.error(where, "E31", str(exc))
 
 
 def compute_derived(entry: dict[str, Any], schema: dict[str, Any]) -> dict[str, Any]:

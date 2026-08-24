@@ -12,8 +12,8 @@
 #
 # Do not add fields without an ADR. Do not relax a rule to make CI green.
 
-schema_version: "1.1"
-supported_versions: ["1.0", "1.1"]
+schema_version: "1.2"
+supported_versions: ["1.0", "1.1", "1.2"]
 
 # ---------------------------------------------------------------------------
 # Sample construction (pre-registered; see EPISODE_PROTOCOL.md sec. E.4)
@@ -311,6 +311,12 @@ fields:
   - {name: dedup_rule_applied,      type: str,  requirement: always,
      notes: "which A.5 / H rule produced this partition"}
 
+  # -- candidate lineage (ADR-0009) -----------------------------------------
+  - {name: candidate_ids, type: list, requirement: always, min_items: 1,
+     notes: "Nonempty D5 ancestry; unique; ascending frozen D5 order; many-to-many allowed"}
+  - {name: candidate_universe_version, type: str, requirement: always,
+     notes: "Frozen D5 universe token d5cu-{64hex}; scopes lineage IDs to one universe"}
+
   # -- governance -----------------------------------------------------------
   - {name: market_outcomes_reviewed, type: bool, requirement: always,
      must_equal_pre_freeze: false, notes: "true before freeze FAILS the build"}
@@ -366,6 +372,8 @@ rules:
     - {id: E27, rule: "public_anchor_precision=date requires anchor_ts null; timestamp requires anchor_ts"}
     - {id: E28, rule: "severity_class_kind contemporaneous cannot use metric as_of_date after public_anchor"}
     - {id: E29, rule: "hand-entered severity_class_kind is forbidden (derived only)"}
+    - {id: E30, rule: "candidate_ids nonempty, unique, D5-valid, consistent width, ascending D5 numeric order"}
+    - {id: E31, rule: "candidate_universe_version must match d5cu-{64 lowercase hex}"}
   warnings:
     - {id: W01, rule: "anchor_precision_days in {4..7} -> needs_review"}
     - {id: W02, rule: "single tier-1 source or source_confidence medium -> needs_review"}
