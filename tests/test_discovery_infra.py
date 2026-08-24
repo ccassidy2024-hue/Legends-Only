@@ -56,6 +56,7 @@ from grainsys.discovery.governance import (
     parse_ruling_sections,
     serialize_ratification_manifest,
     sha256_file,
+    validate_ratification_manifest_mapping,
 )
 from grainsys.discovery.sweep import SweepEnumerator, SweepError
 
@@ -1620,8 +1621,14 @@ def test_c_rulings_insert_into_bound_prefix_fails(tmp_path: Path) -> None:
         assert_rulings_binding_holds(root, bound)
 
 
-def test_c_no_live_manifest_in_repo() -> None:
-    assert not (REPO / MANIFEST_RELATIVE).exists()
+def test_c_live_manifest_in_repo_is_valid() -> None:
+    """Verify the committed manifest exists and passes structural validation."""
+    manifest_path = REPO / MANIFEST_RELATIVE
+    assert manifest_path.exists(), "Ratification manifest must exist in repo"
+    import yaml
+    with open(manifest_path) as f:
+        loaded = yaml.safe_load(f)
+    validate_ratification_manifest_mapping(loaded)
 
 
 def test_c_format_block_example_ignored_in_rulings_parse() -> None:
