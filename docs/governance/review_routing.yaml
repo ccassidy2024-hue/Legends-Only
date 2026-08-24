@@ -1,43 +1,70 @@
-# REVIEW-ROUTING-v1 — machine-readable companion to ADR-0014 / WORKFLOW.md
+# REVIEW-ROUTING-v2 — machine-readable companion to ADR-0016 / WORKFLOW.md
 #
 # review_tier and agent_delegatable are independent axes.
 # Do not invent Tier D. Fail closed for unclassified scientific/load-bearing work.
 # This file is not executable automation.
 
-schema_version: "1.0"
-contract: REVIEW-ROUTING-v1
-adr: docs/decisions/0014-review-routing-v1.md
+schema_version: "2.0"
+contract: REVIEW-ROUTING-v2
+adr: docs/decisions/0016-review-routing-v2.md
+supersedes: REVIEW-ROUTING-v1
 human_authority: WORKFLOW.md
 ratified: "2026-08-24"
+slack_thread: "1787597569.176769"
 
 review_tiers:
   A:
     name: joint_scientific_decision
     counterpart_agreement_required: true
+    batched: true
     description: >
       Explicit Person A + Person B agreement before choosing/changing
       scientific rules, sample construction, inference methodology,
       discovery/freeze authorization, or reopening CLOSED decisions.
-  B:
-    name: load_bearing_implementation
+      One approval of a decision packet authorizes faithful downstream
+      implementation; humans do NOT re-approve the same science per PR.
+  B-RED:
+    name: silent_invalidity_surfaces
     counterpart_agreement_required: false
-    exact_head_review_before_merge: true
+    human_exact_head_review_before_merge: true
     owner_may_design_implement_push_open_pr: true
+    review_only_after_frozen_head_and_ci_green: true
     either_may_merge_after_valid_approval: true
     approval_binds_to_exact_commit_sha: true
     title_body_only_changes_do_not_invalidate: true
     description: >
-      High-blast-radius shared implementation of an already-settled contract.
-      Counterpart exact-head review is required before merge.
+      Silent-invalidity code surfaces: panel.py / as-of joins / release_ts
+      alignment; lag-direction / alignment; core leakage tests; discovery
+      authorization / N3 freeze / tag guard. Counterpart human exact-head
+      review required before merge, only after head frozen + CI green.
+  B-STANDARD:
+    name: deterministic_load_bearing
+    counterpart_agreement_required: false
+    human_review_required: false
+    agent_exact_head_review_required: true
+    owner_scoped_branch_required: true
+    ci_green_required: true
+    automation_may_merge: true
+    escalate_if_new_science: true
+    description: >
+      Load-bearing but deterministic implementation of already-ratified
+      science (D2 mechanics, candidate identity/lineage, capture provenance,
+      source adapters/normalization, episode-schema validation, deterministic
+      parsers, prereg value persistence). Requires owner-scoped branch + green
+      CI + independent exact-head agent review. Automation may merge when
+      those pass. Escalate to A if reviewer finds a new scientific choice.
   C:
     name: routine_implementation
     counterpart_agreement_required: false
     owner_may_self_merge_after_ci: true
+    automation_may_merge_after_ci: true
     description: >
       Faithful implementation of an already-settled contract with no new
-      scientific choice. Escalate to A if a new scientific choice appears.
+      scientific choice (docs, source notes, status sync, ordinary tests,
+      fixtures, registered adapters, paths/config plumbing, semantics-preserving
+      refactors). Escalate to A if a new scientific choice appears.
 
-# Independent of A/B/C — never reduces review requirements.
+# Independent of A/B-RED/B-STANDARD/C — never reduces review requirements.
 agent_delegation:
   concept: agent_delegatable
   is_review_tier: false
@@ -63,19 +90,37 @@ agent_delegation:
     - weaken_tests
     - reinterpret_closed_adr
 
-known_load_bearing_surfaces:
-  review_tier: B
+process_rules:
+  - batch_ab_decisions_smallest_packet
+  - no_review_until_ci_green_head_frozen
+  - no_duplicate_agent_audits_unless_a_or_red_risk
+  - claude_optional_redteam_not_critical_path
+  - preserve_unknown_positive_only_after_source_verification_fails
+  - maintain_concise_checkpoint_after_merges
+  - no_adr_for_routine_implementation
+
+known_b_red_surfaces:
+  review_tier: B-RED
   paths:
     - src/grainsys/panel.py
-    - src/grainsys/screening/
+    - src/grainsys/discovery/governance.py  # N3 freeze/tag guard
+  concerns:
+    - as_of_joins
+    - release_ts_alignment
+    - lag_direction_alignment
+    - core_leakage_tests
+
+known_b_standard_surfaces:
+  review_tier: B-STANDARD
+  paths:
     - src/grainsys/lineage.py
     - src/grainsys/episodes.py
     - src/grainsys/discovery/candidates.py
     - src/grainsys/discovery/candidate_universe.py
     - src/grainsys/discovery/capture.py
-    - src/grainsys/discovery/governance.py
+    - src/grainsys/screening/
     - research/episodes/episode_schema.yaml
-    - tests/  # especially leakage / lag / freeze-accounting tests
+    - tests/  # except core leakage tests which are B-RED
 
 default_escalation:
   unclassified_scientific_or_load_bearing: fail_closed
