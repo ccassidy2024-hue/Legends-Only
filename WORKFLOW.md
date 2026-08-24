@@ -77,18 +77,31 @@ git push -u origin feat/barge-ingest
 # open PR
 ```
 
-**Review rules — deliberately asymmetric:**
+**Review routing — REVIEW-ROUTING-v1 (ADR-0014):**
 
-| Change touches | Review needed |
-|---|---|
-| `src/grainsys/panel.py`, `screening/lagscan.py`, `tests/` (esp. leakage/lag) | **Mandatory** review by the other person. No exceptions, no self-merge. |
-| Anything else in `src/` | PR + other person's 👍, self-merge OK |
-| `docs/`, `research/`, `notebooks/` | Push straight to main |
+Durable record: `docs/decisions/0014-review-routing-v1.md`.
+Machine-readable companion: `docs/governance/review_routing.yaml`.
 
-The asymmetry is the point. Alignment and lag code is the surface where a
-silent bug invalidates every downstream result, and it is also exactly where
-AI-generated code fails in ways that look correct. Everything else can be
-fixed later; leakage cannot, because you won't know it happened.
+Exactly three review classes. There is **no Tier D**. Ownership (A vs B work
+assignment) never exempts a change from this routing.
+
+| Tier | Name | Rule |
+|---|---|---|
+| **A** | Joint scientific decision | Explicit Person A + Person B agreement before choosing/changing scientific rules, sample construction, inference methodology, discovery/freeze authorization, or reopening a CLOSED decision. Faithfully implementing an already-ratified decision is not automatically Tier A. |
+| **B** | Load-bearing implementation | No new scientific vote. Owner may design, implement, test, push, and open a PR without waiting. Counterpart **exact-head** review is required **before merge** for high-blast-radius surfaces (panel/as-of, lag, leakage tests, inference, freeze/accounting, candidate identity/lineage, capture immutability/provenance, episode-schema validation, governance gates). Approval binds to the exact SHA; later code changes invalidate it; title/body-only edits do not. Either person may Merge after valid approval. |
+| **C** | Routine implementation | No counterpart approval. Owner may self-merge after required CI when faithfully implementing an already-settled contract (docs persistence, ordinary tests, adapters, fixtures, lint/CI fixes, semantics-preserving refactors). If a **new** scientific choice appears: **STOP** and escalate to A. |
+
+**Async Tier B.** Counterpart review does not have to be synchronous. Phone/text
+review counts only when the exact head SHA is stated, the reviewer confirms
+they reviewed that exact state, approval is durably transcribed to the PR, and
+no code changes occur afterward. Do not impersonate the reviewer.
+
+**Agent delegation is independent** of A/B/C (`agent_delegatable`). Cursor /
+Claude Code / Codex may mechanically execute an authorized settled task without
+per-step human approval. Agent work **never** reduces A/B/C requirements.
+Agents may not independently choose scientific values, infer completeness, turn
+silence into zero, choose episodes, inspect forbidden market outcomes, weaken
+tests, or reinterpret CLOSED ADRs.
 
 CI (`.github/workflows/ci.yml`) runs `ruff` + `pytest` on every PR. If the
 leakage tests fail, the PR does not merge. Do not weaken a test to make CI

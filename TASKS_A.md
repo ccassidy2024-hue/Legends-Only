@@ -2,6 +2,9 @@
 
 ## Ownership
 
+Ownership means **default work assignment**. It never exempts a change from
+REVIEW-ROUTING-v1 (ADR-0014 / `WORKFLOW.md`) Tier A/B/C requirements.
+
 - Source verification and documentation (`docs/sources/`)
 - `catalog/series/*.yaml` (one file per series; no invented IDs/delays)
 - `src/grainsys/ingest/`
@@ -33,5 +36,6 @@ Then **Milestone 2 — As-of panel + leakage protection** on real series once ca
 
 ## Review sensitivity
 
-Changes touching `src/grainsys/panel.py` or core leakage tests require
-especially careful human review with Person B. Do not weaken leakage tests.
+Follow REVIEW-ROUTING-v1. Panel / leakage / lineage / capture / freeze-gate
+work is typically Tier B (exact-head counterpart review before merge). New
+scientific choices escalate to Tier A. Do not weaken leakage tests.

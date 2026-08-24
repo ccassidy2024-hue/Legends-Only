@@ -59,4 +59,15 @@ One YAML per series under `catalog/series/`. Raw data immutable. Notebooks gitig
 
 Observations columns above + `build_asof_panel`. See `TASKS_A.md` / `TASKS_B.md`.
 
-Changes to `panel.py`, screening lag logic, or core leakage tests need careful dual review.
+## Review routing (REVIEW-ROUTING-v1)
+
+Governing record: `docs/decisions/0014-review-routing-v1.md` and
+`docs/governance/review_routing.yaml`. Human authority: `WORKFLOW.md`.
+
+- **A** — joint scientific decision (explicit A+B agreement)
+- **B** — load-bearing implementation (exact-head counterpart review before merge)
+- **C** — routine implementation of settled contracts (self-merge after CI)
+
+Agent mechanical execution is an independent `agent_delegatable` axis; it never
+reduces A/B/C. There is no Tier D. Do not choose scientific values, weaken
+tests, or reinterpret CLOSED ADRs.
