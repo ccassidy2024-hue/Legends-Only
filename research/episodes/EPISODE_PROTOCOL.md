@@ -388,9 +388,15 @@ documents, and is recorded in `discovery_trail`, never in `primary_sources` or
    identifier, URL, `retrieved_on`, `sha256` of the retrieved file, local
    archive path, and `supports` — the list of fields it substantiates. Link rot
    is certain over a 15-year sample; the quote and the hash are what survive.
-4. **Archive outside git.** Snapshots live under `$GRAIN_DATA_ROOT/episodes/<episode_id>/`,
-   consistent with `data/` being gitignored. The ledger stores hashes and
-   quotes, not PDFs.
+4. **Archive outside git.** Canonical raw evidence is **candidate-keyed** under
+   `$GRAIN_DATA_ROOT/sweeps/<sweep_id>/<candidate_id>/` (ADR-0010 / ADR-0013:
+   `capture.sweeps_subdir = "sweeps"`, `rehome_policy = candidate_keyed_no_move`).
+   Content-addressed objects live at `objects/<sha256>` with an append-only
+   capture manifest. Episode-keyed storage under
+   `$GRAIN_DATA_ROOT/episodes/<episode_id>/` is **not** an authoritative
+   raw-evidence location. Under the current policy, no episode-organized
+   materialization or reference view is required or implemented. The ledger
+   stores hashes and quotes, not PDFs.
 5. **Conflicts are recorded, not resolved silently.** Two Tier 1 sources
    disagreeing on a date is a `source_conflicts[]` entry and an automatic
    `NEEDS REVIEW`.
@@ -1275,7 +1281,7 @@ primary_sources:
     url: "https://fictional-district.example.invalid/ntni/0000-99"
     retrieved_on: 2099-05-01
     sha256: "0000000000000000000000000000000000000000000000000000000000000000"
-    archive_path: "$GRAIN_DATA_ROOT/episodes/EP-0000-000/ntni-0000-99.pdf"
+    archive_path: "$GRAIN_DATA_ROOT/sweeps/S1/CAND-0001/objects/0000000000000000000000000000000000000000000000000000000000000000"
     quote: >-
       FICTIONAL QUOTE. "Lock 99 is closed to all vessel traffic effective
       immediately due to a lower miter gate failure. No estimated reopening."
@@ -1288,7 +1294,7 @@ primary_sources:
     url: "https://fictional-district.example.invalid/lpms/lock99"
     retrieved_on: 2099-05-01
     sha256: "1111111111111111111111111111111111111111111111111111111111111111"
-    archive_path: "$GRAIN_DATA_ROOT/episodes/EP-0000-000/lpms-lock99.csv"
+    archive_path: "$GRAIN_DATA_ROOT/sweeps/S1/CAND-0001/objects/1111111111111111111111111111111111111111111111111111111111111111"
     quote: >-
       FICTIONAL QUOTE. Daily record showing queued tows above and below the
       chamber for the closure period.
@@ -1301,7 +1307,7 @@ primary_sources:
     url: "https://fictional-district.example.invalid/ntni/0000-104"
     retrieved_on: 2099-05-01
     sha256: "2222222222222222222222222222222222222222222222222222222222222222"
-    archive_path: "$GRAIN_DATA_ROOT/episodes/EP-0000-000/ntni-0000-104.pdf"
+    archive_path: "$GRAIN_DATA_ROOT/sweeps/S1/CAND-0001/objects/2222222222222222222222222222222222222222222222222222222222222222"
     quote: >-
       FICTIONAL QUOTE. "Lock 99 has returned to normal two-way operation."
     supports: [end_date, relief_confirmed_date, d2_duration]
@@ -1314,7 +1320,7 @@ secondary_sources:
     url: "https://fictional-wire.example.invalid/2099/03/14/lock-99"
     retrieved_on: 2099-05-01
     sha256: "3333333333333333333333333333333333333333333333333333333333333333"
-    archive_path: "$GRAIN_DATA_ROOT/episodes/EP-0000-000/wire-2099-03-14.html"
+    archive_path: "$GRAIN_DATA_ROOT/sweeps/S1/CAND-0001/objects/3333333333333333333333333333333333333333333333333333333333333333"
     quote: >-
       FICTIONAL QUOTE. Same-day report naming the district engineer and the
       closure; establishes contemporaneous public knowability.

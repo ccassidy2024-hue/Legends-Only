@@ -60,6 +60,9 @@ CANDIDATES_KEYS: tuple[str, ...] = (
     "stable_id_key",
 )
 CAPTURE_KEYS: tuple[str, ...] = ("sweeps_subdir", "rehome_policy")
+
+# ADR-0013 closed vocabulary — first D6 implementation only.
+REHOME_POLICIES = frozenset({"candidate_keyed_no_move"})
 COVERAGE_KEYS: tuple[str, ...] = (
     "records_dir",
     "absent_must_be_explicit",
@@ -659,7 +662,16 @@ def load_prereg_rules(repo_root: Path | None = None) -> dict[str, Any]:
         capture.get("sweeps_subdir"),
         field="capture.sweeps_subdir",
     )
-    require_nonempty_str(capture.get("rehome_policy"), field="capture.rehome_policy")
+    rehome_policy = require_nonempty_str(
+        capture.get("rehome_policy"), field="capture.rehome_policy"
+    )
+    if rehome_policy not in REHOME_POLICIES:
+        raise DiscoveryConfigError(
+            f"capture.rehome_policy={rehome_policy!r} must be one of "
+            f"{sorted(REHOME_POLICIES)}; refuse unauthorized rehome token "
+            "(ADR-0013)"
+        )
+    capture["rehome_policy"] = rehome_policy
 
     coverage = require_exact_mapping_keys(
         data.get("coverage"), field="coverage", required=COVERAGE_KEYS

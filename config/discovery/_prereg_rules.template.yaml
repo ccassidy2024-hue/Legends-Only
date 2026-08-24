@@ -68,11 +68,15 @@ candidates:
 
 # D6 — pre-episode raw capture roots (paths only; no downloads)
 # Live loader requires explicit nonempty values; template stays unset.
+# ADR-0010 / ADR-0013: canonical evidence is candidate-keyed under
+#   $GRAIN_DATA_ROOT/<sweeps_subdir>/<sweep_id>/<candidate_id>/
+# Episode formation does not physically move canonical raw evidence.
+# Closed live rehome_policy token: candidate_keyed_no_move only.
 capture:
   # Safe relative path under $GRAIN_DATA_ROOT (or an explicit absolute data root).
   # Hits are stored under <sweeps_subdir>/<sweep_id>/<candidate_id>/ — no episode_id.
   sweeps_subdir: null
-  rehome_policy: null  # when/how a hit moves under episodes/<episode_id>/ — D6
+  rehome_policy: null  # live must be candidate_keyed_no_move (ADR-0013)
 
 # D7 — coverage gap policy
 # Live loader requires explicit records_dir, P5 family/identity keys, and

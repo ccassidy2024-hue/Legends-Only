@@ -1,0 +1,60 @@
+# Capture manifest schema (D6 scaffolding / ADR-0010 + ADR-0013).
+#
+# SCHEMA/SHAPE DOCUMENTATION ONLY.
+# No live capture manifests are committed to this repository.
+# Live artifacts live under $GRAIN_DATA_ROOT/sweeps/<sweep_id>/<candidate_id>/.
+#
+# D5 candidate identity (candidates.csv) and D6 evidence provenance remain
+# separate. This schema does not add columns to candidates.csv.
+
+schema_version: "1.0"
+record_kind: capture_manifest
+
+top_level_required_fields:
+  - schema_version
+  - candidate_id
+  - sweep_id
+  - records
+
+record_required_fields:
+  - source_reference
+  - sha256
+  - byte_length
+
+record_optional_fields:
+  - retrieved_on
+  - original_filename
+  - content_type
+
+field_notes:
+  schema_version: "Capture-manifest schema token (currently 1.0)"
+  candidate_id: "D5-shaped ID, e.g. CAND-0001"
+  sweep_id: "Protocol sweep family / sweep id path component, e.g. S1"
+  records: "Append-only ordered list of capture/provenance records"
+  source_reference: "Upstream identifier/reference; not necessarily a URL"
+  sha256: "Lowercase hex SHA-256 of raw bytes; exactly 64 chars; equals objects/<sha256> filename"
+  byte_length: "Integer length of persisted raw bytes"
+  retrieved_on: "Optional ISO date/string if known; never invented"
+  original_filename: "Optional metadata only; never a path component"
+  content_type: "Optional; only when actually known; never guessed"
+
+forbidden_record_fields:
+  - correction
+  - latest
+  - current
+  - supersedes
+  - episode_id
+  - severity
+  - market_outcome
+  - price
+  - futures
+  - basis
+
+semantics:
+  - raw object identity is sha256
+  - manifest records are provenance relationships to raw objects
+  - identical source_reference + sha256 + optional metadata is idempotent
+  - different source_reference + same sha256 appends a new provenance record
+  - same source_reference + different sha256 appends a new provenance record
+  - no automatic correction / current / latest / supersession semantics
+  - canonical evidence remains candidate-keyed under rehome_policy candidate_keyed_no_move
