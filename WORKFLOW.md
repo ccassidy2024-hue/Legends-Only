@@ -77,31 +77,42 @@ git push -u origin feat/barge-ingest
 # open PR
 ```
 
-**Review routing — REVIEW-ROUTING-v1 (ADR-0014):**
+**Review routing — REVIEW-ROUTING-v2 (ADR-0016):**
 
-Durable record: `docs/decisions/0014-review-routing-v1.md`.
+Durable record: `docs/decisions/0016-review-routing-v2.md`.
 Machine-readable companion: `docs/governance/review_routing.yaml`.
+Supersedes: REVIEW-ROUTING-v1 (ADR-0014).
 
-Exactly three review classes. There is **no Tier D**. Ownership (A vs B work
+Exactly four review classes. There is **no Tier D**. Ownership (A vs B work
 assignment) never exempts a change from this routing.
 
 | Tier | Name | Rule |
 |---|---|---|
-| **A** | Joint scientific decision | Explicit Person A + Person B agreement before choosing/changing scientific rules, sample construction, inference methodology, discovery/freeze authorization, or reopening a CLOSED decision. Faithfully implementing an already-ratified decision is not automatically Tier A. |
-| **B** | Load-bearing implementation | No new scientific vote. Owner may design, implement, test, push, and open a PR without waiting. Counterpart **exact-head** review is required **before merge** for high-blast-radius surfaces (panel/as-of, lag, leakage tests, inference, freeze/accounting, candidate identity/lineage, capture immutability/provenance, episode-schema validation, governance gates). Approval binds to the exact SHA; later code changes invalidate it; title/body-only edits do not. Either person may Merge after valid approval. |
-| **C** | Routine implementation | No counterpart approval. Owner may self-merge after required CI when faithfully implementing an already-settled contract (docs persistence, ordinary tests, adapters, fixtures, lint/CI fixes, semantics-preserving refactors). If a **new** scientific choice appears: **STOP** and escalate to A. |
+| **A** | Joint scientific decision | Explicit Person A + Person B agreement before choosing/changing scientific rules, sample construction, inference methodology, discovery/freeze authorization, or reopening a CLOSED decision. **Batched:** one approval of a decision packet authorizes faithful downstream implementation; humans do NOT re-approve the same science per PR. |
+| **B-RED** | Silent-invalidity surfaces | No new scientific vote. Owner may design, implement, test, push, and open a PR without waiting. Counterpart **human exact-head** review required **before merge** only for: `panel.py` / as-of joins / `release_ts` alignment; lag-direction / alignment; core leakage tests; N3 freeze/tag guard. Review only **after** head frozen + CI green. Any content change invalidates approval. Either person may Merge after valid approval. |
+| **B-STANDARD** | Deterministic load-bearing | No second human required. For deterministic implementation of already-ratified science (D2 mechanics, candidate identity/lineage, capture provenance, source adapters/normalization, episode-schema validation, deterministic parsers, prereg value persistence). Requires: owner-scoped branch + green CI + independent **exact-head agent** review. Automation may merge when those pass. If reviewer finds a new scientific choice: **STOP** and escalate to A. |
+| **C** | Routine implementation | No counterpart approval. Owner/automation may self-merge after required CI when faithfully implementing an already-settled contract (docs, source notes, status sync, ordinary tests, fixtures, registered adapters, paths/config plumbing, semantics-preserving refactors). If a **new** scientific choice appears: **STOP** and escalate to A. |
 
-**Async Tier B.** Counterpart review does not have to be synchronous. Phone/text
-review counts only when the exact head SHA is stated, the reviewer confirms
-they reviewed that exact state, approval is durably transcribed to the PR, and
-no code changes occur afterward. Do not impersonate the reviewer.
+**Async B-RED.** Human counterpart review does not have to be synchronous.
+Phone/text review counts only when the exact head SHA is stated, the reviewer
+confirms they reviewed that exact state, approval is durably transcribed to the
+PR, and no code changes occur afterward. Do not impersonate the reviewer.
 
-**Agent delegation is independent** of A/B/C (`agent_delegatable`). Cursor /
-Claude Code / Codex may mechanically execute an authorized settled task without
-per-step human approval. Agent work **never** reduces A/B/C requirements.
-Agents may not independently choose scientific values, infer completeness, turn
-silence into zero, choose episodes, inspect forbidden market outcomes, weaken
-tests, or reinterpret CLOSED ADRs.
+**Agent delegation is independent** of A/B-RED/B-STANDARD/C (`agent_delegatable`).
+Cursor / Claude Code / Codex may mechanically execute an authorized settled
+task without per-step human approval. Agent work **never** reduces review
+requirements. Agents may not independently choose scientific values, infer
+completeness, turn silence into zero, choose episodes, inspect forbidden market
+outcomes, weaken tests, or reinterpret CLOSED ADRs.
+
+**Process rules (v2):**
+1. Batch all genuine A+B decisions into one smallest packet
+2. No review request until CI green + head frozen
+3. No duplicate agent audits unless Tier A or B-RED risk justifies independent red-team
+4. Claude is optional red-team, never routine critical path
+5. After source verification fails to prove completeness, preserve UNKNOWN / positive-only
+6. Maintain one concise checkpoint after merges
+7. No new ADR for routine implementation detail
 
 CI (`.github/workflows/ci.yml`) runs `ruff` + `pytest` on every PR. If the
 leakage tests fail, the PR does not merge. Do not weaken a test to make CI
