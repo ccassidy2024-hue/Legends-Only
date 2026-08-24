@@ -112,6 +112,32 @@ def test_crosswalk_exact_code_dispositions() -> None:
     assert by_code["UNKNOWN"].disposition is CrosswalkDisposition.UNRESOLVED
 
 
+def test_crosswalk_requires_exact_registry_link_and_source_code_universes() -> None:
+    links = [link("a", "n1", "n2", "ONE"), link("b", "n2", "n3", "TWO")]
+    corridors = build_atomic_corridors(links, id_prefix="TEST")
+    try:
+        build_exact_code_crosswalk(
+            source_codes=["ONE", "TWO"],
+            retained_links=links[:1],
+            corridors=corridors,
+        )
+    except CorridorConstructionError as exc:
+        assert "edge sets differ" in str(exc)
+    else:
+        raise AssertionError("omitting a registered edge must fail closed")
+
+    try:
+        build_exact_code_crosswalk(
+            source_codes=["ONE"],
+            retained_links=links,
+            corridors=corridors,
+        )
+    except CorridorConstructionError as exc:
+        assert "absent from source_codes" in str(exc)
+    else:
+        raise AssertionError("omitting a retained source code must fail closed")
+
+
 def test_membership_positive_is_existential_even_with_missing_year() -> None:
     links = [link("a", "n1", "n2", "W1")]
     corridors = build_atomic_corridors(links, id_prefix="TEST")

@@ -244,18 +244,43 @@ def build_exact_code_crosswalk(
 
     edge_to_corridor: dict[str, str] = {}
     for corridor in corridors:
+        if not corridor.member_edge_ids:
+            raise CorridorConstructionError(
+                f"corridor has no retained edges: {corridor.corridor_id}"
+            )
         for edge_id in corridor.member_edge_ids:
             if edge_id in edge_to_corridor:
                 raise CorridorConstructionError(f"edge assigned to multiple corridors: {edge_id}")
             edge_to_corridor[edge_id] = corridor.corridor_id
 
     links_by_code: dict[str, list[TopologyLink]] = defaultdict(list)
-    for link in retained_links:
+    retained = tuple(retained_links)
+    retained_edge_ids = [link.edge_id for link in retained]
+    if len(retained_edge_ids) != len(set(retained_edge_ids)):
+        raise CorridorConstructionError("retained topology edge_id values must be unique")
+    registered_edges = set(edge_to_corridor)
+    supplied_edges = set(retained_edge_ids)
+    if supplied_edges != registered_edges:
+        missing = sorted(registered_edges - supplied_edges)
+        extra = sorted(supplied_edges - registered_edges)
+        raise CorridorConstructionError(
+            "atomic registry and retained topology edge sets differ: "
+            f"missing={missing!r}, extra={extra!r}"
+        )
+    retained_codes: set[str] = set()
+    for link in retained:
         if link.edge_id not in edge_to_corridor:
             raise CorridorConstructionError(
                 f"retained edge absent from atomic registry: {link.edge_id}"
             )
         links_by_code[link.source_code].append(link)
+        retained_codes.add(link.source_code)
+    unattested_codes = retained_codes - set(canonical_codes)
+    if unattested_codes:
+        raise CorridorConstructionError(
+            "retained topology contains source codes absent from source_codes: "
+            f"{sorted(unattested_codes)!r}"
+        )
 
     entries: list[SourceCrosswalkEntry] = []
     for code in canonical_codes:
