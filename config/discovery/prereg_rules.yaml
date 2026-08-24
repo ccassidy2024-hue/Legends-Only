@@ -31,7 +31,7 @@ corridors:
     - upper_mississippi
     - ohio
     - illinois
-    - tennessee_cumberland
+    - columbia_snake
 
 # D3 — S1 source archives (ratified per ADR-0015 / ntni.py)
 # Positive-evidence-only; never absence-generating.
@@ -151,13 +151,7 @@ physical_thresholds:
 event_windows:
   pre_event_horizon: "4 weeks"
   reference_horizon: "prior-year same calendar weeks"
-  response_horizons:
-    - "1 week"
-    - "2 weeks"
-    - "4 weeks"
-    - "8 weeks"
-    - "13 weeks"
-    - "26 weeks"
+  response_horizon: "{1, 2, 4, 8, 13, 26} weeks"
   mapping_disposition: "strictly-after registered-grid; no fill/imputation"
 
 # D10 — three-candidate calibration set (§K.3.1; ratified)

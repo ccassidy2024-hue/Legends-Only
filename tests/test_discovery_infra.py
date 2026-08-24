@@ -481,6 +481,17 @@ def test_repo_has_live_prereg_rules() -> None:
     assert template.is_file()
 
 
+def test_live_prereg_rules_loads_without_error() -> None:
+    """The committed prereg_rules.yaml must load and validate successfully."""
+    cfg = load_prereg_rules(REPO)
+    assert cfg["schema_version"] == "0.2"
+    assert cfg["governing_adr"] == "docs/decisions/0002-episode-preregistration.md"
+    assert cfg["sample_period"]["sample_start"] == "2010-01-01"
+    assert cfg["sample_period"]["sample_end"] == "2024-12-31"
+    assert "response_horizon" in cfg["event_windows"]
+    assert cfg["physical_thresholds"]["mode"] == "binding_operational_restriction_only"
+
+
 # ---------------------------------------------------------------------------
 # N1 — deterministic minting
 # ---------------------------------------------------------------------------
