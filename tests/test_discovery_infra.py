@@ -473,9 +473,10 @@ def test_pre_episode_capture_paths_need_no_episode_id(tmp_path: Path) -> None:
         )
 
 
-def test_repo_has_no_live_prereg_rules() -> None:
+def test_repo_has_live_prereg_rules() -> None:
+    """After Phase 0 ratification, live prereg_rules.yaml must exist."""
     live = prereg_rules_path(REPO)
-    assert not live.exists(), "Do not commit invented prereg_rules.yaml yet"
+    assert live.exists(), "Live prereg_rules.yaml required after Phase 0 ratification"
     template = REPO / "config" / "discovery" / "_prereg_rules.template.yaml"
     assert template.is_file()
 
