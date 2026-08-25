@@ -1,0 +1,92 @@
+# S2-S8 A+B RATIFICATION RECORD
+#
+# Status: RATIFIED — decision authority only; concrete values INCOMPLETE
+# Date: 2026-08-25
+# Method: Phone review between Person A and Person B
+# Slack reference: This record persists the A+B approval of S2-S8 minimal ballot
+#
+# This file records WHAT was approved, not the concrete values themselves.
+# Concrete values must come from the canonical reconciliation packet.
+
+schema_version: "1.0"
+ratification_id: S2_S8_MINIMAL_BALLOT_v1
+ratification_date: "2026-08-25"
+ratification_method: phone_review
+marker: S2_S8_AB_RATIFIED
+
+# What was approved (decision scope)
+approved_items:
+  S2_navigation_gauges:
+    decision: approved
+    scope: "Pre-registered navigation-gauge station universe required by protocol"
+    authority: "USGS/AHPS"
+    requirement: "Exact station list/IDs must be persisted from approved packet"
+    concrete_values_persisted: false
+    concrete_values_location: null
+    blocking_reason: "Station IDs not present in codebase - need reconciliation packet"
+
+  S4_export_nodes:
+    decision: approved
+    scope: "Grain export/transfer node universe with coordinates AND proximity radius"
+    authority: "NHC landfall proximity"
+    requirement: "Exact node coordinates + radius must be persisted from approved packet"
+    concrete_values_persisted: false
+    concrete_values_location: null
+    blocking_reason: "Node coordinates and radius not present in codebase - need reconciliation packet"
+
+  D8_physical_thresholds:
+    decision: preserve_exactly
+    mode: binding_operational_restriction_only
+    class_thresholds: []
+    concrete_values_persisted: true
+    concrete_values_location: "config/discovery/prereg_rules.yaml"
+    verification_status: verified
+
+  closed_decisions:
+    D3:
+      status: CLOSED
+      adr: "docs/decisions/0015-d3-d4-positive-only-s1.md"
+      reopen: false
+    D8:
+      status: CLOSED
+      location: "config/discovery/prereg_rules.yaml"
+      reopen: false
+    D13:
+      status: CLOSED
+      location: "config/discovery/prereg_rules.yaml"
+      reopen: false
+
+# Semantic constraints preserved
+preserved_semantics:
+  - "UNKNOWN != zero"
+  - "positive-evidence-only"
+  - "market-outcome firewall"
+
+# Execution status
+execution_status:
+  S1_complete: true
+  S1_captures: 37
+  D5_universe_from_S1: "pending_merge_pr33"
+  S2_S8_blocked: true
+  blocking_items:
+    - S2_station_ids
+    - S4_node_coordinates
+    - S4_proximity_radius
+
+# Missing values packet (smallest exact specification)
+missing_values_required:
+  S2_navigation_gauges:
+    description: "USGS station IDs at navigation-relevant locations"
+    format: "List of USGS station IDs (e.g., 07010000, 07289000)"
+    sample_period_coverage: "2010-01-01 to 2024-12-31"
+    required_from: "canonical reconciliation packet"
+
+  S4_grain_export_nodes:
+    description: "Grain export/transfer facility coordinates"
+    format: "List of {name, latitude, longitude} for each node"
+    required_from: "canonical reconciliation packet"
+
+  S4_proximity_radius:
+    description: "Distance threshold defining storm proximity to nodes"
+    format: "Numeric value with unit (e.g., 100 km, 50 miles)"
+    required_from: "canonical reconciliation packet"
