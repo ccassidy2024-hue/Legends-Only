@@ -315,20 +315,32 @@ def test_live_prereg_rules_yaml_exists() -> None:
     assert (REPO / "config/discovery/prereg_rules.yaml").exists()
 
 
-def test_d5_artifacts_not_modified_by_capture(tmp_path: Path) -> None:
-    assert not (REPO / CANONICAL_CANDIDATES_RELATIVE).exists()
-    assert not (REPO / CANONICAL_CANDIDATE_UNIVERSE_MANIFEST_RELATIVE).exists()
+def test_d5_artifacts_exist_and_not_modified_by_capture(tmp_path: Path) -> None:
+    """Verify D5 artifacts exist and capture doesn't modify them."""
+    # D5 artifacts exist after authorized build
+    assert (REPO / CANONICAL_CANDIDATES_RELATIVE).exists()
+    assert (REPO / CANONICAL_CANDIDATE_UNIVERSE_MANIFEST_RELATIVE).exists()
+    # Record state before capture
+    candidates_before = (REPO / CANONICAL_CANDIDATES_RELATIVE).read_bytes()
+    manifest_before = (REPO / CANONICAL_CANDIDATE_UNIVERSE_MANIFEST_RELATIVE).read_bytes()
+    # Capture operation
     _capture(tmp_path, raw_bytes=b"x", source_reference="doc-a")
-    assert not (REPO / CANONICAL_CANDIDATES_RELATIVE).exists()
-    assert not (REPO / CANONICAL_CANDIDATE_UNIVERSE_MANIFEST_RELATIVE).exists()
+    # Verify artifacts unchanged by capture
+    assert (REPO / CANONICAL_CANDIDATES_RELATIVE).read_bytes() == candidates_before
+    assert (REPO / CANONICAL_CANDIDATE_UNIVERSE_MANIFEST_RELATIVE).read_bytes() == manifest_before
+    # Capture doesn't create new candidates.csv in tmp_path
     assert not list(tmp_path.glob("**/candidates.csv"))
 
 
-def test_no_real_candidate_or_episode_artifact_in_repo() -> None:
-    assert not (REPO / CANONICAL_CANDIDATES_RELATIVE).exists()
+def test_real_candidate_artifact_exists_but_no_episode_artifact_in_repo() -> None:
+    """Verify D5 candidates exist but no real episodes yet."""
+    # D5 candidates exist after authorized build
+    assert (REPO / CANONICAL_CANDIDATES_RELATIVE).exists()
+    # No episode dispositions yet (created later in workflow)
     assert not (
         REPO / "research/episodes/discovery/candidates/no_episode_dispositions.csv"
     ).exists()
+    # No real episode entries yet (only example entries)
     real_eps = [
         p
         for p in (REPO / "research/episodes/entries").glob("*.yaml")

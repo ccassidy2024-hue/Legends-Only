@@ -444,8 +444,9 @@ def test_checker_does_not_modify_episode_yaml(tmp_path: Path) -> None:
     assert path.read_text(encoding="utf-8") == before
 
 
-def test_missing_live_candidates_csv_does_not_break_standalone_validation() -> None:
-    assert not (REPO / CANONICAL_CANDIDATES_RELATIVE).exists()
+def test_live_candidates_csv_does_not_break_standalone_validation() -> None:
+    """Verify standalone episode validation works with live candidates.csv."""
+    assert (REPO / CANONICAL_CANDIDATES_RELATIVE).exists()
     _, fx = check(ENTRIES_DIR, SCHEMA_PATH)
     assert fx.errors == [], fx.errors
 
@@ -459,12 +460,18 @@ def test_candidates_csv_never_gains_episode_id_field() -> None:
     assert b"episode_id" not in csv_bytes.splitlines()[0]
 
 
-def test_no_live_candidates_csv_in_repo() -> None:
-    assert not (REPO / CANONICAL_CANDIDATES_RELATIVE).exists()
+def test_live_candidates_csv_in_repo() -> None:
+    """Verify canonical candidates.csv exists after D5 build."""
+    assert (REPO / CANONICAL_CANDIDATES_RELATIVE).exists()
+    import yaml
+    with (REPO / CANONICAL_CANDIDATE_UNIVERSE_MANIFEST_RELATIVE).open() as f:
+        manifest = yaml.safe_load(f)
+    assert manifest["candidate_count"] == 37
 
 
-def test_no_candidate_universe_yaml_in_repo() -> None:
-    assert not (REPO / CANONICAL_CANDIDATE_UNIVERSE_MANIFEST_RELATIVE).exists()
+def test_candidate_universe_yaml_in_repo() -> None:
+    """Verify canonical candidate_universe.yaml exists after D5 build."""
+    assert (REPO / CANONICAL_CANDIDATE_UNIVERSE_MANIFEST_RELATIVE).exists()
 
 
 def test_no_live_no_episode_dispositions_csv() -> None:

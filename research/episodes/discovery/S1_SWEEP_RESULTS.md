@@ -26,7 +26,7 @@ Three USACE NTNI district endpoints returned notice records with null `begindate
 | New Orleans (MVN) | ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/MVN | `items[2].begindate` is null |
 | Pittsburgh (LRP) | ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/LRP | `items[2].issuedate` is null |
 
-**Governance note:** These are hard source failures requiring A+B review before any parser modification. The ratified code correctly failed closed. Modification to `src/grainsys/ingest/ntni.py` would require manifest update and re-ratification per N3 governance.
+**Governance note:** Per ADR-0015 positive-evidence-only semantics, these null-dated rows are excluded from candidate generation (fail-closed, classified UNKNOWN). No parser modification or new A+B decision required; ratified semantics govern.
 
 ## Keyword Hits by District
 
@@ -62,7 +62,7 @@ All 37 keyword hits have been captured under `$GRAIN_DATA_ROOT/sweeps/S1/`:
 
 ## Next Steps
 
-1. **BLOCKED:** MVP, MVN, LRP districts require source-handling ADR decision
+1. **GOVERNED:** MVP, MVN, LRP null-dated rows excluded per ADR-0015 fail-closed semantics
 2. **READY:** 37 captured hits ready for D5 candidate universe construction
 3. **PENDING:** S2-S8 sweeps (different source families)
 
