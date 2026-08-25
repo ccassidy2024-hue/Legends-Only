@@ -211,6 +211,24 @@ Based on data accessibility and mechanical complexity:
 | 6 | S7 (STB) | Complex document parsing |
 | 7 | S8 (Ports) | Heterogeneous, requires source identification |
 
+## Execution Status (2026-08-25)
+
+All S2-S8 families are FAIL-CLOSED / BLOCKED due to missing Tier-A parameters
+or D3 endpoint registration:
+
+| Family | Status | Blocking Item(s) |
+|--------|--------|------------------|
+| S2 (USGS) | **BLOCKED** | Gauge list + threshold values unratified (Tier A) |
+| S3 (USCG) | **BLOCKED** | D3 endpoint registration required |
+| S4 (NHC) | **BLOCKED** | Node list + radius threshold unratified (Tier A) |
+| S5 (AMS GTR) | **BLOCKED** | D3 archive endpoint registration required |
+| S6 (LPMS) | **BLOCKED** | Lock list + threshold values unratified (Tier A) |
+| S7 (STB) | **BLOCKED** | Docket type classification unratified (Tier A) |
+| S8 (Ports) | **BLOCKED** | Source list + archive registration required |
+
+Per automation instruction: Do not invent gauges/thresholds/radii or other
+Tier-A values. Families remain fail-closed until A+B ratification.
+
 ## Blocked Items
 
 All S2-S8 adapters require:
@@ -231,3 +249,4 @@ All S2-S8 adapters require:
 ## Marker
 
 `S2_S8_ADAPTER_INVENTORY_DOCUMENTED`
+`S2_S8_EXECUTION_ALL_BLOCKED_TIER_A`
