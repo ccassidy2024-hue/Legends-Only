@@ -10,9 +10,10 @@ During the authorized S1 NTNI sweep execution under Lock-1, three USACE NTNI
 district endpoints returned notice records with null date fields. The ratified
 `ntni.py` parser correctly failed closed on these records per N3 governance.
 
-This document immutably records the failed rows/fields per instruction. No
-modification to the frozen `ntni.py` parser is authorized pending A+B governance
-classification.
+This document immutably records the failed rows/fields per instruction. Under
+ADR-0015 positive-evidence-only semantics, these null-dated rows are excluded
+from candidate generation (fail-closed), classified UNKNOWN, and require no
+new A+B decision.
 
 ## Failed Districts
 
@@ -25,7 +26,7 @@ classification.
 | Failed field | `items[3].begindate` |
 | Error | Field value is null |
 | Parser behavior | Fail closed (NtniNormalizationError) |
-| Classification | **UNKNOWN** pending governance |
+| Classification | **UNKNOWN** (ADR-0015 fail-closed semantics) |
 
 ### MVN (New Orleans District)
 
@@ -36,7 +37,7 @@ classification.
 | Failed field | `items[2].begindate` |
 | Error | Field value is null |
 | Parser behavior | Fail closed (NtniNormalizationError) |
-| Classification | **UNKNOWN** pending governance |
+| Classification | **UNKNOWN** (ADR-0015 fail-closed semantics) |
 
 ### LRP (Pittsburgh District)
 
@@ -47,31 +48,28 @@ classification.
 | Failed field | `items[2].issuedate` |
 | Error | Field value is null |
 | Parser behavior | Fail closed (NtniNormalizationError) |
-| Classification | **UNKNOWN** pending governance |
+| Classification | **UNKNOWN** (ADR-0015 fail-closed semantics) |
 
 ## Governance Status
 
-### Current state
+### Current state (ADR-0015 compliant)
 
-- **Parser modification**: NOT AUTHORIZED
-- **Source handling ADR**: REQUIRED before any parser change
-- **Fail-closed preservation**: MANDATORY
+- **Parser modification**: NOT REQUIRED (existing semantics apply)
+- **Null-date handling**: Fail-closed per ratified positive-evidence-only semantics
+- **Classification**: UNKNOWN (not zero, not absent)
+- **Candidate generation**: Null-dated rows excluded from D5 universe
 
-### Required A+B decisions
+### ADR-0015 governing semantics
 
-1. **Accept source as-is**: Tolerate null dates for certain fields?
-2. **Field fallback policy**: Use alternative date fields when primary is null?
-3. **Source exclusion**: Exclude districts with data quality issues?
-4. **Partial acceptance**: Accept non-null records, skip null ones?
+Per ADR-0015 positive-evidence-only ratification:
 
-### Parser modification path (if approved)
+1. **Fail-closed behavior**: Null dates trigger NtniNormalizationError (correct)
+2. **No imputation/fallback**: Do not use alternative date fields
+3. **No parser change**: `src/grainsys/ingest/ntni.py` remains frozen
+4. **UNKNOWN classification**: Source failure recorded, not treated as zero or absent
 
-Any modification to `src/grainsys/ingest/ntni.py` requires:
-
-1. A+B decision recorded in source-handling ADR
-2. Updated N3 manifest with new parser digest
-3. Re-ratification at new `prereg-rules-v2` tag
-4. Tier B exact-head review before merge
+No new A+B decision is required. These rows are simply excluded from positive
+dated candidate generation per existing ratified governance.
 
 ## Impact on D5 Candidate Universe
 
@@ -89,15 +87,15 @@ D5 candidate universe construction proceeds with S1 captures from:
 | Memphis (MVM) | Lower Mississippi | 1 |
 
 The three failed districts (MVP, MVN, LRP) contribute zero hits to the
-D5 candidate universe until governance resolves their status.
+D5 candidate universe per ADR-0015 fail-closed semantics.
 
 ## Preservation Guarantees
 
 1. This document records immutable failure metadata
-2. No parser modification without explicit A+B approval
-3. Unknown status preserved (not zero, not absent)
+2. Current fail-closed behavior governed by ADR-0015 (no change required)
+3. UNKNOWN status preserved (not zero, not absent)
 4. Sweep results document reflects accurate failure count
-5. D5 universe excludes failed districts (fail-closed, not silently included)
+5. D5 universe excludes null-dated rows (fail-closed, not silently included)
 
 ## Marker
 

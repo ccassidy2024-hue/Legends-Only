@@ -734,12 +734,12 @@ def test_n2_missing_sweep_status_illegal() -> None:
 # ---------------------------------------------------------------------------
 
 
-def test_n3_real_repo_refuses_live_sweep_execution() -> None:
-    """Current canonical repo has no prereg-rules-v1 — must fail closed."""
-    with pytest.raises(RatificationError):
-        assert_sweep_authorized(REPO)
-    with pytest.raises(SweepError, match="ratification"):
-        SweepEnumerator.from_repo(REPO)
+def test_n3_real_repo_authorizes_live_sweep_execution() -> None:
+    """Current canonical repo has prereg-rules-v1 tag — must authorize."""
+    prov = assert_sweep_authorized(REPO)
+    assert prov.prereg_tag == PREREG_TAG
+    enum = SweepEnumerator.from_repo(REPO)
+    assert len(list(enum.iter_archives(sweep_id="S1"))) == 10
     tags = subprocess.run(
         ["git", "tag", "-l", PREREG_TAG],
         cwd=REPO,
@@ -747,7 +747,7 @@ def test_n3_real_repo_refuses_live_sweep_execution() -> None:
         capture_output=True,
         text=True,
     ).stdout.strip()
-    assert tags == ""
+    assert tags == PREREG_TAG
 
 
 def test_n3_isolated_repo_authorizes_when_all_conditions_met(tmp_path: Path) -> None:

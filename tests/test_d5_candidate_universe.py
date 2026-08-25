@@ -536,10 +536,17 @@ def test_authorized_build_persist_roundtrip_dual_artifacts(tmp_path: Path) -> No
         monkey.undo()
 
 
-def test_no_live_candidates_or_manifest_in_repo() -> None:
+def test_live_candidates_and_manifest_exist_in_repo() -> None:
+    """Verify canonical D5 artifacts exist (post D5 build execution)."""
     repo = Path(__file__).resolve().parents[1]
-    assert not (repo / CANONICAL_CANDIDATES_RELATIVE).exists()
-    assert not (repo / CANONICAL_CANDIDATE_UNIVERSE_MANIFEST_RELATIVE).exists()
+    assert (repo / CANONICAL_CANDIDATES_RELATIVE).exists()
+    assert (repo / CANONICAL_CANDIDATE_UNIVERSE_MANIFEST_RELATIVE).exists()
+    # Validate candidate count from manifest
+    import yaml
+    with (repo / CANONICAL_CANDIDATE_UNIVERSE_MANIFEST_RELATIVE).open() as f:
+        manifest = yaml.safe_load(f)
+    assert manifest["candidate_count"] == 37
+    assert manifest["required_sweep_families"] == ["S1"]
 
 
 def test_future_canonical_manifest_path_constant() -> None:

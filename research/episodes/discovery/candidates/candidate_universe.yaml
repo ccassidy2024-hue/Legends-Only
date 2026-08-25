@@ -1,0 +1,17 @@
+candidate_universe_version: d5cu-48cc374f36a13b87108d0f2e15935d394afdc4db887d3aa2a52dc078fa82dd0b
+hit_set_digest: 48cc374f36a13b87108d0f2e15935d394afdc4db887d3aa2a52dc078fa82dd0b
+candidates_digest: 5ee900587d518d92acfad36311f4df9d2469c947029d414df7c84579cdfeca24
+id_prefix: CAND
+ordering_keys:
+- sweep_id
+- source_reference
+stable_id_key: null
+required_sweep_families:
+- S1
+completed_sweep_families:
+- S1
+candidate_count: 37
+frozen_at: null
+supersedes: null
+candidates_table_relative: research/episodes/discovery/candidates/candidates.csv
+manifest_relative: research/episodes/discovery/candidates/candidate_universe.yaml
