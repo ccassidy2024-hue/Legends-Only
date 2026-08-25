@@ -10,26 +10,22 @@ Requires N3 ratification (prereg-rules-v1 tag + digest match + ancestry).
 from __future__ import annotations
 
 import hashlib
-import json
 import os
 import re
-import urllib.request
 import urllib.error
-from collections.abc import Mapping, Sequence
+import urllib.request
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
 
-from grainsys.discovery.config import load_prereg_rules, REPO_ROOT
-from grainsys.discovery.governance import assert_sweep_authorized, SweepProvenance
-from grainsys.discovery.sweep import SweepEnumerator, ArchiveTarget, KeywordPolicy
-from grainsys.discovery.capture import capture_candidate_evidence, CaptureRecord
+from grainsys.discovery.capture import capture_candidate_evidence
+from grainsys.discovery.config import REPO_ROOT, load_prereg_rules
+from grainsys.discovery.governance import SweepProvenance, assert_sweep_authorized
+from grainsys.discovery.sweep import KeywordPolicy, SweepEnumerator
 from grainsys.ingest.ntni import (
-    parse_active_notice_listing,
-    normalize_full_text,
-    NtniNoticeReference,
     NtniNormalizationError,
+    normalize_full_text,
+    parse_active_notice_listing,
 )
 
 
@@ -79,7 +75,7 @@ class SweepResult:
 
 def _iso_utc_now() -> str:
     """Current UTC timestamp in ISO format."""
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 def _sha256_bytes(data: bytes) -> str:
@@ -287,7 +283,7 @@ def execute_s1_ntni_sweep(
                     )
                     capture_failures += 1
     
-    print(f"\n=== S1 Sweep Summary ===")
+    print("\n=== S1 Sweep Summary ===")
     print(f"Endpoints fetched: {fetched_count}/{len(s1_archives)}")
     print(f"Total notices scanned: {total_notices}")
     print(f"Keyword hits: {len(all_hits)}")
@@ -331,7 +327,7 @@ def main() -> None:
         dry_run=args.dry_run,
     )
     
-    print(f"\n=== Sweep Complete ===")
+    print("\n=== Sweep Complete ===")
     print(f"Provenance: {result.provenance.prereg_tag}")
     print(f"Config digest: {result.provenance.prereg_config_digest[:16]}...")
     print(f"Execution commit: {result.provenance.execution_commit_sha[:12]}")
