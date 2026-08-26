@@ -1,6 +1,6 @@
 # Post-Lock1 Amendment Packet
 
-**Status:** `M1_POST_LOCK1_AMENDMENT_PACKET_COMPILATION_ACTIVE`  
+**Status:** `M1_POST_LOCK1_AMENDMENT_PACKET_FINAL_READY`  
 **Date:** 2026-08-26  
 **Context:** Tier-A scientific amendments to frozen prereg config
 
@@ -383,15 +383,15 @@ def find_applicable_prereg_tag(repo_root: Path, head: str) -> str:
 
 ```
 CURRENT_MAIN = 3647265
-PR39_HEAD = <pending commit>
-ADAPTER_ONLY_PRS = Pending creation
-AGENT_SAFE_WORK_REMAINING = [digest_computation, adapter_split]
+PR39_HEAD = b6df44f
+ADAPTER_ONLY_PRS = PR #40 (cursor/s3-s8-adapters-only-a71d) — B-STANDARD review routed
+AGENT_SAFE_WORK_REMAINING = []
 TRUE_TIER_A_ITEMS = [S2_mechanics_choice, S4_radius_choice]
-NEXT_ACTION = Compute digest, create adapter-only branches, finalize packet
+NEXT_ACTION = A+B human ratification of compact approval line
 ```
 
 `D5_COMPLETE_UNIVERSE_READY = FALSE`
-`HUMAN_ACTION = NONE`
+`HUMAN_ACTION = RATIFY_BALLOT`
 
 ---
 
@@ -412,4 +412,4 @@ OLD_DIGEST = a0eee0add8057c82fb6251daf2d93745a157b129862c4bd2ae25d0027ef3df0e
 
 ## Marker
 
-`M1_PACKET_COMPILATION_ACTIVE`
+`M1_POST_LOCK1_AMENDMENT_PACKET_FINAL_READY`
