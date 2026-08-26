@@ -266,7 +266,7 @@ qa_verification:
 
 state_line:
   CURRENT_MAIN: a6f1b81c40f15a6f986ecbbe4e2e3128242a3b9c
-  PACKET_PR_HEAD: PENDING  # To be filled after commit and PR creation
+  PACKET_PR_HEAD: 3de4e8e7931f0f355e6fc16807ce38aa088a3600
   PROPOSAL_DIGESTS:
     S2_A: ec2f2282d15b0df89bc2cd2f4c2c93ec17d3566a9c598d2f27ad8e0743ada8cb
     S2_B: 20c269d8b00ba8d058b75409480d67eaea7ef63c15b56cb5d98c297f34cc9a64
