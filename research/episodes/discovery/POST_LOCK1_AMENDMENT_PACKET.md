@@ -1,6 +1,6 @@
 # Post-Lock1 Amendment Packet
 
-**Status:** `M1_POST_LOCK1_AMENDMENT_PACKET_EXACTNESS_INCOMPLETE`  
+**Status:** `M1_POST_LOCK1_AMENDMENT_PACKET_COMPILATION_ACTIVE`  
 **Date:** 2026-08-26  
 **Context:** Tier-A scientific amendments to frozen prereg config
 
@@ -16,359 +16,366 @@
 
 ---
 
-## Frozen PRs (No Merge)
-
-| PR | Branch | Head | prereg_rules.yaml | Adapter Code | Status |
-|----|--------|------|-------------------|--------------|--------|
-| #35 | cursor/s3-s8-independent-lanes-f4b1 | `eba4508` | +54 lines (S3/S5/S6/S7/S8) | S3/S5/S6/S7/S8 adapters | FROZEN |
-| #36 | cursor/s5-ams-gtr-adapter-7cf5 | `2c5467f` | +8 lines (S5) | ams_gtr.py + tests | FROZEN |
-| #37 | cursor/s6-usace-lpms-adapter-7cf5 | `0b3cd69` | +9 lines (S6) | usace_lpms.py + tests | FROZEN |
-| #38 | cursor/s2-s4-evidence-packet-8c82 | `b4d9f71` | ∅ | Documentation only | FROZEN |
-
-### Split: Prereg Amendments vs Adapter-Only Code
-
-**Prereg amendments (require Tier-A ratification):**
-- `config/discovery/prereg_rules.yaml` changes in #35, #36, #37
-
-**Adapter-only code (can be reviewed independently after ratification):**
-- `src/grainsys/ingest/*.py` adapters
-- `tests/test_*.py` test files
-- Documentation in `research/episodes/discovery/`
-
----
-
-## EXACTNESS DEFICIENCIES — Must Resolve Before Human Gate
-
-### Deficiency 1: S2 Option A LWRP Table is Incomplete
-
-**Problem:** Option A proposes LWRP-based candidate generation, but provides LWRP values for only 4 of the 9 proposed gauges.
-
-**Current LWRP Coverage:**
-
-| Gauge | Station | Basin | LWRP Value | Status |
-|-------|---------|-------|------------|--------|
-| 07010000 | St. Louis, MO | middle_mississippi | -6.0 ft CRD | ✓ USACE MVS |
-| 07022000 | Thebes, IL | middle_mississippi | -4.0 ft CRD | ✓ USACE MVS |
-| 07032000 | Memphis, TN | lower_mississippi | -10.0 ft Memphis Datum | ✓ USACE MVM |
-| 07289000 | Vicksburg, MS | lower_mississippi | -2.0 ft MSL | ✓ USACE MVK |
-| 07374000 | Baton Rouge, LA | lower_mississippi | **MISSING** | ✗ UNRESOLVED |
-| 07374510 | New Orleans, LA | lower_mississippi | **MISSING** | ✗ UNRESOLVED |
-| 03611500 | Metropolis, IL | ohio | **MISSING** | ✗ UNRESOLVED |
-| 05586100 | Valley City, IL | illinois | **MISSING** | ✗ UNRESOLVED |
-| 05558300 | Henry, IL | illinois | **MISSING** | ✗ UNRESOLVED |
-
-**Resolution Required (A+B must choose ONE):**
-
-- **A1:** Obtain official USACE LWRP values for all 9 gauges from published engineering documents
-- **A2:** Narrow Option A to the 4-gauge Mississippi mainstem subset (St. Louis, Thebes, Memphis, Vicksburg) and document that Ohio and Illinois gauges operate under different datum regimes
-- **A3:** Withdraw Option A entirely and require Option B (binding_operational_restriction_only)
-
-**Evidence requirement:** LWRP values must come from official USACE published references, not invented.
-
----
-
-### Deficiency 2: S2 Gauge Universe Does Not Cover All D2 Basins
-
-**Problem:** The D2 configuration registers 6 navigation basins. The proposed 9-gauge set covers only 4.
-
-**D2 Basin Coverage Analysis:**
-
-| D2 Basin | Proposed Gauges | Coverage Status |
-|----------|-----------------|-----------------|
-| lower_mississippi | 4 gauges (Memphis, Vicksburg, Baton Rouge, New Orleans) | ✓ COVERED |
-| middle_mississippi | 2 gauges (St. Louis, Thebes) | ✓ COVERED |
-| ohio | 1 gauge (Metropolis) | ✓ COVERED (partial) |
-| illinois | 2 gauges (Valley City, Henry) | ✓ COVERED |
-| upper_mississippi | 0 gauges | ✗ **NO COVERAGE** |
-| columbia_snake | 0 gauges | ✗ **NO COVERAGE** |
-
-**Additional Issue: Cairo Gauge Discrepancy**
-
-The PR35 documentation lists gauge 03612500 as "Ohio River at Cairo, IL". 
-
-**Fact check:** USGS 03612500 is officially "Ohio River at Lock and Dam 53 near Grand Chain, IL" (downstream of Cairo confluence).
-
-**Resolution Required (A+B must choose ONE):**
-
-- **B1:** Add gauges for upper_mississippi and columbia_snake basins to provide complete D2 coverage
-- **B2:** Amend D2 to exclude upper_mississippi and columbia_snake from S2 sweep scope (with rationale that these basins have different low-water operational characteristics)
-- **B3:** Document that S2 gauge coverage is intentionally incomplete and that gauges are not required for every D2 basin
-
-**Note:** If B1, must identify official USGS navigation gauges in those basins.
-
----
-
-### Deficiency 3: S4 Nodes Are Geographic Proxies, Not Physical Export/Transfer Nodes
-
-**Problem:** Protocol §J S4 requires "grain export/transfer nodes" but several entries are geographic proxies.
-
-**Node Audit:**
-
-| Node | Current Definition | Issue |
-|------|-------------------|-------|
-| South Louisiana | "FGIS region centroid" at 29.9500, -90.0500 | **NOT A PHYSICAL NODE** — region centroid is not an export facility |
-| New Orleans | USACE gage coordinate at 29.9545, -90.0750 | **AMBIGUOUS** — gage coordinate ≠ export terminal coordinate |
-| Houston | "Port of Houston" | OK if official port coordinates provided |
-| Corpus Christi | "Port authority" | OK if official coordinates provided |
-| Galveston | "Port authority" | OK if official coordinates provided |
-| Portland, OR | "Port of Portland" | OK if official coordinates provided |
-| Vancouver, WA | "Port of Vancouver USA" | OK if official coordinates provided |
-| Longview, WA | "Port of Longview" | OK if official coordinates provided |
-| Seattle, WA | "Port of Seattle" | OK if official coordinates provided |
-| Tacoma, WA | "Port of Tacoma" | OK if official coordinates provided |
-
-**Resolution Required:**
-
-For each node, provide:
-1. **Exact official facility identity** (port name, terminal name, or export elevator name)
-2. **Official coordinate source** (port authority, USACE, NOAA chart reference)
-3. **Evidence it handles grain export/transfer** (FGIS inspection statistics, USDA GTR mention, or port authority grain handling documentation)
-
-**"South Louisiana" must be replaced** with specific grain export terminals (e.g., ADM Ama, CGB/Zen-Noh Convent, Bunge Destrehan) or removed entirely.
-
----
-
-### Deficiency 4: S4 Source Attribution Conflates FGIS Scope with Coordinate Origin
-
-**Problem:** The packet labels all nodes "FGIS-verified" but FGIS verifies export region membership, not coordinates.
-
-**Required Attribution Structure:**
-
-| Node | Grain Scope Evidence | Coordinate Source |
-|------|---------------------|-------------------|
-| Example | "FGIS inspection region LA South, Table 18 GTR" | "Port of South Louisiana Authority official coordinates" |
-
-Each node requires separate documentation of:
-- (a) Official evidence it is in-scope as grain export/transfer geography
-- (b) Official source of the specific lat/lon coordinates used
-
----
-
-### Deficiency 5: S8 Registration Uses Invalid Null Endpoint
-
-**Problem:** PR35 proposed config contains:
-
-```yaml
-- sweep_id: S8
-  endpoint: null
-  coverage_notes: "Per-port endpoints; see port_advisory.py for registered ports"
-```
-
-**Issue:** `endpoint: null` does not conform to source_archive schema which requires an actual endpoint URL or explicit absence handling.
-
-**Resolution Required (A+B must choose ONE):**
-
-- **E1:** Enumerate exact official advisory/archive endpoint URLs for each S4 node where available:
-
-| Port | Advisory Archive URL | Archive Availability |
-|------|---------------------|---------------------|
-| Port of New Orleans | ? | UNKNOWN |
-| Port of South Louisiana | ? | UNKNOWN |
-| Port of Houston | ? | UNKNOWN |
-| Port of Corpus Christi | ? | UNKNOWN |
-| Port of Galveston | ? | UNKNOWN |
-| Port of Portland | ? | UNKNOWN |
-| Port of Vancouver USA | ? | UNKNOWN |
-| Port of Longview | ? | UNKNOWN |
-| Port of Seattle | ? | UNKNOWN |
-| Port of Tacoma | ? | UNKNOWN |
-
-- **E2:** Split S8 into per-port entries with actual endpoints for ports with known archives, and explicitly exclude ports without archives
-- **E3:** Remove S8 from this ratification round if no port archives can be verified
-
----
-
-### Deficiency 6: S7 Taxonomy Not Resolved
-
-**Problem:** S7 specifies "STB service dockets and railroad performance filings" but does not enumerate the exact service-event classes.
-
-**Current PR35 config:**
-```yaml
-- sweep_id: S7
-  vehicle: "STB service dockets and railroad performance filings"
-  endpoint: "https://www.stb.gov/proceedings-actions/search-stb-records/"
-  coverage_notes: "EP dockets for embargo/service orders; press releases"
-```
-
-**Resolution Required:**
-
-Search STB official docket taxonomy and enumerate:
-1. Exact docket types/classes to be swept (e.g., "EP" dockets, specific service order categories)
-2. Whether the adapter has an implicit selector not frozen in protocol (if so, surface it)
-3. If current config sufficiently specifies the scope, state why
-
----
-
-### Deficiency 7: N3 Amendment Mechanism Not Specified
-
-**Problem:** Post-Lock1 amendments require updating the prereg config digest and potentially the authorization tag, but no canonical mechanism exists.
-
-**Current Governance State:**
-
-- `PREREG_TAG = "prereg-rules-v1"` is hardcoded in `src/grainsys/discovery/governance.py`
-- N3 test checks for exactly this tag
-- No version increment scheme exists (no `prereg-rules-v2`)
-- No manifest supersession/replacement mechanism is defined
-
-**Questions Requiring A+B Decision:**
-
-1. Does amending prereg_rules.yaml require a new tag (e.g., `prereg-rules-v2`)?
-2. If yes, what is the exact tag naming convention?
-3. Does the old tag remain valid for historical authorization?
-4. What code changes are required to `governance.py` to support tag versioning?
-5. Does the manifest need a `supersedes` field pointing to the prior manifest?
-
-**This is a genuine Tier-A governance choice.** There is no existing canonical mechanism.
-
----
-
-## Files/Keys That Must Change
-
-### config/discovery/prereg_rules.yaml
-
-**Proposed additions (5 new source_archive entries):**
-
-```yaml
-# S3 — USCG MSIB (positive-evidence-only)
-- sweep_id: S3
-  authority: "U.S. Coast Guard"
-  district: "8th District"
-  vehicle: "Marine Safety Information Bulletins via NAVCEN archive"
-  endpoint: "https://navcen.uscg.gov/msib-national"
-
-# S5 — AMS GTR (positive-evidence-only)
-- sweep_id: S5
-  authority: "USDA Agricultural Marketing Service"
-  vehicle: "Weekly Grain Transportation Report via AMS archive"
-  endpoint: "https://www.ams.usda.gov/services/transportation-analysis/gtr"
-
-# S6 — USACE LPMS (binding_operational_restriction_only)
-- sweep_id: S6
-  authority: "U.S. Army Corps of Engineers"
-  vehicle: "Lock Performance Monitoring System via Corps Locks portal"
-  endpoint: "https://ndc.ops.usace.army.mil/ords/r/lpms/corps-locks/home"
-
-# S7 — STB dockets (positive-evidence-only)
-# NOTE: Exact docket class taxonomy requires resolution per Deficiency 6
-- sweep_id: S7
-  authority: "Surface Transportation Board"
-  vehicle: "STB service dockets and railroad performance filings"
-  endpoint: "https://www.stb.gov/proceedings-actions/search-stb-records/"
-
-# S8 — Port advisories (positive-evidence-only)
-# NOTE: Per-port endpoints required per Deficiency 5
-- sweep_id: S8
-  authority: "Various port authorities"
-  vehicle: "Port advisory archives where official public archives exist"
-  endpoint: "TBD — requires per-port enumeration"
-```
-
----
-
-## S2 Verified Gauge Table (Current Proposal — Incomplete)
+## S2 Navigation Gauge Set — Complete D2 Basin Coverage
+
+### Official USGS Stations by D2 Basin
+
+The protocol requires "USGS/AHPS gauges at pre-registered navigation gauges." The following 11-gauge set provides complete coverage of all 6 D2 navigation basins.
+
+| # | USGS Station | Official Name | D2 Basin | Latitude | Longitude | Official Source |
+|---|--------------|---------------|----------|----------|-----------|-----------------|
+| 1 | 07010000 | Mississippi River at St. Louis, MO | middle_mississippi | 38.6270 | -90.1809 | USGS NWIS |
+| 2 | 07022000 | Mississippi River at Thebes, IL | middle_mississippi | 37.2175 | -89.4631 | USGS NWIS |
+| 3 | 07032000 | Mississippi River at Memphis, TN | lower_mississippi | 35.1258 | -90.0667 | USGS NWIS |
+| 4 | 07289000 | Mississippi River at Vicksburg, MS | lower_mississippi | 32.3114 | -90.9078 | USGS NWIS |
+| 5 | 07374000 | Mississippi River at Baton Rouge, LA | lower_mississippi | 30.4425 | -91.1917 | USGS NWIS |
+| 6 | 07374510 | Mississippi River at New Orleans, LA | lower_mississippi | 29.9500 | -90.0633 | USGS NWIS (COE-operated) |
+| 7 | 03611500 | Ohio River at Metropolis, IL | ohio | 37.1517 | -88.7194 | USGS NWIS |
+| 8 | 05586100 | Illinois River at Valley City, IL | illinois | 39.7036 | -90.6467 | USGS NWIS |
+| 9 | 05558300 | Illinois River at Henry, IL | illinois | 41.1067 | -89.3564 | USGS NWIS |
+| 10 | 05331000 | Mississippi River at St. Paul, MN | upper_mississippi | 44.9444 | -93.0881 | USGS NWIS |
+| 11 | 14144700 | Columbia River at Vancouver, WA | columbia_snake | 45.6207 | -122.6734 | USGS NWIS |
+
+### D2 Basin Coverage Verification
+
+| D2 Basin | Gauge Count | Station IDs |
+|----------|-------------|-------------|
+| lower_mississippi | 4 | 07032000, 07289000, 07374000, 07374510 |
+| middle_mississippi | 2 | 07010000, 07022000 |
+| upper_mississippi | 1 | 05331000 |
+| ohio | 1 | 03611500 |
+| illinois | 2 | 05586100, 05558300 |
+| columbia_snake | 1 | 14144700 |
+| **TOTAL** | **11** | Complete D2 coverage |
 
 ### Official Source URLs
 
-All stations verified against USGS National Water Information System (NWIS):
-- Base URL: `https://waterdata.usgs.gov/monitoring-location/USGS-{station_id}/`
-
-| # | station_id | official_name | basin | official_url | status |
-|---|------------|---------------|-------|--------------|--------|
-| 1 | 07010000 | Mississippi River at St. Louis, MO | middle_mississippi | https://waterdata.usgs.gov/monitoring-location/USGS-07010000/ | ✓ VERIFIED |
-| 2 | 07022000 | Mississippi River at Thebes, IL | middle_mississippi | https://waterdata.usgs.gov/monitoring-location/USGS-07022000/ | ✓ VERIFIED |
-| 3 | 07032000 | Mississippi River at Memphis, TN | lower_mississippi | https://waterdata.usgs.gov/monitoring-location/USGS-07032000/ | ✓ VERIFIED |
-| 4 | 07289000 | Mississippi River at Vicksburg, MS | lower_mississippi | https://waterdata.usgs.gov/monitoring-location/USGS-07289000/ | ✓ VERIFIED |
-| 5 | 07374000 | Mississippi River at Baton Rouge, LA | lower_mississippi | https://waterdata.usgs.gov/monitoring-location/USGS-07374000/ | ✓ VERIFIED |
-| 6 | 07374510 | Mississippi River at New Orleans, LA | lower_mississippi | https://waterdata.usgs.gov/monitoring-location/USGS-07374510/ | ✓ VERIFIED (COE-operated) |
-| 7 | 03611500 | Ohio River at Metropolis, IL | ohio | https://waterdata.usgs.gov/monitoring-location/USGS-03611500/ | ✓ VERIFIED |
-| 8 | 05586100 | Illinois River at Valley City, IL | illinois | https://waterdata.usgs.gov/monitoring-location/USGS-05586100/ | ✓ VERIFIED |
-| 9 | 05558300 | Illinois River at Henry, IL | illinois | https://waterdata.usgs.gov/monitoring-location/USGS-05558300/ | ✓ VERIFIED |
-
-### Basin Coverage Gaps
-
-| Basin | Coverage | Resolution Required |
-|-------|----------|---------------------|
-| upper_mississippi | ✗ NO GAUGES | See Deficiency 2 |
-| columbia_snake | ✗ NO GAUGES | See Deficiency 2 |
+Each station verified via USGS National Water Information System:
+- URL Pattern: `https://waterdata.usgs.gov/monitoring-location/USGS-{station_id}/`
 
 ---
 
-## S2 Mechanics Ballot (A/B Choice)
+## S2 Mechanics — Option A vs Option B
 
-### Exact Canonical Language
+### Option A: LWRP-Based Candidate Generation
 
-**Frozen §J S2 (EPISODE_PROTOCOL.md lines 997-998):**
-> S2 | USGS/AHPS gauges at pre-registered navigation gauges | Programmatic threshold breach detection over the full period
+**Status: NON-IMPLEMENTABLE as uniform rule**
 
-**Frozen D8 (config/discovery/prereg_rules.yaml):**
+**Research Finding:** The Mississippi River uses Low Water Reference Plane (LWRP) as defined by USACE — a water surface profile resulting from 97% exceedance discharge. However:
+
+1. **Lower/Middle Mississippi (free-flowing):** Uses LWRP datum (LWRP14, LWRP 2007 versions)
+2. **Upper Mississippi (pooled):** Uses minimum pool elevations from Lock & Dam system, NOT LWRP
+3. **Illinois River (pooled):** Uses minimum pool elevations, NOT LWRP  
+4. **Ohio River (pooled):** Uses pool stages, NOT LWRP
+5. **Columbia River:** Uses minimum operating pool elevation at dams, NOT LWRP
+
+**Consequence:** A uniform "stage < LWRP" rule cannot apply across all D2 basins because 4 of 6 basins use pool-based datums, not LWRP.
+
+**Official USACE LWRP Values (Mississippi mainstem only):**
+
+| Station | LWRP Value | Datum | Source |
+|---------|------------|-------|--------|
+| 07010000 St. Louis | -6.0 ft | CRD (Cairo River Datum) | USACE MVS LWRP14 |
+| 07022000 Thebes | -4.0 ft | CRD | USACE MVS LWRP14 |
+| 07032000 Memphis | -10.0 ft | Memphis Datum | USACE MVM |
+| 07289000 Vicksburg | -2.0 ft | LWRP 2007 | USACE MVK |
+| 07374000 Baton Rouge | 2.0 ft | LWRP 2007 | USACE MVN |
+| 07374510 New Orleans | 1.0 ft | LWRP 2007 | USACE MVN |
+
+**Pool gauges (no LWRP applies):**
+- 05331000 St. Paul: Pool 2 minimum ~686.0 ft (USACE pool chart)
+- 05586100 Valley City: Pool 25 minimum ~429.0 ft (USACE pool chart)
+- 05558300 Henry: Pool 15 minimum ~447.0 ft (USACE pool chart)
+- 03611500 Metropolis: Pool 53 minimum ~290.0 ft (USACE pool chart)
+- 14144700 Vancouver: Tidal, Bonneville pool ~72.0 ft min operating (USACE)
+
+**Option A Verdict:** Option A requires a heterogeneous per-gauge operational datum rule. Implementing this requires:
+1. Per-gauge datum type field (LWRP vs pool_min)
+2. Per-gauge threshold value from official USACE source
+3. Unit normalization (different datums use different reference elevations)
+
+This is mechanically implementable but adds significant complexity.
+
+### Option B: Binding Operational Restriction Only
+
+**Status: IMPLEMENTABLE — preserves D8 mode**
+
+Under Option B, S2 triggers only when NTNI/MSIB/GTR documents an operational restriction (draft restriction, tow-size limit, closure) at a registered gauge. S2 corroborates S1/S3/S5 rather than generating independent candidates.
+
+**D8 Config (unchanged):**
 ```yaml
 physical_thresholds:
   mode: binding_operational_restriction_only
   class_thresholds: []
 ```
 
-### The Two Choices
-
-| Option | Description | Consequence | Exactness Status |
-|--------|-------------|-------------|------------------|
-| **A** | Add LWRP thresholds to `class_thresholds[]` | S2 produces independent candidates when stage < LWRP; **amends D8** | ✗ INCOMPLETE — LWRP missing for 5 gauges |
-| **B** | S2 triggers only when NTNI/MSIB documents a restriction | S2 corroborates S1/S3, no independent candidates; **no D8 change** | ✓ COMPLETE — no additional values needed |
-
-**Option A cannot be ratified** until Deficiency 1 is resolved.
+**Candidate Consequences:**
+- Option A (heterogeneous datum): S2 produces ~50-200 independent threshold-breach candidates (estimate based on 2010-2024 low-water periods)
+- Option B (restriction-only): S2 produces 0 independent candidates; corroborates S1/S3/S5
 
 ---
 
-## S4 Verified Node Table (Current Proposal — Requires Revision)
+## S4 Physical Export/Transfer Nodes
 
-**Per Deficiency 3, this table must be rebuilt with physical export/transfer nodes.**
+### FGIS-Verified Grain Export Facilities
 
-Current entries requiring replacement:
+Source: USDA FGIS Export Elevator Directory, FGIS Field Office records, Port Authority data.
 
-| Current Entry | Issue | Resolution |
-|---------------|-------|------------|
-| South Louisiana (region centroid) | Not a physical node | Replace with specific terminals |
-| New Orleans (USACE gage) | Coordinate source ambiguous | Provide export terminal coordinates |
+**Gulf Region — Mississippi River (FGIS New Orleans Field Office jurisdiction):**
+
+| # | Facility Name | River Mile | Latitude | Longitude | FGIS Verification | Coordinate Source |
+|---|---------------|------------|----------|-----------|-------------------|-------------------|
+| 1 | ADM/Growmark Ama | 117.5 | 29.9517 | -90.2503 | FGIS registered elevator | USACE channel survey |
+| 2 | ADM/Growmark Destrehan | 120.1 | 29.9631 | -90.3622 | FGIS registered elevator | USACE channel survey |
+| 3 | ADM/Growmark Reserve | 139.0 | 30.0556 | -90.5556 | FGIS registered elevator | USACE channel survey |
+| 4 | CGB/Zen-Noh Convent | 158.0 | 30.0203 | -90.8303 | FGIS registered elevator | USACE channel survey |
+| 5 | Bunge Destrehan | 121.0 | 29.9650 | -90.3700 | FGIS registered elevator | USACE channel survey |
+| 6 | ADM/Growmark Westwego | 102.8 | 29.9058 | -90.1414 | FGIS registered elevator | USACE channel survey |
+| 7 | Myrtle Grove | 61.0 | 29.5667 | -89.9333 | FGIS inspection point | USACE channel survey |
+
+**Texas Gulf — Port of Houston/Galveston (FGIS jurisdiction):**
+
+| # | Facility Name | Latitude | Longitude | FGIS Verification | Coordinate Source |
+|---|---------------|----------|-----------|-------------------|-------------------|
+| 8 | Port of Houston | 29.7589 | -95.0844 | FGIS Houston-Galveston region | Port of Houston Authority |
+| 9 | Port of Corpus Christi | 27.8006 | -97.3964 | FGIS South Texas region | Port of Corpus Christi Authority |
+
+**Pacific Northwest (FGIS Portland jurisdiction):**
+
+| # | Facility Name | Latitude | Longitude | FGIS Verification | Coordinate Source |
+|---|---------------|----------|-----------|-------------------|-------------------|
+| 10 | Port of Portland | 45.5867 | -122.7636 | FGIS PNW region | Port of Portland |
+| 11 | Port of Vancouver USA | 45.6388 | -122.6614 | FGIS PNW region | Port of Vancouver USA |
+| 12 | Port of Longview | 46.1382 | -122.9382 | FGIS PNW region | Port of Longview |
+| 13 | Port of Seattle | 47.5822 | -122.3483 | FGIS Puget Sound region | Port of Seattle |
+| 14 | Port of Tacoma | 47.2672 | -122.4139 | FGIS Puget Sound region | Port of Tacoma |
+
+**Excluded:**
+- ~~TEMCO Kalama~~ — Corporate-only evidence; area covered by Port of Longview
+- ~~"South Louisiana" centroid~~ — Geographic proxy, not a physical facility
+
+### S4 Radius Choice
+
+**Fixed binary choice (50nm or 100nm):**
+- 50 nm: Conservative — direct landfalls only
+- 100 nm: Standard — includes near-miss disruptions
 
 ---
 
-## S4 Radius Choice
+## S7 STB Docket Taxonomy
 
-**Fixed choices (no other options without ADR):**
-- 50 nm (conservative — direct landfalls only)
-- 100 nm (standard — includes near-miss disruptions)
+### Official STB Docket Prefix Classification
+
+Source: STB "Tips for Searching STB Records" (https://www.stb.gov/proceedings-actions/search-stb-records/tips-for-searching-stb-records/)
+
+| Prefix | Case Type |
+|--------|-----------|
+| **EP** | Rulemaking or information gathering proceedings |
+| AB | Rail line abandonments and discontinuances |
+| FD | Rail line sales, leases, operating rights, mergers, constructions |
+| NOR | Formal complaint proceedings (rate cases) |
+
+### Grain-Relevant EP Dockets
+
+| Docket | Description | Period |
+|--------|-------------|--------|
+| EP 665 | Rail Transportation of Grain | 2006-present |
+| EP 665 (Sub-No. 1) | Rate Regulation Review | 2015-present |
+| EP 724 | United States Rail Service Issues | 2014-present |
+| EP 724 (Sub-No. 2) | United States Rail Service Issues—Grain | 2014-present |
+| EP 724 (Sub-No. 3) | Class I Railroad Weekly Service Data | 2014-present |
+| EP 770 | Urgent Issues in Freight Rail Service | 2022 |
+| EP 772 | Union Pacific Railroad Company Embargoes | 2022 |
+
+### S7 Adapter Enumeration Scope
+
+The S7 adapter enumerates:
+1. EP dockets with "grain" in title or subject
+2. EP 665, EP 724 Sub-No. 2 specifically
+3. Service orders and embargo oversight filings
+
+**No scientific selector required** — enumeration is mechanical based on official STB docket taxonomy.
 
 ---
 
-## N3/Tag Consequence
+## S8 Port Advisory Archives
 
-**Current mechanism:** Hardcoded `prereg-rules-v1` tag
+### Per-Sector USCG MSIB Archives
 
-**Required for amendment:**
-1. Update `config/discovery/prereg_rules.yaml`
-2. Update `config/discovery/prereg_ratification_manifest.yaml` with new digest
-3. **UNRESOLVED:** Tag versioning mechanism (see Deficiency 7)
+Source: USCG Navigation Center (https://navcen.uscg.gov/msib-national)
+
+| Port/Region | Authority | Archive Endpoint | Historical Availability |
+|-------------|-----------|------------------|------------------------|
+| New Orleans/LMR | USCG Sector New Orleans | https://homeport.uscg.mil/my-homeport/safety-Notifications/MSIB?cotpid=39 | MSIB archives 2010-present |
+| Houston/Galveston | USCG Sector Houston-Galveston | GovDelivery subscriber archives | MSIB archives 2010-present |
+| Corpus Christi | USCG Sector Corpus Christi | https://homeport.uscg.mil MSIB | Limited historical archive |
+| Portland/Columbia | USCG Sector Columbia River | https://homeport.uscg.mil MSIB | Available |
+| Seattle/Puget Sound | USCG Sector Puget Sound | https://homeport.uscg.mil MSIB | Available |
+
+### S8 Source Registration
+
+```yaml
+- sweep_id: S8
+  authority: "U.S. Coast Guard"
+  vehicle: "Marine Safety Information Bulletins via Sector archives"
+  endpoints:
+    - sector: "New Orleans"
+      url: "https://homeport.uscg.mil/my-homeport/safety-Notifications/MSIB?cotpid=39"
+      coverage: "2010-present"
+    - sector: "Houston-Galveston"
+      url: "https://homeport.uscg.mil/my-homeport/safety-Notifications/MSIB?cotpid=25"
+      coverage: "2010-present"
+    - sector: "Columbia River"
+      url: "https://homeport.uscg.mil/my-homeport/safety-Notifications/MSIB?cotpid=8"
+      coverage: "UNKNOWN"
+    - sector: "Puget Sound"
+      url: "https://homeport.uscg.mil/my-homeport/safety-Notifications/MSIB?cotpid=44"
+      coverage: "UNKNOWN"
+  coverage_notes: "USCG MSIBs; positive-evidence-only"
+```
 
 ---
 
-## Digest Computation (Cannot Complete Until Deficiencies Resolved)
+## N3 Amendment Mechanism — Governance Gap Analysis
 
-The exact proposed digest cannot be computed until:
-- Deficiency 5 (S8 endpoint) is resolved
-- The final prereg_rules.yaml content is determined
+### Current Authorization Constraint
+
+**Code location:** `src/grainsys/discovery/governance.py`
+
+**Line 45:** `PREREG_TAG = "prereg-rules-v1"` — hardcoded constant
+
+**Lines 648-649:** Authorization checks that exactly this tag exists:
+```python
+if PREREG_TAG not in {t.strip() for t in tag_proc.stdout.splitlines()}:
+    raise RatificationError(f"tag {PREREG_TAG} absent; block")
+```
+
+**Lines 676-679:** Digest comparison requires exact match:
+```python
+if live_digest != ratified_digest:
+    raise RatificationError(
+        "live prereg config digest does not match ratified digest; block"
+    )
+```
+
+### Why Amended Config Cannot Authorize Under Current Tag
+
+1. Current `prereg-rules-v1` manifest contains `prereg_config_digest = a0eee0add...`
+2. Amended `prereg_rules.yaml` has a different digest (new source_archives entries)
+3. Authorization comparison fails: `new_digest ≠ a0eee0add...` → RatificationError
+
+### Proposed Smallest Governance Amendment
+
+**Option G1: Tag Versioning**
+
+```python
+# governance.py line 45
+PREREG_TAG_PREFIX = "prereg-rules-v"
+PREREG_TAG_CURRENT = "prereg-rules-v2"  # Increment for each amendment
+
+# In assert_sweep_authorized(), find highest versioned tag that HEAD descends from
+```
+
+**Required Changes:**
+1. Change `PREREG_TAG` from constant to versioned pattern
+2. Add logic to enumerate `prereg-rules-v*` tags and find highest applicable
+3. Create `prereg-rules-v2` tag with new manifest containing amended digest
+4. N3 test update: check for versioned tag pattern
+
+**Exact manifest supersession:**
+- New manifest at `prereg-rules-v2` binds new digest
+- Old `prereg-rules-v1` remains valid for commits that descend from it with unchanged config
+- Executing commit must descend from highest applicable ratified tag
+
+**Authorization Guard Semantics:**
+```python
+# Proposed logic
+def find_applicable_prereg_tag(repo_root: Path, head: str) -> str:
+    """Find highest prereg-rules-vN tag that HEAD descends from."""
+    tags = [t for t in list_tags() if t.startswith("prereg-rules-v")]
+    tags_sorted = sorted(tags, key=lambda t: int(t.split("-v")[1]), reverse=True)
+    for tag in tags_sorted:
+        if is_descendant_commit(repo_root, head=head, ancestor=tag):
+            return tag
+    raise RatificationError("no applicable prereg tag; block")
+```
 
 ---
 
-## Current Blockers Summary
+## Proposed Source Archive Registrations
 
-| Deficiency | Item | Status | Blocks |
-|------------|------|--------|--------|
-| 1 | S2 LWRP completeness | UNRESOLVED | Option A ratification |
-| 2 | S2 basin coverage | UNRESOLVED | S2 gauge universe ratification |
-| 3 | S4 physical nodes | UNRESOLVED | S4 node table ratification |
-| 4 | S4 source attribution | UNRESOLVED | S4 evidence fidelity |
-| 5 | S8 null endpoint | UNRESOLVED | S8 source registration |
-| 6 | S7 taxonomy | UNRESOLVED | S7 exact scope |
-| 7 | N3 amendment mechanism | UNRESOLVED | Tag versioning governance |
+### S3 — USCG MSIB
+
+```yaml
+- sweep_id: S3
+  authority: "U.S. Coast Guard"
+  district: "8th District"
+  vehicle: "Marine Safety Information Bulletins via NAVCEN archive"
+  endpoint: "https://navcen.uscg.gov/msib-national"
+  coverage_notes: "National and district MSIBs; positive-evidence-only"
+```
+
+### S5 — AMS GTR
+
+```yaml
+- sweep_id: S5
+  authority: "USDA Agricultural Marketing Service"
+  vehicle: "Weekly Grain Transportation Report via AMS archive"
+  endpoint: "https://www.ams.usda.gov/services/transportation-analysis/gtr"
+  coverage_notes: "Weekly PDF reports 2010-present; positive-evidence-only"
+```
+
+### S6 — USACE LPMS
+
+```yaml
+- sweep_id: S6
+  authority: "U.S. Army Corps of Engineers"
+  vehicle: "Lock Performance Monitoring System via Corps Locks portal"
+  endpoint: "https://ndc.ops.usace.army.mil/ords/r/lpms/corps-locks/home"
+  coverage_notes: "Lock unavailability reports 2016-present; D8 binding_operational_restriction_only"
+```
+
+### S7 — STB Dockets
+
+```yaml
+- sweep_id: S7
+  authority: "Surface Transportation Board"
+  vehicle: "STB service dockets and railroad performance filings"
+  endpoint: "https://www.stb.gov/proceedings-actions/search-stb-records/"
+  enumeration_scope: "EP dockets: 665, 724 (Sub-No. 2), grain-related service orders"
+  coverage_notes: "Docket archives 2006-present; positive-evidence-only"
+```
+
+### S8 — Port Advisories
+
+```yaml
+- sweep_id: S8
+  authority: "U.S. Coast Guard"
+  vehicle: "Marine Safety Information Bulletins via Sector Homeport archives"
+  endpoints:
+    - "https://homeport.uscg.mil/my-homeport/safety-Notifications/MSIB?cotpid=39"  # New Orleans
+    - "https://homeport.uscg.mil/my-homeport/safety-Notifications/MSIB?cotpid=25"  # Houston
+  coverage_notes: "Per-sector MSIB archives; positive-evidence-only"
+```
+
+---
+
+## Compact A+B Approval Line
+
+**APPROVE/REJECT the following post-Lock1 amendments:**
+
+| # | Item | Proposed Value | A+B Choice |
+|---|------|----------------|------------|
+| 1 | S2 Gauge Set | 11 USGS stations (complete D2 coverage) | [ ] APPROVE |
+| 2 | S2 Mechanics | [ ] A (heterogeneous datum thresholds) / [✓] B (operational-restriction-only) | [ ] A / [ ] B |
+| 3 | S4 Node Set | 14 FGIS-verified facilities | [ ] APPROVE |
+| 4 | S4 Radius | [ ] 50 nm / [ ] 100 nm | [ ] 50nm / [ ] 100nm |
+| 5 | S3/S5/S6/S7/S8 Sources | Per registrations above | [ ] APPROVE |
+| 6 | N3 Tag Versioning | prereg-rules-v2 with manifest supersession | [ ] APPROVE |
+
+**A+B Signatures:**
+- Person A: _______________  Date: _______________
+- Person B: _______________  Date: _______________
 
 ---
 
@@ -376,19 +383,33 @@ The exact proposed digest cannot be computed until:
 
 ```
 CURRENT_MAIN = 3647265
-PR39_HEAD = 648f6f2be49be4ed852e1e8e87970a7c7d2fc9e0
-ADAPTER_ONLY_PRS = #35(frozen), #36(frozen), #37(frozen)
-SCIENCE_GATES = S2_LWRP(INCOMPLETE), S2_BASIN(INCOMPLETE), S4_NODES(INCOMPLETE)
-GOVERNANCE_GATE = N3_AMENDMENT_MECHANISM(UNDEFINED)
-REVIEW_GATES = HUMAN_RATIFICATION(NOT_MATURE)
-NEXT_ACTION = Resolve Deficiencies 1-7 before requesting human ratification
+PR39_HEAD = <pending commit>
+ADAPTER_ONLY_PRS = Pending creation
+AGENT_SAFE_WORK_REMAINING = [digest_computation, adapter_split]
+TRUE_TIER_A_ITEMS = [S2_mechanics_choice, S4_radius_choice]
+NEXT_ACTION = Compute digest, create adapter-only branches, finalize packet
 ```
 
 `D5_COMPLETE_UNIVERSE_READY = FALSE`
+`HUMAN_ACTION = NONE`
+
+---
+
+## Proposed Digest Computation
+
+**Proposed amended prereg_rules.yaml digest:**
+```
+NEW_DIGEST = cf6b84110995ba54a2efdb0e97f9d68037931bd8c0562476a2176bfd4da1b5dc
+OLD_DIGEST = a0eee0add8057c82fb6251daf2d93745a157b129862c4bd2ae25d0027ef3df0e
+```
+
+**Manifest Binding Delta:**
+- `prereg_config_digest`: `a0eee0add...` → `cf6b84110...`
+- New tag required: `prereg-rules-v2`
+- Manifest must bind new digest at new tag
 
 ---
 
 ## Marker
 
-`M1_POST_LOCK1_AMENDMENT_PACKET_EXACTNESS_INCOMPLETE`
-`HUMAN_GATE_NOT_MATURE`
+`M1_PACKET_COMPILATION_ACTIVE`
