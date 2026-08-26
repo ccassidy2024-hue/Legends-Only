@@ -1,0 +1,449 @@
+# ballot/proposals/prereg_rules_v2_A_50nm.yaml
+#
+# PROPOSED CONFIGURATION — Tier-A ballot variant A_50nm
+# NOT RATIFIED. DO NOT USE FOR SWEEP AUTHORIZATION.
+#
+# This variant proposes:
+#   S2 Mechanics: Option A (heterogeneous datum thresholds)
+#   S4 Radius: 50 nautical miles
+#
+# Requires prereg-rules-v2 tag and A+B ratification before execution.
+
+schema_version: "0.3"
+
+# N3 — governing ADR
+governing_adr: docs/decisions/0002-episode-preregistration.md
+
+# D1 — global sample period (ratified 2026-08-24)
+sample_period:
+  sample_start: "2010-01-01"
+  sample_end: "2024-12-31"
+
+# D2 — corridor / basin scope
+corridors:
+  navigation_basins:
+    - lower_mississippi
+    - middle_mississippi
+    - upper_mississippi
+    - ohio
+    - illinois
+    - columbia_snake
+
+# S2 — Navigation Gauge Set (11 USGS stations) with HETEROGENEOUS DATUM THRESHOLDS
+# Source: USGS National Water Information System (NWIS) + USACE datum references
+# URL pattern: https://waterdata.usgs.gov/monitoring-location/USGS-{station_id}/
+#
+# OPTION A: Per-gauge threshold breach detection using LWRP (free-flowing) or
+# pool-minimum (pooled reaches). Each gauge has datum_type and threshold_ft.
+navigation_gauges:
+  # Free-flowing Mississippi (LWRP datum)
+  - station_id: "07010000"
+    official_name: "Mississippi River at St. Louis, MO"
+    basin: middle_mississippi
+    latitude: 38.6270
+    longitude: -90.1809
+    source: "USGS NWIS"
+    datum_type: LWRP
+    threshold_ft: -6.0
+    datum_source: "USACE MVS LWRP14"
+  - station_id: "07022000"
+    official_name: "Mississippi River at Thebes, IL"
+    basin: middle_mississippi
+    latitude: 37.2175
+    longitude: -89.4631
+    source: "USGS NWIS"
+    datum_type: LWRP
+    threshold_ft: -4.0
+    datum_source: "USACE MVS LWRP14"
+  - station_id: "07032000"
+    official_name: "Mississippi River at Memphis, TN"
+    basin: lower_mississippi
+    latitude: 35.1258
+    longitude: -90.0667
+    source: "USGS NWIS"
+    datum_type: LWRP
+    threshold_ft: -10.0
+    datum_source: "USACE MVM Memphis Datum"
+  - station_id: "07289000"
+    official_name: "Mississippi River at Vicksburg, MS"
+    basin: lower_mississippi
+    latitude: 32.3114
+    longitude: -90.9078
+    source: "USGS NWIS"
+    datum_type: LWRP
+    threshold_ft: -2.0
+    datum_source: "USACE MVK LWRP 2007"
+  - station_id: "07374000"
+    official_name: "Mississippi River at Baton Rouge, LA"
+    basin: lower_mississippi
+    latitude: 30.4425
+    longitude: -91.1917
+    source: "USGS NWIS"
+    datum_type: LWRP
+    threshold_ft: 2.0
+    datum_source: "USACE MVN LWRP 2007"
+  - station_id: "07374510"
+    official_name: "Mississippi River at New Orleans, LA"
+    basin: lower_mississippi
+    latitude: 29.9500
+    longitude: -90.0633
+    source: "USGS NWIS (COE-operated)"
+    datum_type: LWRP
+    threshold_ft: 1.0
+    datum_source: "USACE MVN LWRP 2007"
+  # Pooled reaches (pool-minimum datum)
+  - station_id: "03611500"
+    official_name: "Ohio River at Metropolis, IL"
+    basin: ohio
+    latitude: 37.1517
+    longitude: -88.7194
+    source: "USGS NWIS"
+    datum_type: pool_minimum
+    threshold_ft: 290.0
+    datum_source: "USACE LRL Pool 53 chart"
+  - station_id: "05586100"
+    official_name: "Illinois River at Valley City, IL"
+    basin: illinois
+    latitude: 39.7036
+    longitude: -90.6467
+    source: "USGS NWIS"
+    datum_type: pool_minimum
+    threshold_ft: 429.0
+    datum_source: "USACE MVR Pool 25 chart"
+  - station_id: "05558300"
+    official_name: "Illinois River at Henry, IL"
+    basin: illinois
+    latitude: 41.1067
+    longitude: -89.3564
+    source: "USGS NWIS"
+    datum_type: pool_minimum
+    threshold_ft: 447.0
+    datum_source: "USACE MVR Pool 15 chart"
+  - station_id: "05331000"
+    official_name: "Mississippi River at St. Paul, MN"
+    basin: upper_mississippi
+    latitude: 44.9444
+    longitude: -93.0881
+    source: "USGS NWIS"
+    datum_type: pool_minimum
+    threshold_ft: 686.0
+    datum_source: "USACE MVP Pool 2 chart"
+  - station_id: "14144700"
+    official_name: "Columbia River at Vancouver, WA"
+    basin: columbia_snake
+    latitude: 45.6207
+    longitude: -122.6734
+    source: "USGS NWIS"
+    datum_type: pool_minimum
+    threshold_ft: 72.0
+    datum_source: "USACE NWP Bonneville pool min operating"
+
+# S2 Mechanics — Option A: Heterogeneous Datum Threshold Breach Detection
+# S2 generates independent threshold-breach candidates when stage < threshold
+# for each gauge. Requires per-gauge datum normalization.
+s2_mechanics:
+  mode: heterogeneous_datum_thresholds
+  candidate_generation: independent_threshold_breach
+  independent_threshold_candidates: true
+  inclusion_rule: >-
+    When observed stage at a registered gauge falls below the gauge-specific
+    threshold (LWRP for free-flowing, pool_minimum for pooled reaches),
+    S2 generates an independent candidate. Candidates are generated for
+    each threshold breach event, distinct from S1/S3/S5 corroboration.
+  notes: >-
+    Option A produces independent candidates from threshold breach events.
+    Requires heterogeneous datum handling (6 LWRP gauges + 5 pool-minimum gauges).
+    Changes D8 semantics by adding threshold-based candidate generation.
+
+# D3 — Source archives (S1 + S3 + S5 + S6 + S7 + S8)
+source_archives:
+  # S1 — USACE NTNI (ratified per ADR-0015)
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "St. Paul District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/MVP"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "Rock Island District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/MVR"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "St. Louis District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/MVS"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "Memphis District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/MVM"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "Vicksburg District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/MVK"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "New Orleans District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/MVN"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "Louisville District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/LRL"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "Huntington District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/LRH"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "Pittsburgh District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/LRP"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "Nashville District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/LRN"
+  # S3 — USCG MSIB
+  - sweep_id: S3
+    authority: "U.S. Coast Guard"
+    district: "8th District"
+    vehicle: "Marine Safety Information Bulletins via NAVCEN archive"
+    endpoint: "https://navcen.uscg.gov/msib-national"
+    coverage_notes: "National and district MSIBs; positive-evidence-only"
+  # S5 — AMS GTR
+  - sweep_id: S5
+    authority: "USDA Agricultural Marketing Service"
+    vehicle: "Weekly Grain Transportation Report via AMS archive"
+    endpoint: "https://www.ams.usda.gov/services/transportation-analysis/gtr"
+    coverage_notes: "Weekly PDF reports 2010-present; positive-evidence-only"
+  # S6 — USACE LPMS
+  - sweep_id: S6
+    authority: "U.S. Army Corps of Engineers"
+    vehicle: "Lock Performance Monitoring System via Corps Locks portal"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/r/lpms/corps-locks/home"
+    coverage_notes: "Lock unavailability reports 2016-present; D8 binding_operational_restriction_only"
+  # S7 — STB Dockets
+  - sweep_id: S7
+    authority: "Surface Transportation Board"
+    vehicle: "STB service dockets and railroad performance filings"
+    endpoint: "https://www.stb.gov/proceedings-actions/search-stb-records/"
+    enumeration_scope: "EP dockets: 665, 724 (Sub-No. 2), grain-related service orders"
+    coverage_notes: "Docket archives 2006-present; positive-evidence-only"
+  # S8 — Port Advisories
+  - sweep_id: S8
+    authority: "U.S. Coast Guard"
+    vehicle: "Marine Safety Information Bulletins via Sector Homeport archives"
+    endpoints:
+      - sector: "New Orleans"
+        url: "https://homeport.uscg.mil/my-homeport/safety-Notifications/MSIB?cotpid=39"
+      - sector: "Houston-Galveston"
+        url: "https://homeport.uscg.mil/my-homeport/safety-Notifications/MSIB?cotpid=25"
+      - sector: "Columbia River"
+        url: "https://homeport.uscg.mil/my-homeport/safety-Notifications/MSIB?cotpid=8"
+      - sector: "Puget Sound"
+        url: "https://homeport.uscg.mil/my-homeport/safety-Notifications/MSIB?cotpid=44"
+    coverage_notes: "Per-sector MSIB archives; positive-evidence-only"
+
+# S4 — Physical Export/Transfer Nodes (14 FGIS-verified facilities)
+# Radius: 50 nautical miles (conservative; direct landfalls only)
+physical_export_nodes:
+  radius_nm: 50
+  radius_notes: "Conservative 50nm radius includes direct storm landfalls only"
+  facilities:
+    # Gulf Region — Mississippi River
+    - node_id: "ADM_AMA"
+      name: "ADM/Growmark Ama"
+      river_mile: 117.5
+      latitude: 29.9517
+      longitude: -90.2503
+      fgis_verification: "FGIS registered elevator"
+      coordinate_source: "USACE channel survey"
+    - node_id: "ADM_DESTREHAN"
+      name: "ADM/Growmark Destrehan"
+      river_mile: 120.1
+      latitude: 29.9631
+      longitude: -90.3622
+      fgis_verification: "FGIS registered elevator"
+      coordinate_source: "USACE channel survey"
+    - node_id: "ADM_RESERVE"
+      name: "ADM/Growmark Reserve"
+      river_mile: 139.0
+      latitude: 30.0556
+      longitude: -90.5556
+      fgis_verification: "FGIS registered elevator"
+      coordinate_source: "USACE channel survey"
+    - node_id: "CGB_CONVENT"
+      name: "CGB/Zen-Noh Convent"
+      river_mile: 158.0
+      latitude: 30.0203
+      longitude: -90.8303
+      fgis_verification: "FGIS registered elevator"
+      coordinate_source: "USACE channel survey"
+    - node_id: "BUNGE_DESTREHAN"
+      name: "Bunge Destrehan"
+      river_mile: 121.0
+      latitude: 29.9650
+      longitude: -90.3700
+      fgis_verification: "FGIS registered elevator"
+      coordinate_source: "USACE channel survey"
+    - node_id: "ADM_WESTWEGO"
+      name: "ADM/Growmark Westwego"
+      river_mile: 102.8
+      latitude: 29.9058
+      longitude: -90.1414
+      fgis_verification: "FGIS registered elevator"
+      coordinate_source: "USACE channel survey"
+    - node_id: "MYRTLE_GROVE"
+      name: "Myrtle Grove"
+      river_mile: 61.0
+      latitude: 29.5667
+      longitude: -89.9333
+      fgis_verification: "FGIS inspection point"
+      coordinate_source: "USACE channel survey"
+    # Texas Gulf
+    - node_id: "PORT_HOUSTON"
+      name: "Port of Houston"
+      latitude: 29.7589
+      longitude: -95.0844
+      fgis_verification: "FGIS Houston-Galveston region"
+      coordinate_source: "Port of Houston Authority"
+    - node_id: "PORT_CORPUS_CHRISTI"
+      name: "Port of Corpus Christi"
+      latitude: 27.8006
+      longitude: -97.3964
+      fgis_verification: "FGIS South Texas region"
+      coordinate_source: "Port of Corpus Christi Authority"
+    # Pacific Northwest
+    - node_id: "PORT_PORTLAND"
+      name: "Port of Portland"
+      latitude: 45.5867
+      longitude: -122.7636
+      fgis_verification: "FGIS PNW region"
+      coordinate_source: "Port of Portland"
+    - node_id: "PORT_VANCOUVER_USA"
+      name: "Port of Vancouver USA"
+      latitude: 45.6388
+      longitude: -122.6614
+      fgis_verification: "FGIS PNW region"
+      coordinate_source: "Port of Vancouver USA"
+    - node_id: "PORT_LONGVIEW"
+      name: "Port of Longview"
+      latitude: 46.1382
+      longitude: -122.9382
+      fgis_verification: "FGIS PNW region"
+      coordinate_source: "Port of Longview"
+    - node_id: "PORT_SEATTLE"
+      name: "Port of Seattle"
+      latitude: 47.5822
+      longitude: -122.3483
+      fgis_verification: "FGIS Puget Sound region"
+      coordinate_source: "Port of Seattle"
+    - node_id: "PORT_TACOMA"
+      name: "Port of Tacoma"
+      latitude: 47.2672
+      longitude: -122.4139
+      fgis_verification: "FGIS Puget Sound region"
+      coordinate_source: "Port of Tacoma"
+
+# D4 — keyword policy (unchanged)
+keyword_policy:
+  terms:
+    - closure
+    - restriction
+    - "draft restriction"
+    - lockage
+    - "high water"
+    - "low water"
+    - dredging
+    - outage
+    - grounding
+    - allision
+    - breach
+  match: whole_word
+  case_sensitive: false
+  fields:
+    - full_text
+
+# D5 — candidate table (unchanged)
+candidates:
+  table_path: research/episodes/discovery/candidates/candidates.csv
+  id_prefix: CAND
+  ordering_keys:
+    - sweep_id
+    - source_reference
+  stable_id_key: null
+
+# D6 — capture roots (unchanged)
+capture:
+  sweeps_subdir: sweeps
+  rehome_policy: candidate_keyed_no_move
+
+# D7 — coverage gap policy (unchanged)
+coverage:
+  records_dir: research/episodes/discovery/coverage
+  absent_must_be_explicit: true
+  gap_policy_notes: >-
+    Preserves unknown; permits absence only over explicitly registered
+    covered intervals. An empty or unavailable result remains unknown,
+    not zero. No S1 source generates absence evidence under this config.
+  absence_generating_families: []
+  source_identity_keys:
+    - source_family
+    - authority
+    - district
+    - vehicle
+    - endpoint
+
+# D8 — physical thresholds (CHANGED for Option A)
+# Option A enables per-class threshold detection from S2 gauge data
+physical_thresholds:
+  mode: heterogeneous_datum_thresholds
+  class_thresholds:
+    - class: LWRP_breach
+      description: "Stage below LWRP at free-flowing Mississippi gauges"
+      applies_to_gauges: ["07010000", "07022000", "07032000", "07289000", "07374000", "07374510"]
+    - class: pool_minimum_breach
+      description: "Stage below pool minimum at pooled-reach gauges"
+      applies_to_gauges: ["03611500", "05586100", "05558300", "05331000", "14144700"]
+
+# D9 — event windows (unchanged)
+event_windows:
+  pre_event_horizon: "4 weeks"
+  reference_horizon: "prior-year same calendar weeks"
+  response_horizon: "{1, 2, 4, 8, 13, 26} weeks"
+  mapping_disposition: "strictly-after registered-grid; no fill/imputation"
+
+# D10 — calibration set (unchanged)
+calibration_set:
+  count: 3
+  selection_rule: >-
+    Select the first three candidates in frozen D5 deterministic ordering
+    (lowest deterministic CAND IDs after the complete candidate universe
+    is minted). Fail closed if fewer than 3 candidates exist.
+
+# D11 — concurrent shocks (unchanged)
+concurrent_shocks:
+  shock_types:
+    - "drought (crop)"
+    - "macro (rates/USD)"
+    - "competing-origin (Brazil/Argentina)"
+    - other
+  sweep_rule: >-
+    Every candidate receives the same mechanical sweep across every
+    preregistered concurrent-shock class. Absence only under registered
+    coverage, otherwise UNKNOWN. Never add classes from memory.
+
+# D13 — analysis anchor grid (unchanged)
+analysis_anchor_grid:
+  frequency: weekly
+  weekday_or_calendar_convention: Friday
+  cutoff_time: "23:59"
+  timezone: UTC
+  holiday_treatment: rollback
+  missing_anchor_handling: drop
+  target_date_mapping: strictly-after
