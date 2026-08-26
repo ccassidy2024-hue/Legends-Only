@@ -89,13 +89,12 @@ source_archives:
   # S6 — USACE LPMS Lock Unavailability (registered 2026-08-26)
   # D8 mode=binding_operational_restriction_only; positive-evidence-only.
   # UNKNOWN for 2010-2015 (archive starts 2016).
+  # Note: LPMS is a cross-district system; use "NDC" (Navigation Data Center) per D3 semantics.
   - sweep_id: S6
     authority: "U.S. Army Corps of Engineers"
-    vehicle: "Corps Locks Annual Lock Unavailability Report"
+    district: "NDC"
+    vehicle: "Corps Locks Annual Lock Unavailability Report (D8=binding_operational_restriction_only, COVERED_2016_2024_UNKNOWN_2010_2015)"
     endpoint: "https://ndc.ops.usace.army.mil/ords/r/lpms/corps-locks"
-    enumeration: "annual_unavailability_2016_to_2024_UNKNOWN_2010_to_2015"
-    d8_mode: "binding_operational_restriction_only"
-    historical_completeness: "COVERED_2016_2024_UNKNOWN_2010_2015"
 
 # D4 — keyword policy (ratified from 03:26 checklist at 04:38 + later amendments)
 # match=whole_word per ADR-0015; case_sensitive=false per later ratification.
