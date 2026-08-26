@@ -20,7 +20,6 @@ import re
 from dataclasses import dataclass
 from datetime import date
 from typing import Any
-from urllib.parse import urlparse
 
 # Port authorities with documented public advisory archives
 # These are the official-source-supported nodes for S4 hurricane proximity analysis
@@ -240,7 +239,7 @@ def validate_s4_node_coverage(s4_nodes: list[str]) -> dict[str, bool]:
             continue
         
         # Check if node matches a terminal code
-        for term_code, _, port, status in TERMINAL_OPERATORS:
+        for term_code, _, _port, status in TERMINAL_OPERATORS:
             if term_code == node or node in term_code:
                 result[node] = status == "public_notices"
                 break

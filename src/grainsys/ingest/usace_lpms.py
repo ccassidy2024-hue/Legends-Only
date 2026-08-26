@@ -18,7 +18,6 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from typing import Any
-from urllib.parse import urlparse
 from xml.etree import ElementTree
 
 USACE_AUTHORITY = "U.S. Army Corps of Engineers"
@@ -237,8 +236,8 @@ def get_registered_rivers() -> tuple[tuple[str, str], ...]:
 def get_registered_locks() -> tuple[LockReference, ...]:
     """Return the tuple of locks covered by the registered grain corridor scope."""
     return tuple(
-        LockReference(river_code=r, lock_code=l, lock_name=n)
-        for r, l, n in LPMS_GRAIN_CORRIDOR_LOCKS
+        LockReference(river_code=r, lock_code=lock, lock_name=n)
+        for r, lock, n in LPMS_GRAIN_CORRIDOR_LOCKS
     )
 
 
@@ -280,7 +279,7 @@ def normalize_unavailability_report(
 def _parse_unavailability_html(raw_html: bytes, *, year: int) -> tuple[LockUnavailabilityRecord, ...]:
     """Parse unavailability data from HTML table format."""
     try:
-        decoded = raw_html.decode("utf-8")
+        _ = raw_html.decode("utf-8")  # Validate encoding
     except UnicodeDecodeError as exc:
         raise LpmsNormalizationError(f"HTML decode failed: {exc}") from exc
 
@@ -294,7 +293,7 @@ def _parse_unavailability_html(raw_html: bytes, *, year: int) -> tuple[LockUnava
 def _parse_unavailability_csv(raw_csv: bytes, *, year: int) -> tuple[LockUnavailabilityRecord, ...]:
     """Parse unavailability data from CSV format."""
     try:
-        decoded = raw_csv.decode("utf-8")
+        _ = raw_csv.decode("utf-8")  # Validate encoding
     except UnicodeDecodeError as exc:
         raise LpmsNormalizationError(f"CSV decode failed: {exc}") from exc
 

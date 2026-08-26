@@ -128,7 +128,7 @@ def extract_date_from_pdf_filename(filename: str) -> date:
     match = _GTR_FILENAME_RE.search(filename)
     if not match:
         raise GtrNormalizationError(
-            f"Filename '{filename}' does not match GTR{mmddyyyy}.pdf pattern"
+            f"Filename '{filename}' does not match GTRmmddyyyy.pdf pattern"
         )
     mmddyyyy = match.group(1)
     try:
