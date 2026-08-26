@@ -1,0 +1,149 @@
+# S2 Navigation Gauge Proposal - Variant A (LWRP Datum Mode)
+#
+# Status: NON-EXECUTABLE PROPOSAL VARIANT (awaiting A+B ratification)
+# Interpretation: §J S2 "programmatic threshold breach detection" satisfied via
+#   official USACE Low Water Reference Plane (LWRP) as breach datum.
+#
+# Row count: 10 (NOT 11)
+# Missing basins: Upper Mississippi (locked/pooled structure differs),
+#   Columbia-Snake (requires separate PNW derivation not yet performed)
+#
+# If A+B requires Upper Mississippi or Columbia-Snake gauges, proposal must be
+# extended with same methodology before ratification.
+
+schema_version: "1.0"
+proposal_id: S2_GAUGE_PROPOSAL_A_LWRP
+proposal_date: "2026-08-26"
+interpretation: LWRP_AS_OFFICIAL_DATUM
+d8_compatibility: true
+d8_mode: binding_operational_restriction_only
+
+row_count: 10
+claimed_row_count_discrepancy:
+  claimed: 11
+  actual: 10
+  reason: >-
+    Only 10 gauges derivable from D2 basin scope + USGS NWIS + USACE cooperation
+    using mechanical criteria. Upper Mississippi basin (locked/pooled) requires
+    structurally different gauge selection. Columbia-Snake basin requires
+    separate PNW derivation not yet performed. No official/mechanical support
+    exists for 11th row.
+
+gauges:
+  - station_id: "07010000"
+    name: "Mississippi River at St. Louis, MO"
+    d2_basin: middle_mississippi
+    latitude: 38.6273
+    longitude: -90.1806
+    lwrp_value_ft: -6.0
+    lwrp_datum: CRD
+    official_source: "USGS NWIS + USACE St. Louis District"
+    river_mile: 179.6
+
+  - station_id: "07022000"
+    name: "Mississippi River at Thebes, IL"
+    d2_basin: middle_mississippi
+    latitude: 37.2181
+    longitude: -89.4678
+    lwrp_value_ft: -4.0
+    lwrp_datum: CRD
+    official_source: "USGS NWIS + USACE St. Louis District"
+    river_mile: 43.7
+
+  - station_id: "07032000"
+    name: "Mississippi River at Memphis, TN"
+    d2_basin: lower_mississippi
+    latitude: 35.1406
+    longitude: -90.0556
+    lwrp_value_ft: -10.0
+    lwrp_datum: Memphis_Datum
+    official_source: "USGS NWIS + USACE Memphis District"
+    river_mile: 737.2
+
+  - station_id: "07289000"
+    name: "Mississippi River at Vicksburg, MS"
+    d2_basin: lower_mississippi
+    latitude: 32.3119
+    longitude: -90.9022
+    lwrp_value_ft: -2.0
+    lwrp_datum: MSL
+    official_source: "USGS NWIS + USACE Vicksburg District"
+    river_mile: 435.7
+
+  - station_id: "07374000"
+    name: "Mississippi River at Baton Rouge, LA"
+    d2_basin: lower_mississippi
+    latitude: 30.4458
+    longitude: -91.1919
+    lwrp_value_ft: null
+    lwrp_datum: null
+    official_source: "USGS NWIS + USACE New Orleans District"
+    river_mile: 228.4
+    notes: "Tidewater transition zone; LWRP less applicable"
+
+  - station_id: "07374510"
+    name: "Mississippi River at New Orleans, LA"
+    d2_basin: lower_mississippi
+    latitude: 29.9508
+    longitude: -90.0633
+    lwrp_value_ft: null
+    lwrp_datum: null
+    official_source: "USGS NWIS + USACE New Orleans District"
+    river_mile: 102.8
+    notes: "Export corridor anchor; tidal influence"
+
+  - station_id: "03612500"
+    name: "Ohio River at Cairo, IL"
+    d2_basin: ohio
+    latitude: 37.0042
+    longitude: -89.1850
+    lwrp_value_ft: null
+    lwrp_datum: null
+    official_source: "USACE Louisville District (OH111)"
+    river_mile: 0.0
+    notes: "Ohio confluence gauge"
+
+  - station_id: "03611500"
+    name: "Ohio River at Metropolis, IL"
+    d2_basin: ohio
+    latitude: 37.1514
+    longitude: -88.7311
+    lwrp_value_ft: null
+    lwrp_datum: null
+    official_source: "USGS NWIS + USACE"
+    river_mile: 45.2
+    notes: "Key lower Ohio gauge"
+
+  - station_id: "05586100"
+    name: "Illinois River at Valley City, IL"
+    d2_basin: illinois
+    latitude: 39.7053
+    longitude: -90.6461
+    lwrp_value_ft: null
+    lwrp_datum: null
+    official_source: "USGS NWIS + USACE Rock Island District"
+    river_mile: 61.0
+    notes: "Lower Illinois Waterway"
+
+  - station_id: "05558300"
+    name: "Illinois River at Henry, IL"
+    d2_basin: illinois
+    latitude: 41.1119
+    longitude: -89.3567
+    lwrp_value_ft: null
+    lwrp_datum: null
+    official_source: "USGS NWIS + USACE Rock Island District"
+    river_mile: 196.0
+    notes: "Upper Illinois Waterway"
+
+execution_semantics:
+  trigger_condition: "stage < LWRP (where LWRP defined)"
+  evidence_type: "Independent S2 candidate when stage crosses LWRP"
+  positive_evidence_only: true
+  absence_generating: false
+
+verification_urls:
+  usgs_nwis: "https://waterdata.usgs.gov/monitoring-location/USGS-{station_id}/"
+  usace_rivergages: "https://rivergages.mvr.usace.army.mil/"
+
+marker: "S2_PROPOSAL_A_LWRP_10_ROWS"

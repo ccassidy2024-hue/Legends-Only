@@ -1,0 +1,124 @@
+# S2 Navigation Gauge Proposal - Variant B (Operational Restriction Mode)
+#
+# Status: NON-EXECUTABLE PROPOSAL VARIANT (awaiting A+B ratification)
+# Interpretation: S2 triggers only when NTNI/MSIB documents an operational
+#   restriction, not on raw gauge breach. S2 corroborates S1/S3 rather than
+#   generating independent candidates.
+#
+# Row count: 10 (NOT 11)
+# Missing basins: Upper Mississippi (locked/pooled structure differs),
+#   Columbia-Snake (requires separate PNW derivation not yet performed)
+#
+# If A+B requires Upper Mississippi or Columbia-Snake gauges, proposal must be
+# extended with same methodology before ratification.
+
+schema_version: "1.0"
+proposal_id: S2_GAUGE_PROPOSAL_B_OPERATIONAL
+proposal_date: "2026-08-26"
+interpretation: OPERATIONAL_RESTRICTION_ONLY
+d8_compatibility: true
+d8_mode: binding_operational_restriction_only
+
+row_count: 10
+claimed_row_count_discrepancy:
+  claimed: 11
+  actual: 10
+  reason: >-
+    Only 10 gauges derivable from D2 basin scope + USGS NWIS + USACE cooperation
+    using mechanical criteria. Upper Mississippi basin (locked/pooled) requires
+    structurally different gauge selection. Columbia-Snake basin requires
+    separate PNW derivation not yet performed. No official/mechanical support
+    exists for 11th row.
+
+gauges:
+  - station_id: "07010000"
+    name: "Mississippi River at St. Louis, MO"
+    d2_basin: middle_mississippi
+    latitude: 38.6273
+    longitude: -90.1806
+    official_source: "USGS NWIS + USACE St. Louis District"
+    river_mile: 179.6
+
+  - station_id: "07022000"
+    name: "Mississippi River at Thebes, IL"
+    d2_basin: middle_mississippi
+    latitude: 37.2181
+    longitude: -89.4678
+    official_source: "USGS NWIS + USACE St. Louis District"
+    river_mile: 43.7
+
+  - station_id: "07032000"
+    name: "Mississippi River at Memphis, TN"
+    d2_basin: lower_mississippi
+    latitude: 35.1406
+    longitude: -90.0556
+    official_source: "USGS NWIS + USACE Memphis District"
+    river_mile: 737.2
+
+  - station_id: "07289000"
+    name: "Mississippi River at Vicksburg, MS"
+    d2_basin: lower_mississippi
+    latitude: 32.3119
+    longitude: -90.9022
+    official_source: "USGS NWIS + USACE Vicksburg District"
+    river_mile: 435.7
+
+  - station_id: "07374000"
+    name: "Mississippi River at Baton Rouge, LA"
+    d2_basin: lower_mississippi
+    latitude: 30.4458
+    longitude: -91.1919
+    official_source: "USGS NWIS + USACE New Orleans District"
+    river_mile: 228.4
+
+  - station_id: "07374510"
+    name: "Mississippi River at New Orleans, LA"
+    d2_basin: lower_mississippi
+    latitude: 29.9508
+    longitude: -90.0633
+    official_source: "USGS NWIS + USACE New Orleans District"
+    river_mile: 102.8
+
+  - station_id: "03612500"
+    name: "Ohio River at Cairo, IL"
+    d2_basin: ohio
+    latitude: 37.0042
+    longitude: -89.1850
+    official_source: "USACE Louisville District (OH111)"
+    river_mile: 0.0
+
+  - station_id: "03611500"
+    name: "Ohio River at Metropolis, IL"
+    d2_basin: ohio
+    latitude: 37.1514
+    longitude: -88.7311
+    official_source: "USGS NWIS + USACE"
+    river_mile: 45.2
+
+  - station_id: "05586100"
+    name: "Illinois River at Valley City, IL"
+    d2_basin: illinois
+    latitude: 39.7053
+    longitude: -90.6461
+    official_source: "USGS NWIS + USACE Rock Island District"
+    river_mile: 61.0
+
+  - station_id: "05558300"
+    name: "Illinois River at Henry, IL"
+    d2_basin: illinois
+    latitude: 41.1119
+    longitude: -89.3567
+    official_source: "USGS NWIS + USACE Rock Island District"
+    river_mile: 196.0
+
+execution_semantics:
+  trigger_condition: "S1/S3 operational restriction documented AND gauge corroborates"
+  evidence_type: "Corroboration for S1/S3 candidates; no independent S2 candidates"
+  positive_evidence_only: true
+  absence_generating: false
+
+verification_urls:
+  usgs_nwis: "https://waterdata.usgs.gov/monitoring-location/USGS-{station_id}/"
+  usace_rivergages: "https://rivergages.mvr.usace.army.mil/"
+
+marker: "S2_PROPOSAL_B_OPERATIONAL_10_ROWS"

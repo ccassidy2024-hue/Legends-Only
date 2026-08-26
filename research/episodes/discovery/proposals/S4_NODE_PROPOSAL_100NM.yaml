@@ -1,0 +1,142 @@
+# S4 Export/Transfer Node Proposal - Variant 100NM
+#
+# Status: NON-EXECUTABLE PROPOSAL VARIANT (awaiting A+B ratification)
+# Proximity radius: 100 nautical miles (standard)
+#
+# Row count: 10 (NOT 14)
+# Derivation: USDA FGIS official export port regions only
+# Excluded: Nodes lacking independent FGIS export facility registration
+#
+# If A+B requires additional nodes, each must have official FGIS or equivalent
+# Tier 1 source documentation before inclusion.
+
+schema_version: "1.0"
+proposal_id: S4_NODE_PROPOSAL_100NM
+proposal_date: "2026-08-26"
+proximity_radius_nm: 100
+proximity_radius_interpretation: >-
+  Standard radius for port disruption analysis including near-miss disruptions.
+  Storm center must pass within 100 nm of node coordinates to trigger S4
+  candidate. Captures both direct impacts and peripheral disruption events.
+
+row_count: 10
+claimed_row_count_discrepancy:
+  claimed: 14
+  actual: 10
+  reason: >-
+    Only 10 nodes derivable from USDA FGIS official export port region
+    definitions. Corporate-only evidence (e.g., TEMCO Kalama) does not meet
+    Tier 1 official source requirements. Additional nodes would require either
+    (a) independent FGIS registration, or (b) A+B ratification of alternative
+    official source criteria. No official/mechanical support exists for 14 rows.
+
+fgis_port_regions_reference:
+  MISSISSIPPI_RIVER: "Export port locations on the Mississippi River in Louisiana"
+  EAST_GULF: "East of Mississippi River in Gulf coastal areas"
+  NORTH_TEXAS: "Houston and points north, plus west of Mississippi River in Louisiana"
+  SOUTH_TEXAS: "Geographically south of Houston, Texas on Gulf of Mexico"
+  COLUMBIA_RIVER: "Along Columbia River system in Pacific Northwest"
+  PUGET_SOUND: "Waterways of Puget Sound in Washington"
+
+nodes:
+  # Gulf Export Nodes (FGIS Mississippi River + Texas Regions)
+  - node_id: "GULF-01"
+    name: "South Louisiana (general)"
+    latitude: 29.9500
+    longitude: -90.0500
+    fgis_port_region: MISSISSIPPI_RIVER
+    official_source: "FGIS port region centroid"
+
+  - node_id: "GULF-02"
+    name: "New Orleans (Carrollton)"
+    latitude: 29.9545
+    longitude: -90.0750
+    fgis_port_region: MISSISSIPPI_RIVER
+    official_source: "USACE gage 01300 coordinates"
+
+  - node_id: "GULF-03"
+    name: "Houston Ship Channel"
+    latitude: 29.7604
+    longitude: -95.3698
+    fgis_port_region: NORTH_TEXAS
+    official_source: "Port of Houston Authority"
+
+  - node_id: "GULF-04"
+    name: "Corpus Christi"
+    latitude: 27.8006
+    longitude: -97.3964
+    fgis_port_region: SOUTH_TEXAS
+    official_source: "Port of Corpus Christi Authority"
+
+  - node_id: "GULF-05"
+    name: "Galveston"
+    latitude: 29.3013
+    longitude: -94.7977
+    fgis_port_region: NORTH_TEXAS
+    official_source: "Port of Galveston Authority"
+
+  # PNW Export Nodes (FGIS Columbia River + Puget Sound Regions)
+  - node_id: "PNW-01"
+    name: "Portland, OR"
+    latitude: 45.5152
+    longitude: -122.6784
+    fgis_port_region: COLUMBIA_RIVER
+    official_source: "Port of Portland"
+
+  - node_id: "PNW-02"
+    name: "Vancouver, WA"
+    latitude: 45.6388
+    longitude: -122.6614
+    fgis_port_region: COLUMBIA_RIVER
+    official_source: "Port of Vancouver USA"
+
+  - node_id: "PNW-03"
+    name: "Longview, WA"
+    latitude: 46.1382
+    longitude: -122.9382
+    fgis_port_region: COLUMBIA_RIVER
+    official_source: "Port of Longview"
+
+  - node_id: "PNW-04"
+    name: "Seattle, WA"
+    latitude: 47.6062
+    longitude: -122.3321
+    fgis_port_region: PUGET_SOUND
+    official_source: "Port of Seattle"
+
+  - node_id: "PNW-05"
+    name: "Tacoma, WA"
+    latitude: 47.2529
+    longitude: -122.4443
+    fgis_port_region: PUGET_SOUND
+    official_source: "Port of Tacoma"
+
+excluded_nodes:
+  - name: "TEMCO Kalama"
+    reason: >-
+      No independent FGIS export facility registration found. Corporate-only
+      evidence does not meet Tier 1 source requirements. Hurricane proximity
+      to Kalama area captured via Port of Longview (PNW-03).
+  - name: "East Gulf facilities"
+    reason: >-
+      EAST_GULF FGIS region exists but no specific grain export facilities
+      identified with official coordinates meeting Tier 1 requirements.
+  - name: "Additional Texas terminals"
+    reason: >-
+      Multiple terminals exist in NORTH_TEXAS/SOUTH_TEXAS regions but
+      specific facility coordinates require individual verification against
+      FGIS registration or equivalent official source.
+
+execution_semantics:
+  trigger_condition: "NHC storm track passes within 100 nm of node coordinates"
+  evidence_type: "Independent S4 candidate for each qualifying landfall"
+  positive_evidence_only: true
+  absence_generating: false
+  nhc_data_source: "HURDAT2"
+
+verification_urls:
+  fgis_regions: "https://fgisonline.ams.usda.gov/F_DEC/exportRegionDefinitionTables0801.pdf"
+  fgis_data: "https://www.ams.usda.gov/resources/fgis-data-and-statistics"
+  nhc_hurdat2: "https://www.nhc.noaa.gov/data/hurdat/"
+
+marker: "S4_PROPOSAL_100NM_10_ROWS"

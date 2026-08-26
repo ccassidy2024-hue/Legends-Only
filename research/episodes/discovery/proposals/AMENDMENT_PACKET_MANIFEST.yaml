@@ -1,0 +1,297 @@
+# M1 Amendment Packet Manifest
+#
+# Status: HUMAN_BALLOT_MATERIALS_READY (not HUMAN_BALLOT_EXACT_READY)
+# Date: 2026-08-26
+#
+# This packet contains non-executable proposal variants for S2 and S4 that
+# require A+B ratification before becoming production configuration.
+#
+# The production schema (prereg_rules.yaml) cannot encode unresolved
+# alternatives. These proposal variants are materialized under this
+# non-executable path per instruction.
+
+schema_version: "1.0"
+packet_id: M1_AMENDMENT_PACKET
+packet_date: "2026-08-26"
+packet_marker: M1_PACKET_BUILD_RENUDGED
+
+# ============================================================================
+# CANONICAL MAIN
+# ============================================================================
+
+canonical_main:
+  commit_sha: a6f1b81c40f15a6f986ecbbe4e2e3128242a3b9c
+  commit_message: "feat(ingest): S3/S5/S6/S7/S8 adapters (prereg-neutral) (#40)"
+  verified: true
+
+# ============================================================================
+# N3 AUTHORIZATION GUARD CODE - UNCHANGED
+# ============================================================================
+
+n3_guard_unchanged:
+  confirmed: true
+  governance_py_digest: 09afcc1d592c26a855f5224e8cc8a19df44bf63736dc353d3678514f8674ef9e
+  governance_py_digest_matches_manifest: true
+  prereg_rules_digest: a0eee0add8057c82fb6251daf2d93745a157b129862c4bd2ae25d0027ef3df0e
+  prereg_tag_v1_exists: false
+  notes: >-
+    N3 authorization guard code (governance.py) has not changed from the
+    ratified manifest. The tag prereg-rules-v1 does not yet exist in the
+    repository. No N3 guard code changes on this packet branch.
+
+# ============================================================================
+# S2 GAUGE PROPOSALS - 10 ROWS (NOT 11)
+# ============================================================================
+
+s2_proposals:
+  claimed_row_count: 11
+  actual_row_count: 10
+  deficiency_reason: >-
+    Only 10 gauges derivable from D2 basin scope using USGS NWIS + USACE
+    cooperation methodology. Missing: Upper Mississippi (locked/pooled
+    structure requires different selection criteria), Columbia-Snake (requires
+    separate PNW derivation not yet performed). No official/mechanical support
+    exists for 11th row.
+
+  variants:
+    - variant_id: S2_GAUGE_PROPOSAL_A_LWRP
+      interpretation: "LWRP as official USACE datum for breach detection"
+      file_path: research/episodes/discovery/proposals/S2_GAUGE_PROPOSAL_A_LWRP.yaml
+      sha256_digest: ec2f2282d15b0df89bc2cd2f4c2c93ec17d3566a9c598d2f27ad8e0743ada8cb
+      gauge_count: 10
+      d8_compatible: true
+
+    - variant_id: S2_GAUGE_PROPOSAL_B_OPERATIONAL
+      interpretation: "Operational restriction only (S2 corroborates S1/S3)"
+      file_path: research/episodes/discovery/proposals/S2_GAUGE_PROPOSAL_B_OPERATIONAL.yaml
+      sha256_digest: 20c269d8b00ba8d058b75409480d67eaea7ef63c15b56cb5d98c297f34cc9a64
+      gauge_count: 10
+      d8_compatible: true
+
+  human_choice_required:
+    description: "A+B must select between LWRP datum mode (A) or operational restriction mode (B)"
+    options:
+      - A_LWRP
+      - B_OPERATIONAL
+
+  basins_covered:
+    - lower_mississippi  # 4 gauges
+    - middle_mississippi # 2 gauges
+    - ohio               # 2 gauges
+    - illinois           # 2 gauges
+
+  basins_not_covered:
+    - upper_mississippi  # Locked/pooled; requires different methodology
+    - columbia_snake     # Requires separate PNW derivation
+
+# ============================================================================
+# S4 NODE PROPOSALS - 10 ROWS (NOT 14)
+# ============================================================================
+
+s4_proposals:
+  claimed_row_count: 14
+  actual_row_count: 10
+  deficiency_reason: >-
+    Only 10 nodes derivable from USDA FGIS official export port region
+    definitions. Corporate-only evidence (TEMCO Kalama, additional terminals)
+    does not meet Tier 1 official source requirements. No official/mechanical
+    support exists for 14 rows.
+
+  variants:
+    - variant_id: S4_NODE_PROPOSAL_50NM
+      proximity_radius_nm: 50
+      interpretation: "Conservative radius - direct landfalls only"
+      file_path: research/episodes/discovery/proposals/S4_NODE_PROPOSAL_50NM.yaml
+      sha256_digest: 10dfd19fe8b0853bbf000d6d056458d183c9bed6483bad49c4ad4439e062cb99
+      node_count: 10
+
+    - variant_id: S4_NODE_PROPOSAL_100NM
+      proximity_radius_nm: 100
+      interpretation: "Standard radius - includes near-miss disruptions"
+      file_path: research/episodes/discovery/proposals/S4_NODE_PROPOSAL_100NM.yaml
+      sha256_digest: d6879e10b53b61f838c901d6bfcc50765f57bb4445a6cc2ddeb28e2cc312ce50
+      node_count: 10
+
+  human_choice_required:
+    description: "A+B must select 50nm or 100nm proximity radius"
+    options:
+      - 50NM
+      - 100NM
+
+  excluded_nodes:
+    - name: "TEMCO Kalama"
+      reason: "Corporate-only evidence; no FGIS registration"
+    - name: "East Gulf facilities"
+      reason: "No specific grain export coordinates meeting Tier 1"
+    - name: "Additional Texas terminals"
+      reason: "Individual FGIS verification required"
+
+# ============================================================================
+# S3/S5/S6/S7/S8 ADAPTER READINESS
+# ============================================================================
+
+adapter_readiness:
+  S3_USCG_MSIB:
+    adapter_file: src/grainsys/ingest/uscg_msib.py
+    status: IMPLEMENTED
+    can_execute_before_amendment: false
+    blocking_reason: "Requires D3 endpoint registration in prereg_rules.yaml"
+    tests_pass: true
+    notes: "Adapter ready; awaits ratification to add to prereg config"
+
+  S5_AMS_GTR:
+    adapter_file: src/grainsys/ingest/ams_gtr.py
+    status: IMPLEMENTED
+    can_execute_before_amendment: false
+    blocking_reason: "Requires D3 endpoint registration in prereg_rules.yaml"
+    tests_pass: true
+    notes: "Adapter ready; awaits ratification to add to prereg config"
+
+  S6_USACE_LPMS:
+    adapter_file: src/grainsys/ingest/usace_lpms.py
+    status: IMPLEMENTED
+    can_execute_before_amendment: false
+    blocking_reason: "Requires D3 endpoint registration + lock list ratification"
+    tests_pass: true
+    notes: "Adapter ready; lock list and thresholds are Tier A decisions"
+
+  S7_STB_DOCKETS:
+    adapter_file: src/grainsys/ingest/stb_dockets.py
+    status: IMPLEMENTED
+    can_execute_before_amendment: false
+    blocking_reason: "Requires D3 registration + docket type classification ratification"
+    tests_pass: true
+    notes: "Adapter ready; docket classification is Tier A decision"
+
+  S8_PORT_ADVISORY:
+    adapter_file: src/grainsys/ingest/port_advisory.py
+    status: BLOCKED_ON_S4
+    can_execute_before_amendment: false
+    blocking_reason: "S8 archive verification requires ratified S4 node set"
+    tests_pass: true
+    notes: "validate_s4_node_coverage() depends on S4 ratification"
+
+# ============================================================================
+# PREREG-RULES-V2 AUTHORIZATION SEMANTICS (PROPOSED)
+# ============================================================================
+
+prereg_rules_v2_semantics:
+  description: >-
+    After A+B ratification of S2 and S4 proposals, the selected variants would
+    be integrated into prereg_rules.yaml. A new tag prereg-rules-v2 would
+    supersede the (not yet created) prereg-rules-v1 with an updated manifest.
+
+  manifest_delta:
+    new_entries:
+      - "S2 navigation gauge registry (whichever variant selected)"
+      - "S4 export node registry with selected radius"
+      - "S3 source archive entries (USCG MSIB)"
+      - "S5 source archive entries (AMS GTR)"
+      - "S6 source archive entries (USACE LPMS with lock list)"
+      - "S7 source archive entries (STB dockets with classifications)"
+      - "S8 source archive entries (port advisories for S4 nodes)"
+
+    interpretation_digests_to_add:
+      - src/grainsys/ingest/uscg_msib.py
+      - src/grainsys/ingest/ams_gtr.py
+      - src/grainsys/ingest/usace_lpms.py
+      - src/grainsys/ingest/stb_dockets.py
+      - src/grainsys/ingest/port_advisory.py
+
+  supersession:
+    - "prereg-rules-v1 (when created) would be superseded by prereg-rules-v2"
+    - "All existing rulings R-001 through R-015 remain binding (append-only)"
+
+  authorization_requirements:
+    - "A+B ratification of S2 A/B choice"
+    - "A+B ratification of S4 50nm/100nm choice"
+    - "A+B ratification of S6 lock list (Tier A)"
+    - "A+B ratification of S7 docket classifications (Tier A)"
+    - "Fresh normalized checkout for manifest build"
+    - "All load-bearing ADRs must be status accepted"
+
+# ============================================================================
+# HUMAN GATES AND EXECUTION STATUS
+# ============================================================================
+
+human_gates:
+  S2_interpretation_choice:
+    status: PENDING
+    options: [A_LWRP, B_OPERATIONAL]
+    required_for: ["S2 adapter implementation", "S2 sweep execution"]
+
+  S4_radius_choice:
+    status: PENDING
+    options: [50NM, 100NM]
+    required_for: ["S4 adapter implementation", "S4 sweep execution", "S8 verification"]
+
+  S6_lock_list:
+    status: PENDING
+    description: "Which USACE locks are in scope (Tier A scientific decision)"
+    required_for: ["S6 sweep execution"]
+
+  S7_docket_types:
+    status: PENDING
+    description: "Which STB docket types are relevant (Tier A scientific decision)"
+    required_for: ["S7 sweep execution"]
+
+execution_status:
+  S1: COMPLETE  # 37 captures via existing prereg_rules.yaml
+  S2: BLOCKED   # Awaiting A+B interpretation choice
+  S3: BLOCKED   # Adapter ready, awaiting D3 registration ratification
+  S4: BLOCKED   # Awaiting A+B radius choice
+  S5: BLOCKED   # Adapter ready, awaiting D3 registration ratification
+  S6: BLOCKED   # Adapter ready, awaiting lock list ratification
+  S7: BLOCKED   # Adapter ready, awaiting docket type ratification
+  S8: BLOCKED   # Blocked on S4 ratification
+
+# ============================================================================
+# QA VERIFICATION
+# ============================================================================
+
+qa_verification:
+  proposal_files_exist: true
+  proposal_digests_computed: true
+  n3_guard_unchanged: true
+  row_count_discrepancy_documented:
+    s2: "10 actual vs 11 claimed"
+    s4: "10 actual vs 14 claimed"
+  unresolved_choices_not_silently_selected: true
+  adapter_files_on_main: true
+  tests_file: tests/test_s3_s8_adapters.py
+
+# ============================================================================
+# STATE LINE (per instruction)
+# ============================================================================
+
+state_line:
+  CURRENT_MAIN: a6f1b81c40f15a6f986ecbbe4e2e3128242a3b9c
+  PACKET_PR_HEAD: PENDING  # To be filled after commit and PR creation
+  PROPOSAL_DIGESTS:
+    S2_A: ec2f2282d15b0df89bc2cd2f4c2c93ec17d3566a9c598d2f27ad8e0743ada8cb
+    S2_B: 20c269d8b00ba8d058b75409480d67eaea7ef63c15b56cb5d98c297f34cc9a64
+    S4_50NM: 10dfd19fe8b0853bbf000d6d056458d183c9bed6483bad49c4ad4439e062cb99
+    S4_100NM: d6879e10b53b61f838c901d6bfcc50765f57bb4445a6cc2ddeb28e2cc312ce50
+  S3_S5_S6_S7_S8_READY:
+    S3: IMPLEMENTED_BLOCKED_ON_D3
+    S5: IMPLEMENTED_BLOCKED_ON_D3
+    S6: IMPLEMENTED_BLOCKED_ON_LOCK_LIST
+    S7: IMPLEMENTED_BLOCKED_ON_DOCKET_TYPES
+    S8: BLOCKED_ON_S4
+  HUMAN_GATE: "S2 A/B + S4 50/100nm + S6 lock list + S7 docket types"
+  B_RED_FUTURE_REVIEW: "N/A - no changes to load-bearing code on this packet"
+  NEXT_ACTION: "A+B ratification of S2 interpretation and S4 radius"
+
+# ============================================================================
+# FINAL STATUS
+# ============================================================================
+
+final_status: PACKET_NOT_MATURE
+exact_remaining_deficiency:
+  - "S2: Only 10 rows derivable (not 11); A+B must select interpretation"
+  - "S4: Only 10 rows derivable (not 14); A+B must select radius"
+  - "S6: Lock list not ratified"
+  - "S7: Docket type classification not ratified"
+  - "prereg-rules-v1 tag does not yet exist"
+
+marker: "M1_AMENDMENT_PACKET_MANIFEST_COMPLETE"
