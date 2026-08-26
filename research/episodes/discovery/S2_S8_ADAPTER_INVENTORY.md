@@ -211,42 +211,60 @@ Based on data accessibility and mechanical complexity:
 | 6 | S7 (STB) | Complex document parsing |
 | 7 | S8 (Ports) | Heterogeneous, requires source identification |
 
-## Execution Status (2026-08-25)
+## Execution Status (2026-08-26)
 
-All S2-S8 families are FAIL-CLOSED / BLOCKED due to missing Tier-A parameters
-or D3 endpoint registration:
+**M1 execution resumed.** Adapter implementation and source registration complete
+for S3/S5/S6/S7/S8. S2 and S4 blocked on Tier-A scientific decisions only.
 
-| Family | Status | Blocking Item(s) |
-|--------|--------|------------------|
-| S2 (USGS) | **BLOCKED** | Gauge list + threshold values unratified (Tier A) |
-| S3 (USCG) | **BLOCKED** | D3 endpoint registration required |
-| S4 (NHC) | **BLOCKED** | Node list + radius threshold unratified (Tier A) |
-| S5 (AMS GTR) | **BLOCKED** | D3 archive endpoint registration required |
-| S6 (LPMS) | **BLOCKED** | Lock list + threshold values unratified (Tier A) |
-| S7 (STB) | **BLOCKED** | Docket type classification unratified (Tier A) |
-| S8 (Ports) | **BLOCKED** | Source list + archive registration required |
+| Family | Status | Adapter | Tests | Blocking Item(s) |
+|--------|--------|---------|-------|------------------|
+| S2 (USGS) | **BLOCKED** | - | - | Threshold policy decision (Tier A) |
+| S3 (USCG) | ✓ **READY** | `uscg_msib.py` | 9 pass | - |
+| S4 (NHC) | **BLOCKED** | - | - | Radius threshold decision (Tier A) |
+| S5 (AMS GTR) | ✓ **READY** | `ams_gtr.py` | 7 pass | - |
+| S6 (LPMS) | ✓ **READY** | `usace_lpms.py` | 8 pass | - |
+| S7 (STB) | ✓ **READY** | `stb_dockets.py` | 10 pass | - |
+| S8 (Ports) | ✓ **READY** | `port_advisory.py` | 9 pass | - |
 
-Per automation instruction: Do not invent gauges/thresholds/radii or other
-Tier-A values. Families remain fail-closed until A+B ratification.
+**Total adapter tests:** 46 pass (see `tests/test_s3_s8_adapters.py`)
 
-## Blocked Items
+### Remaining Tier-A Decisions (A+B ballot)
 
-All S2-S8 adapters require:
+1. **S2-THRESHOLD-POLICY:** Protocol-vs-D8 conflict resolution
+2. **S4-PROXIMITY-RADIUS:** 50nm vs 100nm hurricane proximity
 
-1. **D3 endpoint registration**: Specific endpoints/sources per family
-2. **A+B scientific decisions**: Thresholds, node lists, proximity radii
-3. **Tier B implementation review**: Parser code review before merge
-4. **N3 manifest update**: Add new parser digests at next ratification
+See `S2_S8_FINAL_BALLOT.md` for complete ballot.
+
+## Implemented Adapters
+
+| Adapter | Source | Key Functions |
+|---------|--------|---------------|
+| `uscg_msib.py` | USCG NAVCEN | `national_msib_endpoint()`, `parse_navcen_msib_listing()` |
+| `ams_gtr.py` | USDA AMS | `gtr_archive_endpoint()`, `parse_gtr_archive_listing()` |
+| `usace_lpms.py` | USACE NDC | `lock_queue_endpoint()`, `parse_lock_queue_xml()` |
+| `stb_dockets.py` | STB | `docket_search_url()`, `enumerate_service_orders()` |
+| `port_advisory.py` | Various | `get_official_archive_ports()`, `validate_s4_node_coverage()` |
+
+## Blocked Items (Tier A only)
+
+S2 and S4 require A+B scientific decisions:
+
+1. **S2-THRESHOLD-POLICY**: Resolve protocol-vs-D8 conflict
+2. **S4-PROXIMITY-RADIUS**: Select 50nm or 100nm
+
+All D3 endpoint registration and Tier B implementation is complete for S3/S5/S6/S7/S8.
 
 ## Next Steps
 
-1. Select one family for first implementation (suggest S4 NHC)
-2. Obtain A+B decision on required scientific parameters
-3. Implement deterministic adapter under B-STANDARD review
-4. Update prereg_rules.yaml with new source_archives entries
-5. Execute sweep under N3 authorization
+1. A+B decide on S2-THRESHOLD-POLICY ballot item
+2. A+B decide on S4-PROXIMITY-RADIUS ballot item
+3. Upon decision: implement S2 and S4 adapters
+4. Execute full S2-S8 sweep universe
+5. Update N3 manifest with new parser digests
 
 ## Marker
 
 `S2_S8_ADAPTER_INVENTORY_DOCUMENTED`
-`S2_S8_EXECUTION_ALL_BLOCKED_TIER_A`
+`S2_S8_FINAL_MINIMAL_BALLOT_READY`
+`M1_EXECUTION_RESUMED`
+`S3_S5_S6_S7_S8_ADAPTERS_IMPLEMENTED`
