@@ -87,6 +87,60 @@ source_archives:
     vehicle: "NTNI active notices by district JSON with linked HTML notice"
     endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/LRN"
 
+# S3 — USCG MSIB source archives (registered 2026-08-26)
+# Marine Safety Information Bulletins from NAVCEN
+# Positive-evidence-only; never absence-generating.
+  - sweep_id: S3
+    authority: "U.S. Coast Guard"
+    district: "8th District"
+    vehicle: "Marine Safety Information Bulletins via NAVCEN archive"
+    endpoint: "https://navcen.uscg.gov/msib-national"
+    coverage_notes: "National and 8th District MSIBs; years 2009-2026 available"
+
+# S5 — AMS GTR source archives (registered 2026-08-26)
+# Weekly Grain Transportation Report from USDA AMS
+# Positive-evidence-only; never absence-generating.
+  - sweep_id: S5
+    authority: "USDA Agricultural Marketing Service"
+    vehicle: "Weekly Grain Transportation Report via AMS archive"
+    endpoint: "https://www.ams.usda.gov/services/transportation-analysis/gtr"
+    coverage_notes: "Weekly PDF reports; archive by year"
+
+# S6 — USACE LPMS source archives (registered 2026-08-26)
+# Lock Performance Monitoring System via Corps Locks
+# D8 mode: binding_operational_restriction_only (no invented thresholds)
+  - sweep_id: S6
+    authority: "U.S. Army Corps of Engineers"
+    vehicle: "Lock Performance Monitoring System via Corps Locks portal"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/r/lpms/corps-locks/home"
+    coverage_notes: "Lock queue, tonnage, and unavailability reports; XML API available"
+
+# S7 — STB service dockets (registered 2026-08-26)
+# Surface Transportation Board service orders and embargo oversight
+# No new selector unless canonical text proves one.
+  - sweep_id: S7
+    authority: "Surface Transportation Board"
+    vehicle: "STB service dockets and railroad performance filings"
+    endpoint: "https://www.stb.gov/proceedings-actions/search-stb-records/"
+    coverage_notes: "EP dockets for embargo/service orders; press releases"
+
+# S8 — Port advisory archives (registered 2026-08-26)
+# Port authority notices where official archives exist
+# Positive-evidence-only; excludes corporate-only evidence
+  - sweep_id: S8
+    authority: "Various port authorities"
+    vehicle: "Port advisory archives where official public archives exist"
+    endpoint: null
+    coverage_notes: "Per-port endpoints; see port_advisory.py for registered ports"
+    official_ports:
+      - NOLA
+      - SBPT
+      - HST
+      - PDX
+      - LON
+    excluded_corporate_only:
+      - "TEMCO Kalama"
+
 # D4 — keyword policy (ratified from 03:26 checklist at 04:38 + later amendments)
 # match=whole_word per ADR-0015; case_sensitive=false per later ratification.
 # fields=[full_text] is the normalized local field from D3/D4-A (ADR-0015).
