@@ -11,61 +11,20 @@ Tests cover:
 from __future__ import annotations
 
 from datetime import date
-from xml.etree import ElementTree
 
 import pytest
 
-# S3 - USCG MSIB
-from grainsys.ingest.uscg_msib import (
-    MSIB_DISTRICTS,
-    MSIB_SAMPLE_START_YEAR,
-    MSIB_SAMPLE_END_YEAR,
-    MsibNormalizationError,
-    MsibReference,
-    national_msib_endpoint,
-    parse_msib_number,
-    get_registered_years,
-    district_covers_basin,
-)
-
 # S5 - AMS GTR
 from grainsys.ingest.ams_gtr import (
-    GTR_SAMPLE_START_YEAR,
     GTR_SAMPLE_END_YEAR,
+    GTR_SAMPLE_START_YEAR,
     GtrNormalizationError,
-    GtrReportReference,
+    extract_date_from_pdf_filename,
     gtr_archive_endpoint,
     parse_report_date,
-    extract_date_from_pdf_filename,
+)
+from grainsys.ingest.ams_gtr import (
     get_registered_years as gtr_get_years,
-)
-
-# S6 - USACE LPMS
-from grainsys.ingest.usace_lpms import (
-    LPMS_RIVERS,
-    LPMS_GRAIN_CORRIDOR_LOCKS,
-    LpmsNormalizationError,
-    LockReference,
-    LockQueueRecord,
-    lock_queue_endpoint,
-    parse_lock_queue_xml,
-    get_registered_rivers,
-    get_registered_locks,
-    get_registered_years as lpms_get_years,
-)
-
-# S7 - STB dockets
-from grainsys.ingest.stb_dockets import (
-    CLASS_I_GRAIN_RAILROADS,
-    STB_RELEVANT_DOCKET_PREFIXES,
-    StbNormalizationError,
-    StbDocketReference,
-    docket_search_url,
-    parse_docket_number,
-    is_grain_relevant_docket,
-    get_registered_railroads,
-    get_registered_years as stb_get_years,
-    get_relevant_docket_types,
 )
 
 # S8 - Port advisories
@@ -77,12 +36,48 @@ from grainsys.ingest.port_advisory import (
     TerminalReference,
     get_official_archive_ports,
     get_public_notice_terminals,
-    is_official_source_supported,
     is_grain_corridor_port,
+    is_official_source_supported,
     validate_s4_node_coverage,
+)
+from grainsys.ingest.port_advisory import (
     get_registered_years as port_get_years,
 )
 
+# S7 - STB dockets
+from grainsys.ingest.stb_dockets import (
+    CLASS_I_GRAIN_RAILROADS,
+    STB_RELEVANT_DOCKET_PREFIXES,
+    StbNormalizationError,
+    docket_search_url,
+    get_registered_railroads,
+    is_grain_relevant_docket,
+    parse_docket_number,
+)
+
+# S6 - USACE LPMS
+from grainsys.ingest.usace_lpms import (
+    LPMS_GRAIN_CORRIDOR_LOCKS,
+    LPMS_RIVERS,
+    LockReference,
+    LpmsNormalizationError,
+    get_registered_locks,
+    get_registered_rivers,
+    lock_queue_endpoint,
+    parse_lock_queue_xml,
+)
+
+# S3 - USCG MSIB
+from grainsys.ingest.uscg_msib import (
+    MSIB_DISTRICTS,
+    MSIB_SAMPLE_END_YEAR,
+    MSIB_SAMPLE_START_YEAR,
+    MsibNormalizationError,
+    district_covers_basin,
+    get_registered_years,
+    national_msib_endpoint,
+    parse_msib_number,
+)
 
 # =============================================================================
 # S3 - USCG MSIB Tests
@@ -405,11 +400,11 @@ class TestCrossAdapterIntegration:
 
     def test_all_adapters_use_consistent_sample_period(self) -> None:
         """All adapters use consistent sample period 2010-2024."""
-        from grainsys.ingest.uscg_msib import MSIB_SAMPLE_START_YEAR, MSIB_SAMPLE_END_YEAR
-        from grainsys.ingest.ams_gtr import GTR_SAMPLE_START_YEAR, GTR_SAMPLE_END_YEAR
-        from grainsys.ingest.usace_lpms import LPMS_SAMPLE_START_YEAR, LPMS_SAMPLE_END_YEAR
-        from grainsys.ingest.stb_dockets import STB_SAMPLE_START_YEAR, STB_SAMPLE_END_YEAR
-        from grainsys.ingest.port_advisory import PORT_SAMPLE_START_YEAR, PORT_SAMPLE_END_YEAR
+        from grainsys.ingest.ams_gtr import GTR_SAMPLE_END_YEAR, GTR_SAMPLE_START_YEAR
+        from grainsys.ingest.port_advisory import PORT_SAMPLE_END_YEAR, PORT_SAMPLE_START_YEAR
+        from grainsys.ingest.stb_dockets import STB_SAMPLE_END_YEAR, STB_SAMPLE_START_YEAR
+        from grainsys.ingest.usace_lpms import LPMS_SAMPLE_END_YEAR, LPMS_SAMPLE_START_YEAR
+        from grainsys.ingest.uscg_msib import MSIB_SAMPLE_END_YEAR, MSIB_SAMPLE_START_YEAR
 
         starts = {
             MSIB_SAMPLE_START_YEAR,
@@ -431,13 +426,8 @@ class TestCrossAdapterIntegration:
 
     def test_all_adapters_use_fail_closed_error_classes(self) -> None:
         """All adapters define fail-closed error classes."""
-        from grainsys.ingest.uscg_msib import MsibNormalizationError
-        from grainsys.ingest.ams_gtr import GtrNormalizationError
-        from grainsys.ingest.usace_lpms import LpmsNormalizationError
-        from grainsys.ingest.stb_dockets import StbNormalizationError
-        from grainsys.ingest.port_advisory import PortAdvisoryNormalizationError
-
         # All error classes should be ValueError subclasses
+        # (classes already imported at module level)
         assert issubclass(MsibNormalizationError, ValueError)
         assert issubclass(GtrNormalizationError, ValueError)
         assert issubclass(LpmsNormalizationError, ValueError)
@@ -446,10 +436,10 @@ class TestCrossAdapterIntegration:
 
     def test_all_adapters_define_authority_constants(self) -> None:
         """All adapters define authority constants."""
-        from grainsys.ingest.uscg_msib import USCG_AUTHORITY, MSIB_VEHICLE
-        from grainsys.ingest.ams_gtr import AMS_AUTHORITY, GTR_VEHICLE
-        from grainsys.ingest.usace_lpms import USACE_AUTHORITY, LPMS_VEHICLE
-        from grainsys.ingest.stb_dockets import STB_AUTHORITY, STB_VEHICLE
+        from grainsys.ingest.ams_gtr import AMS_AUTHORITY
+        from grainsys.ingest.stb_dockets import STB_AUTHORITY
+        from grainsys.ingest.usace_lpms import USACE_AUTHORITY
+        from grainsys.ingest.uscg_msib import USCG_AUTHORITY
 
         assert "Coast Guard" in USCG_AUTHORITY
         assert "Marketing Service" in AMS_AUTHORITY
