@@ -88,12 +88,12 @@ source_archives:
     endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/LRN"
   # S5 — AMS Grain Transportation Report archive (registered 2026-08-26)
   # Positive-evidence-only; never absence-generating.
+  # Note: AMS is a national agency without district structure; use "National" per D3 semantics.
   - sweep_id: S5
     authority: "U.S. Department of Agriculture, Agricultural Marketing Service"
-    vehicle: "Weekly Grain Transportation Report PDF archive"
+    district: "National"
+    vehicle: "Weekly Grain Transportation Report PDF archive (yearly_archive_pages_2010_to_2024, EXPECTED_COMPLETE)"
     endpoint: "https://www.ams.usda.gov/services/transportation-analysis/gtr/archive"
-    enumeration: "yearly_archive_pages_2010_to_2024"
-    historical_completeness: "EXPECTED_COMPLETE"
 
 # D4 — keyword policy (ratified from 03:26 checklist at 04:38 + later amendments)
 # match=whole_word per ADR-0015; case_sensitive=false per later ratification.
