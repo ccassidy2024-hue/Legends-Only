@@ -6,6 +6,7 @@ proposal_id: S4_DISTANCE_CONTRACT
 proposal_date: "2026-08-27"
 packet_status: PR42_S4_CORRECTION_BLOCKED
 
+proximity_radius_nm: 100
 preserved:
   proximity_radius_nm: 100
   source: A+B approval S4_RADIUS=100_NM at PR42 head 840d989; radius not reopened

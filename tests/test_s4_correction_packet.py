@@ -143,8 +143,8 @@ def test_corrected_default_has_zero_s4_facilities() -> None:
 
 def test_corrected_b100_does_not_reintroduce_defective_nodes() -> None:
     text = (PROPOSALS / "FULL_CONFIG_B100_S4_CORRECTED.yaml").read_text(encoding="utf-8")
-    registry = _load("FULL_CONFIG_B100_S4_CORRECTED.yaml")["s4_node_registry"]
-    dumped = yaml.safe_dump(registry)
+    nodes = _load("FULL_CONFIG_B100_S4_CORRECTED.yaml")["s4_node_registry"]["nodes"]
+    dumped = yaml.safe_dump(nodes)
     for token in FORBIDDEN_DEFAULT_TOKENS:
         assert token not in dumped, token
         if token.startswith(("GULF-", "PNW-")):

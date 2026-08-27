@@ -13,6 +13,8 @@ frozen_pr42_head: "840d9891473d3ebf248c2d44a9bbeac270d614ca"
 pr42_branch: cursor/m1-amendment-packet-e03a
 correction_branch: cursor/pr42-s4-binding-correction
 
+historical_b100_digest_sha256: "9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1"
+historical_b100_digest_status: historical_evidence_only_not_executable
 historical_b100:
   path_on_pr42: research/episodes/discovery/proposals/FULL_CONFIG_B100.yaml
   digest_sha256: "9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1"
@@ -39,7 +41,7 @@ corrected_b100_status: NON_EXECUTABLE_PENDING_S4_CENSUS_AND_DISTANCE_BINDINGS
 packet_file_digests_sha256:
   FULL_CONFIG_B100_S4_CORRECTED.yaml: "eece940e00d7fd4272f03741756e6dc2ee12bf6a116926cb5ec5b0cfb325ef79"
   S4_FACILITY_BINDING.yaml: "05e90c96e0ea86d31497cc605b732f0b7c8d96342626212fccbdc0be252fd127"
-  S4_DISTANCE_CONTRACT.yaml: "20574b8481d413d343ec5925029c07ad3ca3c23094a0e30126b8959b36641e9e"
+  S4_DISTANCE_CONTRACT.yaml: "5daaadd31d9c1799d4b2cc8387bc6a3db5535cf2717bc45f922eb91d75709734"
   S4_DELTA_BALLOT.yaml: "29e1df44010716018771ab9e29ebd73804d23208c74202d3f1576c9e092c935c"
   s4_correction_packet.schema.yaml: "c6737663598f30af5e3927322834dbfbdb20229eeeaa0dae9413f8c779fd2b0d"
 
