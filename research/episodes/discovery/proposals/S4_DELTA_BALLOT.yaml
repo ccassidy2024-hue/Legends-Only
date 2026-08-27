@@ -1,59 +1,76 @@
 # Compact S4 correction delta ballot.
-# Does not re-ask S2, 100 NM, or v2 governance.
+# Does not re-ask S2, 100 NM, v2 governance, or Haversine vs WGS84.
 
 schema_version: "1.0"
 ballot_id: S4_CORRECTION_DELTA_BALLOT
 ballot_date: "2026-08-27"
 review_tier: A
-packet_status: PR42_S4_CORRECTION_BLOCKED
+packet_status: PR44_EXACT_DELTA_BALLOT_READY
 
 preserved_without_reasking:
   S2: USE_B_OPERATIONAL_RESTRICTION_ONLY
   S4_RADIUS: 100_NM
   V2_GOVERNANCE: APPROVE
+  S4_GEODESIC: HAVERSINE_NM_SPHERE
   historical_b100_digest_sha256: "9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1"
   historical_b100_digest_status: historical_evidence_only_not_executable
 
+recommended_binding:
+  S4_NODE_CENSUS: A
+  S4_TRACK_GEOMETRY: POINT_ONLY
+  corrected_b100: FULL_CONFIG_B100_S4_CORRECTED.yaml
+  corrected_b100_sha256: "f13589a240316c8d287bf25c63af9439bf5f52619175cbabbe6747f77c378551"
+
 human_fields:
-  - field_id: S4_NODE_CENSUS_SELECTOR
+  - field_id: S4_NODE_CENSUS
     batched: true
     required: true
     irreducible: true
-    ask: >-
-      Bind the single official census that uniquely enumerates named grain
-      export/transfer facilities after live-D2 geography and facility-object
-      class are applied. Include census product, vintage/hash, whether inland
-      transfer terminals are in scope, and the official coordinate product
-      plus match rule. Do not approve ports, cities, gauges, or centroids.
-    default_in_this_packet: empty_fail_closed
-    not_asked: [S2, S4_RADIUS, V2_GOVERNANCE]
+    ask: A or B or C
+    recommended: A
+    options:
+      - id: A
+        file: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml
+        sha256: "0b38e45c31b6c3ef258cb63e39deaab51e819f70079d37c4b3efede531d0a37b"
+        row_count: 534
+        rule: WCSC Dock + live D2 waterway + grain token in COMMODITIES or PURPOSE
+      - id: B
+        file: S4_CENSUS_B_WCSC_D2GRAIN_DOCK_COMMODITIES.yaml
+        sha256: "1c219297b0df6d1ddfe51318628893c9e9216681e2a04dfc78ae37bedc5ab9d3"
+        row_count: 405
+        rule: Same as A, COMMODITIES only
+      - id: C
+        file: S4_CENSUS_C_WCSC_D2GRAIN_EXPORT_BASINS.yaml
+        sha256: "294a38860e275b906312934eb9998a79972f089cc6c4f48705d3be4722412ff4"
+        row_count: 227
+        rule: Same as A, lower_mississippi + columbia_snake only
+    not_asked: [S2, S4_RADIUS, V2_GOVERNANCE, S4_GEODESIC]
+    humans_must_not_invent: [census_product, source_hash, match_rule]
 
   - field_id: S4_TRACK_GEOMETRY
     batched: true
     required: true
     irreducible: true
-    ask: POINT_ONLY or GREAT_CIRCLE_OR_GEODESIC_SEGMENT
+    ask: POINT_ONLY or SEGMENT
+    recommended: POINT_ONLY
+    options:
+      - id: POINT_ONLY
+        file: S4_DISTANCE_POINT_ONLY.yaml
+        sha256: "7170f9b674794ff7eea252ef7b41470ce1cbb5a1009ab629650e14bb12be7590"
+      - id: SEGMENT
+        file: S4_DISTANCE_SEGMENT.yaml
+        sha256: "9d3a95ef91611ff196c7ab0d423c54233c7890d9e38934530147f8905ae14c1d"
     why: >-
-      Not canonically settled in HURDAT2 or protocol text. Changes whether
-      a storm whose closest approach is between 6-hour points is in-sample
-      at 100 NM.
-
-  - field_id: S4_GEODESIC
-    batched: true
-    required: true
-    irreducible: true
-    ask: HAVERSINE_IUGG_MEAN or WGS84_KARNEY
-    why: >-
-      PR42 mixed Haversine with WGS84 ellipsoid. No unique NHC user-distance
-      algorithm. Bind one.
+      Not uniquely settled by HURDAT2 format. Changes whether a storm whose
+      closest approach is between published points is in-sample at 100 NM.
 
 approval_line_template: >-
   A+B APPROVE S4_CORRECTION_DELTA @ <EXACT_PACKET_HEAD_SHA>
-  | S4_NODE_CENSUS_SELECTOR=<census product + vintage/hash + transfer_scope + coordinate product>
-  | S4_TRACK_GEOMETRY=POINT_ONLY or GREAT_CIRCLE_OR_GEODESIC_SEGMENT
-  | S4_GEODESIC=HAVERSINE_IUGG_MEAN or WGS84_KARNEY
+  | S4_NODE_CENSUS=A or B or C
+  | S4_TRACK_GEOMETRY=POINT_ONLY or SEGMENT
   | S2=USE_B_OPERATIONAL_RESTRICTION_ONLY (preserved)
   | S4_RADIUS=100_NM (preserved)
+  | S4_GEODESIC=HAVERSINE_NM_SPHERE (mechanical)
   | V2_GOVERNANCE=APPROVE (preserved)
 
-marker: S4_CORRECTION_DELTA_BALLOT_MINIMAL
+marker: S4_CORRECTION_DELTA_BALLOT_ENUMERATED_ABC_POINT_SEGMENT

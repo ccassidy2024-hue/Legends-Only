@@ -1,0 +1,4327 @@
+schema_version: '1.0'
+proposal_id: S4_CENSUS_C_WCSC_D2GRAIN_EXPORT_BASINS
+recommended: false
+title: WCSC D2 grain docks on export basins only
+rule: Same as A restricted to lower_mississippi and columbia_snake (export-corridor basins). Inland ohio/illinois/upper/middle
+  transfer docks dropped.
+row_count: 227
+basin_counts:
+  columbia_snake: 60
+  lower_mississippi: 167
+completeness_claim: NOT_CLAIMED
+nodes:
+- node_id: WCSC-021Y
+  name: WINDUST
+  latitude: 46.404992
+  longitude: -118.656908
+  d2_basin: columbia_snake
+  nav_unit_id: 021Y
+  wtwy_name: Snake River, OR, WA and ID
+  mile: 28
+  city: PRESCOTT
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-024T
+  name: GRAIN ELEVATOR
+  latitude: 45.93003
+  longitude: -119.2752
+  d2_basin: columbia_snake
+  nav_unit_id: 024T
+  wtwy_name: Columbia River and Tributaries above Mcnary Lock and Dam to Kennewick, WA
+  mile: 293
+  city: UMATILLA
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-02TL
+  name: KALAMA PORT DOCK
+  latitude: 46.00972
+  longitude: -122.848672
+  d2_basin: columbia_snake
+  nav_unit_id: 02TL
+  wtwy_name: Columbia and Lower Willamette Rivers below Vancouver, WA and Portland, OR
+  mile: 75
+  city: KALAMA
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0N0H
+  name: CONNEL-ODESSA GRAIN
+  latitude: 46.565506
+  longitude: -118.529422
+  d2_basin: columbia_snake
+  nav_unit_id: 0N0H
+  wtwy_name: Snake River, OR, WA and ID
+  mile: 42
+  city: PRESCOTT
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0PU3
+  name: WEYERHAUSER CO - LONGVIEW PLANT - LOG EXPORT WHARF
+  latitude: 46.12096
+  longitude: -122.9718
+  d2_basin: columbia_snake
+  nav_unit_id: 0PU3
+  wtwy_name: Columbia and Lower Willamette Rivers below Vancouver, WA and Portland, OR
+  mile: 65
+  city: 'Longview '
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0PU5
+  name: 'PORT OF LONGVIEW BERTH # 4'
+  latitude: 46.1088
+  longitude: -122.9577
+  d2_basin: columbia_snake
+  nav_unit_id: 0PU5
+  wtwy_name: Columbia and Lower Willamette Rivers below Vancouver, WA and Portland, OR
+  mile: 66
+  city: Longview
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0PU6
+  name: 'PORT OF LONGVIEW BERTH # 5'
+  latitude: 46.1089
+  longitude: -122.9579
+  d2_basin: columbia_snake
+  nav_unit_id: 0PU6
+  wtwy_name: Columbia and Lower Willamette Rivers below Vancouver, WA and Portland, OR
+  mile: 66
+  city: Longview
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0PU7
+  name: PORT OF PORTLAND TERM 4 - BERTH 416 (AUTOS)
+  latitude: 45.595971
+  longitude: -122.773365
+  d2_basin: columbia_snake
+  nav_unit_id: 0PU7
+  wtwy_name: Lower Willamette River
+  mile: 8
+  city: 'Portland '
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0R29
+  name: CEREAL FOOD PROCESSORS, PORTLAND BERTH B-401
+  latitude: 45.60528
+  longitude: -122.77972
+  d2_basin: columbia_snake
+  nav_unit_id: 0R29
+  wtwy_name: Lower Willamette River
+  mile: 8
+  city: Portland
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0R2B
+  name: TEMCO WHEAT ELEVATOR TERMINALS, PORTLAND
+  latitude: 45.53528
+  longitude: -122.67556
+  d2_basin: columbia_snake
+  nav_unit_id: 0R2B
+  wtwy_name: Lower Willamette River
+  mile: 8
+  city: Portland
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0RA1
+  name: TIDEWATER TERMINAL CO., WILMA DOCK
+  latitude: 46.42167
+  longitude: -117.10944
+  d2_basin: columbia_snake
+  nav_unit_id: 0RA1
+  wtwy_name: Snake River, OR, WA and ID
+  mile: 134
+  city: UNIONTOWN
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0RA6
+  name: TIDEWATER TERM CO., PASCO TERM., PETRO DOCK
+  latitude: 46.22361
+  longitude: -119.01278
+  d2_basin: columbia_snake
+  nav_unit_id: 0RA6
+  wtwy_name: Snake River, OR, WA and ID
+  mile: 2
+  city: PASCO
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0RAE
+  name: CO-GRAIN, BURBANK ELEV. BARGE SLIP
+  latitude: 46.21028
+  longitude: -119.01833
+  d2_basin: columbia_snake
+  nav_unit_id: 0RAE
+  wtwy_name: Snake River, OR, WA and ID
+  mile: 1
+  city: BURBANK
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0RK6
+  name: PORT OF WHITMAN COUNTY SITE H & I WHARVES
+  latitude: 46.42111
+  longitude: -117.10194
+  d2_basin: columbia_snake
+  nav_unit_id: 0RK6
+  wtwy_name: Snake River, OR, WA and ID
+  mile: 135
+  city: UNIONTOWN
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0T0R
+  name: Cargill, Portland Barge Dock.
+  latitude: 45.534167
+  longitude: -122.67416
+  d2_basin: columbia_snake
+  nav_unit_id: 0T0R
+  wtwy_name: Lower Willamette River
+  mile: 11.6
+  city: Portland
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0T0S
+  name: Cargill, Portland Wharf.
+  latitude: 45.535278
+  longitude: -122.67555
+  d2_basin: columbia_snake
+  nav_unit_id: 0T0S
+  wtwy_name: Lower Willamette River
+  mile: 11.5
+  city: Portland
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0T3T
+  name: Port of Portland, Terminal 4, Pier No. 1, Berths 403, 404, and 405.
+  latitude: 45.604444
+  longitude: -122.77666
+  d2_basin: columbia_snake
+  nav_unit_id: 0T3T
+  wtwy_name: Lower Willamette River
+  mile: 4.3
+  city: Portland
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0T3U
+  name: CARGILL, TERMINAL 4 GRAIN ELEVATOR, BERTH NO. 401
+  latitude: 45.605278
+  longitude: -122.77972
+  d2_basin: columbia_snake
+  nav_unit_id: 0T3U
+  wtwy_name: Lower Willamette River
+  mile: 4.2
+  city: Portland
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0T51
+  name: Co-Grain, Burbank Elevator Barge Slip.
+  latitude: 46.209444
+  longitude: -119.02166
+  d2_basin: columbia_snake
+  nav_unit_id: 0T51
+  wtwy_name: Snake River, OR, WA and ID
+  mile: 1.8
+  city: Burbank
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0T65
+  name: Cargill, Burbank Grain-Elevator Dock.
+  latitude: 46.210278
+  longitude: -119.01833
+  d2_basin: columbia_snake
+  nav_unit_id: 0T65
+  wtwy_name: Snake River, OR, WA and ID
+  mile: 2
+  city: Burbank
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0UE9
+  name: CLD O DOCK PORTLAND
+  latitude: 45.528611
+  longitude: -122.66916
+  d2_basin: columbia_snake
+  nav_unit_id: 0UE9
+  wtwy_name: Lower Willamette River
+  mile: 12
+  city: Portland
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UEB
+  name: CAL PORTLAND CEMENT TERMINAL
+  latitude: 45.536667
+  longitude: -122.6775
+  d2_basin: columbia_snake
+  nav_unit_id: 0UEB
+  wtwy_name: Lower Willamette River
+  mile: 11.3
+  city: Portland
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UEM
+  name: BOARDMAN WOODCHIP DOCK
+  latitude: 45.852778
+  longitude: -119.68027
+  d2_basin: columbia_snake
+  nav_unit_id: 0UEM
+  wtwy_name: Columbia River above The Dalles Dam, WA and OR to Mcnary Lock and Dam, OR and WA
+  mile: 270.2
+  city: Boardman
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UEN
+  name: PORT OF MORROW CONTAINER SLIPWAY & FLEET MOORING
+  latitude: 45.853333
+  longitude: -119.67222
+  d2_basin: columbia_snake
+  nav_unit_id: 0UEN
+  wtwy_name: Columbia River above The Dalles Dam, WA and OR to Mcnary Lock and Dam, OR and WA
+  mile: 270.6
+  city: Boardman
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UEP
+  name: CARGILL, PORT OF MORROW GRAIN ELEVATOR DOCK
+  latitude: 45.854444
+  longitude: -119.66472
+  d2_basin: columbia_snake
+  nav_unit_id: 0UEP
+  wtwy_name: Columbia River above The Dalles Dam, WA and OR to Mcnary Lock and Dam, OR and WA
+  mile: 270.8
+  city: Boardman
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UEQ
+  name: MORROW COUNTY GRAIN GROWERS/HOGUE-WARNER GRAIN ELV
+  latitude: 45.918611
+  longitude: -119.56277
+  d2_basin: columbia_snake
+  nav_unit_id: 0UEQ
+  wtwy_name: Columbia River above The Dalles Dam, WA and OR to Mcnary Lock and Dam, OR and WA
+  mile: 278.2
+  city: Irrigon
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UFN
+  name: CARGILL, THE DALLES GRAIN ELVEATOR DOCK (S/GRAIN)
+  latitude: 45.6125
+  longitude: -121.19361
+  d2_basin: columbia_snake
+  nav_unit_id: 0UFN
+  wtwy_name: Columbia River between Vancouver, WA and The Dalles, OR
+  mile: 188.7
+  city: The Dalles
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UFP
+  name: MID-COLUMBIA DOCK
+  latitude: 45.604444
+  longitude: -121.18027
+  d2_basin: columbia_snake
+  nav_unit_id: 0UFP
+  wtwy_name: Columbia River between Vancouver, WA and The Dalles, OR
+  mile: 189.6
+  city: The Dalles
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UGA
+  name: STEGNER GRAIN TERMINAL DOCK
+  latitude: 46.42
+  longitude: -117.08638
+  d2_basin: columbia_snake
+  nav_unit_id: 0UGA
+  wtwy_name: Snake River, OR, WA and ID
+  mile: 136.6
+  city: Wilma
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UGN
+  name: SDS LUMBER CO DOCK
+  latitude: 45.716111
+  longitude: -121.47583
+  d2_basin: columbia_snake
+  nav_unit_id: 0UGN
+  wtwy_name: Columbia River between Vancouver, WA and The Dalles, OR
+  mile: 170.7
+  city: Bingen
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UHE
+  name: ASH GROVE CEMENT CO., PORTLAND WHARF
+  latitude: 45.545091
+  longitude: -122.689643
+  d2_basin: columbia_snake
+  nav_unit_id: 0UHE
+  wtwy_name: Lower Willamette River
+  mile: 10.6
+  city: Portland
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UHF
+  name: ASH GROVE CEMENT, PORTLAND WHARF
+  latitude: 45.549722
+  longitude: -122.69388
+  d2_basin: columbia_snake
+  nav_unit_id: 0UHF
+  wtwy_name: Lower Willamette River
+  mile: 10
+  city: Portland
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UHQ
+  name: PENDLETON GRAIN GROWERS MCNARY ELEVATOR DOCK
+  latitude: 45.929722
+  longitude: -119.28138
+  d2_basin: columbia_snake
+  nav_unit_id: 0UHQ
+  wtwy_name: Columbia River above The Dalles Dam, WA and OR to Mcnary Lock and Dam, OR and WA
+  mile: 292.3
+  city: Umatilla
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UJ3
+  name: PORT OF PORTLAND TERMINAL 4, BERTHS 410-411
+  latitude: 45.601111
+  longitude: -122.77527
+  d2_basin: columbia_snake
+  nav_unit_id: 0UJ3
+  wtwy_name: Lower Willamette River
+  mile: 4.5
+  city: Portland
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0UJQ
+  name: SHAVER TRANSP CO PORTLAND MOORING
+  latitude: 45.56
+  longitude: -122.72861
+  d2_basin: columbia_snake
+  nav_unit_id: 0UJQ
+  wtwy_name: Lower Willamette River
+  mile: 8.3
+  city: Portland
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UJW
+  name: MID COLUMBIA PRODCUERS "A" HOUSE DOCK
+  latitude: 45.669167
+  longitude: -120.84305
+  d2_basin: columbia_snake
+  nav_unit_id: 0UJW
+  wtwy_name: Columbia River above The Dalles Dam, WA and OR to Mcnary Lock and Dam, OR and WA
+  mile: 207.5
+  city: Biggs Junction
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UKZ
+  name: CARGILL ARLINGTON GRAIN ELEVATOR DOCK
+  latitude: 45.724167
+  longitude: -120.20472
+  d2_basin: columbia_snake
+  nav_unit_id: 0UKZ
+  wtwy_name: Columbia River above The Dalles Dam, WA and OR to Mcnary Lock and Dam, OR and WA
+  mile: 241.6
+  city: Arlington
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UL0
+  name: FARMERS WSHE & COMMISSION CO/ROOSEVELT GRAIN ELEV
+  latitude: 45.7525
+  longitude: -120.19027
+  d2_basin: columbia_snake
+  nav_unit_id: 0UL0
+  wtwy_name: Columbia River above The Dalles Dam, WA and OR to Mcnary Lock and Dam, OR and WA
+  mile: 243.5
+  city: Roosevelt
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UP8
+  name: PORT OF PORTLAND,  BERTH 501COLUMBIA GRAIN TERM DOCK
+  latitude: 45.6425
+  longitude: -122.77222
+  d2_basin: columbia_snake
+  nav_unit_id: 0UP8
+  wtwy_name: Lower Willamette River
+  mile: 1
+  city: Portland
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0UPP
+  name: WALLA WALLA GRAIN GROWERS, PORT KELLEY DOCK
+  latitude: 46.025
+  longitude: -118.94055
+  d2_basin: columbia_snake
+  nav_unit_id: 0UPP
+  wtwy_name: Columbia River and Tributaries above Mcnary Lock and Dam to Kennewick, WA
+  mile: 311.8
+  city: Port Kelley
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UPQ
+  name: WALLA WALLA GRAIN GROWERS, PORT WALLULA PIER
+  latitude: 46.060556
+  longitude: -118.91638
+  d2_basin: columbia_snake
+  nav_unit_id: 0UPQ
+  wtwy_name: Columbia River and Tributaries above Mcnary Lock and Dam to Kennewick, WA
+  mile: 314.2
+  city: Wallula
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0USM
+  name: WALLA WALLA GRAIN GROWERS, SHEFFLER DOCK
+  latitude: 46.41
+  longitude: -118.63611
+  d2_basin: columbia_snake
+  nav_unit_id: 0USM
+  wtwy_name: Snake River, OR, WA and ID
+  mile: 29
+  city: Sheffler
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0USN
+  name: LOUIS DREYFUS CORP., WINDUST ELEVATOR DOCK
+  latitude: 46.532222
+  longitude: -118.58305
+  d2_basin: columbia_snake
+  nav_unit_id: 0USN
+  wtwy_name: Snake River, OR, WA and ID
+  mile: 38.5
+  city: Windust
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0USP
+  name: COLUMBIA COUNTY GRAIN GROWERS, LYONS FERRY DOCK
+  latitude: 46.570556
+  longitude: -118.1925
+  d2_basin: columbia_snake
+  nav_unit_id: 0USP
+  wtwy_name: Snake River, OR, WA and ID
+  mile: 61.1
+  city: Lyons Ferry
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0USR
+  name: NORTHWEST TERMINALLING CO., EAST PASCO TERMINAL
+  latitude: 46.214444
+  longitude: -119.02583
+  d2_basin: columbia_snake
+  nav_unit_id: 0USR
+  wtwy_name: Snake River, OR, WA and ID
+  mile: 2
+  city: Pasco
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UV5
+  name: UNITED HARVEST VANCOUVER GRAIN ELEVATOR WHARF
+  latitude: 45.630278
+  longitude: -122.69277
+  d2_basin: columbia_snake
+  nav_unit_id: 0UV5
+  wtwy_name: Columbia and Lower Willamette Rivers below Vancouver, WA and Portland, OR
+  mile: 105.3
+  city: Vancouver
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0UVK
+  name: POMEROY GRAIN GROWERS DOCK (S/GRAIN)
+  latitude: 46.615833
+  longitude: -117.79416
+  d2_basin: columbia_snake
+  nav_unit_id: 0UVK
+  wtwy_name: Snake River, OR, WA and ID
+  mile: 83
+  city: Central Ferry
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UVL
+  name: ALMOTA ELEVATOR CO DOCK
+  latitude: 46.701944
+  longitude: -117.47333
+  d2_basin: columbia_snake
+  nav_unit_id: 0UVL
+  wtwy_name: Snake River, OR, WA and ID
+  mile: 103.6
+  city: Almota
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UVM
+  name: S & R GRAIN CO., PORT OF ALMOTA DOCK
+  latitude: 46.701667
+  longitude: -117.47055
+  d2_basin: columbia_snake
+  nav_unit_id: 0UVM
+  wtwy_name: Snake River, OR, WA and ID
+  mile: 103.7
+  city: Almota
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0UW9
+  name: PORT OF PASCO, MARINE TERMINAL WHARF
+  latitude: 46.219444
+  longitude: -119.09777
+  d2_basin: columbia_snake
+  nav_unit_id: 0UW9
+  wtwy_name: Columbia River and Tributaries above Mcnary Lock and Dam to Kennewick, WA
+  mile: 328.2
+  city: Pasco
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UWA
+  name: HARVEST STATES COOPERATIVES, KENNEWICK DOCK
+  latitude: 46.213611
+  longitude: -119.1
+  d2_basin: columbia_snake
+  nav_unit_id: 0UWA
+  wtwy_name: Columbia River and Tributaries above Mcnary Lock and Dam to Kennewick, WA
+  mile: 328.1
+  city: Kennewick
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0UXM
+  name: KALAMA EXPORT CO., GRAIN ELEVATOR WHARVES
+  latitude: 46.026499
+  longitude: -122.868692
+  d2_basin: columbia_snake
+  nav_unit_id: 0UXM
+  wtwy_name: Columbia and Lower Willamette Rivers below Vancouver, WA and Portland, OR
+  mile: 73.8
+  city: Kalama
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0ZB9
+  name: TEMCO (CHS CARGILL), KALAMA GRAIN ELEVATOR
+  latitude: 45.984409
+  longitude: -122.835497
+  d2_basin: columbia_snake
+  nav_unit_id: 0ZB9
+  wtwy_name: Columbia and Lower Willamette Rivers below Vancouver, WA and Portland, OR
+  mile: 77
+  city: Kalama
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0ZBC
+  name: PORT OF VANCOUVER TERM 4, BERTHS 13-14
+  latitude: 45.643889
+  longitude: -122.725
+  d2_basin: columbia_snake
+  nav_unit_id: 0ZBC
+  wtwy_name: Columbia and Lower Willamette Rivers below Vancouver, WA and Portland, OR
+  mile: 103.5
+  city: Vancouver
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0ZBQ
+  name: SIMPLOT
+  latitude: 45.625833
+  longitude: -122.78833
+  d2_basin: columbia_snake
+  nav_unit_id: 0ZBQ
+  wtwy_name: Lower Willamette River
+  mile: 2.6
+  city: Portland
+  state: OR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0ZBT
+  name: PORT OF PASCO, BARGE SLIP NO.1 CONTAINER TERM WHF
+  latitude: 46.213889
+  longitude: -119.07055
+  d2_basin: columbia_snake
+  nav_unit_id: 0ZBT
+  wtwy_name: Columbia River and Tributaries above Mcnary Lock and Dam to Kennewick, WA
+  mile: 326.8
+  city: Pasco
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0ZBV
+  name: CENTRAL FERRY TERM ASSOC GRAIN DOCK
+  latitude: 46.631944
+  longitude: -117.79194
+  d2_basin: columbia_snake
+  nav_unit_id: 0ZBV
+  wtwy_name: Snake River, OR, WA and ID
+  mile: 83.7
+  city: Central Ferry
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0ZBW
+  name: COLUMBIA RIVER INT'L, CENTRAL FERRY ELEV DK
+  latitude: 46.630556
+  longitude: -117.79444
+  d2_basin: columbia_snake
+  nav_unit_id: 0ZBW
+  wtwy_name: Snake River, OR, WA and ID
+  mile: 83.5
+  city: Central Ferry
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0ZC0
+  name: MOUNTAIN FIR CHIP CO., WILAM DIV. DK.
+  latitude: 46.420278
+  longitude: -117.09444
+  d2_basin: columbia_snake
+  nav_unit_id: 0ZC0
+  wtwy_name: Snake River, OR, WA and ID
+  mile: 136.1
+  city: Wilma
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-11TB
+  name: PORT OF LONGVIEW BERTH 9 EGT
+  latitude: 46.1089
+  longitude: -122.9577
+  d2_basin: columbia_snake
+  nav_unit_id: 11TB
+  wtwy_name: Columbia and Lower Willamette Rivers below Vancouver, WA and Portland, OR
+  mile: 66
+  city: Longview
+  state: WA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0B4Y
+  name: ALLIED
+  latitude: 34.362613
+  longitude: -90.690303
+  d2_basin: lower_mississippi
+  nav_unit_id: 0B4Y
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 648
+  city: HELENA
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0B57
+  name: UNION 76 OIL CO
+  latitude: 34.41112
+  longitude: -90.57504
+  d2_basin: lower_mississippi
+  nav_unit_id: 0B57
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 656
+  city: DUNDEE
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0BDF
+  name: LUHR BROS. (ROCKYARD)
+  latitude: 30.99566
+  longitude: -91.64841
+  d2_basin: lower_mississippi
+  nav_unit_id: 0BDF
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 305
+  city: SAINT FRANCISVILLE
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0DA3
+  name: CGB MARINE SERVICES ISLAND 1 FLEET
+  latitude: 33.893545
+  longitude: -91.037314
+  d2_basin: lower_mississippi
+  nav_unit_id: 0DA3
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 592
+  city: ROSEDALE
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0DA5
+  name: PWD CGB MARINE SERVICES ISLAND 1 FLEET
+  latitude: 36.976145
+  longitude: -89.102122
+  d2_basin: lower_mississippi
+  nav_unit_id: 0DA5
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 952
+  city: WICKLIFFE
+  state: KY
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0DF2
+  name: CITY DOCK  LAKE PROVIDENCE
+  latitude: 32.73049
+  longitude: -91.08663
+  d2_basin: lower_mississippi
+  nav_unit_id: 0DF2
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 483
+  city: ROLLING FORK
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0DF5
+  name: LAKE PROVIDENCE HARBOR  LAKE PROVIDENCE
+  latitude: 32.73021
+  longitude: -91.11663
+  d2_basin: lower_mississippi
+  nav_unit_id: 0DF5
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 485
+  city: ROLLING FORK
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0E4C
+  name: LULING BRIDGE SITE
+  latitude: 29.93448
+  longitude: -90.34423
+  d2_basin: lower_mississippi
+  nav_unit_id: 0E4C
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 120
+  city: LULING
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0E4D
+  name: FLEETING AREA  LULING
+  latitude: 29.93448
+  longitude: -90.34423
+  d2_basin: lower_mississippi
+  nav_unit_id: 0E4D
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 120
+  city: LULING
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0E6N
+  name: COOPER   SUNSHINE
+  latitude: 30.27552
+  longitude: -91.13567
+  d2_basin: lower_mississippi
+  nav_unit_id: 0E6N
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 203
+  city: SUNSHINE
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0EX5
+  name: AMA ANCHORAGE
+  latitude: 29.95306
+  longitude: -90.30356
+  d2_basin: lower_mississippi
+  nav_unit_id: 0EX5
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 117
+  city: SAINT ROSE
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0NE2
+  name: EMPIRE ANCHORAGE
+  latitude: 29.38508
+  longitude: -89.58851
+  d2_basin: lower_mississippi
+  nav_unit_id: 0NE2
+  wtwy_name: Mississippi River, New Orleans, LA to Mouth of Passes
+  mile: 29
+  city: Empire
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0Q13
+  name: GNOTS-RESERVE, ST. ROSE EAST & WEST BANK FLEET MOORINGS
+  latitude: 29.93407
+  longitude: -90.32779
+  d2_basin: lower_mississippi
+  nav_unit_id: 0Q13
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 119
+  city: LULING
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0Q1R
+  name: HOST AVONDALE MARINE TERMINALS
+  latitude: 29.93194
+  longitude: -90.17778
+  d2_basin: lower_mississippi
+  nav_unit_id: 0Q1R
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 108
+  city: 'New Orleans '
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0Q1U
+  name: INGRAM BARGE CO., COLUMBUS DOCK & FLEETS 1 THRU 23
+  latitude: 36.76797
+  longitude: -89.11213
+  d2_basin: lower_mississippi
+  nav_unit_id: 0Q1U
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 937.3
+  city: CLINTON
+  state: KY
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0QBU
+  name: WOOD RESOURCES CORP ARTCO SARAH FLEET MOORING
+  latitude: 29.945
+  longitude: -90.22611
+  d2_basin: lower_mississippi
+  nav_unit_id: 0QBU
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 110
+  city: WESTWEGO
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0R0Y
+  name: BIG RIVER RICE AND GRAIN, LAKE PROVIDENCE TERMINAL
+  latitude: 32.751502
+  longitude: -91.170025
+  d2_basin: lower_mississippi
+  nav_unit_id: 0R0Y
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 1.6
+  city: Lake Providence
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0R0Z
+  name: MARTIN MARIETTA, ST. ROSE YARD (BANK UNLOADING)
+  latitude: 29.973246
+  longitude: -90.250796
+  d2_basin: lower_mississippi
+  nav_unit_id: 0R0Z
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 113
+  city: SAINT ROSE
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0RM3
+  name: C F INDUSTRIES, DONALDSONVILLE WHARVES
+  latitude: 30.10306
+  longitude: -90.95944
+  d2_basin: lower_mississippi
+  nav_unit_id: 0RM3
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 173
+  city: 'Donaldsonville '
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0S97
+  name: Cooper/T. Smith Stevedoring, Mile 175 Dry-Bulk Transfer Mooring.
+  latitude: 30.114682
+  longitude: -90.984974
+  d2_basin: lower_mississippi
+  nav_unit_id: 0S97
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 175.3
+  city: Darrow
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0S9Y
+  name: Impala Terminals, Burnside Terminal, Dry-Bulk Terminal
+  latitude: 30.127855
+  longitude: -90.916874
+  d2_basin: lower_mississippi
+  nav_unit_id: 0S9Y
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 169.5
+  city: Burnside
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0SEN
+  name: Cargill, Westwego Elevator Wharf.
+  latitude: 29.938118
+  longitude: -90.143294
+  d2_basin: lower_mississippi
+  nav_unit_id: 0SEN
+  wtwy_name: Mississippi River, New Orleans, LA to Mouth of Passes
+  mile: 103.1
+  city: Westwego
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0SEQ
+  name: Cargill, Westwego Barge Slip.
+  latitude: 29.934552
+  longitude: -90.143515
+  d2_basin: lower_mississippi
+  nav_unit_id: 0SEQ
+  wtwy_name: Mississippi River, New Orleans, LA to Mouth of Passes
+  mile: 103
+  city: Westwego
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0TKQ
+  name: Poinsett Rice & Grain, North Dock.
+  latitude: 35.687778
+  longitude: -89.955
+  d2_basin: lower_mississippi
+  nav_unit_id: 0TKQ
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 785.6
+  city: Osceola
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0TLU
+  name: GNOTS-Reserve, St. Rose East-Bank Fleet Mooring.
+  latitude: 29.936667
+  longitude: -90.336111
+  d2_basin: lower_mississippi
+  nav_unit_id: 0TLU
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 119.3
+  city: Destrehan
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0TLV
+  name: Bunge Corp., Destrehan Elevator Wharf.
+  latitude: 29.938184
+  longitude: -90.346974
+  d2_basin: lower_mississippi
+  nav_unit_id: 0TLV
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 120
+  city: Destrehan
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0TMQ
+  name: Hickman-Fulton County Riverport Authority, Lower Dock.
+  latitude: 36.569444
+  longitude: -89.205833
+  d2_basin: lower_mississippi
+  nav_unit_id: 0TMQ
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 922.3
+  city: Hickman
+  state: KY
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0TNM
+  name: Poinsett Rice & Grain, South Dock.
+  latitude: 35.686803
+  longitude: -89.954639
+  d2_basin: lower_mississippi
+  nav_unit_id: 0TNM
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 785.5
+  city: Osceola
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0TP3
+  name: Bunge Corp., Osceola Landside Dock.
+  latitude: 35.65697
+  longitude: -89.927623
+  d2_basin: lower_mississippi
+  nav_unit_id: 0TP3
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 783.5
+  city: Osceola
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0TP4
+  name: Bunge Corp., Osceola Riverside Dock.
+  latitude: 35.656667
+  longitude: -89.9275
+  d2_basin: lower_mississippi
+  nav_unit_id: 0TP4
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 783
+  city: Osceola
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0TTR
+  name: Cargill AgHorizons, New Madrid Elevator Dock.
+  latitude: 36.580833
+  longitude: -89.547222
+  d2_basin: lower_mississippi
+  nav_unit_id: 0TTR
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 888.3
+  city: New Madrid
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0TUW
+  name: NEW MADRID COUNTY PORT, DRY-BULK DOCK
+  latitude: 36.531111
+  longitude: -89.571389
+  d2_basin: lower_mississippi
+  nav_unit_id: 0TUW
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 885.2
+  city: Marston
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0TUX
+  name: Riceland Foods, New Madrid County Port Authority Grain Terminal Dock.
+  latitude: 36.531116
+  longitude: -89.569567
+  d2_basin: lower_mississippi
+  nav_unit_id: 0TUX
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 885.2
+  city: Marston
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0TX5
+  name: Mississippi Limestone Corp., Friars Point Dry-Bulk Wharf.
+  latitude: 34.381944
+  longitude: -90.629722
+  d2_basin: lower_mississippi
+  nav_unit_id: 0TX5
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 652.5
+  city: Friars Point
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0TX7
+  name: Cargill North American Sweeteners, Memphis Grain Dock.
+  latitude: 35.080208
+  longitude: -90.134139
+  d2_basin: lower_mississippi
+  nav_unit_id: 0TX7
+  wtwy_name: Memphis Harbor, TN
+  mile: 725.5
+  city: Memphis
+  state: TN
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0TYL
+  name: KINDER MORGAN ENERGY PARTNERS, GLOBALPLEX INTERMODAL TERMINAL, RESERVE SLIP WHARVES
+  latitude: 30.054167
+  longitude: -90.569444
+  d2_basin: lower_mississippi
+  nav_unit_id: 0TYL
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 138.7
+  city: Reserve
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0TYV
+  name: PORT OF WEST MEMPHIS
+  latitude: 35.103028
+  longitude: -90.1805
+  d2_basin: lower_mississippi
+  nav_unit_id: 0TYV
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 727.3
+  city: West Memphis
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0U03
+  name: Rosedale-Bolivar County Port Commission, Public Dock.
+  latitude: 33.820773
+  longitude: -91.021559
+  d2_basin: lower_mississippi
+  nav_unit_id: 0U03
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 2.6
+  city: Rosedale
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0U1T
+  name: SCOULAR AGRICULTURAL SERVICE
+  latitude: 34.520556
+  longitude: -90.584722
+  d2_basin: lower_mississippi
+  nav_unit_id: 0U1T
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 663.1
+  city: Helena
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0U22
+  name: CARGILL-RESERVE ELEVATOR WHARF
+  latitude: 30.053916
+  longitude: -90.583303
+  d2_basin: lower_mississippi
+  nav_unit_id: 0U22
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 139.6
+  city: Reserve
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0U2B
+  name: Natchez-Adams County Port Commission, General Cargo Wharf.
+  latitude: 31.540278
+  longitude: -91.439444
+  d2_basin: lower_mississippi
+  nav_unit_id: 0U2B
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 361.6
+  city: Natchez
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0WLH
+  name: AMERICAN COMMERCIAL TERMINALS, MEMPHIS DOCK
+  latitude: 35.123111
+  longitude: -90.07725
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WLH
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 734.4
+  city: Memphis
+  state: TN
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WLJ
+  name: RICELAND FOODS, WEST MEMPHIS EXPORT TERMINAL DOCK
+  latitude: 35.101917
+  longitude: -90.182056
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WLJ
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 727.5
+  city: West Memphis
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WMA
+  name: ANGOLA FERRY LANDINGS
+  latitude: 30.943611
+  longitude: -91.646667
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WMA
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 300.5
+  city: Angola
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WME
+  name: MCALISTER GRAIN, OLD TOWN TERMINAL DOCK
+  latitude: 34.367778
+  longitude: -90.763889
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WME
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 644.5
+  city: HELENA
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WMU
+  name: BUNGE NORTH AMERICA, HURRICANE POINT TERMINAL WHARF
+  latitude: 34.016063
+  longitude: -90.94234
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WMU
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 609
+  city: Hurricane Point
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WMX
+  name: KINDER MORGAN BULK TERMINALS
+  latitude: 35.101639
+  longitude: -90.089167
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WMX
+  wtwy_name: Memphis Harbor, TN
+  mile: 725.5
+  city: Memphis
+  state: TN
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0WMY
+  name: WILLIAM C. ELLIS, MEMPHIS MOORING
+  latitude: 35.105
+  longitude: -90.085556
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WMY
+  wtwy_name: Memphis Harbor, TN
+  mile: 725.5
+  city: Memphis
+  state: TN
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WMZ
+  name: ADM RIVER PORT CORP., MEMPHIS DOCK
+  latitude: 35.100389
+  longitude: -90.094194
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WMZ
+  wtwy_name: Memphis Harbor, TN
+  mile: 725.5
+  city: Memphis
+  state: TN
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WNN
+  name: HELENA-WEST HELENA PHILLIPS COUNTY PORT AUTH., HELENA PUBLIC POR
+  latitude: 34.393718
+  longitude: -90.639754
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WNN
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 652
+  city: Helena
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WNP
+  name: CONSOLIDATED GRAIN AND BARGE CO., FRIARS POINT ELEVATOR
+  latitude: 34.383611
+  longitude: -90.624444
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WNP
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 652.8
+  city: Friars Point
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WNQ
+  name: JIMMY SANDERS SEED CO., FRIARS POINT TERMINAL DOCK
+  latitude: 34.407222
+  longitude: -90.581667
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WNQ
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 655.6
+  city: Friars Point
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WP7
+  name: PLANTERS SERVICE, HELENA TERMINAL DOCK
+  latitude: 34.475556
+  longitude: -90.595
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WP7
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 660.2
+  city: Helena
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WP9
+  name: BUNGE CORP., HELENA DOCK
+  latitude: 34.515889
+  longitude: -90.584
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WP9
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 663
+  city: Helena
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WPA
+  name: HELENA MARINE SERVICE DOCK
+  latitude: 34.496944
+  longitude: -90.592222
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WPA
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 661.7
+  city: 'Helena  '
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WPT
+  name: HELENA BRIDGE TERMINAL DOCKS
+  latitude: 34.5
+  longitude: -90.590833
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WPT
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 661.7
+  city: Helena
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WUS
+  name: ADM GROWMARK, PAULINA TERMINAL, GRAIN ELEVATOR WHARF
+  latitude: 30.017967
+  longitude: -90.736307
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WUS
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 150.5
+  city: Paulina
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WUT
+  name: CARGO CARRIERS, RESERVE FLEET MOORING, UPPER SECTION
+  latitude: 30.047029
+  longitude: -90.570459
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WUT
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 138.7
+  city: Edgard
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WUU
+  name: ADM/GROWMARK, RESERVE ELEVATOR WHARF
+  latitude: 30.054994
+  longitude: -90.577913
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WUU
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 139.2
+  city: Reserve
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0WVC
+  name: JIMMY SANDERS, ROSEDALE, FERTILIZER DOCK
+  latitude: 33.822203
+  longitude: -91.021887
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WVC
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 2.7
+  city: Rosedale
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WVD
+  name: JIMMY SANDERS, ROSEDALE GRAIN DOCK
+  latitude: 33.823609
+  longitude: -91.022349
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WVD
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 2.8
+  city: Rosedale
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WVW
+  name: ADM/GROWMARK, DESTREHAN ELEVATOR WHARF
+  latitude: 29.940893
+  longitude: -90.356809
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WVW
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 120.5
+  city: Destrehan
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0WW0
+  name: ARTCO TWELVE MILE FLEET MOORING
+  latitude: 29.933443
+  longitude: -90.21481
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WW0
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 110
+  city: Harahan
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WW2
+  name: CHANNEL SHIPYARD WHARF
+  latitude: 29.951389
+  longitude: -90.228611
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WW2
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 111.3
+  city: Waggaman
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WWH
+  name: WATERWAYS MARINE OF GREENVILLE VALLEY FLEET MOORING
+  latitude: 33.37453
+  longitude: -91.093007
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WWH
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 2.4
+  city: Greenville
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0WWK
+  name: BUNGE NORTH AMERICA, GREENVILLE HARBOR WHARF
+  latitude: 33.432222
+  longitude: -91.055
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WWK
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 6.8
+  city: Greenville
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WWN
+  name: OAKLEY GRAIN, YELLOW BEND WHARF
+  latitude: 33.538889
+  longitude: -91.228333
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WWN
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 552.7
+  city: Yellow Bend
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WWV
+  name: ARTCO TULANE FLEETING, TULANE FLEET MOORING
+  latitude: 29.952221
+  longitude: -90.308785
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WWV
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 117.1
+  city: St. Rose
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WWW
+  name: ADM/GROWMARK, AMA GRAIN ELEVATOR DOCK
+  latitude: 29.94057
+  longitude: -90.311256
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WWW
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 117.6
+  city: Ama
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0WWY
+  name: YELLOW BEND BIG RIVER RICE AND GRAIN
+  latitude: 33.55087
+  longitude: -91.237947
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WWY
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 554.7
+  city: Arkansas City
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WXK
+  name: CARGO CARRIERS TERRE HAUTE LANDING & UPPER TERRE HAUTE FLEET MOOR
+  latitude: 30.044304
+  longitude: -90.647176
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WXK
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 144.2
+  city: Willow Grove
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WXQ
+  name: LOUIS DREYFUS COMMODITIES LLC PORT ALLEN
+  latitude: 30.434003
+  longitude: -91.201586
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WXQ
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 228.9
+  city: Port Allen
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0WXR
+  name: CARGO CARRIERS, PORT ALLEN WHARF AND FLEET
+  latitude: 30.422353
+  longitude: -91.204016
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WXR
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 228
+  city: Port Allen
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WY2
+  name: BUZZI UNICEM USA
+  latitude: 30.138889
+  longitude: -90.939444
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WY2
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 170.9
+  city: Burnside
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WY5
+  name: ARTCO TULANE FLEETING, OAK ALLEY FLEET MOORING
+  latitude: 30.009124
+  longitude: -90.77119
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WY5
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 152.7
+  city: Vacherie
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WY6
+  name: SOUTH LOUISIANA SUGARS COOPERATIVE DOCK
+  latitude: 29.998148
+  longitude: -90.835212
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WY6
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 157.7
+  city: St. James
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WYG
+  name: GETCO MILE 171 AND MILE 172 DRY BULK TRANSFER MOORINGS
+  latitude: 30.126408
+  longitude: -90.950518
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WYG
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 171.8
+  city: Hillaryville
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0WYJ
+  name: DELTA BULK TERMINAL, GRAIN TRANSFER MOORING
+  latitude: 30.015247
+  longitude: -90.829665
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WYJ
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 158.6
+  city: Convent
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0WYP
+  name: ADM GROWMARK RIVER SYSTEMS, MEMPHIS DOCK
+  latitude: 35.094444
+  longitude: -90.1045
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WYP
+  wtwy_name: Memphis Harbor, TN
+  mile: 725.5
+  city: Memphis
+  state: TN
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0WYQ
+  name: CARGILL AG HORIZONS, MEMPHIS TERMINAL ELEVATOR DOCK
+  latitude: 35.093222
+  longitude: -90.105333
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WYQ
+  wtwy_name: Memphis Harbor, TN
+  mile: 725.5
+  city: Memphis
+  state: TN
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WYZ
+  name: ZEN-NOH GRAIN CORP. WHARF.
+  latitude: 30.065545
+  longitude: -90.875053
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WYZ
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 163.8
+  city: Convent
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0WZ4
+  name: MACROSOURCE MEMPHIS TN
+  latitude: 35.084389
+  longitude: -90.111056
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WZ4
+  wtwy_name: Memphis Harbor, TN
+  mile: 725.5
+  city: Memphis
+  state: TN
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WZM
+  name: RIVER CEMENT SALES CO., MEMPHIS TERMINAL DOCK
+  latitude: 35.080389
+  longitude: -90.126361
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WZM
+  wtwy_name: Memphis Harbor, TN
+  mile: 725.5
+  city: Memphis
+  state: TN
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WZT
+  name: TRIAD NITROGEN WHARF
+  latitude: 30.10353
+  longitude: -90.955015
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WZT
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 173.4
+  city: Donaldsonville
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0WZV
+  name: KINDER MORGAN, BELLE HELENE LANDING
+  latitude: 30.173901
+  longitude: -91.003336
+  d2_basin: lower_mississippi
+  nav_unit_id: 0WZV
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 182.9
+  city: Geismar
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X02
+  name: BARNHART CRANE & RIGGING CO., MEMPHIS WHARF
+  latitude: 35.084444
+  longitude: -90.143889
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X02
+  wtwy_name: Memphis Harbor, TN
+  mile: 725.5
+  city: Memphis
+  state: TN
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X24
+  name: OXBOW CARBON AND MINERALS
+  latitude: 30.494762
+  longitude: -91.192257
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X24
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 233
+  city: Baton Rouge
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X2K
+  name: CARGO CARRIERS RESERVE CLEANING WHARF & FLEET MOORING LOWER SECTI
+  latitude: 30.04485
+  longitude: -90.549485
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X2K
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 137.3
+  city: Edgard
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X2L
+  name: RESERVE FERRY LANDING
+  latitude: 30.052095
+  longitude: -90.550511
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X2L
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 137.6
+  city: Reserve
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X2M
+  name: UPPER ST. ROSE FLEETING MOORING
+  latitude: 29.954402
+  longitude: -90.389368
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X2M
+  wtwy_name: Mississippi River, Baton Rouge, LA to New Orleans, LA
+  mile: 122.9
+  city: New Sarpy
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X2Q
+  name: DELTA TERMINAL DOCK
+  latitude: 33.370256
+  longitude: -91.098177
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X2Q
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 2
+  city: Greenville
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X2R
+  name: FARMERS GRAIN TERMINAL GREENVILLE WHARF
+  latitude: 33.373454
+  longitude: -91.094898
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X2R
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 2.2
+  city: Greenville
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X2U
+  name: PRODUCERS RICE MILL, GREENVILLE WHARF
+  latitude: 33.354952
+  longitude: -91.111332
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X2U
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 0.6
+  city: Greenville
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X32
+  name: BUNGE NORTH AMERICA, VIDALIA DOCK
+  latitude: 31.548906
+  longitude: -91.440878
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X32
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 361.8
+  city: Vidalia
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X58
+  name: RALEY TRANSPORT, GOODRICH LANDING, GRAIN ELEVATOR, DOCK
+  latitude: 32.638056
+  longitude: -91.163889
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X58
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 468.2
+  city: Transylvania
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X59
+  name: BUNGE NORTH AMERICA, GOODRICH LANDING ELEVATOR DOCK
+  latitude: 32.641389
+  longitude: -91.164722
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X59
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 468.6
+  city: Transylvania
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X62
+  name: VIOLET DOCK PORT INC BERTHING FACILITY
+  latitude: 29.890837
+  longitude: -89.900428
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X62
+  wtwy_name: Mississippi River, New Orleans, LA to Mouth of Passes
+  mile: 83.5
+  city: Violet
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X6B
+  name: BUNGE NORTH AMERICA, DESOTO LANDING WHARF
+  latitude: 33.692222
+  longitude: -91.228889
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X6B
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 570.6
+  city: DeSoto Landing
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X6C
+  name: JAN TRAN, INC., ROSEDALE DOCK AND FLEETING AREA
+  latitude: 33.808614
+  longitude: -91.020742
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X6C
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 1.8
+  city: Rosedale
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X6D
+  name: FARMERS GRAIN TERMINAL, LAKE VILLAGE DOCK
+  latitude: 33.288528
+  longitude: -91.159808
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X6D
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 531
+  city: Lake Village
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X6E
+  name: DUFOUR PETROLEUM, MAYERSVILLE DOCK
+  latitude: 32.876111
+  longitude: -91.078611
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X6E
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 494.4
+  city: Mayersville
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X6H
+  name: ANDRY STREET WHARF
+  latitude: 29.954755
+  longitude: -90.021005
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X6H
+  wtwy_name: Mississippi River, New Orleans, LA to Mouth of Passes
+  mile: 92.1
+  city: New Orleans
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X6L
+  name: CENEX HARVEST STATES COOPERATIVES, MYRTLE GROVE TERMINAL WHARF
+  latitude: 29.674167
+  longitude: -89.964167
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X6L
+  wtwy_name: Mississippi River, New Orleans, LA to Mouth of Passes
+  mile: 61.8
+  city: Myrtle Grove
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0X6P
+  name: BUNGE CORP., LINDA GRAIN ELEVATOR DOCK
+  latitude: 36.4125
+  longitude: -89.537222
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X6P
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 875.7
+  city: Linda
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X6V
+  name: BUNGE NORTH AMERICA, MAYERSVILLE, GRAIN ELEVATOR DOCK
+  latitude: 32.916667
+  longitude: -91.061667
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X6V
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 497.4
+  city: Mayersville
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X75
+  name: ST. JUDE & NEW MADRID HARBOR SERVICE, LOWER FLEET MOORINGS
+  latitude: 36.498333
+  longitude: -89.544444
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X75
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 882.1
+  city: New Madrid
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X76
+  name: ST JUDE INDUSTRIAL PARK, BARGE DOCK
+  latitude: 36.524444
+  longitude: -89.564444
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X76
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 884.9
+  city: New Madrid
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X77
+  name: ASSOCIATED ELECTRIC COOPERATIVE, NEW MADRID POWER PLANT DOCK
+  latitude: 36.520556
+  longitude: -89.562222
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X77
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 884.7
+  city: New Madrid
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X78
+  name: MAGNITUDE 7 METALS, NEW MADRID PLANT
+  latitude: 36.510908
+  longitude: -89.555866
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X78
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 883.8
+  city: Marston
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X7Q
+  name: ST. JUDE & NEW MADRID HAR SER, NEW MADRID FT MOOR(CWIS 110502)
+  latitude: 36.582778
+  longitude: -89.533889
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X7Q
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 888.9
+  city: New Madrid
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X7R
+  name: CARGILL AG HORIZONS, TIPTONVILLE ELEVATOR DOCK
+  latitude: 36.343889
+  longitude: -89.518333
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X7R
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 870.8
+  city: Tiptonville
+  state: TN
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X7S
+  name: FARMERS GRAIN TERMINAL, WATERPROOF ELEVATOR WHARF
+  latitude: 31.814682
+  longitude: -91.35871
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X7S
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 381.8
+  city: Waterproof
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X7T
+  name: BUNGE NORTH AMERICA, ST. JOSEPH ELEVATOR DOCK
+  latitude: 31.923056
+  longitude: -91.195556
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X7T
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 396.4
+  city: St. Joseph
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X8T
+  name: BERTUCCI CONTRACTING CORP MOORING
+  latitude: 29.956216
+  longitude: -90.14082
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X8T
+  wtwy_name: Mississippi River, New Orleans, LA to Mouth of Passes
+  mile: 104.2
+  city: Jefferson
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X8U
+  name: BUNGE CORP., HICKMAN GRAIN ELEVATOR DOCK
+  latitude: 36.5675
+  longitude: -89.215833
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X8U
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 921.3
+  city: Hickman
+  state: KY
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X8W
+  name: TRI-STATE MARINE SERVICES, DOCK AND FLEET MOORING
+  latitude: 36.061111
+  longitude: -89.688889
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X8W
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 832.7
+  city: Caruthersville
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X93
+  name: FULLEN DOCK AND WAREHOUSE, MEMPHIS WHARVES
+  latitude: 35.209778
+  longitude: -90.061111
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X93
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 740.5
+  city: Memphis
+  state: TN
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0X9A
+  name: CONSOLIDATED GRAIN AND BARGE CO., COTTONWOOD POINT ELEVATOR DOCK
+  latitude: 36.073333
+  longitude: -89.685
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X9A
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 833.6
+  city: Caruthersville
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X9B
+  name: BUNGE CORP., BOOTHSPOINT ELEVATOR DOCK
+  latitude: 36.110833
+  longitude: -89.613611
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X9B
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 838.8
+  city: Boothspoint
+  state: TN
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X9C
+  name: A G DISTRIBUTORS, CARUTHERSVILLE DOCK
+  latitude: 36.203889
+  longitude: -89.665278
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X9C
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 847.3
+  city: Caruthersville
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X9D
+  name: BUNGE CORP., CARUTHERSVILLE DOCK
+  latitude: 36.195
+  longitude: -89.653333
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X9D
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 846.5
+  city: Caruthersville
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X9E
+  name: CARUTHERSVILLE MARINE SERVICE, DOCK AND FLEET MOORING
+  latitude: 36.208333
+  longitude: -89.673056
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X9E
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 847.9
+  city: Caruthersville
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X9M
+  name: MID-SOUTH CONSTRUCTION MATERIALS, LLC
+  latitude: 35.515111
+  longitude: -89.947194
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X9M
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 768.7
+  city: Drummonds
+  state: TN
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0X9R
+  name: CARGILL AG HORIZONS, HICKMAN "B" DOCK
+  latitude: 36.570833
+  longitude: -89.203333
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X9R
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 922.4
+  city: Hickman
+  state: KY
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X9S
+  name: U.S. COAST GUARD DEPOT, HICKMAN MOORINGS
+  latitude: 36.572222
+  longitude: -89.2
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X9S
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 922.6
+  city: Hickman
+  state: KY
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X9U
+  name: CONSOLIDATED GRAIN AND BARGE CO., DORENA ELEVATOR DOCK
+  latitude: 36.591111
+  longitude: -89.210833
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X9U
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 923
+  city: Dorena
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X9X
+  name: CARUTHERSVILLE MARINE SERVICE, FLEET MOORING
+  latitude: 36.234722
+  longitude: -89.704722
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X9X
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 850
+  city: Caruthersville
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X9Y
+  name: MFA, CARUTHERSVILLE DOCK
+  latitude: 36.215
+  longitude: -89.681667
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X9Y
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 848.6
+  city: Caruthersville
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0X9Z
+  name: TRINITY MARINE PRODUCTS, CARUTHERSVILLE SHIPYARD DOCK
+  latitude: 36.210556
+  longitude: -89.676111
+  d2_basin: lower_mississippi
+  nav_unit_id: 0X9Z
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 848.3
+  city: Caruthersville
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0XA0
+  name: OAKLEY MISSOURI, CARUTHERSVILLE DOCK
+  latitude: 36.229167
+  longitude: -89.698889
+  d2_basin: lower_mississippi
+  nav_unit_id: 0XA0
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 849.4
+  city: Caruthersville
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0XAC
+  name: WATERFRONT SERVICES CO., FLEET MOORINGS
+  latitude: 36.980278
+  longitude: -89.105556
+  d2_basin: lower_mississippi
+  nav_unit_id: 0XAC
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 951.6
+  city: Wickliffe
+  state: KY
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0XAD
+  name: WATERWAYS MARINE OF GREENVILLE WARFIELD POINT WHARF
+  latitude: 33.353333
+  longitude: -91.128611
+  d2_basin: lower_mississippi
+  nav_unit_id: 0XAD
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 536.8
+  city: Greenville
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0XAE
+  name: VISERION GRAIN, LAKE PROVIDENCE ELEVATOR DOCK
+  latitude: 32.755639
+  longitude: -91.170992
+  d2_basin: lower_mississippi
+  nav_unit_id: 0XAE
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 2
+  city: Lake Providence
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0XAF
+  name: LAKE PROVIDENCE PORT COMMISSION, PIERS
+  latitude: 32.754363
+  longitude: -91.171153
+  d2_basin: lower_mississippi
+  nav_unit_id: 0XAF
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 1.9
+  city: Lake Providence
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0XAH
+  name: U.S. ARMY CORPS OF ENGINEERS, DELTA POINT CASTING FIELD LANDING
+  latitude: 32.335833
+  longitude: -90.921667
+  d2_basin: lower_mississippi
+  nav_unit_id: 0XAH
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 437.5
+  city: Delta
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0XAK
+  name: KINDER MORGAN ENERGY PARTNERS, L.P., BLYTHEVILLE PLANT DOCK
+  latitude: 35.893611
+  longitude: -89.769444
+  d2_basin: lower_mississippi
+  nav_unit_id: 0XAK
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 809.9
+  city: Barfield
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0XAM
+  name: BUNGE CORP., BARFIELD TERMINAL DOCK
+  latitude: 35.900833
+  longitude: -89.759722
+  d2_basin: lower_mississippi
+  nav_unit_id: 0XAM
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 810.5
+  city: Barfield
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0XAN
+  name: CARGILL AG HORIZONS, HALES POINT ELEVATOR DOCK
+  latitude: 35.893611
+  longitude: -89.640556
+  d2_basin: lower_mississippi
+  nav_unit_id: 0XAN
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 818.3
+  city: Hales Point
+  state: TN
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0XAU
+  name: GREENVILLE PORT COMMISSION, PUBLIC TERMINAL WHARF
+  latitude: 33.358317
+  longitude: -91.11135
+  d2_basin: lower_mississippi
+  nav_unit_id: 0XAU
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 0.6
+  city: Greenville
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0XAX
+  name: MILLER MATERIALS, WHARF
+  latitude: 32.333333
+  longitude: -90.896111
+  d2_basin: lower_mississippi
+  nav_unit_id: 0XAX
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 437
+  city: Vicksburg
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0XAY
+  name: FARMERS GRAIN TERMINAL, TALLULAH ELEVATOR WHARF
+  latitude: 32.347778
+  longitude: -90.98
+  d2_basin: lower_mississippi
+  nav_unit_id: 0XAY
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 442
+  city: Tallulah
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0XAZ
+  name: BUNGE NORTH AMERICA, TALLULAH GRAIN ELEVATOR DOCK
+  latitude: 32.496707
+  longitude: -91.121145
+  d2_basin: lower_mississippi
+  nav_unit_id: 0XAZ
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 457.3
+  city: Tallulah
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0XB2
+  name: BUNGE CORP., HUFFMAN ELEVATOR DOCK
+  latitude: 35.981389
+  longitude: -89.725
+  d2_basin: lower_mississippi
+  nav_unit_id: 0XB2
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 826.8
+  city: Huffman
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0XB3
+  name: BUNGE CORP., HELOISE ELEVATOR DOCK
+  latitude: 36.034444
+  longitude: -89.679444
+  d2_basin: lower_mississippi
+  nav_unit_id: 0XB3
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 831
+  city: Finley
+  state: TN
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0XB4
+  name: CHOCTAW TRANSPORTATION CO., HELOISE DOCK
+  latitude: 36.038056
+  longitude: -89.678611
+  d2_basin: lower_mississippi
+  nav_unit_id: 0XB4
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 831.5
+  city: Heloise
+  state: TN
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0Y5U
+  name: WEPFER MARINE, MCKELLAR LAKE FLEET MOORING
+  latitude: 35.085833
+  longitude: -90.1475
+  d2_basin: lower_mississippi
+  nav_unit_id: 0Y5U
+  wtwy_name: Memphis Harbor, TN
+  mile: 725.5
+  city: Memphis
+  state: TN
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0Y5W
+  name: MISSISSIPPI LIMESTONE CORP., REPAIR DOCK
+  latitude: 34.40183
+  longitude: -90.632793
+  d2_basin: lower_mississippi
+  nav_unit_id: 0Y5W
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 652
+  city: Helena
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0Y5X
+  name: HELM FERTILIZER, HELENA TERMINAL DOCK
+  latitude: 34.414444
+  longitude: -90.614444
+  d2_basin: lower_mississippi
+  nav_unit_id: 0Y5X
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 652
+  city: Helena
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0Y5Y
+  name: ARCHER DANIELS MIDLAND CO., HELENA DOCK
+  latitude: 34.491944
+  longitude: -90.593889
+  d2_basin: lower_mississippi
+  nav_unit_id: 0Y5Y
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 661.3
+  city: Helena
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0Y9M
+  name: KINDER MORGAN ENERGY PARTNERS, L.P., HICKMAN PLANT DOCK
+  latitude: 35.945833
+  longitude: -89.690556
+  d2_basin: lower_mississippi
+  nav_unit_id: 0Y9M
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 822.6
+  city: Hickman
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-0Y9N
+  name: CONSOLIDATED GRAIN AND BARGE, CARUTHERSVILLE DOCK
+  latitude: 36.230833
+  longitude: -89.700278
+  d2_basin: lower_mississippi
+  nav_unit_id: 0Y9N
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 849.8
+  city: Caruthersville
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0YA4
+  name: RIVER BEND AG, NEW MADRID LIQUID FERTILIZER DOCK (CWIS 110502)
+  latitude: 36.578333
+  longitude: -89.553333
+  d2_basin: lower_mississippi
+  nav_unit_id: 0YA4
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 888.1
+  city: New Madrid
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0YA5
+  name: WEPFER MARINE, HICKMAN DOCK AND FLEET MOORING
+  latitude: 36.568378
+  longitude: -89.213003
+  d2_basin: lower_mississippi
+  nav_unit_id: 0YA5
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 921.9
+  city: Hickman
+  state: KY
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0YA6
+  name: HICKMAN FERRY, DORENA LANDING
+  latitude: 36.586667
+  longitude: -89.214444
+  d2_basin: lower_mississippi
+  nav_unit_id: 0YA6
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 922.6
+  city: Dorena
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0YPD
+  name: BELLE CHASSE MARINE TRANSPORTATION, DAVANT LANDING
+  latitude: 29.605066
+  longitude: -89.876103
+  d2_basin: lower_mississippi
+  nav_unit_id: 0YPD
+  wtwy_name: Mississippi River, New Orleans, LA to Mouth of Passes
+  mile: 52.1
+  city: Point Celeste
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0YSK
+  name: DOMINO SUGAR CHALMETTE
+  latitude: 29.943985
+  longitude: -90.000985
+  d2_basin: lower_mississippi
+  nav_unit_id: 0YSK
+  wtwy_name: Mississippi River, New Orleans, LA to Mouth of Passes
+  mile: 90.9
+  city: Arabi
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0YSP
+  name: BEVERLY INDUSTRIES/VULCAN ICA DISTRIBUTION CO WESTWEGO YARD LDG
+  latitude: 29.945976
+  longitude: -90.143165
+  d2_basin: lower_mississippi
+  nav_unit_id: 0YSP
+  wtwy_name: Mississippi River, New Orleans, LA to Mouth of Passes
+  mile: 103.5
+  city: Westwego
+  state: LA
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0ZRU
+  name: APAC-MISSISSIPPI, GREENVILLE DOCK
+  latitude: 33.362492
+  longitude: -91.110049
+  d2_basin: lower_mississippi
+  nav_unit_id: 0ZRU
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 1.1
+  city: Greenville
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-0ZSB
+  name: MACROSOURCE FERTILIZER GREENVILLE WHARF
+  latitude: 33.377
+  longitude: -91.09096
+  d2_basin: lower_mississippi
+  nav_unit_id: 0ZSB
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 2.4
+  city: Greenville
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: true
+  grain_in_purpose: false
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: COMMODITIES
+- node_id: WCSC-120Y
+  name: CONSOLIDATED GRAIN AND BARGE CO.
+  latitude: 35.658044
+  longitude: -89.930951
+  d2_basin: lower_mississippi
+  nav_unit_id: 120Y
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 783.5
+  city: Osceola
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-120Z
+  name: CONSOLIDATED GRAIN AND BARGE CO., TUNICA
+  latitude: 34.73835
+  longitude: -90.446159
+  d2_basin: lower_mississippi
+  nav_unit_id: 120Z
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 687.6
+  city: Tunica
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-123M
+  name: LOUIS DREYFUS CO WEST MEMPHIS TERMINAL
+  latitude: 35.098374
+  longitude: -90.183916
+  d2_basin: lower_mississippi
+  nav_unit_id: 123M
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 727.1
+  city: West Memphis
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-125D
+  name: CARGILL, WEST MEMPHIS ELEVATOR
+  latitude: 35.114817
+  longitude: -90.177755
+  d2_basin: lower_mississippi
+  nav_unit_id: 125D
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 728.1
+  city: West Memphis
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-125T
+  name: ELLIS PROCESSING & MATERIAL HANDLING, WRIGHTS POINT DOCK TERMINAL
+  latitude: 35.904868
+  longitude: -89.705882
+  d2_basin: lower_mississippi
+  nav_unit_id: 125T
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 815
+  city: null
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-127X
+  name: ADM GRAIN CO., NEW MADRID COUNTY ELEVATOR
+  latitude: 36.527758
+  longitude: -89.56721
+  d2_basin: lower_mississippi
+  nav_unit_id: 127X
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 885
+  city: MARSTON
+  state: MO
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-127Z
+  name: CONSOLIDATED GRAIN AND BARGE CO., WEST MEMPHIS ELEVATOR
+  latitude: 35.135516
+  longitude: -90.148659
+  d2_basin: lower_mississippi
+  nav_unit_id: 127Z
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 730.2
+  city: West Memphis
+  state: AR
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+- node_id: WCSC-128Z
+  name: FARMERS GRAIN TERMINAL INC., ROSEDALE HARBOR, MS
+  latitude: 33.81807
+  longitude: -91.020932
+  d2_basin: lower_mississippi
+  nav_unit_id: 128Z
+  wtwy_name: Mississippi River, Mouth of Ohio River to Baton Rouge, LA
+  mile: 585
+  city: Rosedale
+  state: MS
+  match_keys:
+  - NAV_UNIT_ID
+  - WTWY_NAME
+  - FAC_TYPE=Dock
+  - grain_token_COMMODITIES_or_PURPOSE
+  grain_in_commodities: false
+  grain_in_purpose: true
+  coordinate_provenance: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+  grain_function_evidence: PURPOSE
+marker: S4_CENSUS_C_WCSC_D2GRAIN_EXPORT_BASINS
+digest_sha256: 877651030be3cdc37cbce1a85e4747a3d1aafed47dc38f8b329b4050662402a8

@@ -1,0 +1,73 @@
+schema_version: '1.0'
+proposal_id: S4_UNMATCHED_AND_EXPANSIONS
+grain_token_rows_not_in_default: 455
+excluded_fac_types_in_mapped_or_unmapped:
+  Dock: 306
+  Milepoint: 133
+  Junction: 1
+  Open Water: 6
+  Fleeting Area: 6
+  Anchorage: 2
+  'null': 1
+top_unmapped_waterways:
+- wtwy_name: Tennessee River, TN, AL and KY
+  n: 42
+- wtwy_name: Arkansas River, AR
+  n: 26
+- wtwy_name: Houston Ship Channel, TX
+  n: 11
+- wtwy_name: Missouri River, Kansas City to the Mouth
+  n: 9
+- wtwy_name: Calumet Harbor and River, IL and IN
+  n: 8
+- wtwy_name: Minnesota River, MN
+  n: 8
+- wtwy_name: Missouri River, Omaha to Kansas City
+  n: 8
+- wtwy_name: Tennessee Tombigbee Waterway
+  n: 7
+- wtwy_name: Lake Michigan
+  n: 7
+- wtwy_name: Yazoo River, MS Mouth of
+  n: 6
+- wtwy_name: White River, AR below Batesville, AR
+  n: 6
+- wtwy_name: Superior Wisconsin
+  n: 6
+- wtwy_name: Duluth MN
+  n: 6
+- wtwy_name: Lake Erie, Including Upper Niagara River
+  n: 6
+- wtwy_name: Sacramento River Deepwater Ship Channel, CA
+  n: 5
+- wtwy_name: Calcasieu River and Pass, LA
+  n: 5
+- wtwy_name: San Juan Harbor, PR
+  n: 5
+- wtwy_name: Cumberland River, Mouth to Nashville, TN
+  n: 5
+- wtwy_name: Chicago Sanitary and Ship Canal, IL
+  n: 5
+- wtwy_name: Clearwater River, ID
+  n: 5
+unapproved_expansions_observed_in_wcsc_grain_tokens:
+  TEXAS_GULF:
+  - Houston Ship Channel, TX
+  - Corpus Christi Ship Channel, TX
+  - Galveston, TX
+  PUGET_SOUND:
+  - Seattle, WA
+  - Tacoma Harbor, WA
+  GREAT_LAKES:
+  - Duluth MN
+  - Lake Michigan
+  - Lake Erie, Including Upper Niagara River
+  - Superior Wisconsin
+included_in_corrected_default: false
+fgis_join:
+  attempted: true
+  result: NO_FACILITY_JOIN
+  reason: GetFGISExportsList LocationName is null on all 655 rows; business addresses are not dock coordinates.
+ambiguous_rows: 'None inside a chosen variant: NAV_UNIT_ID is unique. Unmapped waterways are excluded,
+  not guessed.'
+marker: S4_UNMATCHED_AND_EXPANSIONS_v1

@@ -1,0 +1,45 @@
+schema_version: '1.0'
+proposal_id: S4_JOIN_RULES
+retrieval_ts: '2026-08-27T23:41:05Z'
+live_d2_basins:
+- lower_mississippi
+- middle_mississippi
+- upper_mississippi
+- ohio
+- illinois
+- columbia_snake
+grain_token_regex: \b(grain|grains|wheat|corn|maize|soybean|soybeans|soy|rice|barley|oats|oat|sorghum|rye)\b
+grain_token_authority: D2 WCUS grain publication names in docs/sources/USACE_D2_WCUS_NTAD2009_EVIDENCE.md
+  plus GRAIN
+fac_type_required: Dock
+wtwy_name_to_d2_basin:
+  Mississippi River, Minneapolis, MN to Mouth of Missouri River: upper_mississippi
+  Mississippi River, Mouth of Missouri River to Mouth of Ohio River: middle_mississippi
+  Mississippi River, Mouth of Ohio River to Baton Rouge, LA: lower_mississippi
+  Mississippi River, Baton Rouge, LA to New Orleans, LA: lower_mississippi
+  Mississippi River, New Orleans, LA to Mouth of Passes: lower_mississippi
+  Memphis Harbor, TN: lower_mississippi
+  Ohio River: ohio
+  Illinois River, IL: illinois
+  Columbia and Lower Willamette Rivers below Vancouver, WA and Portland, OR: columbia_snake
+  Columbia River between Vancouver, WA and The Dalles, OR: columbia_snake
+  Columbia River above The Dalles Dam, WA and OR to Mcnary Lock and Dam, OR and WA: columbia_snake
+  Columbia River and Tributaries above Mcnary Lock and Dam to Kennewick, WA: columbia_snake
+  Snake River, OR, WA and ID: columbia_snake
+  Lower Willamette River: columbia_snake
+excluded_from_default_examples:
+- Tennessee River, TN, AL and KY
+- Arkansas River, AR
+- Houston Ship Channel, TX
+- Missouri River, Kansas City to the Mouth
+- Lake Michigan
+- Seattle, WA
+- Tacoma Harbor, WA
+- Duluth MN
+- Corpus Christi Ship Channel, TX
+- Galveston, TX
+match_key: NAV_UNIT_ID
+coordinate_fields:
+- LATITUDE
+- LONGITUDE
+marker: S4_JOIN_RULES_v1

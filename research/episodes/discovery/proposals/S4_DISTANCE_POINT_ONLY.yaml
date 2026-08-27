@@ -1,0 +1,42 @@
+schema_version: '1.0'
+proposal_id: S4_DISTANCE_POINT_ONLY
+recommended: true
+track_geometry: POINT_ONLY
+rule: Minimum Haversine distance from facility to any published HURDAT2 detail-line position with parseable
+  lat/lon, including non-synoptic (L) times. No interpolation.
+mechanical_from_pr42: true
+pr42_text: storm center position (lat/lon from HURDAT2 best track)
+proximity_radius_nm: 100
+nautical_mile_m: 1852
+radius_m: 185200
+boundary_inequality: <=
+boundary_predicate: distance_m <= 185200
+geodesic:
+  algorithm: haversine_sphere
+  mechanical_from_pr42: true
+  formula: d = 2*R*asin(sqrt(sin^2(dphi/2)+cos(phi1)*cos(phi2)*sin^2(dlon/2)))
+  earth_radius_m: 6366707.019493707
+  earth_radius_rule: R = 1852 * 10800 / pi  (sphere on which 1 arc-minute of great circle = 1 international
+    nautical mile)
+  rejected_mixed_wording: Haversine on WGS84 ellipsoid is internally contradictory; keep approved Haversine,
+    drop ellipsoid
+hurdat2_files:
+  atlantic:
+    url: https://www.nhc.noaa.gov/data/hurdat/hurdat2-1851-2025-02272026.txt
+    local_tmp: /tmp/s4_sources/hurdat2-1851-2025-02272026.txt
+    sha256: 1b9b0c7beed5b4505838658b1d30e159fc84330c60891a58cfcf43ae55c37202
+    bytes: 7082381
+    last_modified: Thu, 05 Mar 2026 16:03:11 GMT
+    http_status: 200
+  pacific_ne_nc:
+    url: https://www.nhc.noaa.gov/data/hurdat/hurdat2-nepac-1949-2025-02272026.txt
+    sha256: db65f8bc538d5c05e15f738c96111861d6ce3572c007879de58e44d4d05a9cd6
+    bytes: 4083231
+    last_modified: Thu, 05 Mar 2026 16:03:11 GMT
+    http_status: 200
+  pacific_required: iff census includes columbia_snake (true for A/B/C)
+missing_positions: Skip detail rows with missing/unparseable lat/lon; do not invent; do not interpolate
+  across a skipped row.
+duplicate_positions: Collapse exact (storm_id, datetime_utc, lat, lon). Keep distinct coordinates at the
+  same timestamp.
+marker: S4_DISTANCE_POINT_ONLY

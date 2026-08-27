@@ -1,0 +1,107 @@
+schema_version: '1.0'
+proposal_id: S4_SOURCE_RETRIEVAL_PROVENANCE
+retrieval_ts: '2026-08-27T23:41:05Z'
+user_agent: Mozilla/5.0 (research retrieval for PR44 S4 correction packet)
+sources:
+- id: USACE_BTS_NAVIGATION_FACILITIES_DOCK
+  authority: U.S. Army Corps of Engineers Waterborne Commerce Statistics Center / USDOT BTS
+  product: Navigation Facilities (Dock) ArcGIS FeatureServer layer 0
+  url: https://services7.arcgis.com/n1YM8pTrFmm7L4hs/arcgis/rest/services/Docks/FeatureServer/0
+  item_id: db8bdecc473646cd859c625508334483
+  owner: USDOT_BTS
+  max_record_count: 2000
+  frozen_files:
+  - path: research/episodes/discovery/proposals/s4_sources/usace_bts_docks_layer_metadata.json
+    bytes: 23567
+    sha256: 8641ae9e961d61e75fd5ea224c66fc0c4581f3318a953d7f306954848e9f5af9
+  - path: research/episodes/discovery/proposals/s4_sources/usace_bts_docks_query_grain.json
+    bytes: 715853
+    sha256: f1299d4549edbd5a41be62f4541b2180305b7faab9b45cc727725f6c28882460
+  - path: research/episodes/discovery/proposals/s4_sources/usace_bts_docks_query_d2_commodity_tokens.json
+    bytes: 1080959
+    sha256: c6e20fdfd898d7fc09a2a70aff4643b01552b6acb0d5c999905176865ce2431f
+  query_grain: UPPER(COMMODITIES) LIKE '%GRAIN%' OR UPPER(PURPOSE) LIKE '%GRAIN%'
+  query_supp: WHEAT/CORN/SOY/RICE/BARLEY/SORGHUM/OATS in COMMODITIES or PURPOSE
+  coverage_limitations:
+  - Layer is a dock/navigation-unit inventory, not an FGIS export-elevator census.
+  - COMMODITIES/PURPOSE text is not a closed grain-code field; token match can miss or overinclude.
+  - FAC_TYPE includes Milepoint/Open Water/Junction/Fleeting Area/Anchorage which are excluded from facility
+    rows.
+  - No claim that every grain-handling facility in D2 is present.
+- id: FGIS_REGISTERED_GRAIN_EXPORTERS
+  authority: USDA AMS Federal Grain Inspection Service
+  product: Registered Grain Exporters Kendo grid GetFGISExportsList
+  url: https://fgisonline.ams.usda.gov/MyFGIS/RegisteredGrainExporters/GetFGISExportsList
+  last_updated_endpoint: https://fgisonline.ams.usda.gov/MyFGIS/RegisteredGrainExporters/GetLastOrganizationUpdated
+  last_updated: Aug 19, 2026
+  frozen_files:
+  - path: research/episodes/discovery/proposals/s4_sources/fgis_GetFGISExportsList.json
+    bytes: 312013
+    sha256: 7b34ca0c932d7536985a0faa939a07a4e34003c8ca435ef9d0d8d3ea760e8329
+  - path: research/episodes/discovery/proposals/s4_sources/fgis_GetLastOrganizationUpdated.json
+    bytes: 14
+    sha256: 6aacc50e9e172887b96df0f02052406f1459dd6a4c6756ed6679efb6cc40bb44
+  row_count: 655
+  location_name_nonnull: 0
+  coverage_limitations:
+  - Rows are registered exporter business identities with HQ/business addresses.
+  - LocationName is null on every retrieved row. This is not a named-facility coordinate census.
+  - Cannot mechanically join to WCSC docks without inventing a name/address matcher.
+  - USDA also describes a Registered Grain Exporting Locations report that was not served as a public
+    bulk extract with coordinates during this retrieval.
+- id: FGIS_EXPORT_REGION_TABLES
+  authority: USDA AMS FGIS
+  url: https://fgisonline.ams.usda.gov/F_DEC/exportRegionDefinitionTables0801.pdf
+  frozen_files:
+  - path: research/episodes/discovery/proposals/s4_sources/fgis_exportRegionDefinitionTables0801.pdf
+    bytes: 130969
+    sha256: c94a017aa1f1e8f1db44f05cb2216387104a828cf3937694511c82b20db8d5c7
+  last_modified: Fri, 24 Jul 2026 15:49:41 GMT
+  coverage_limitations:
+  - Defines FGIS regions/ports, not facility points. Texas and Puget Sound regions exist here and remain
+    unapproved expansions relative to live D2.
+- id: NHC_HURDAT2
+  authority: NOAA National Hurricane Center
+  index_url: https://www.nhc.noaa.gov/data/hurdat/
+  files:
+    atlantic_current:
+      url: https://www.nhc.noaa.gov/data/hurdat/hurdat2-1851-2025-02272026.txt
+      local_tmp: /tmp/s4_sources/hurdat2-1851-2025-02272026.txt
+      sha256: 1b9b0c7beed5b4505838658b1d30e159fc84330c60891a58cfcf43ae55c37202
+      bytes: 7082381
+      last_modified: Thu, 05 Mar 2026 16:03:11 GMT
+      http_status: 200
+    pacific_ne_nc_current:
+      url: https://www.nhc.noaa.gov/data/hurdat/hurdat2-nepac-1949-2025-02272026.txt
+      sha256: db65f8bc538d5c05e15f738c96111861d6ce3572c007879de58e44d4d05a9cd6
+      bytes: 4083231
+      last_modified: Thu, 05 Mar 2026 16:03:11 GMT
+      http_status: 200
+    atlantic_pr42_inherited:
+      url: https://www.nhc.noaa.gov/data/hurdat/hurdat2-1851-2024-040425.txt
+      sha256: d595ada8aaa64e402c26eeb80efb344b52ef420b1627d8c0ee6ee65f0729923b
+      bytes: 7034638
+      http_status: 200
+      note: PR42 filename still exists; current NHC Atlantic file is hurdat2-1851-2025-02272026.txt
+  note: Full storm files hashed at retrieval; not stored in this packet because of size. Distance variants
+    bind these URLs and SHA256.
+- id: NOAA_USACE_IENC
+  retrieved: false
+  reason: >-
+    Not required. USACE/BTS Navigation Facilities (Dock) already supplies official
+    LATITUDE/LONGITUDE for every joined census row. IENC would be a second coordinate
+    product and would reopen matching.
+endpoint_verification:
+  https://www.navcen.uscg.gov/msib: 404
+  https://navcen.uscg.gov/msib-national: 200
+  https://www.navcen.uscg.gov/msib-national: 200
+  https://www.nhc.noaa.gov/data/hurdat/hurdat2-1851-2024-040425.txt: 200
+  https://www.nhc.noaa.gov/data/hurdat/hurdat2-1851-2025-02272026.txt: 200
+  https://www.nhc.noaa.gov/data/hurdat/hurdat2-1851-2025-022726.txt: 404
+  https://www.ams.usda.gov/services/transportation-analysis/gtr: 200
+  https://corpslocks.usace.army.mil/: DNS_FAIL
+  https://ndc.ops.usace.army.mil/ords/r/lpms/corps-locks/home: 200
+  https://www.stb.gov/: 200
+  https://www.stb.gov/proceedings-actions/search-stb-records/: 200
+  https://portnola.com/notices: 404
+marker: S4_SOURCE_RETRIEVAL_PROVENANCE_v2

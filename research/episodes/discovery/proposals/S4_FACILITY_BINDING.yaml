@@ -1,10 +1,10 @@
-# S4 facility binding — correction of PR42 material node defect.
-# Status: NON-EXECUTABLE. Does not invent a complete facility universe.
+# S4 facility binding after official census retrieval and D2 join.
+# Proposal only. Completeness is not claimed.
 
 schema_version: "1.0"
 proposal_id: S4_FACILITY_BINDING
 proposal_date: "2026-08-27"
-packet_status: PR42_S4_CORRECTION_BLOCKED
+packet_status: PR44_EXACT_DELTA_BALLOT_READY
 defect_accepted:
   audit_marker: PR42_PACKET_DEFECT
   frozen_pr42_head: "840d9891473d3ebf248c2d44a9bbeac270d614ca"
@@ -12,10 +12,6 @@ defect_accepted:
     All 10 PR42 S4 rows are ports, cities, gauges, or centroids, not named
     grain export/transfer facilities. Texas Gulf and Puget Sound rows are
     outside the live D2 basin universe.
-
-# ============================================================================
-# Mechanical filters (already ratified; not reopened)
-# ============================================================================
 
 mechanical_filters_applied:
   object_class: >-
@@ -36,135 +32,95 @@ live_d2_basins:
   - illinois
   - columbia_snake
 
-# ============================================================================
-# Corrected default universe
-# ============================================================================
+retrieval_executed: true
+retrieval_ts: "2026-08-27T23:41:05Z"
+join_rules_file: S4_JOIN_RULES.yaml
+match_key: NAV_UNIT_ID
+coordinate_product: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+ienc_used: false
 
-default_facility_rows: []
-row_count: 0
+fgis_registered_exporters:
+  retrieved: true
+  row_count: 655
+  location_name_nonnull: 0
+  join: NO_FACILITY_JOIN
+  reason: >-
+    GetFGISExportsList LocationName is null on every row. Rows are exporter
+    business identities, not named docks with coordinates.
+
+recommended_census_id: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP
+recommended_census_file: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml
+recommended_census_sha256: "0b38e45c31b6c3ef258cb63e39deaab51e819f70079d37c4b3efede531d0a37b"
+row_count: 534
 completeness_claim: NOT_CLAIMED
 inclusion_rule: >-
-  No facility is included in the corrected default. A non-empty S4 node
-  list does not follow mechanically from already-ratified text plus in-repo
-  source facts. Empty default is fail-closed, not a claim that zero
-  facilities exist.
+  FAC_TYPE==Dock AND valid official lat/lon AND WTWY_NAME in the frozen
+  live-D2 waterway map AND word-boundary grain token in COMMODITIES or
+  PURPOSE. NAV_UNIT_ID is the exact match key. Unmapped waterways and
+  non-Dock types are excluded, not guessed.
 
-# ============================================================================
-# Audit: does a unique set follow from already-ratified facts?
-# ============================================================================
+default_facility_rows:
+  source_file: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml
+  sha256: "0b38e45c31b6c3ef258cb63e39deaab51e819f70079d37c4b3efede531d0a37b"
+  row_count: 534
+  compact_copy: FULL_CONFIG_B100_S4_CORRECTED.yaml s4_node_registry.nodes
 
-mechanical_derivation_audit:
-  unique_facility_set_follows_from_ratified_facts: false
-  reasons:
-    - >-
-      Protocol S4 requires a pre-registered set of grain export/transfer
-      nodes with coordinates, but does not name the census, vintage, or
-      coordinate product.
-    - >-
-      Live D2 filters geography. It does not enumerate terminals.
-    - >-
-      FGIS export-region tables name regions (including Texas and Puget
-      Sound), not facility points. PR42 used those regions and then
-      substituted city/port/gauge proxies.
-    - >-
-      src/grainsys/ingest/port_advisory.py names five TERMINAL_OPERATORS
-      without coordinates and is an S8 archive-support list, not a ratified
-      S4 census. Using it would silently choose completeness.
-    - >-
-      "Export/transfer" is broader than FGIS export elevators. Including
-      inland transfer terminals on Ohio/Illinois/Upper Mississippi is a
-      selector, not a mechanical remainder.
-    - >-
-      Official facility names exist (FGIS export-elevator / registered
-      exporting-location surfaces; USACE WCSC docks). Official dock
-      coordinates exist (USACE WCSC Navigation Infrastructure). The join
-      from named grain function to a lat/lon row is not already bound.
+census_variants:
+  - id: A
+    selector: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP
+    file: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml
+    sha256: "0b38e45c31b6c3ef258cb63e39deaab51e819f70079d37c4b3efede531d0a37b"
+    row_count: 534
+    recommended: true
+    least_change: true
+    rule: Dock + live-D2 waterway + grain token in COMMODITIES or PURPOSE
+    basin_counts:
+      lower_mississippi: 167
+      upper_mississippi: 101
+      ohio: 82
+      illinois: 73
+      columbia_snake: 60
+      middle_mississippi: 51
+  - id: B
+    selector: S4_CENSUS_B_WCSC_D2GRAIN_DOCK_COMMODITIES
+    file: S4_CENSUS_B_WCSC_D2GRAIN_DOCK_COMMODITIES.yaml
+    sha256: "1c219297b0df6d1ddfe51318628893c9e9216681e2a04dfc78ae37bedc5ab9d3"
+    row_count: 405
+    recommended: false
+    rule: Same as A except grain token must appear in COMMODITIES
+    drops_purpose_only_export_elevators:
+      - ADM/GROWMARK, AMA GRAIN ELEVATOR DOCK
+      - ADM/GROWMARK, DESTREHAN ELEVATOR WHARF
+      - ZEN-NOH GRAIN CORP. WHARF.
+  - id: C
+    selector: S4_CENSUS_C_WCSC_D2GRAIN_EXPORT_BASINS
+    file: S4_CENSUS_C_WCSC_D2GRAIN_EXPORT_BASINS.yaml
+    sha256: "294a38860e275b906312934eb9998a79972f089cc6c4f48705d3be4722412ff4"
+    row_count: 227
+    recommended: false
+    rule: Same as A restricted to lower_mississippi and columbia_snake
+    basin_counts:
+      lower_mississippi: 167
+      columbia_snake: 60
 
-in_repo_named_terminals_not_a_census:
-  source: src/grainsys/ingest/port_advisory.py
-  coordinates_in_repo: false
-  complete: false
-  rows:
-    - terminal_code: ADM_NOLA
-      name: ADM Ama Terminal
-      mapped_port: NOLA
-      d2_basin: lower_mississippi
-      grain_function_evidence: >-
-        In-repo S8 adapter label "Gulf export terminals". Not independent
-        FGIS/USACE primary evidence in this packet. No authoritative
-        coordinates in-repo.
-      included_in_corrected_default: false
-    - terminal_code: CGB_NOLA
-      name: CGB/Zen-Noh Convent
-      mapped_port: SBPT
-      d2_basin: lower_mississippi
-      grain_function_evidence: >-
-        In-repo S8 adapter label "Gulf export terminals". Not independent
-        FGIS/USACE primary evidence in this packet. No authoritative
-        coordinates in-repo.
-      included_in_corrected_default: false
-    - terminal_code: BUNGE_NOLA
-      name: Bunge Destrehan
-      mapped_port: SBPT
-      d2_basin: lower_mississippi
-      grain_function_evidence: >-
-        In-repo S8 adapter label "Gulf export terminals". Not independent
-        FGIS/USACE primary evidence in this packet. No authoritative
-        coordinates in-repo.
-      included_in_corrected_default: false
-    - terminal_code: EGT_LON
-      name: EGT Longview
-      mapped_port: LON
-      d2_basin: columbia_snake
-      grain_function_evidence: >-
-        In-repo S8 adapter label "PNW export terminals". Not independent
-        FGIS/USACE primary evidence in this packet. No authoritative
-        coordinates in-repo.
-      included_in_corrected_default: false
-    - terminal_code: UGG_PDX
-      name: United Grain Portland
-      mapped_port: PDX
-      d2_basin: columbia_snake
-      grain_function_evidence: >-
-        In-repo S8 adapter label "PNW export terminals". Not independent
-        FGIS/USACE primary evidence in this packet. No authoritative
-        coordinates in-repo.
-      included_in_corrected_default: false
-  excluded_corporate_only:
-    - name: TEMCO Kalama
-      reason: >-
-        Adapter and PR42 already exclude corporate-only evidence. This
-        packet does not re-include it.
+recommendation_basis: >-
+  A is least change from ratified S4 object class (export/transfer, not
+  export-only) and keeps PURPOSE-only official grain elevators that B
+  drops. C silently chooses export-basin completeness. Humans pick A, B,
+  or C; they do not invent a product or hash.
 
-official_census_surfaces_not_executed:
-  - surface: USDA FGIS Registered Grain Exporters / Registered Grain Exporting Locations
-    urls:
-      - https://www.ams.usda.gov/services/fgis/international
-      - https://fgisonline.ams.usda.gov/MyFGIS/RegisteredGrainExporters/Index
-    what_it_can_supply: named registered export entities/locations
-    what_it_does_not_supply_here: a frozen vintage extract or facility lat/lon
-  - surface: USDA FGIS Export Elevator Directory (historical facility data sheets)
-    what_it_can_supply: named export elevators, often by Mississippi River mile
-    what_it_does_not_supply_here: WGS84 lat/lon; current vintage bytes were not frozen
-  - surface: USACE WCSC Navigation Infrastructure docks
-    url: https://www.iwr.usace.army.mil/About/Technical-Centers/WCSC-Waterborne-Commerce-Statistics-Center/WCSC-Navigation-Infrastructure/
-    what_it_can_supply: official dock name, purpose, waterway, mile, latitude, longitude
-    what_it_does_not_supply_here: a frozen grain-purpose extract already joined to D2
+notable_included_under_A:
+  - name: ADM/GROWMARK, AMA GRAIN ELEVATOR DOCK
+    nav_unit_id: included_in_census_A
+  - name: PORT OF LONGVIEW BERTH 9 EGT
+    note: Commodities Wheat|Corn|Oilseeds; name has neither ELEVATOR nor GRAIN
+  - name: TEMCO (CHS CARGILL), KALAMA GRAIN ELEVATOR
+    note: >-
+      Official WCSC grain dock. S8 corporate-only exclusion does not apply
+      to S4 physical nodes when WCSC is the census.
 
-coordinate_rule_if_census_is_later_ratified:
-  allowed: official USACE WCSC dock lat/lon or NOAA/USACE IENC facility coordinates
-  forbidden:
-    - city-center geocoders
-    - Wikipedia/generic port points
-    - gauge/gage coordinates as facility proxies
-    - FGIS region centroids
-  matching: >-
-    Name-to-coordinate matching is part of the census selector, not an
-    agent choice.
-
-# ============================================================================
-# Unapproved expansions (not in corrected default)
-# ============================================================================
+unmatched_grain_token_rows: 455
+ambiguous_rows: none_inside_variant_NAV_UNIT_ID_unique
 
 unapproved_expansions:
   - id: TEXAS_GULF
@@ -182,13 +138,12 @@ unapproved_expansions:
     included_in_corrected_default: false
   - id: GREAT_LAKES
     pr42_s4_rows: []
-    in_repo_port_authorities: [DUL, TOL]
     live_d2: false
     episode_schema_vocab_token: great_lakes_seaway
     included_in_corrected_default: false
     note: >-
-      S3 D9 remains as in the approved v2 source-archive proposal. That is
-      not an S4 node expansion.
+      Coast Guard district D9 is omitted from proposed S3. Great Lakes
+      waterways observed in WCSC grain-token rows stay unmatched.
 
 withdrawn_pr42_default_rows:
   - node_id: GULF-01
@@ -212,23 +167,13 @@ withdrawn_pr42_default_rows:
   - node_id: PNW-05
     reason: Tacoma city-center; Puget Sound not live D2
 
-# ============================================================================
-# Irreducible selector (single smallest batched re-ratification field)
-# ============================================================================
-
 irreducible_selector:
-  field_id: S4_NODE_CENSUS_SELECTOR
+  field_id: S4_NODE_CENSUS
+  options: [A, B, C]
+  recommended: A
   why_irreducible: >-
-    After applying object-class and live-D2 filters, more than one official
-    census can still generate different finite facility sets, and none is
-    already bound with coordinates.
-  humans_must_bind:
-    official_census_source: which named official product enumerates the facilities
-    vintage: exact publication/extract date or hash of the census bytes
-    transfer_scope: >-
-      export elevators only, or export plus inland grain transfer terminals
-      on live D2 waterways
-    coordinate_product: which official lat/lon product and match rule
+    Official bytes plus live-D2 Dock join still leave three defensible finite
+    rules. Each is materialized with exact rows and SHA256.
   not_silently_chosen: true
 
-marker: S4_FACILITY_BINDING_FAIL_CLOSED_EMPTY_DEFAULT
+marker: S4_FACILITY_BINDING_CENSUS_ABC_ENUMERATED

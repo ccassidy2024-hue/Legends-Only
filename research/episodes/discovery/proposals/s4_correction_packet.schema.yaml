@@ -4,6 +4,7 @@
 schema_version: "1.0"
 schema_id: S4_CORRECTION_PACKET_SCHEMA
 packet_status_vocab:
+  - PR44_EXACT_DELTA_BALLOT_READY
   - PR42_S4_CORRECTION_BLOCKED
   - PR42_S4_CORRECTION_PACKET_READY
 
@@ -13,6 +14,22 @@ required_packet_files:
   - S4_DISTANCE_CONTRACT.yaml
   - S4_DELTA_BALLOT.yaml
   - FULL_CONFIG_B100_S4_CORRECTED.yaml
+  - S4_JOIN_RULES.yaml
+  - S4_SOURCE_RETRIEVAL_PROVENANCE.yaml
+  - S4_UNMATCHED_AND_EXPANSIONS.yaml
+  - S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml
+  - S4_CENSUS_B_WCSC_D2GRAIN_DOCK_COMMODITIES.yaml
+  - S4_CENSUS_C_WCSC_D2GRAIN_EXPORT_BASINS.yaml
+  - S4_DISTANCE_POINT_ONLY.yaml
+  - S4_DISTANCE_SEGMENT.yaml
+
+required_source_files:
+  - s4_sources/usace_bts_docks_layer_metadata.json
+  - s4_sources/usace_bts_docks_query_grain.json
+  - s4_sources/usace_bts_docks_query_d2_commodity_tokens.json
+  - s4_sources/fgis_GetFGISExportsList.json
+  - s4_sources/fgis_GetLastOrganizationUpdated.json
+  - s4_sources/fgis_exportRegionDefinitionTables0801.pdf
 
 manifest_required_fields:
   - schema_version
@@ -25,7 +42,7 @@ manifest_required_fields:
   - corrected_b100_path
   - corrected_b100_digest_sha256
   - preserved_science
-  - irreducible_selector
+  - irreducible_selectors
   - production_persistence
   - marker
 
@@ -34,6 +51,7 @@ facility_binding_required_fields:
   - proposal_id
   - live_d2_basins
   - default_facility_rows
+  - census_variants
   - unapproved_expansions
   - irreducible_selector
   - mechanical_filters_applied
@@ -46,7 +64,8 @@ distance_contract_required_fields:
   - nautical_mile_m
   - radius_m
   - boundary_inequality
-  - geodesic_options
+  - geodesic_mechanical
+  - geodesic
   - hurdat2_treatment
   - exposed_fields
   - marker
@@ -102,4 +121,9 @@ live_d2_basins:
 historical_b100_digest_sha256: "9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1"
 historical_b100_digest_status: historical_evidence_only_not_executable
 
-marker: S4_CORRECTION_PACKET_SCHEMA_v1
+census_variant_ids: [A, B, C]
+track_geometry_ids: [POINT_ONLY, SEGMENT]
+geodesic_id: HAVERSINE_NM_SPHERE
+earth_radius_m: 6366707.019493707
+
+marker: S4_CORRECTION_PACKET_SCHEMA_v2

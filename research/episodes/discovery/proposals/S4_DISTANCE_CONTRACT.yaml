@@ -1,10 +1,10 @@
-# S4 distance contract — 100 NM preserved; mixed Haversine/WGS84 wording unmixed.
-# Track geometry and geodesic algorithm remain exposed where not mechanical.
+# S4 distance contract. 100 NM preserved. Haversine NM-sphere bound mechanically.
+# Track geometry remains the only distance selector.
 
 schema_version: "1.0"
 proposal_id: S4_DISTANCE_CONTRACT
 proposal_date: "2026-08-27"
-packet_status: PR42_S4_CORRECTION_BLOCKED
+packet_status: PR44_EXACT_DELTA_BALLOT_READY
 
 proximity_radius_nm: 100
 preserved:
@@ -22,42 +22,69 @@ boundary_reading: >-
   "Within 100 NM" is inclusive. A storm position or track segment at exact
   equality is in-sample.
 
-# Mixed PR42 wording "Haversine formula on WGS84 ellipsoid" is not one convention.
-# Haversine is spherical. WGS84 geodesic is ellipsoidal (Vincenty/Karney).
-# NHC HURDAT2 format does not mandate a unique Earth model for user distances.
-geodesic_mechanical: false
-geodesic_options:
-  HAVERSINE_IUGG_MEAN:
-    algorithm: haversine_sphere
-    formula: >-
-      d = 2 * R * arcsin(sqrt(sin^2(delta_phi/2) + cos(phi1)*cos(phi2)*sin^2(delta_lambda/2)))
-      with phi, lambda in radians, d and R in metres.
-    earth_radius_m: 6371008.8
-    earth_radius_authority: >-
-      IUGG mean Earth radius (Moritz 1980, Geodetic Reference System 1980).
-    not: WGS84 ellipsoidal geodesic
-  WGS84_KARNEY:
-    algorithm: karney_geographiclib_inverse
-    ellipsoid: WGS84
-    semi_major_axis_m: 6378137.0
-    flattening: "1/298.257223563"
-    earth_radius_m: null
-    authority: >-
-      WGS84 defining constants; inverse geodesic per Karney 2013
-      (GeographicLib). Distance is ellipsoid s12 in metres, then compared
-      to 185200.
-    not: haversine
+geodesic_mechanical: true
+geodesic:
+  id: HAVERSINE_NM_SPHERE
+  algorithm: haversine_sphere
+  mechanical_from_pr42: true
+  pr42_approval: explicit Haversine
+  formula: >-
+    d = 2 * R * asin(sqrt(sin^2(dphi/2) + cos(phi1)*cos(phi2)*sin^2(dlon/2)))
+    with phi, lambda in radians, d and R in metres.
+  earth_radius_m: 6366707.019493707
+  earth_radius_rule: "R = 1852 * 10800 / pi"
+  earth_radius_authority: >-
+    Sphere on which one arc-minute of great circle equals one international
+    nautical mile (1852 m). This is the unique sphere that makes Haversine
+    distances native to a 100 NM threshold.
+  rejected_mixed_wording: >-
+    PR42 "Haversine formula on WGS84 ellipsoid" is internally contradictory.
+    Keep the approved Haversine algorithm; drop the ellipsoid clause.
+  not: WGS84 ellipsoidal geodesic / Karney
+
+track_geometry_mechanical: false
+track_geometry_options:
+  POINT_ONLY:
+    recommended: true
+    mechanical_from_pr42: true
+    pr42_text: storm center position (lat/lon from HURDAT2 best track)
+    file: S4_DISTANCE_POINT_ONLY.yaml
+    sha256: "7170f9b674794ff7eea252ef7b41470ce1cbb5a1009ab629650e14bb12be7590"
+  SEGMENT:
+    recommended: false
+    mechanical_from_pr42: false
+    file: S4_DISTANCE_SEGMENT.yaml
+    sha256: "9d3a95ef91611ff196c7ab0d423c54233c7890d9e38934530147f8905ae14c1d"
+    rule: >-
+      Minimum Haversine distance to the great-circle segment between
+      consecutive chronological published HURDAT2 positions of the same
+      storm, omitting any segment that would cross a skipped missing
+      position.
 
 hurdat2_treatment:
-  authority: "NHC HURDAT2 Atlantic format (Landsea / NHC format note)"
+  authority: "NHC HURDAT2 Atlantic and NE/NC Pacific format (Landsea / NHC format note)"
   format_url: https://www.nhc.noaa.gov/data/hurdat/
   format_doc: https://www.aoml.noaa.gov/hrd/hurdat/hurdat2-format.pdf
   files:
-    atlantic_retained_from_pr42: >-
-      https://www.nhc.noaa.gov/data/hurdat/hurdat2-1851-2024-040425.txt
-    pacific_ne_nc: >-
-      Required iff the ratified facility census includes columbia_snake
-      facilities. Not silently added in this packet.
+    atlantic_current:
+      url: https://www.nhc.noaa.gov/data/hurdat/hurdat2-1851-2025-02272026.txt
+      sha256: "1b9b0c7beed5b4505838658b1d30e159fc84330c60891a58cfcf43ae55c37202"
+      bytes: 7082381
+      last_modified: "Thu, 05 Mar 2026 16:03:11 GMT"
+      http_status: 200
+      required: true
+    pacific_ne_nc_current:
+      url: https://www.nhc.noaa.gov/data/hurdat/hurdat2-nepac-1949-2025-02272026.txt
+      sha256: "db65f8bc538d5c05e15f738c96111861d6ce3572c007879de58e44d4d05a9cd6"
+      bytes: 4083231
+      last_modified: "Thu, 05 Mar 2026 16:03:11 GMT"
+      http_status: 200
+      required: true
+      why: columbia_snake is in census A/B/C
+    atlantic_pr42_filename_not_used:
+      url: https://www.nhc.noaa.gov/data/hurdat/hurdat2-1851-2024-040425.txt
+      sha256: "d595ada8aaa64e402c26eeb80efb344b52ef420b1627d8c0ee6ee65f0729923b"
+      note: Still published; current NHC Atlantic file is hurdat2-1851-2025-02272026.txt
   positions_used: >-
     Every HURDAT2 detail (data) line with a parseable latitude and longitude,
     including non-synoptic times (landfall L and other ATCF identifiers).
@@ -71,32 +98,19 @@ hurdat2_treatment:
     row. Do not invent a position. Do not interpolate across a skipped row.
   duplicate_positions: >-
     Exact duplicate tuples (storm_id, datetime_utc, lat, lon) collapse to
-    one. Distinct coordinates at the same timestamp are both kept (both are
-    published best-track positions).
+    one. Distinct coordinates at the same timestamp are both kept.
   unused_fields: >-
     Wind radii and radius of maximum wind are storm-size fields in nautical
     miles. They are not the track-center-to-facility distance.
   interpolation_mechanical: false
   interpolation_changes_membership: true
-  interpolation_note: >-
-    Six-hour synoptic spacing can skip a closer approach between published
-    points. Point-only vs consecutive-segment distance can change whether
-    min distance is <= 185200 m.
 
 exposed_fields:
-  - field_id: S4_GEODESIC
-    options: [HAVERSINE_IUGG_MEAN, WGS84_KARNEY]
-    why_exposed: >-
-      PR42 mixed Haversine and WGS84 ellipsoid. NHC HURDAT2 does not name
-      one reproducible user-distance algorithm. Sphere vs ellipsoid can
-      change membership near the 100 NM boundary (order 0.1 NM).
   - field_id: S4_TRACK_GEOMETRY
-    options: [POINT_ONLY, GREAT_CIRCLE_OR_GEODESIC_SEGMENT]
+    options: [POINT_ONLY, SEGMENT]
+    recommended: POINT_ONLY
     why_exposed: >-
-      Not canonically settled. POINT_ONLY uses published HURDAT2 positions
-      only. SEGMENT uses minimum distance to the geodesic (or sphere great
-      circle, matching S4_GEODESIC) between consecutive chronological
-      positions of the same storm, omitting any segment that would cross a
-      skipped missing position. This can change sample membership.
+      POINT_ONLY follows PR42 "storm center position". SEGMENT can change
+      membership when the closest approach is between 6-hour points.
 
-marker: S4_DISTANCE_CONTRACT_100NM_EXPOSED_GEOMETRY
+marker: S4_DISTANCE_CONTRACT_100NM_HAVERSINE_NM_SPHERE_BOUND
