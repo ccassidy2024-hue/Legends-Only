@@ -4,9 +4,9 @@
 # Marker: PR42_AB_APPROVED_B100_V2
 #
 # This file records the exact approved production bindings. It does not
-# authorize a sweep. Authorization requires the separate B-RED v2 N3 guard,
-# counterpart human exact-head review, merge of an unchanged frozen head,
-# and tag prereg-rules-v2.
+# authorize a sweep. Authorization requires counterpart human exact-head
+# review of the frozen B-RED head, merge of that unchanged head, and tag
+# prereg-rules-v2.
 
 schema_version: "1.0"
 binding_id: PR42_AB_APPROVED_B100_V2
@@ -37,13 +37,14 @@ full_config:
   sha256: 9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1
   schema_version: "0.3"
 
-v2_manifest_bindings_planned:
+v2_manifest_bindings:
   note: >-
-    Digests are not frozen here. The N3 manifest must be built from a clean
-    normalized checkout AFTER the B-RED v2 guard lands and the exact head is
-    frozen. Live prereg_ratification_manifest.yaml remains the v1-era file
-    until that later emit.
-  prereg_config_digest_target: 9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1
+    Manifest emitted from a clean normalized checkout after the B-RED v2
+    guard landed. This still does not authorize a sweep until prereg-rules-v2
+    is tagged on the frozen reviewed head.
+  live_manifest_path: config/discovery/prereg_ratification_manifest.yaml
+  live_manifest_sha256: 46f728d8c42c15581f3eeb6a0bbcae82bdbb11b33c9dc9d1a014b321c4d4d50a
+  prereg_config_digest: 9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1
   new_interpretation_paths:
     - src/grainsys/ingest/uscg_msib.py
     - src/grainsys/ingest/ams_gtr.py
@@ -57,6 +58,7 @@ v2_manifest_bindings_planned:
 authorization_status:
   sweeps_authorized: false
   reason: >-
-    Config persistence does not authorize discovery. v2 N3 guard, human
-    exact-head review, merge, and prereg-rules-v2 tag are still required.
+    v2 N3 guard and digest manifest are present, but prereg-rules-v2 is not
+    tagged. Counterpart human exact-head review and merge of the frozen head
+    are required before the tag. UNKNOWN is not zero.
   unknown_is_not_zero: true

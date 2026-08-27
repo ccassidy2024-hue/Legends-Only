@@ -74,7 +74,8 @@ def test_b100_bindings_record_matches_live_digest() -> None:
     assert data["selected"]["s2"] == "USE_B_OPERATIONAL_RESTRICTION_ONLY"
     assert data["selected"]["s4_radius_nm"] == 100
     assert data["authorization_status"]["sweeps_authorized"] is False
-    assert data["v2_manifest_bindings_planned"]["tag_status"] == "not_created"
+    assert data["v2_manifest_bindings"]["tag_status"] == "not_created"
+    assert data["v2_manifest_bindings"]["prereg_config_digest"] == B100_DIGEST
 
 
 def test_schema_03_rejects_invented_s2_threshold_mode(tmp_path: Path) -> None:
