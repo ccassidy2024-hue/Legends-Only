@@ -4,7 +4,7 @@
 #
 # Status: HUMAN_BALLOT_EXACT_READY_V2
 # PR: #42
-# Packet Head: 9cf37813714d404f26bf7d6b755d00d84683b9db
+# Packet Head: SEE_FINAL_COMMIT_IN_PR42
 #
 # This ballot requires THREE decisions. Execution proceeds immediately after
 # vote if B is selected for Decision A.
