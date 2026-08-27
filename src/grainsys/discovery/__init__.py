@@ -2,8 +2,8 @@
 
 Does not search archives, open notices, or write episode ledger rows.
 Live sweeps require committed ``config/discovery/prereg_rules.yaml`` **and**
-the N3 ratification guard (accepted ADR, ``prereg-rules-v1`` tag, digests,
-descendant commit).
+the N3 ratification guard (accepted ADR, ``prereg-rules-v1`` or
+``prereg-rules-v2`` tag, digests, descendant commit).
 """
 
 from grainsys.discovery.archive_listing import (

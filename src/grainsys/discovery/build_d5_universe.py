@@ -3,7 +3,7 @@
 This module loads captured hits from GRAIN_DATA_ROOT sweep manifests and
 builds the D5 candidate universe following ADR-0008 deterministic ordering.
 
-Requires N3 ratification (prereg-rules-v1 tag + digest match + ancestry).
+Requires N3 ratification (prereg-rules-v1 or prereg-rules-v2 tag + digest match + ancestry).
 """
 
 from __future__ import annotations

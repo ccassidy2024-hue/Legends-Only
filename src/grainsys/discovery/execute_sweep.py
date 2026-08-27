@@ -4,7 +4,7 @@ This module performs the actual network fetch, keyword filtering, capture
 persistence, and candidate universe construction for the preregistered
 discovery sweep.
 
-Requires N3 ratification (prereg-rules-v1 tag + digest match + ancestry).
+Requires N3 ratification (prereg-rules-v1 or prereg-rules-v2 tag + digest match + ancestry).
 """
 
 from __future__ import annotations

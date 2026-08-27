@@ -43,6 +43,7 @@ from grainsys.discovery.governance import (
     LOAD_BEARING_RELATIVE_PATHS,
     MANIFEST_RELATIVE,
     PREREG_TAG,
+    PREREG_TAG_V2,
     RULINGS_PATH_CANONICAL,
     RULINGS_RELATIVE,
     RatificationError,
@@ -846,6 +847,11 @@ def test_n3_positive_only_s1_contract_is_load_bearing_and_drift_blocks(
     adapter = "src/grainsys/ingest/ntni.py"
     assert adr15 in LOAD_BEARING_RELATIVE_PATHS
     assert adapter in LOAD_BEARING_RELATIVE_PATHS
+    assert "src/grainsys/ingest/uscg_msib.py" in LOAD_BEARING_RELATIVE_PATHS
+    assert "src/grainsys/ingest/ams_gtr.py" in LOAD_BEARING_RELATIVE_PATHS
+    assert "src/grainsys/ingest/usace_lpms.py" in LOAD_BEARING_RELATIVE_PATHS
+    assert "src/grainsys/ingest/stb_dockets.py" in LOAD_BEARING_RELATIVE_PATHS
+    assert "src/grainsys/ingest/port_advisory.py" in LOAD_BEARING_RELATIVE_PATHS
 
     root = _build_ratified_repo(tmp_path)
     digests = build_interpretation_digests(root)
@@ -898,6 +904,67 @@ def test_n3_provenance_helper_ready() -> None:
             execution_commit_sha="def",
             governing_adr="docs/decisions/0003-phase0-prereg-hardening.md",
         )
+    v2_stamp = make_sweep_provenance(
+        prereg_config_digest=digest,
+        execution_commit_sha=sha,
+        governing_adr="docs/decisions/0003-phase0-prereg-hardening.md",
+        prereg_tag=PREREG_TAG_V2,
+    )
+    assert v2_stamp.prereg_tag == PREREG_TAG_V2
+    with pytest.raises(RatificationError, match="prereg_tag"):
+        make_sweep_provenance(
+            prereg_config_digest=digest,
+            execution_commit_sha=sha,
+            governing_adr="docs/decisions/0003-phase0-prereg-hardening.md",
+            prereg_tag="prereg-rules-v3",
+        )
+
+
+def test_n3_v2_tag_authorizes_when_all_conditions_met(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    _git(root, "tag", PREREG_TAG_V2)
+    prov = assert_sweep_authorized(root)
+    assert prov.prereg_tag == PREREG_TAG_V2
+    enum = SweepEnumerator.from_repo(root)
+    assert len(list(enum.iter_archives())) == 1
+
+
+def test_n3_v2_wrong_digest_fail_closed(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    _git(root, "tag", "-d", PREREG_TAG)
+    _git(root, "tag", PREREG_TAG_V2)
+    cfg_path = root / "config" / "discovery" / "prereg_rules.yaml"
+    cfg = yaml.safe_load(cfg_path.read_text(encoding="utf-8"))
+    cfg["sample_period"]["sample_end"] = "2099-06-30"
+    cfg_path.write_text(yaml.safe_dump(cfg), encoding="utf-8", newline="\n")
+    _git(root, "add", "-A")
+    _git(root, "commit", "-m", "mutate-config-after-v2")
+    with pytest.raises(RatificationError, match="digest"):
+        assert_sweep_authorized(root)
+
+
+def test_n3_v2_dirty_tree_fail_closed(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    _git(root, "tag", "-d", PREREG_TAG)
+    _git(root, "tag", PREREG_TAG_V2)
+    target = root / "src/grainsys/discovery/governance.py"
+    target.write_bytes(target.read_bytes() + b"\n# dirty\n")
+    with pytest.raises(RatificationError, match="working tree drift|fresh normalized"):
+        assert_sweep_authorized(root)
+
+
+def test_n3_v2_unbound_interpretation_path_fail_closed(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    _git(root, "tag", "-d", PREREG_TAG)
+    man_path = root / MANIFEST_RELATIVE
+    manifest = yaml.safe_load(man_path.read_text(encoding="utf-8"))
+    manifest["interpretation_digests"]["docs/decisions/0004-not-real.md"] = "a" * 64
+    man_path.write_text(yaml.safe_dump(manifest), encoding="utf-8")
+    _git(root, "add", "-A")
+    _git(root, "commit", "-m", "unbound-interp")
+    _git(root, "tag", PREREG_TAG_V2)
+    with pytest.raises(RatificationError, match="extra|interpretation|load-bearing"):
+        assert_sweep_authorized(root)
 
 
 # ---------------------------------------------------------------------------
@@ -1647,7 +1714,11 @@ def test_c_live_manifest_in_repo_is_valid() -> None:
     import yaml
     with open(manifest_path) as f:
         loaded = yaml.safe_load(f)
-    validate_ratification_manifest_mapping(loaded)
+    validate_ratification_manifest_mapping(loaded, load_bearing=None)
+    live_paths = set(loaded["interpretation_digests"])
+    current = set(LOAD_BEARING_RELATIVE_PATHS)
+    if live_paths == current:
+        validate_ratification_manifest_mapping(loaded)
 
 
 def test_c_format_block_example_ignored_in_rulings_parse() -> None:
