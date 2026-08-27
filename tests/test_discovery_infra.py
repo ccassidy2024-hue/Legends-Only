@@ -485,12 +485,14 @@ def test_repo_has_live_prereg_rules() -> None:
 def test_live_prereg_rules_loads_without_error() -> None:
     """The committed prereg_rules.yaml must load and validate successfully."""
     cfg = load_prereg_rules(REPO)
-    assert cfg["schema_version"] == "0.2"
+    assert cfg["schema_version"] == "0.3"
     assert cfg["governing_adr"] == "docs/decisions/0002-episode-preregistration.md"
     assert cfg["sample_period"]["sample_start"] == "2010-01-01"
     assert cfg["sample_period"]["sample_end"] == "2024-12-31"
     assert "response_horizon" in cfg["event_windows"]
     assert cfg["physical_thresholds"]["mode"] == "binding_operational_restriction_only"
+    assert cfg["s2_gauge_registry"]["interpretation"] == "OPERATIONAL_RESTRICTION_ONLY"
+    assert cfg["s4_node_registry"]["proximity_radius_nm"] == 100
 
 
 # ---------------------------------------------------------------------------
@@ -734,20 +736,37 @@ def test_n2_missing_sweep_status_illegal() -> None:
 # ---------------------------------------------------------------------------
 
 
-def test_n3_real_repo_authorizes_live_sweep_execution() -> None:
-    """Current canonical repo has prereg-rules-v1 tag — must authorize."""
-    prov = assert_sweep_authorized(REPO)
-    assert prov.prereg_tag == PREREG_TAG
-    enum = SweepEnumerator.from_repo(REPO)
-    assert len(list(enum.iter_archives(sweep_id="S1"))) == 10
-    tags = subprocess.run(
+def test_n3_real_repo_blocks_until_v2_tag() -> None:
+    """B100 live config is not v1-authorized; prereg-rules-v2 does not exist yet."""
+    with pytest.raises(RatificationError):
+        assert_sweep_authorized(REPO)
+    with pytest.raises(SweepError, match="ratification guard blocked"):
+        SweepEnumerator.from_repo(REPO)
+    v1 = subprocess.run(
         ["git", "tag", "-l", PREREG_TAG],
         cwd=REPO,
         check=True,
         capture_output=True,
         text=True,
+    ).stdout.splitlines()
+    assert PREREG_TAG in v1
+    v2 = subprocess.run(
+        ["git", "tag", "-l", "prereg-rules-v2"],
+        cwd=REPO,
+        check=True,
+        capture_output=True,
+        text=True,
     ).stdout.strip()
-    assert tags == PREREG_TAG
+    assert v2 == ""
+
+
+def test_live_b100_s1_archives_enumerable_without_authorization() -> None:
+    """Constructor matching may use live config; from_repo remains gated."""
+    enum = SweepEnumerator(load_prereg_rules(REPO))
+    s1 = list(enum.iter_archives(sweep_id="S1"))
+    assert len(s1) == 10
+    assert all(target.district for target in s1)
+    assert list(enum.iter_archives(sweep_id="S2")) == []
 
 
 def test_n3_isolated_repo_authorizes_when_all_conditions_met(tmp_path: Path) -> None:

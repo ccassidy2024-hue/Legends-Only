@@ -1,38 +1,48 @@
 # S2-S8 A+B RATIFICATION RECORD
 #
-# Status: RATIFIED — decision authority only; concrete values INCOMPLETE
-# Date: 2026-08-25
-# Method: Phone review between Person A and Person B
-# Slack reference: This record persists the A+B approval of S2-S8 minimal ballot
+# Status: RATIFIED — B100 concrete values PERSISTED; sweeps NOT authorized
+# Date: 2026-08-27
+# Method: Phone review between Person A and Person B; Slack transcription
+# Marker: PR42_AB_APPROVED_B100_V2
 #
-# This file records WHAT was approved, not the concrete values themselves.
-# Concrete values must come from the canonical reconciliation packet.
+# Concrete production values are the exact B100 full-config bound to PR42
+# head 840d9891473d3ebf248c2d44a9bbeac270d614ca.
 
-schema_version: "1.0"
-ratification_id: S2_S8_MINIMAL_BALLOT_v1
-ratification_date: "2026-08-25"
+schema_version: "1.1"
+ratification_id: PR42_AB_APPROVED_B100_V2
+ratification_date: "2026-08-27"
 ratification_method: phone_review
-marker: S2_S8_AB_RATIFIED
+marker: PR42_AB_APPROVED_B100_V2
+supersedes: S2_S8_MINIMAL_BALLOT_v1
 
-# What was approved (decision scope)
+pr42:
+  head: 840d9891473d3ebf248c2d44a9bbeac270d614ca
+  full_config_sha256: 9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1
+  live_config: config/discovery/prereg_rules.yaml
+
 approved_items:
   S2_navigation_gauges:
-    decision: approved
+    decision: USE_B_OPERATIONAL_RESTRICTION_ONLY
     scope: "Pre-registered navigation-gauge station universe required by protocol"
     authority: "USGS/AHPS"
-    requirement: "Exact station list/IDs must be persisted from approved packet"
-    concrete_values_persisted: false
-    concrete_values_location: null
-    blocking_reason: "Station IDs not present in codebase - need reconciliation packet"
+    concrete_values_persisted: true
+    concrete_values_location: "config/discovery/prereg_rules.yaml#s2_gauge_registry"
+    row_count: 10
+    interpretation: OPERATIONAL_RESTRICTION_ONLY
+    independent_candidates: false
+    blocking_reason: null
 
   S4_export_nodes:
     decision: approved
     scope: "Grain export/transfer node universe with coordinates AND proximity radius"
     authority: "NHC landfall proximity"
-    requirement: "Exact node coordinates + radius must be persisted from approved packet"
-    concrete_values_persisted: false
-    concrete_values_location: null
-    blocking_reason: "Node coordinates and radius not present in codebase - need reconciliation packet"
+    concrete_values_persisted: true
+    concrete_values_location: "config/discovery/prereg_rules.yaml#s4_node_registry"
+    row_count: 10
+    proximity_radius_nm: 100
+    geodesic_convention: "great-circle distance (Haversine on WGS84)"
+    storm_position_source: "NHC HURDAT2 best track"
+    blocking_reason: null
 
   D8_physical_thresholds:
     decision: preserve_exactly
@@ -41,6 +51,12 @@ approved_items:
     concrete_values_persisted: true
     concrete_values_location: "config/discovery/prereg_rules.yaml"
     verification_status: verified
+
+  v2_governance:
+    decision: APPROVE
+    mechanism: prereg-rules-v2 amendment/supersession as bound in PR42
+    tag_status: not_created
+    sweeps_authorized: false
 
   closed_decisions:
     D3:
@@ -56,37 +72,18 @@ approved_items:
       location: "config/discovery/prereg_rules.yaml"
       reopen: false
 
-# Semantic constraints preserved
 preserved_semantics:
   - "UNKNOWN != zero"
   - "positive-evidence-only"
   - "market-outcome firewall"
+  - "S2 corroboration only; no invented numeric stage threshold"
 
-# Execution status
 execution_status:
   S1_complete: true
   S1_captures: 37
-  D5_universe_from_S1: "pending_merge_pr33"
+  D5_universe_from_S1: present
   S2_S8_blocked: true
   blocking_items:
-    - S2_station_ids
-    - S4_node_coordinates
-    - S4_proximity_radius
-
-# Missing values packet (smallest exact specification)
-missing_values_required:
-  S2_navigation_gauges:
-    description: "USGS station IDs at navigation-relevant locations"
-    format: "List of USGS station IDs (e.g., 07010000, 07289000)"
-    sample_period_coverage: "2010-01-01 to 2024-12-31"
-    required_from: "canonical reconciliation packet"
-
-  S4_grain_export_nodes:
-    description: "Grain export/transfer facility coordinates"
-    format: "List of {name, latitude, longitude} for each node"
-    required_from: "canonical reconciliation packet"
-
-  S4_proximity_radius:
-    description: "Distance threshold defining storm proximity to nodes"
-    format: "Numeric value with unit (e.g., 100 km, 50 miles)"
-    required_from: "canonical reconciliation packet"
+    - v2_n3_guard_b_red
+    - counterpart_human_exact_head_review
+    - prereg_rules_v2_tag

@@ -28,9 +28,9 @@ class SweepError(RuntimeError):
 class ArchiveTarget:
     sweep_id: str
     authority: str
-    district: str
+    district: str | None
     vehicle: str
-    endpoint: str
+    endpoint: str | None
 
 
 @dataclass(frozen=True)
@@ -65,16 +65,24 @@ class SweepEnumerator:
         archives = config.get("source_archives")
         if not isinstance(archives, list) or not archives:
             raise SweepError("source_archives empty; fail closed (D3).")
-        self._archives = tuple(
-            ArchiveTarget(
-                sweep_id=str(a["sweep_id"]),
-                authority=str(a["authority"]),
-                district=str(a["district"]),
-                vehicle=str(a["vehicle"]),
-                endpoint=str(a["endpoint"]),
+        built: list[ArchiveTarget] = []
+        for a in archives:
+            if not isinstance(a, Mapping):
+                raise SweepError("source_archives entry is not a mapping; fail closed.")
+            raw_district = a.get("district")
+            district = str(raw_district) if raw_district is not None else None
+            raw_endpoint = a.get("endpoint")
+            endpoint = str(raw_endpoint) if raw_endpoint is not None else None
+            built.append(
+                ArchiveTarget(
+                    sweep_id=str(a["sweep_id"]),
+                    authority=str(a["authority"]),
+                    district=district,
+                    vehicle=str(a["vehicle"]),
+                    endpoint=endpoint,
+                )
             )
-            for a in archives
-        )
+        self._archives = tuple(built)
         kp = config["keyword_policy"]
         self._keywords = KeywordPolicy(
             terms=tuple(str(t) for t in kp["terms"]),

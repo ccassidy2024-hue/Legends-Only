@@ -190,6 +190,11 @@ def execute_s1_ntni_sweep(
     capture_failures = 0
     
     for archive in s1_archives:
+        if archive.district is None or archive.endpoint is None:
+            errors.append(f"{archive.authority}: S1 archive missing district/endpoint")
+            failed_count += 1
+            print("  FAILED: S1 archive missing district/endpoint")
+            continue
         print(f"\nProcessing: {archive.district} ({archive.endpoint})")
         
         # Fetch listing JSON

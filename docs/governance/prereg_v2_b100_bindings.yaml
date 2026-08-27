@@ -1,0 +1,62 @@
+# PR42 A+B B100 production bindings
+#
+# Status: CONFIG PERSISTED — v2 N3 tag NOT created; sweeps NOT authorized
+# Marker: PR42_AB_APPROVED_B100_V2
+#
+# This file records the exact approved production bindings. It does not
+# authorize a sweep. Authorization requires the separate B-RED v2 N3 guard,
+# counterpart human exact-head review, merge of an unchanged frozen head,
+# and tag prereg-rules-v2.
+
+schema_version: "1.0"
+binding_id: PR42_AB_APPROVED_B100_V2
+binding_date: "2026-08-27"
+ratification_method: phone_review_transcribed_to_slack
+marker: PR42_AB_APPROVED_B100_V2
+
+pr42:
+  url: "https://github.com/ccassidy2024-hue/Legends-Only/pull/42"
+  head: 840d9891473d3ebf248c2d44a9bbeac270d614ca
+  ballot: "A+B APPROVE PR42 @ 840d9891473d3ebf248c2d44a9bbeac270d614ca | S2=USE_B_OPERATIONAL_RESTRICTION_ONLY | S4_RADIUS=100_NM | V2_GOVERNANCE=APPROVE"
+
+selected:
+  s2: USE_B_OPERATIONAL_RESTRICTION_ONLY
+  s2_meaning: >-
+    S2 uses the already-ratified D8 binding_operational_restriction_only
+    posture; no invented universal numeric stage threshold. S2 does not
+    generate independent candidates from raw stage data.
+  s4_radius_nm: 100
+  s4_semantics: >-
+    Fixed 100 nautical miles under the exact PR42 distance/storm-position
+    semantics (great-circle / Haversine on WGS84; NHC HURDAT2 best track).
+  v2_governance: APPROVE
+
+full_config:
+  source_path: research/episodes/discovery/proposals/FULL_CONFIG_B100.yaml
+  live_path: config/discovery/prereg_rules.yaml
+  sha256: 9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1
+  schema_version: "0.3"
+
+v2_manifest_bindings_planned:
+  note: >-
+    Digests are not frozen here. The N3 manifest must be built from a clean
+    normalized checkout AFTER the B-RED v2 guard lands and the exact head is
+    frozen. Live prereg_ratification_manifest.yaml remains the v1-era file
+    until that later emit.
+  prereg_config_digest_target: 9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1
+  new_interpretation_paths:
+    - src/grainsys/ingest/uscg_msib.py
+    - src/grainsys/ingest/ams_gtr.py
+    - src/grainsys/ingest/usace_lpms.py
+    - src/grainsys/ingest/stb_dockets.py
+    - src/grainsys/ingest/port_advisory.py
+  tag_name: prereg-rules-v2
+  tag_status: not_created
+  v1_tag_preserved: a74e3fb925b80f308407cc2f1508d6aecd868326
+
+authorization_status:
+  sweeps_authorized: false
+  reason: >-
+    Config persistence does not authorize discovery. v2 N3 guard, human
+    exact-head review, merge, and prereg-rules-v2 tag are still required.
+  unknown_is_not_zero: true
