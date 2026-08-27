@@ -1,0 +1,344 @@
+# FULL_CONFIG_B50 — Deterministic Full Configuration for B + 50nm Authorization
+#
+# This file represents the exact byte content that would be materialized into
+# config/discovery/prereg_rules.yaml if the ballot selects:
+# - S2: B (Operational Restriction Only)
+# - S4: 50 nm proximity radius
+#
+# Status: EXECUTABLE AUTHORIZATION TARGET
+# Marker: FULL_CONFIG_B50_DETERMINISTIC
+
+schema_version: "0.3"
+
+governing_adr: docs/decisions/0002-episode-preregistration.md
+
+# D1 — global sample period (ratified 2026-08-24)
+sample_period:
+  sample_start: "2010-01-01"
+  sample_end: "2024-12-31"
+
+# D2 — corridor / basin scope
+corridors:
+  navigation_basins:
+    - lower_mississippi
+    - middle_mississippi
+    - upper_mississippi
+    - ohio
+    - illinois
+    - columbia_snake
+
+# D3 — S1 source archives (ratified per ADR-0015 / ntni.py)
+source_archives:
+  # S1 - NTNI (existing ratified)
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "St. Paul District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/MVP"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "Rock Island District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/MVR"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "St. Louis District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/MVS"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "Memphis District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/MVM"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "Vicksburg District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/MVK"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "New Orleans District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/MVN"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "Louisville District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/LRL"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "Huntington District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/LRH"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "Pittsburgh District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/LRP"
+  - sweep_id: S1
+    authority: "U.S. Army Corps of Engineers"
+    district: "Nashville District"
+    vehicle: "NTNI active notices by district JSON with linked HTML notice"
+    endpoint: "https://ndc.ops.usace.army.mil/ords/ntni/json_data/notices_by_district/LRN"
+
+  # S3 - USCG MSIB (proposed v2 addition)
+  - sweep_id: S3
+    authority: "U.S. Coast Guard"
+    vehicle: "Navigation Center MSIB national and district bulletins"
+    endpoint: "https://www.navcen.uscg.gov/msib"
+    districts:
+      - "D8"    # Eighth District (Gulf/Lower Mississippi)
+      - "D13"   # Thirteenth District (Pacific Northwest)
+      - "D9"    # Ninth District (Great Lakes)
+    positive_evidence_only: true
+
+  # S4 - NHC HURDAT2 (proposed v2 addition)
+  - sweep_id: S4
+    authority: "National Hurricane Center / NOAA"
+    vehicle: "HURDAT2 Atlantic best track archive"
+    endpoint: "https://www.nhc.noaa.gov/data/hurdat/hurdat2-1851-2024-040425.txt"
+    proximity_radius_nm: 50
+    positive_evidence_only: true
+
+  # S5 - AMS Grain Transportation Report (proposed v2 addition)
+  - sweep_id: S5
+    authority: "USDA Agricultural Marketing Service"
+    vehicle: "Grain Transportation Report weekly releases"
+    endpoint: "https://www.ams.usda.gov/services/transportation-analysis/gtr"
+    positive_evidence_only: true
+
+  # S6 - USACE LPMS (proposed v2 addition)
+  - sweep_id: S6
+    authority: "U.S. Army Corps of Engineers"
+    vehicle: "Lock Performance Monitoring System"
+    endpoint: "https://corpslocks.usace.army.mil/"
+    positive_evidence_only: true
+
+  # S7 - STB Dockets (proposed v2 addition)
+  - sweep_id: S7
+    authority: "Surface Transportation Board"
+    vehicle: "STB docket filings and service events"
+    endpoint: "https://www.stb.gov/"
+    docket_prefixes:
+      - "EP"    # Exemption Proceedings
+      - "EX"    # Ex Parte proceedings
+      - "STB"   # General STB proceedings
+    positive_evidence_only: true
+
+  # S8 - Port Authority Notices (proposed v2 addition)
+  - sweep_id: S8
+    authority: "Port Authorities"
+    vehicle: "Official port terminal operational notices"
+    nodes: "S4 node registry"
+    positive_evidence_only: true
+
+# D4 — keyword policy (ratified)
+keyword_policy:
+  terms:
+    - closure
+    - restriction
+    - "draft restriction"
+    - lockage
+    - "high water"
+    - "low water"
+    - dredging
+    - outage
+    - grounding
+    - allision
+    - breach
+  match: whole_word
+  case_sensitive: false
+  fields:
+    - full_text
+
+# D5 — candidate table + deterministic ID minting (ratified)
+candidates:
+  table_path: research/episodes/discovery/candidates/candidates.csv
+  id_prefix: CAND
+  ordering_keys:
+    - sweep_id
+    - source_reference
+  stable_id_key: null
+
+# D6 — pre-episode raw capture roots (ratified)
+capture:
+  sweeps_subdir: sweeps
+  rehome_policy: candidate_keyed_no_move
+
+# D7 — coverage gap policy (ratified)
+coverage:
+  records_dir: research/episodes/discovery/coverage
+  absent_must_be_explicit: true
+  gap_policy_notes: >-
+    Preserves unknown; permits absence only over explicitly registered
+    covered intervals. An empty or unavailable result remains unknown,
+    not zero. No S1 source generates absence evidence under this config.
+  absence_generating_families: []
+  source_identity_keys:
+    - source_family
+    - authority
+    - district
+    - vehicle
+    - endpoint
+
+# D8 — physical thresholds (ratified; B mode binding)
+physical_thresholds:
+  mode: binding_operational_restriction_only
+  class_thresholds: []
+
+# S2 — Navigation gauge registry (B mode)
+s2_gauge_registry:
+  interpretation: OPERATIONAL_RESTRICTION_ONLY
+  semantics: >-
+    S2 triggers only when S1/S3 documents an operational restriction at a
+    registered gauge. S2 does not generate independent candidates from raw
+    stage data; it corroborates S1/S3 binding operational restrictions.
+  row_count: 10
+  gauges:
+    - station_id: "07010000"
+      name: "Mississippi River at St. Louis, MO"
+      basin: middle_mississippi
+      lat: 38.6273
+      lon: -90.1806
+    - station_id: "07022000"
+      name: "Mississippi River at Thebes, IL"
+      basin: middle_mississippi
+      lat: 37.2181
+      lon: -89.4678
+    - station_id: "07032000"
+      name: "Mississippi River at Memphis, TN"
+      basin: lower_mississippi
+      lat: 35.1406
+      lon: -90.0556
+    - station_id: "07289000"
+      name: "Mississippi River at Vicksburg, MS"
+      basin: lower_mississippi
+      lat: 32.3119
+      lon: -90.9022
+    - station_id: "07374000"
+      name: "Mississippi River at Baton Rouge, LA"
+      basin: lower_mississippi
+      lat: 30.4458
+      lon: -91.1919
+    - station_id: "07374510"
+      name: "Mississippi River at New Orleans, LA (Carrollton)"
+      basin: lower_mississippi
+      lat: 29.9508
+      lon: -90.0633
+    - station_id: "03612500"
+      name: "Ohio River at Cairo, IL"
+      basin: ohio
+      lat: 37.0042
+      lon: -89.1850
+    - station_id: "03611500"
+      name: "Ohio River at Metropolis, IL"
+      basin: ohio
+      lat: 37.1514
+      lon: -88.7311
+    - station_id: "05586100"
+      name: "Illinois River at Valley City, IL"
+      basin: illinois
+      lat: 39.7053
+      lon: -90.6461
+    - station_id: "05558300"
+      name: "Illinois River at Henry, IL"
+      basin: illinois
+      lat: 41.1119
+      lon: -89.3567
+
+# S4 — Export node registry (50nm radius)
+s4_node_registry:
+  proximity_radius_nm: 50
+  geodesic_convention: "great-circle distance (Haversine on WGS84)"
+  storm_position_source: "NHC HURDAT2 best track"
+  row_count: 10
+  nodes:
+    - node_id: "GULF-01"
+      name: "South Louisiana (FGIS centroid)"
+      lat: 29.9500
+      lon: -90.0500
+      fgis_region: MISSISSIPPI_RIVER
+    - node_id: "GULF-02"
+      name: "New Orleans (Carrollton)"
+      lat: 29.9545
+      lon: -90.0750
+      fgis_region: MISSISSIPPI_RIVER
+    - node_id: "GULF-03"
+      name: "Houston Ship Channel"
+      lat: 29.7604
+      lon: -95.3698
+      fgis_region: NORTH_TEXAS
+    - node_id: "GULF-04"
+      name: "Corpus Christi"
+      lat: 27.8006
+      lon: -97.3964
+      fgis_region: SOUTH_TEXAS
+    - node_id: "GULF-05"
+      name: "Galveston"
+      lat: 29.3013
+      lon: -94.7977
+      fgis_region: NORTH_TEXAS
+    - node_id: "PNW-01"
+      name: "Portland, OR"
+      lat: 45.5152
+      lon: -122.6784
+      fgis_region: COLUMBIA_RIVER
+    - node_id: "PNW-02"
+      name: "Vancouver, WA"
+      lat: 45.6388
+      lon: -122.6614
+      fgis_region: COLUMBIA_RIVER
+    - node_id: "PNW-03"
+      name: "Longview, WA"
+      lat: 46.1382
+      lon: -122.9382
+      fgis_region: COLUMBIA_RIVER
+    - node_id: "PNW-04"
+      name: "Seattle, WA"
+      lat: 47.6062
+      lon: -122.3321
+      fgis_region: PUGET_SOUND
+    - node_id: "PNW-05"
+      name: "Tacoma, WA"
+      lat: 47.2529
+      lon: -122.4443
+      fgis_region: PUGET_SOUND
+
+# D9 — event window / horizon set (ratified)
+event_windows:
+  pre_event_horizon: "4 weeks"
+  reference_horizon: "prior-year same calendar weeks"
+  response_horizon: "{1, 2, 4, 8, 13, 26} weeks"
+  mapping_disposition: "strictly-after registered-grid; no fill/imputation"
+
+# D10 — three-candidate calibration set (ratified)
+calibration_set:
+  count: 3
+  selection_rule: >-
+    Select the first three candidates in frozen D5 deterministic ordering
+    (lowest deterministic CAND IDs after the complete candidate universe
+    is minted). Fail closed if fewer than 3 candidates exist.
+
+# D11 — concurrent-shock types (ratified)
+concurrent_shocks:
+  shock_types:
+    - "drought (crop)"
+    - "macro (rates/USD)"
+    - "competing-origin (Brazil/Argentina)"
+    - other
+  sweep_rule: >-
+    Every candidate receives the same mechanical sweep across every
+    preregistered concurrent-shock class. Absence only under registered
+    coverage, otherwise UNKNOWN. Never add classes from memory.
+
+# D13 — analysis-anchor grid (ratified)
+analysis_anchor_grid:
+  frequency: weekly
+  weekday_or_calendar_convention: Friday
+  cutoff_time: "23:59"
+  timezone: UTC
+  holiday_treatment: rollback
+  missing_anchor_handling: drop
+  target_date_mapping: strictly-after
+
+marker: "FULL_CONFIG_B50_DETERMINISTIC_v2"

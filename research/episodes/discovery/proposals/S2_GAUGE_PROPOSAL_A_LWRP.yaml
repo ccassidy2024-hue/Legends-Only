@@ -1,22 +1,44 @@
 # S2 Navigation Gauge Proposal - Variant A (LWRP Datum Mode)
 #
-# Status: NON-EXECUTABLE PROPOSAL VARIANT (awaiting A+B ratification)
-# Interpretation: §J S2 "programmatic threshold breach detection" satisfied via
-#   official USACE Low Water Reference Plane (LWRP) as breach datum.
+# ============================================================================
+# STATUS: NON_EXECUTABLE_AS_DEFINED
+# ============================================================================
 #
-# Row count: 10 (NOT 11)
-# Missing basins: Upper Mississippi (locked/pooled structure differs),
-#   Columbia-Snake (requires separate PNW derivation not yet performed)
+# Variant A is NOT executable for the frozen 10-gauge universe because LWRP
+# (Low Water Reference Plane) is definitionally not applicable to 4 gauges
+# that are in pooled or backwater-affected hydraulic regimes.
 #
-# If A+B requires Upper Mississippi or Columbia-Snake gauges, proposal must be
-# extended with same methodology before ratification.
+# LWRP Definition: "97% exceedance discharge water surface profile for
+# FREE-FLOWING river reaches" — USACE Engineering Manual 1110-2-1003
+#
+# LWRP does not exist and cannot be defined for:
+# - Pooled/dam-controlled river reaches (use "Flat Pool Elevation" or "LOL")
+# - Backwater-affected reaches (no stable flow-stage relationship)
+# - Tidal reaches (use MLLW or other tidal datum)
+#
+# This artifact preserved for audit purposes. Do NOT use digest as
+# authorization target.
+#
+# ============================================================================
 
 schema_version: "1.0"
 proposal_id: S2_GAUGE_PROPOSAL_A_LWRP
-proposal_date: "2026-08-26"
+proposal_date: "2026-08-27"
 interpretation: LWRP_AS_OFFICIAL_DATUM
-d8_compatibility: true
-d8_mode: binding_operational_restriction_only
+status: NON_EXECUTABLE_AS_DEFINED
+
+executability:
+  executable: false
+  gauges_with_lwrp: 6
+  gauges_without_lwrp: 4
+  blocking_reason: >-
+    LWRP (Low Water Reference Plane) is a hydraulic datum defined as the 97%
+    exceedance discharge water surface profile. It exists ONLY for free-flowing
+    river reaches. Four gauges (Ohio at Cairo/Metropolis, Illinois at Valley
+    City/Henry) are in pooled or backwater-affected reaches where LWRP is
+    definitionally not applicable. No amount of research can produce an LWRP
+    for these gauges because the concept does not apply to their hydraulic
+    regime.
 
 row_count: 10
 claimed_row_count_discrepancy:
@@ -24,119 +46,231 @@ claimed_row_count_discrepancy:
   actual: 10
   reason: >-
     Only 10 gauges derivable from D2 basin scope + USGS NWIS + USACE cooperation
-    using mechanical criteria. Upper Mississippi basin (locked/pooled) requires
-    structurally different gauge selection. Columbia-Snake basin requires
-    separate PNW derivation not yet performed. No official/mechanical support
-    exists for 11th row.
+    using mechanical criteria.
 
 gauges:
+  # ========== GAUGES WITH VALID LWRP (6) ==========
+  
   - station_id: "07010000"
     name: "Mississippi River at St. Louis, MO"
     d2_basin: middle_mississippi
     latitude: 38.6273
     longitude: -90.1806
+    hydraulic_regime: free_flowing
+    lwrp_status: DEFINED
     lwrp_value_ft: -6.0
     lwrp_datum: CRD
+    lwrp_version: LWRP14
     official_source: "USGS NWIS + USACE St. Louis District"
+    official_evidence:
+      usgs_url: "https://waterdata.usgs.gov/monitoring-location/USGS-07010000/"
+      usace_url: "https://rivergages.mvr.usace.army.mil/"
+      reference: "USACE MVS Navigation Tables LWRP14"
     river_mile: 179.6
+    variant_a_executable: true
 
   - station_id: "07022000"
     name: "Mississippi River at Thebes, IL"
     d2_basin: middle_mississippi
     latitude: 37.2181
     longitude: -89.4678
+    hydraulic_regime: free_flowing
+    lwrp_status: DEFINED
     lwrp_value_ft: -4.0
     lwrp_datum: CRD
+    lwrp_version: LWRP14
     official_source: "USGS NWIS + USACE St. Louis District"
+    official_evidence:
+      usgs_url: "https://waterdata.usgs.gov/monitoring-location/USGS-07022000/"
+      reference: "USACE MVS Navigation Tables LWRP14"
     river_mile: 43.7
+    variant_a_executable: true
 
   - station_id: "07032000"
     name: "Mississippi River at Memphis, TN"
     d2_basin: lower_mississippi
     latitude: 35.1406
     longitude: -90.0556
+    hydraulic_regime: free_flowing
+    lwrp_status: DEFINED
     lwrp_value_ft: -10.0
     lwrp_datum: Memphis_Datum
+    lwrp_version: LWRP05
     official_source: "USGS NWIS + USACE Memphis District"
+    official_evidence:
+      usgs_url: "https://waterdata.usgs.gov/monitoring-location/USGS-07032000/"
+      reference: "USACE MVM Navigation Tables"
     river_mile: 737.2
+    variant_a_executable: true
 
   - station_id: "07289000"
     name: "Mississippi River at Vicksburg, MS"
     d2_basin: lower_mississippi
     latitude: 32.3119
     longitude: -90.9022
+    hydraulic_regime: free_flowing
+    lwrp_status: DEFINED
     lwrp_value_ft: -2.0
     lwrp_datum: MSL
+    lwrp_version: LWRP
     official_source: "USGS NWIS + USACE Vicksburg District"
+    official_evidence:
+      usgs_url: "https://waterdata.usgs.gov/monitoring-location/USGS-07289000/"
+      reference: "USACE MVK Navigation Tables"
     river_mile: 435.7
+    variant_a_executable: true
 
   - station_id: "07374000"
     name: "Mississippi River at Baton Rouge, LA"
     d2_basin: lower_mississippi
     latitude: 30.4458
     longitude: -91.1919
-    lwrp_value_ft: null
-    lwrp_datum: null
+    hydraulic_regime: free_flowing_tidal_influenced
+    lwrp_status: DEFINED
+    lwrp_value_ft: -2.5
+    lwrp_datum: NAVD88
+    lwrp_version: LWRP07
     official_source: "USGS NWIS + USACE New Orleans District"
+    official_evidence:
+      usgs_url: "https://waterdata.usgs.gov/monitoring-location/USGS-07374000/"
+      rivergages_id: "01160"
+      reference: "USACE MVN LWRP Datum Clarification Memo 2020"
     river_mile: 228.4
-    notes: "Tidewater transition zone; LWRP less applicable"
+    variant_a_executable: true
 
   - station_id: "07374510"
-    name: "Mississippi River at New Orleans, LA"
+    name: "Mississippi River at New Orleans, LA (Carrollton)"
     d2_basin: lower_mississippi
     latitude: 29.9508
     longitude: -90.0633
-    lwrp_value_ft: null
-    lwrp_datum: null
+    hydraulic_regime: free_flowing_tidal_influenced
+    lwrp_status: DEFINED
+    lwrp_value_ft: -0.6
+    lwrp_datum: NAVD88
+    lwrp_version: LWRP07
     official_source: "USGS NWIS + USACE New Orleans District"
+    official_evidence:
+      usgs_url: "https://waterdata.usgs.gov/monitoring-location/USGS-07374510/"
+      rivergages_id: "01300"
+      reference: "USACE MVN LWRP Datum Clarification Memo 2020"
     river_mile: 102.8
-    notes: "Export corridor anchor; tidal influence"
+    variant_a_executable: true
 
+  # ========== GAUGES WITHOUT VALID LWRP (4) - BLOCKING EXECUTABILITY ==========
+  
   - station_id: "03612500"
     name: "Ohio River at Cairo, IL"
     d2_basin: ohio
     latitude: 37.0042
     longitude: -89.1850
+    hydraulic_regime: backwater_confluence
+    lwrp_status: NOT_APPLICABLE
     lwrp_value_ft: null
     lwrp_datum: null
     official_source: "USACE Louisville District (OH111)"
+    official_evidence:
+      rivergages_id: "OH111"
+      rivergages_url: "https://rivergages.mvr.usace.army.mil/WaterControl/stationinfo2.cfm?sid=OH111"
+      gage_zero: "270.47 ft NGVD29"
+      searched_surfaces:
+        - "USACE rivergages OH111 station info"
+        - "MRG&P Tech Note No. 9 (USACE datum documentation)"
+        - "ORSANCO Ohio River Navigation Dams tables"
+    lwrp_inapplicability_reason: >-
+      Backwater-affected confluence area. No maintained pool, no LWRP.
+      LWRP is defined only for free-flowing river reaches (97% exceedance
+      discharge). Cairo gauge is in Mississippi River backwater zone.
     river_mile: 0.0
-    notes: "Ohio confluence gauge"
+    variant_a_executable: false
 
   - station_id: "03611500"
     name: "Ohio River at Metropolis, IL"
     d2_basin: ohio
     latitude: 37.1514
     longitude: -88.7311
+    hydraulic_regime: backwater_below_last_dam
+    lwrp_status: NOT_APPLICABLE
     lwrp_value_ft: null
     lwrp_datum: null
     official_source: "USGS NWIS + USACE"
+    official_evidence:
+      usgs_url: "https://waterdata.usgs.gov/monitoring-location/USGS-03611500/"
+      river_mile: 45.2
+      last_dam: "Lock and Dam 53 at mile 962.6 (290.0 ft MSL pool)"
+      searched_surfaces:
+        - "USACE Great Lakes and Ohio River Division navigation info"
+        - "ORSANCO Ohio River Fact Book 1994"
+        - "Ohio River Navigation Dams table"
+    lwrp_inapplicability_reason: >-
+      Below Lock and Dam 53 (last Ohio River dam at mile 962.6).
+      Backwater-affected by Mississippi confluence. Pool elevation
+      of L&D 53 is 290.0 ft MSL but Metropolis is not in a controlled pool.
     river_mile: 45.2
-    notes: "Key lower Ohio gauge"
+    variant_a_executable: false
 
   - station_id: "05586100"
     name: "Illinois River at Valley City, IL"
     d2_basin: illinois
     latitude: 39.7053
     longitude: -90.6461
+    hydraulic_regime: free_backwater_below_last_dam
+    lwrp_status: NOT_APPLICABLE
     lwrp_value_ft: null
     lwrp_datum: null
-    official_source: "USGS NWIS + USACE Rock Island District"
+    official_source: "USGS NWIS + USACE St. Louis District"
+    official_evidence:
+      usgs_url: "https://waterdata.usgs.gov/monitoring-location/USGS-05586100/"
+      rivergages_id: "VALI2"
+      gage_zero: "418.00 ft NGVD29"
+      river_mile: 61.3
+      last_dam: "La Grange Lock"
+      searched_surfaces:
+        - "USACE MVR Illinois Waterway Navigation Charts"
+        - "Illinois River Gage Sheet"
+        - "USACE rivergages VALI2 station info"
+    lwrp_inapplicability_reason: >-
+      Below La Grange Lock (last ILW dam). Free-flowing/backwater reach
+      to Mississippi confluence. Illinois Waterway uses "Low Operating
+      Level (LOL)" / "Flat Pool Elevation" for pooled reaches, not LWRP.
+      Valley City is below all pools.
     river_mile: 61.0
-    notes: "Lower Illinois Waterway"
+    variant_a_executable: false
 
   - station_id: "05558300"
     name: "Illinois River at Henry, IL"
     d2_basin: illinois
     latitude: 41.1119
     longitude: -89.3567
+    hydraulic_regime: pooled_dam_controlled
+    lwrp_status: NOT_APPLICABLE
     lwrp_value_ft: null
     lwrp_datum: null
     official_source: "USGS NWIS + USACE Rock Island District"
+    official_evidence:
+      usgs_url: "https://waterdata.usgs.gov/monitoring-location/USGS-05558300/"
+      rivergages_id: "HNYI2"
+      gage_zero: "425.88 ft NGVD29"
+      flat_pool_elevation: "440.0 ft NGVD29"
+      river_mile: 196.0
+      controlling_structure: "Peoria Lock pool"
+      searched_surfaces:
+        - "USACE MVR Illinois Waterway Navigation Information"
+        - "Illinois River Gage Sheet (flat pool = 440.0 at Henry)"
+        - "USACE rivergages HNYI2 station info"
+    lwrp_inapplicability_reason: >-
+      In Peoria Lock pool (controlled). Illinois Waterway is a pooled
+      system using "Flat Pool Elevation" not LWRP. Henry gauge at mile 196
+      is within the Peoria Pool. LWRP concept (97% exceedance discharge)
+      does not apply to dam-controlled pool systems.
     river_mile: 196.0
-    notes: "Upper Illinois Waterway"
+    variant_a_executable: false
 
 execution_semantics:
+  status: NON_EXECUTABLE
+  reason: >-
+    Cannot trigger on "stage < LWRP" because LWRP does not exist for 4 gauges.
+    A hybrid rule mixing LWRP and Flat Pool would require separate science
+    ratification. This artifact exists for audit only.
   trigger_condition: "stage < LWRP (where LWRP defined)"
   evidence_type: "Independent S2 candidate when stage crosses LWRP"
   positive_evidence_only: true
@@ -146,4 +280,4 @@ verification_urls:
   usgs_nwis: "https://waterdata.usgs.gov/monitoring-location/USGS-{station_id}/"
   usace_rivergages: "https://rivergages.mvr.usace.army.mil/"
 
-marker: "S2_PROPOSAL_A_LWRP_10_ROWS"
+marker: "S2_PROPOSAL_A_LWRP_NON_EXECUTABLE"
