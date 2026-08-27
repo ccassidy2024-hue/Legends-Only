@@ -1,0 +1,59 @@
+# PR42 S4 binding-correction packet manifest.
+# New artifacts only. Does not edit frozen PR42 files or production config.
+
+schema_version: "1.0"
+packet_id: PR42_S4_BINDING_CORRECTION
+packet_date: "2026-08-27"
+packet_status: PR42_S4_CORRECTION_BLOCKED
+review_tier: A
+implementation_authorization: false
+
+current_main: a6f1b81c40f15a6f986ecbbe4e2e3128242a3b9c
+frozen_pr42_head: "840d9891473d3ebf248c2d44a9bbeac270d614ca"
+pr42_branch: cursor/m1-amendment-packet-e03a
+correction_branch: cursor/pr42-s4-binding-correction
+
+historical_b100:
+  path_on_pr42: research/episodes/discovery/proposals/FULL_CONFIG_B100.yaml
+  digest_sha256: "9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1"
+  status: historical_evidence_only_not_executable
+  note: >-
+    A+B approved this digest with S2=B, S4=100NM, v2. The S4 node bytes are
+    defective. Do not persist or sweep from those bytes.
+
+supersession_delta:
+  supersedes: research/episodes/discovery/proposals/FULL_CONFIG_B100.yaml
+  does_not_edit_frozen_pr42: true
+  production_prereg_rules_yaml: unchanged
+  production_ratification_manifest: unchanged
+  governance_py: unchanged
+  s2_gauges: preserved_from_approved_B_mode
+  s4_radius_nm: 100
+  s4_nodes: withdrawn_empty_fail_closed
+  s4_texas_gulf_puget_sound_great_lakes: not_in_corrected_default
+
+corrected_b100_path: research/episodes/discovery/proposals/FULL_CONFIG_B100_S4_CORRECTED.yaml
+corrected_b100_digest_sha256: "eece940e00d7fd4272f03741756e6dc2ee12bf6a116926cb5ec5b0cfb325ef79"
+corrected_b100_status: NON_EXECUTABLE_PENDING_S4_CENSUS_AND_DISTANCE_BINDINGS
+
+packet_file_digests_sha256:
+  FULL_CONFIG_B100_S4_CORRECTED.yaml: "eece940e00d7fd4272f03741756e6dc2ee12bf6a116926cb5ec5b0cfb325ef79"
+  S4_FACILITY_BINDING.yaml: "05e90c96e0ea86d31497cc605b732f0b7c8d96342626212fccbdc0be252fd127"
+  S4_DISTANCE_CONTRACT.yaml: "20574b8481d413d343ec5925029c07ad3ca3c23094a0e30126b8959b36641e9e"
+  S4_DELTA_BALLOT.yaml: "29e1df44010716018771ab9e29ebd73804d23208c74202d3f1576c9e092c935c"
+  s4_correction_packet.schema.yaml: "c6737663598f30af5e3927322834dbfbdb20229eeeaa0dae9413f8c779fd2b0d"
+
+preserved_science:
+  S2: USE_B_OPERATIONAL_RESTRICTION_ONLY
+  S4_RADIUS: 100_NM
+  V2_GOVERNANCE: APPROVE
+
+irreducible_selector: S4_NODE_CENSUS_SELECTOR
+also_exposed_because_membership:
+  - S4_TRACK_GEOMETRY
+  - S4_GEODESIC
+
+production_persistence: forbidden
+sweep_execution: forbidden
+
+marker: PR42_S4_BINDING_CORRECTION_MANIFEST_v1

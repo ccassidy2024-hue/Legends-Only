@@ -1,0 +1,59 @@
+# Compact S4 correction delta ballot.
+# Does not re-ask S2, 100 NM, or v2 governance.
+
+schema_version: "1.0"
+ballot_id: S4_CORRECTION_DELTA_BALLOT
+ballot_date: "2026-08-27"
+review_tier: A
+packet_status: PR42_S4_CORRECTION_BLOCKED
+
+preserved_without_reasking:
+  S2: USE_B_OPERATIONAL_RESTRICTION_ONLY
+  S4_RADIUS: 100_NM
+  V2_GOVERNANCE: APPROVE
+  historical_b100_digest_sha256: "9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1"
+  historical_b100_digest_status: historical_evidence_only_not_executable
+
+human_fields:
+  - field_id: S4_NODE_CENSUS_SELECTOR
+    batched: true
+    required: true
+    irreducible: true
+    ask: >-
+      Bind the single official census that uniquely enumerates named grain
+      export/transfer facilities after live-D2 geography and facility-object
+      class are applied. Include census product, vintage/hash, whether inland
+      transfer terminals are in scope, and the official coordinate product
+      plus match rule. Do not approve ports, cities, gauges, or centroids.
+    default_in_this_packet: empty_fail_closed
+    not_asked: [S2, S4_RADIUS, V2_GOVERNANCE]
+
+  - field_id: S4_TRACK_GEOMETRY
+    batched: true
+    required: true
+    irreducible: true
+    ask: POINT_ONLY or GREAT_CIRCLE_OR_GEODESIC_SEGMENT
+    why: >-
+      Not canonically settled in HURDAT2 or protocol text. Changes whether
+      a storm whose closest approach is between 6-hour points is in-sample
+      at 100 NM.
+
+  - field_id: S4_GEODESIC
+    batched: true
+    required: true
+    irreducible: true
+    ask: HAVERSINE_IUGG_MEAN or WGS84_KARNEY
+    why: >-
+      PR42 mixed Haversine with WGS84 ellipsoid. No unique NHC user-distance
+      algorithm. Bind one.
+
+approval_line_template: >-
+  A+B APPROVE S4_CORRECTION_DELTA @ <EXACT_PACKET_HEAD_SHA>
+  | S4_NODE_CENSUS_SELECTOR=<census product + vintage/hash + transfer_scope + coordinate product>
+  | S4_TRACK_GEOMETRY=POINT_ONLY or GREAT_CIRCLE_OR_GEODESIC_SEGMENT
+  | S4_GEODESIC=HAVERSINE_IUGG_MEAN or WGS84_KARNEY
+  | S2=USE_B_OPERATIONAL_RESTRICTION_ONLY (preserved)
+  | S4_RADIUS=100_NM (preserved)
+  | V2_GOVERNANCE=APPROVE (preserved)
+
+marker: S4_CORRECTION_DELTA_BALLOT_MINIMAL

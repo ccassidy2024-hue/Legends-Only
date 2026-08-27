@@ -1,0 +1,234 @@
+# S4 facility binding — correction of PR42 material node defect.
+# Status: NON-EXECUTABLE. Does not invent a complete facility universe.
+
+schema_version: "1.0"
+proposal_id: S4_FACILITY_BINDING
+proposal_date: "2026-08-27"
+packet_status: PR42_S4_CORRECTION_BLOCKED
+defect_accepted:
+  audit_marker: PR42_PACKET_DEFECT
+  frozen_pr42_head: "840d9891473d3ebf248c2d44a9bbeac270d614ca"
+  finding: >-
+    All 10 PR42 S4 rows are ports, cities, gauges, or centroids, not named
+    grain export/transfer facilities. Texas Gulf and Puget Sound rows are
+    outside the live D2 basin universe.
+
+# ============================================================================
+# Mechanical filters (already ratified; not reopened)
+# ============================================================================
+
+mechanical_filters_applied:
+  object_class: >-
+    Named grain export/transfer facility or terminal. Ports, cities, gauges,
+    gages, and regional centroids are not S4 nodes.
+  object_class_sources:
+    - research/episodes/EPISODE_PROTOCOL.md
+    - research/episodes/discovery/S2_S8_ADAPTER_INVENTORY.md
+    - docs/governance/s2_s8_ratification.yaml
+  geography: live D2 navigation_basins only
+  geography_source: config/discovery/prereg_rules.yaml
+
+live_d2_basins:
+  - lower_mississippi
+  - middle_mississippi
+  - upper_mississippi
+  - ohio
+  - illinois
+  - columbia_snake
+
+# ============================================================================
+# Corrected default universe
+# ============================================================================
+
+default_facility_rows: []
+row_count: 0
+completeness_claim: NOT_CLAIMED
+inclusion_rule: >-
+  No facility is included in the corrected default. A non-empty S4 node
+  list does not follow mechanically from already-ratified text plus in-repo
+  source facts. Empty default is fail-closed, not a claim that zero
+  facilities exist.
+
+# ============================================================================
+# Audit: does a unique set follow from already-ratified facts?
+# ============================================================================
+
+mechanical_derivation_audit:
+  unique_facility_set_follows_from_ratified_facts: false
+  reasons:
+    - >-
+      Protocol S4 requires a pre-registered set of grain export/transfer
+      nodes with coordinates, but does not name the census, vintage, or
+      coordinate product.
+    - >-
+      Live D2 filters geography. It does not enumerate terminals.
+    - >-
+      FGIS export-region tables name regions (including Texas and Puget
+      Sound), not facility points. PR42 used those regions and then
+      substituted city/port/gauge proxies.
+    - >-
+      src/grainsys/ingest/port_advisory.py names five TERMINAL_OPERATORS
+      without coordinates and is an S8 archive-support list, not a ratified
+      S4 census. Using it would silently choose completeness.
+    - >-
+      "Export/transfer" is broader than FGIS export elevators. Including
+      inland transfer terminals on Ohio/Illinois/Upper Mississippi is a
+      selector, not a mechanical remainder.
+    - >-
+      Official facility names exist (FGIS export-elevator / registered
+      exporting-location surfaces; USACE WCSC docks). Official dock
+      coordinates exist (USACE WCSC Navigation Infrastructure). The join
+      from named grain function to a lat/lon row is not already bound.
+
+in_repo_named_terminals_not_a_census:
+  source: src/grainsys/ingest/port_advisory.py
+  coordinates_in_repo: false
+  complete: false
+  rows:
+    - terminal_code: ADM_NOLA
+      name: ADM Ama Terminal
+      mapped_port: NOLA
+      d2_basin: lower_mississippi
+      grain_function_evidence: >-
+        In-repo S8 adapter label "Gulf export terminals". Not independent
+        FGIS/USACE primary evidence in this packet. No authoritative
+        coordinates in-repo.
+      included_in_corrected_default: false
+    - terminal_code: CGB_NOLA
+      name: CGB/Zen-Noh Convent
+      mapped_port: SBPT
+      d2_basin: lower_mississippi
+      grain_function_evidence: >-
+        In-repo S8 adapter label "Gulf export terminals". Not independent
+        FGIS/USACE primary evidence in this packet. No authoritative
+        coordinates in-repo.
+      included_in_corrected_default: false
+    - terminal_code: BUNGE_NOLA
+      name: Bunge Destrehan
+      mapped_port: SBPT
+      d2_basin: lower_mississippi
+      grain_function_evidence: >-
+        In-repo S8 adapter label "Gulf export terminals". Not independent
+        FGIS/USACE primary evidence in this packet. No authoritative
+        coordinates in-repo.
+      included_in_corrected_default: false
+    - terminal_code: EGT_LON
+      name: EGT Longview
+      mapped_port: LON
+      d2_basin: columbia_snake
+      grain_function_evidence: >-
+        In-repo S8 adapter label "PNW export terminals". Not independent
+        FGIS/USACE primary evidence in this packet. No authoritative
+        coordinates in-repo.
+      included_in_corrected_default: false
+    - terminal_code: UGG_PDX
+      name: United Grain Portland
+      mapped_port: PDX
+      d2_basin: columbia_snake
+      grain_function_evidence: >-
+        In-repo S8 adapter label "PNW export terminals". Not independent
+        FGIS/USACE primary evidence in this packet. No authoritative
+        coordinates in-repo.
+      included_in_corrected_default: false
+  excluded_corporate_only:
+    - name: TEMCO Kalama
+      reason: >-
+        Adapter and PR42 already exclude corporate-only evidence. This
+        packet does not re-include it.
+
+official_census_surfaces_not_executed:
+  - surface: USDA FGIS Registered Grain Exporters / Registered Grain Exporting Locations
+    urls:
+      - https://www.ams.usda.gov/services/fgis/international
+      - https://fgisonline.ams.usda.gov/MyFGIS/RegisteredGrainExporters/Index
+    what_it_can_supply: named registered export entities/locations
+    what_it_does_not_supply_here: a frozen vintage extract or facility lat/lon
+  - surface: USDA FGIS Export Elevator Directory (historical facility data sheets)
+    what_it_can_supply: named export elevators, often by Mississippi River mile
+    what_it_does_not_supply_here: WGS84 lat/lon; current vintage bytes were not frozen
+  - surface: USACE WCSC Navigation Infrastructure docks
+    url: https://www.iwr.usace.army.mil/About/Technical-Centers/WCSC-Waterborne-Commerce-Statistics-Center/WCSC-Navigation-Infrastructure/
+    what_it_can_supply: official dock name, purpose, waterway, mile, latitude, longitude
+    what_it_does_not_supply_here: a frozen grain-purpose extract already joined to D2
+
+coordinate_rule_if_census_is_later_ratified:
+  allowed: official USACE WCSC dock lat/lon or NOAA/USACE IENC facility coordinates
+  forbidden:
+    - city-center geocoders
+    - Wikipedia/generic port points
+    - gauge/gage coordinates as facility proxies
+    - FGIS region centroids
+  matching: >-
+    Name-to-coordinate matching is part of the census selector, not an
+    agent choice.
+
+# ============================================================================
+# Unapproved expansions (not in corrected default)
+# ============================================================================
+
+unapproved_expansions:
+  - id: TEXAS_GULF
+    pr42_rows: [GULF-03, GULF-04, GULF-05]
+    labels: [Houston Ship Channel, Corpus Christi, Galveston]
+    live_d2: false
+    episode_schema_vocab_token: texas_gulf_coast
+    included_in_corrected_default: false
+  - id: PUGET_SOUND
+    pr42_rows: [PNW-04, PNW-05]
+    labels: [Seattle, Tacoma]
+    live_d2: false
+    episode_schema_vocab_token: null
+    note: puget_sound is not a live D2 basin and is not in episode_schema navigation_basin vocab
+    included_in_corrected_default: false
+  - id: GREAT_LAKES
+    pr42_s4_rows: []
+    in_repo_port_authorities: [DUL, TOL]
+    live_d2: false
+    episode_schema_vocab_token: great_lakes_seaway
+    included_in_corrected_default: false
+    note: >-
+      S3 D9 remains as in the approved v2 source-archive proposal. That is
+      not an S4 node expansion.
+
+withdrawn_pr42_default_rows:
+  - node_id: GULF-01
+    reason: FGIS region centroid / South Louisiana (general); not a facility
+  - node_id: GULF-02
+    reason: USACE gage / New Orleans city proxy; not a facility
+  - node_id: GULF-03
+    reason: generic port / Houston city-center; Texas Gulf not live D2
+  - node_id: GULF-04
+    reason: generic port / Corpus Christi city-center; Texas Gulf not live D2
+  - node_id: GULF-05
+    reason: generic port / Galveston city-center; Texas Gulf not live D2
+  - node_id: PNW-01
+    reason: Portland city-center; not a named Columbia grain terminal
+  - node_id: PNW-02
+    reason: Vancouver WA city-center; not a named transfer facility
+  - node_id: PNW-03
+    reason: Longview city-center; not EGT or other elevator
+  - node_id: PNW-04
+    reason: Seattle city-center; Puget Sound not live D2
+  - node_id: PNW-05
+    reason: Tacoma city-center; Puget Sound not live D2
+
+# ============================================================================
+# Irreducible selector (single smallest batched re-ratification field)
+# ============================================================================
+
+irreducible_selector:
+  field_id: S4_NODE_CENSUS_SELECTOR
+  why_irreducible: >-
+    After applying object-class and live-D2 filters, more than one official
+    census can still generate different finite facility sets, and none is
+    already bound with coordinates.
+  humans_must_bind:
+    official_census_source: which named official product enumerates the facilities
+    vintage: exact publication/extract date or hash of the census bytes
+    transfer_scope: >-
+      export elevators only, or export plus inland grain transfer terminals
+      on live D2 waterways
+    coordinate_product: which official lat/lon product and match rule
+  not_silently_chosen: true
+
+marker: S4_FACILITY_BINDING_FAIL_CLOSED_EMPTY_DEFAULT

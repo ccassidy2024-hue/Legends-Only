@@ -1,0 +1,105 @@
+# Schema for the PR42 S4 binding-correction packet.
+# Non-executable. Does not authorize sweeps or production persistence.
+
+schema_version: "1.0"
+schema_id: S4_CORRECTION_PACKET_SCHEMA
+packet_status_vocab:
+  - PR42_S4_CORRECTION_BLOCKED
+  - PR42_S4_CORRECTION_PACKET_READY
+
+required_packet_files:
+  - S4_CORRECTION_PACKET_MANIFEST.yaml
+  - S4_FACILITY_BINDING.yaml
+  - S4_DISTANCE_CONTRACT.yaml
+  - S4_DELTA_BALLOT.yaml
+  - FULL_CONFIG_B100_S4_CORRECTED.yaml
+
+manifest_required_fields:
+  - schema_version
+  - packet_id
+  - packet_status
+  - frozen_pr42_head
+  - current_main
+  - historical_b100_digest_sha256
+  - historical_b100_digest_status
+  - corrected_b100_path
+  - corrected_b100_digest_sha256
+  - preserved_science
+  - irreducible_selector
+  - production_persistence
+  - marker
+
+facility_binding_required_fields:
+  - schema_version
+  - proposal_id
+  - live_d2_basins
+  - default_facility_rows
+  - unapproved_expansions
+  - irreducible_selector
+  - mechanical_filters_applied
+  - marker
+
+distance_contract_required_fields:
+  - schema_version
+  - proposal_id
+  - proximity_radius_nm
+  - nautical_mile_m
+  - radius_m
+  - boundary_inequality
+  - geodesic_options
+  - hurdat2_treatment
+  - exposed_fields
+  - marker
+
+ballot_required_fields:
+  - schema_version
+  - ballot_id
+  - preserved_without_reasking
+  - human_fields
+  - marker
+
+corrected_b100_required_fields:
+  - schema_version
+  - s2_gauge_registry
+  - s4_node_registry
+  - marker
+
+s4_node_registry_required_fields:
+  - status
+  - proximity_radius_nm
+  - nautical_mile_m
+  - radius_m
+  - boundary_inequality
+  - nodes
+  - row_count
+
+forbidden_default_s4_basins:
+  - texas_gulf
+  - texas_gulf_coast
+  - gulf_texas
+  - puget_sound
+  - PUGET_SOUND
+  - NORTH_TEXAS
+  - SOUTH_TEXAS
+  - great_lakes
+  - great_lakes_seaway
+
+forbidden_default_s4_object_classes:
+  - centroid
+  - city_center
+  - generic_port
+  - gauge
+  - gage
+
+live_d2_basins:
+  - lower_mississippi
+  - middle_mississippi
+  - upper_mississippi
+  - ohio
+  - illinois
+  - columbia_snake
+
+historical_b100_digest_sha256: "9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1"
+historical_b100_digest_status: historical_evidence_only_not_executable
+
+marker: S4_CORRECTION_PACKET_SCHEMA_v1
