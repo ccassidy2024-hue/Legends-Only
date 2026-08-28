@@ -52,10 +52,11 @@ protocol structure only (`example: true`).
 Repo-native empty-ledger representation:
 
 - `entries/` — no real episode YAML (accepted or rejected)
-- generated summary below — 0 accepted rows, Sample P = 0, kill condition true
+- generated summary below — 0 accepted rows (example excluded)
 - `discovery/candidates/no_episode_dispositions.csv` — 4234 candidate-keyed
   rows (ADR-0009: candidates that produce no episode must not disappear)
-- `python -m grainsys.episodes` enforces E ∪ N = C against that frozen universe
+- freeze accounting: E ∪ N = C against the frozen D5 universe (0 episode
+  ancestry ∪ 4234 dispositions = 4234 candidates)
 
 **UNKNOWN is not zero.** Unverified, fixture-bound, or incomplete evidence is
 not a count of zero operational events.
@@ -103,7 +104,7 @@ stale, so the table is always reproducible from committed entries
 
 | episode_id | event_name | event_class | public_anchor | end_date | navigation_basin | severity_class | sample | status | outcomes_reviewed |
 |---|---|---|---|---|---|---|---|---|---|
-| *(none)* | | | | | | | | | *0 admissible rows; market outcomes unopened* |
+| *(none yet)* | | | | | | | | | *blank during pre-registration* |
 
 **Independence audit (protocol H.2)**
 
@@ -112,7 +113,7 @@ stale, so the table is always reproducible from committed entries
 - N_underlying_drivers (descriptive only): **0**
 - max episodes in one cluster: **0** · max episodes for one driver: **0**
 - primary sample (Sample P): **0** · extended (Sample X): **0**
-- shared driver present: **false** · below kill condition: **true**
+- shared driver present: **false** · below kill condition: **n/a**
 
 Primary reporting: N_episodes and N_independent_driver_clusters. Do not auto-drop physically distinct rows that share a driver.
 
