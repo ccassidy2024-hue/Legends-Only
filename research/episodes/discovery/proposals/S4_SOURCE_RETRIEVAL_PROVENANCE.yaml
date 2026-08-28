@@ -20,6 +20,20 @@ independent_rereceipt:
   bytes: 6517079
   sha256: ab1a8c00c142e6c4cd1412d745275ac4521064e946d535a4c7db470665bf4e20
   matches_frozen_bytes: true
+independent_rereceipt_execution_check:
+  retrieval_ts: '2026-08-28T00:14:18Z'
+  agent: bc-a53ba4a0-0807-5b29-a997-1d89d407573c
+  catalog_query: https://ndclibrary.sec.usace.army.mil/api/keywordsearchpub?term=08012026
+  getdoc_url: https://ndclibrary.sec.usace.army.mil/api/getdocdatapub/bebe0d17-f103-4ac7-b753-997429a178e5
+  download_url: https://ndclibrary.sec.usace.army.mil/api/download?id=bebe0d17-f103-4ac7-b753-997429a178e5&filename=Navigation%20Facilities%2007%2031%202026.xlsx
+  keywordsearchpub_http_status: 200
+  getdocdatapub_http_status: 200
+  download_http_status: 200
+  bytes: 6517079
+  sha256: ab1a8c00c142e6c4cd1412d745275ac4521064e946d535a4c7db470665bf4e20
+  matches_frozen_bytes: true
+  getdocdatapub_downloadcount: 18
+  getdocdatapub_delta: DOWNLOADCOUNT 15 at freeze vs 18 at this rereceipt; frozen getdoc snapshot retained because the census workbook bytes are unchanged
 user_agent: Mozilla/5.0 (research retrieval for PR44 S4 correction packet)
 sources:
 - id: NDC_LIBRARY_NAVIGATION_FACILITIES_08012026
@@ -164,4 +178,4 @@ endpoint_verification:
   https://www.stb.gov/: 200
   https://www.stb.gov/proceedings-actions/search-stb-records/: 200
   https://portnola.com/notices: 404
-marker: S4_SOURCE_RETRIEVAL_PROVENANCE_v4
+marker: S4_SOURCE_RETRIEVAL_PROVENANCE_v5

@@ -464,6 +464,11 @@ def test_source_family_endpoints_verified_and_no_out_of_d2_hidden() -> None:
     assert rereceipt["sha256"] == NDC_XLSX_SHA
     assert rereceipt["matches_frozen_bytes"] is True
     assert rereceipt["http_status"] == 200
+    execution_check = provenance["independent_rereceipt_execution_check"]
+    assert execution_check["sha256"] == NDC_XLSX_SHA
+    assert execution_check["matches_frozen_bytes"] is True
+    assert execution_check["download_http_status"] == 200
+    assert execution_check["bytes"] == 6517079
     rules = _load("S4_JOIN_RULES.yaml")
     assert "grain" in rules["observed_matching_tokens"]
     assert "wheat" in rules["observed_matching_tokens"]
