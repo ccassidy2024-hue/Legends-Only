@@ -34,7 +34,8 @@ Build against synthetic fixtures before real USDA/market panels exist.
 Validate plumbing on synthetic data (done in foundation tests). Milestone 1
 is closed as an empty-ledger negative result (0 admissible episodes). M2 is
 `M2_NEGATIVE_RESULT_EMPTY_SAMPLE`; M3/M4 are not-estimable; M3 planned
-family size = 0 tests performed (never-run, not ran-and-null). Do not run a
+family size = 0 tests performed (never-run, not ran-and-null). M5 Gate C FAIL
+memo awaits A/B human signatures. Do not run a
 real-data universe screen or invent a residual-threshold shock. M6/M7 are
 skipped under the <6 kill. M8 is the written unanswerable result.
 

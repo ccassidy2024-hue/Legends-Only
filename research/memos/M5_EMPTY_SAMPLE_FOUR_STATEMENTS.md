@@ -1,5 +1,9 @@
 # Mechanism memo: empty-sample closeout (Milestones 1–5)
 
+Superseded as the Gate C template memo by
+`research/memos/M5_NEGATIVE_RESULT_MECHANISM.md`. This file remains the
+four-statement closeout stub from PR #52. It is not a completed Gate C memo.
+
 Not a shock-to-flow arrow. Milestone 5 is still required
 (`BLUEPRINT_REVIEW.md` revised order): record what the empty sample shows,
 without inventing a mechanism, a literature claim, or a trade.

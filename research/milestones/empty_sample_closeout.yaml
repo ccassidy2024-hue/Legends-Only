@@ -51,9 +51,19 @@ m4:
   early_networkx: false
 
 m5:
-  artifact: research/memos/M5_EMPTY_SAMPLE_FOUR_STATEMENTS.md
+  artifact: research/memos/M5_NEGATIVE_RESULT_MECHANISM.md
+  stub_artifact: research/memos/M5_EMPTY_SAMPLE_FOUR_STATEMENTS.md
   four_statements_required: true
   market_outcomes_opened: false
+  gate_c: FAIL_NEGATIVE_RESULT
+  gate_c_complete: false
+  human_signatures: pending
+  school_database_search_performed: false
+  red_team_status: inserted_gpt56_fail_memo_overclaims
+  red_team_draft_sha: 74c4120f195b701ed5f09a2c050c5d39abed1026
+  red_team_agent: bc-459fb6f8-3172-50ba-971d-0bfb19da93ac
+  red_team_model: gpt-5.6-sol-high
+  red_team_verdict: FAIL_MEMO_OVERCLAIMS
   gate_f_default: no_mispricing
 
 m6:
