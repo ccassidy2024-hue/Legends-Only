@@ -45,11 +45,13 @@ coordinate_fields:
 - LATITUDE
 - LONGITUDE
 marker: S4_JOIN_RULES_v2
-deterministic_filter: >-
-  FAC_TYPE == Dock AND LATITUDE/LONGITUDE present and nonzero AND WTWY_NAME in
-  wtwy_name_to_d2_basin AND word-boundary grain_token_regex match in COMMODITIES
-  or PURPOSE. Completeness is not claimed beyond the frozen 08012026 snapshot.
-unobserved_regex_tokens_in_included_rows: [maize, oat, soy]
+deterministic_filter: FAC_TYPE == Dock AND LATITUDE/LONGITUDE present and nonzero AND WTWY_NAME in wtwy_name_to_d2_basin
+  AND word-boundary grain_token_regex match in COMMODITIES or PURPOSE. Completeness is not claimed beyond
+  the frozen 08012026 snapshot.
+unobserved_regex_tokens_in_included_rows:
+- maize
+- oat
+- soy
 observed_matching_tokens:
 - barley
 - corn

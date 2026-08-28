@@ -4226,10 +4226,9 @@ nodes:
     | Iron Ore and Iron & Steel Waste & Scrap | Slag | Building Cement & Concrete; Lime; Glass | Primary
     Iron and Steel Products (Ingots,Bars,Rods,etc.) | Oilseeds (Soybean, Flaxseed and Others)
   purpose: 'Dry bulk products, project cargo, heavy lift, bulk salt, dry commodities, aggregates, cement,
-    general materials, grains transloaded to barge, scrap.
+    general materials, grains transloaded to barge, scrap._x000D_
 
-
-
+    _x000D_
 
     Dry cargo barge cleaning'
   grain_in_commodities: true
@@ -4947,8 +4946,7 @@ nodes:
   purpose: 'The facility imports bauxite from the company''s surface mining operation in Jamaica. Bauxite
     ore is transported by ship to Gramercy where it is unloaded and refined through a chemical process
     into Alumina, the common name for aluminum oxide, Smelter Grade Alumina, Chemical Grade Alumina (CGA),
-    Calcined Alumina, Wet Alumina Trihydrate and Dry Alumina Trihydrate
-
+    Calcined Alumina, Wet Alumina Trihydrate and Dry Alumina Trihydrate_x000D_
 
     '
   grain_in_commodities: true
@@ -8015,8 +8013,7 @@ nodes:
     | Sand, Gravel, Stone, Rock, Limestone, Soil, Dredged Material | Sulphur (Dry), Clay & Salt | Oilseeds
     (Soybean, Flaxseed and Others) | Vegetable Products | Other Agricultural Products; Food and Kindred
     Products | Waste Material; Garbage, Landfill, Sewage Sludge, Waste Water
-  purpose: 'Receipt and shipment of liquid sulphur and sulfuric acid;
-
+  purpose: 'Receipt and shipment of liquid sulphur and sulfuric acid;_x000D_
 
     receipt of phosphate rock; and shipment of phosphoric acid; occasional handling of marine supplies.
     (See Remarks.)'
@@ -10149,8 +10146,7 @@ nodes:
   fac_type: Dock
   commodities: Units (Ferried Autos, Passengers, Railway Cars) | Wheat | Corn | Barley, Rye, Oats, Rice
     and Sorghum Grains | Oilseeds (Soybean, Flaxseed and Others)
-  purpose: 'Mooring U.S. Coast Guard vessels and handling navigation aids, supplies, and equipment.
-
+  purpose: 'Mooring U.S. Coast Guard vessels and handling navigation aids, supplies, and equipment._x000D_
 
     USCGC CHENA Draft 5 Feet'
   grain_in_commodities: true
@@ -10790,8 +10786,7 @@ nodes:
     (Ingots,Bars,Rods,etc.) | Food and Farm Products | Wheat | Corn | Barley, Rye, Oats, Rice and Sorghum
     Grains | Oilseeds (Soybean, Flaxseed and Others) | Animal Feed, Grain Mill Products, Flour, Processed
     Grains
-  purpose: 'Bunge North America: Receipt and shipment of grain.
-
+  purpose: 'Bunge North America: Receipt and shipment of grain._x000D_
 
     Terral River Service, Inc.: Receipt of liquid-bulk  fertilizer.'
   grain_in_commodities: true
@@ -12407,8 +12402,7 @@ nodes:
     & Salt | Food and Farm Products | Wheat | Corn | Barley, Rye, Oats, Rice and Sorghum Grains | Oilseeds
     (Soybean, Flaxseed and Others) | Vegetable Products | Animal Feed, Grain Mill Products, Flour, Processed
     Grains | Unknown or Not Elsewhere Classified
-  purpose: 'Upper berth: Receipt of coal.
-
+  purpose: 'Upper berth: Receipt of coal._x000D_
 
     Lower berth: Receipt and shipment of dry-bulk materials including grain, grain by-products, fertilizer,
     and chemicals.'
@@ -13450,16 +13444,13 @@ nodes:
     Non-Metal. Min. | Building Cement & Concrete; Lime; Glass | Primary Iron and Steel Products (Ingots,Bars,Rods,etc.)
     | Primary Non-Ferrous Metal Products;Fabricated Metal Prods. | Wheat | Corn | Oilseeds (Soybean, Flaxseed
     and Others) | All Manufactured Equipment, Machinery and Products
-  purpose: 'Towing; fleeting; barge cleaning; repair/dry dock
+  purpose: 'Towing; fleeting; barge cleaning; repair/dry dock_x000D_
 
+    services _x0013_ including out of harbor barge pumping and_x000D_
 
-    services _x0013_ including out of harbor barge pumping and
+    shingling; bulk stevedoring_x000D_
 
-
-    shingling; bulk stevedoring
-
-
-
+    _x000D_
 
     Handles all dry bulk materials'
   grain_in_commodities: true
@@ -15219,10 +15210,9 @@ nodes:
     (Soybean, Flaxseed and Others) | Vegetable Products | Animal Feed, Grain Mill Products, Flour, Processed
     Grains | Other Agricultural Products; Food and Kindred Products | Unknown or Not Elsewhere Classified
   purpose: 'Ship & Receipt of miscellaneous bulk materials including fertilizer, salt, flyash, slag, grain,
-    pig-iron, steel, minerals, and alloys
+    pig-iron, steel, minerals, and alloys_x000D_
 
-
-
+    _x000D_
 
     *****NO COAL***** PER RANDY GROSS'
   grain_in_commodities: true
@@ -16062,8 +16052,7 @@ nodes:
   data_record_status: Validated for TOWS
   fac_type: Dock
   commodities: Corn | Oilseeds (Soybean, Flaxseed and Others)
-  purpose: 'Loading of grain, primarily corn and beans.
-
+  purpose: 'Loading of grain, primarily corn and beans._x000D_
 
     Occasionally fertilizers.'
   grain_in_commodities: true

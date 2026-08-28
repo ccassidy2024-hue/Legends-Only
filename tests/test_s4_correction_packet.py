@@ -37,10 +37,10 @@ PACKET_FILES = (
 )
 
 HISTORICAL_B100 = "9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1"
-CORRECTED_B100 = "52bdd29ff1833a8fa88b0b66462c4156d0cc4a7d8a68897632ee28c18c51675b"
-CENSUS_A_SHA = "eb8e43cde2904406e6a6718675c30dd2c6afdbe19996ef98b611e411c06e3688"
-CENSUS_B_SHA = "545c02b5bec8294859292512d9393b13247b7bf2f6e32df9d55a8a9357a75890"
-CENSUS_C_SHA = "d310690c629ac0141a97bf760f2c3c86c942a7c4e4d2d3abb9e253eb2c537250"
+CORRECTED_B100 = "200797f9c287ab213d6007fc9c7d542e55bb3a2b2752459ec5569da796d5da8c"
+CENSUS_A_SHA = "d3fa78d0b20596806a673250de3eb6ad4672236c83dc41930fabbb5112249076"
+CENSUS_B_SHA = "19022712e51189edbf76b6cdb4d67d5c07b73b32ac6628551a3a58ee5f89e2b0"
+CENSUS_C_SHA = "755d1a2b35df4fc10f8f1298246d8fabece5ac92375e42859decd421b2b7f8a6"
 NDC_XLSX_SHA = "ab1a8c00c142e6c4cd1412d745275ac4521064e946d535a4c7db470665bf4e20"
 EARTH_RADIUS_M = 1852 * 10800 / math.pi
 LIVE_D2 = (
@@ -249,6 +249,21 @@ def test_census_files_match_ndc_08012026_reconstruction_and_digests() -> None:
         assert row["coordinate_provenance"].startswith("NDC Library Navigation Facilities 08012026")
         assert row["wtwy"] is not None
         assert row["inclusion_rationale"].startswith("FAC_TYPE=Dock")
+        rec = next(
+            item
+            for item in rows_a
+            if str(item["NAV_UNIT_ID"]) == row["nav_unit_id"]
+        )
+        src_purpose = rec.get("PURPOSE")
+        if src_purpose is None or (isinstance(src_purpose, float) and math.isnan(src_purpose)):
+            assert row["purpose"] is None
+        else:
+            assert row["purpose"] == str(src_purpose)
+        src_comm = rec.get("COMMODITIES")
+        if src_comm is None or (isinstance(src_comm, float) and math.isnan(src_comm)):
+            assert row["commodities"] is None
+        else:
+            assert row["commodities"] == str(src_comm)
 
 
 def test_recommended_default_is_census_a_live_d2_only() -> None:

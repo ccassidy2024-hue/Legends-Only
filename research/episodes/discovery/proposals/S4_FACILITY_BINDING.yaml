@@ -66,7 +66,7 @@ fgis_registered_exporters:
 
 recommended_census_id: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP
 recommended_census_file: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml
-recommended_census_sha256: "eb8e43cde2904406e6a6718675c30dd2c6afdbe19996ef98b611e411c06e3688"
+recommended_census_sha256: "d3fa78d0b20596806a673250de3eb6ad4672236c83dc41930fabbb5112249076"
 row_count: 677
 completeness_claim: NOT_CLAIMED
 inclusion_rule: >-
@@ -78,7 +78,7 @@ inclusion_rule: >-
 
 default_facility_rows:
   source_file: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml
-  sha256: "eb8e43cde2904406e6a6718675c30dd2c6afdbe19996ef98b611e411c06e3688"
+  sha256: "d3fa78d0b20596806a673250de3eb6ad4672236c83dc41930fabbb5112249076"
   row_count: 677
   compact_copy: FULL_CONFIG_B100_S4_CORRECTED.yaml s4_node_registry.nodes
   per_row_bindings:
@@ -100,7 +100,7 @@ census_variants:
   - id: A
     selector: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP
     file: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml
-    sha256: "eb8e43cde2904406e6a6718675c30dd2c6afdbe19996ef98b611e411c06e3688"
+    sha256: "d3fa78d0b20596806a673250de3eb6ad4672236c83dc41930fabbb5112249076"
     row_count: 677
     recommended: true
     least_change: true
@@ -115,7 +115,7 @@ census_variants:
   - id: B
     selector: S4_CENSUS_B_WCSC_D2GRAIN_DOCK_COMMODITIES
     file: S4_CENSUS_B_WCSC_D2GRAIN_DOCK_COMMODITIES.yaml
-    sha256: "545c02b5bec8294859292512d9393b13247b7bf2f6e32df9d55a8a9357a75890"
+    sha256: "19022712e51189edbf76b6cdb4d67d5c07b73b32ac6628551a3a58ee5f89e2b0"
     row_count: 593
     recommended: false
     rule: Same as A except grain token must appear in COMMODITIES
@@ -127,7 +127,7 @@ census_variants:
   - id: C
     selector: S4_CENSUS_C_WCSC_D2GRAIN_EXPORT_BASINS
     file: S4_CENSUS_C_WCSC_D2GRAIN_EXPORT_BASINS.yaml
-    sha256: "d310690c629ac0141a97bf760f2c3c86c942a7c4e4d2d3abb9e253eb2c537250"
+    sha256: "755d1a2b35df4fc10f8f1298246d8fabece5ac92375e42859decd421b2b7f8a6"
     row_count: 330
     recommended: false
     rule: Same as A restricted to lower_mississippi and columbia_snake
