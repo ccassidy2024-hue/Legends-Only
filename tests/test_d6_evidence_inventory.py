@@ -1,43 +1,44 @@
-"""Focused tests for D6 evidence-pack inventory (outcome-blind; no remint)."""
+"""Focused tests for D6 evidence inventory (pointer verification / field-sufficiency)."""
 
 from __future__ import annotations
 
+import csv
 import hashlib
 from pathlib import Path
 
 import pytest
 import yaml
 
+from grainsys.discovery.candidate_universe import (
+    CANONICAL_CANDIDATE_UNIVERSE_MANIFEST_RELATIVE,
+    CANONICAL_CANDIDATES_RELATIVE,
+)
 from grainsys.discovery.capture import capture_candidate_evidence
 from grainsys.discovery.evidence_inventory import (
     BLOCKER_CAPTURE_STORE_MISSING,
+    FORBIDDEN_INVENTORY_FIELDS,
     FROZEN_CANDIDATE_COUNT,
     FROZEN_CANDIDATE_UNIVERSE_VERSION,
     FROZEN_CANDIDATES_DIGEST,
     FROZEN_HIT_SET_DIGEST,
     FROZEN_S1_COUNT,
     FROZEN_S4_COUNT,
-    HURDAT2_ATLANTIC_URL,
-    HURDAT2_PACIFIC_URL,
-    INVENTORY_RELATIVE,
+    HURDAT2_ARCHIVES,
+    I2_BODY_NOT_ADJUDICATED,
+    I2_NEEDS_PRIMARY,
+    I2_UNKNOWN,
+    INVENTORY_CSV_FIELDNAMES,
+    INVENTORY_CSV_RELATIVE,
     INVENTORY_SCHEMA_RELATIVE,
-    STATUS_MANIFEST_GAP,
-    STATUS_MISSING,
-    STATUS_UNKNOWN,
-    STATUS_VERIFIED,
+    INVENTORY_SUMMARY_RELATIVE,
     EvidenceInventoryError,
-    FrozenPointer,
-    enrich_hurdat2_archive_if_present,
-    hurdat2_archive_specs,
-    hurdat2_capture_candidate_id,
-    load_frozen_d5_identity,
-    load_frozen_pointers,
-    render_inventory_yaml,
-    run_d6_evidence_inventory,
-    verify_hurdat2_archive,
-    verify_pointer_object,
+    _check_object_and_manifest,
+    build_evidence_inventory,
+    enrich_existing_capture_dir,
+    find_capture_data_root,
+    s1_field_sufficiency,
+    s4_field_sufficiency,
 )
-from grainsys.discovery.execute_v2_families import S4_ATLANTIC_SHA256, S4_PACIFIC_SHA256
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -46,399 +47,268 @@ def _sha(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def _pointer(tmp_path: Path, *, sweep: str, capture_id: str, payload: bytes) -> FrozenPointer:
+def test_hurdat2_dir_prefixes_match_authorized_url_hashes() -> None:
+    for archive in HURDAT2_ARCHIVES:
+        got = _sha(archive["source_reference"].encode())[:12]
+        assert archive["dir_prefix"] == f"S4-hurdat-{got}"
+
+
+def test_s4_i2_always_needs_primary_operational_even_if_verified() -> None:
+    verified = s4_field_sufficiency(pointer_status="verified")
+    missing = s4_field_sufficiency(pointer_status="unknown")
+    assert verified["i2_field_sufficiency"] == I2_NEEDS_PRIMARY
+    assert missing["i2_field_sufficiency"] == I2_NEEDS_PRIMARY
+    assert verified["public_anchor_sufficiency"] == I2_NEEDS_PRIMARY
+    assert verified["event_mechanism_sufficiency"] == I2_NEEDS_PRIMARY
+    assert verified["driver_identity_sufficiency"] == "sufficient_from_hurdat2_registry"
+    assert missing["driver_identity_sufficiency"] == "unknown"
+
+
+def test_s1_unreadable_body_is_unknown_not_zero() -> None:
+    unread = s1_field_sufficiency(pointer_status="unknown")
+    present = s1_field_sufficiency(pointer_status="verified")
+    assert unread["i2_field_sufficiency"] == I2_UNKNOWN
+    assert present["i2_field_sufficiency"] == I2_BODY_NOT_ADJUDICATED
+
+
+def test_pointer_verified_requires_object_and_manifest(tmp_path: Path) -> None:
+    payload = b"inventory-fixture"
+    digest = _sha(payload)
     rec = capture_candidate_evidence(
-        sweep_id=sweep,
-        candidate_id=capture_id,
+        sweep_id="S1",
+        candidate_id="S1-LRH-2020-0001",
         raw_bytes=payload,
-        source_reference="doc-a",
+        source_reference="LRH-2020-0001",
         sweeps_subdir="sweeps",
         data_root_path=tmp_path,
     )
-    return FrozenPointer(
-        candidate_id="CAND-0001",
-        sweep_id=sweep,
-        source_reference="doc-a",
-        raw_capture_pointer=f"sweeps/{sweep}/{capture_id}/objects/{rec.sha256}",
-        expected_sha256=rec.sha256,
-        capture_id=capture_id,
+    assert rec.sha256 == digest
+    pointer = f"sweeps/S1/S1-LRH-2020-0001/objects/{digest}"
+    status, observed, man = _check_object_and_manifest(
+        data_root=tmp_path, pointer=pointer
     )
+    assert status == "verified"
+    assert observed == digest
+    assert man == "verified"
 
 
-def test_frozen_d5_identity_byte_identical() -> None:
-    ident = load_frozen_d5_identity(REPO)
-    assert ident.candidate_count == FROZEN_CANDIDATE_COUNT
-    assert ident.s1_count == FROZEN_S1_COUNT
-    assert ident.s4_count == FROZEN_S4_COUNT
-    assert ident.hit_set_digest == FROZEN_HIT_SET_DIGEST
-    assert ident.candidates_digest == FROZEN_CANDIDATES_DIGEST
-    assert ident.candidate_universe_version == FROZEN_CANDIDATE_UNIVERSE_VERSION
-    assert ident.cand_ids_unchanged is True
-    assert ident.candidate_universe_version_unchanged is True
-    assert ident.first_candidate_id == "CAND-0001"
-    assert ident.last_candidate_id == "CAND-4234"
-    assert _sha(ident.candidates_csv_bytes) == FROZEN_CANDIDATES_DIGEST
-
-
-def test_frozen_pointers_count_and_no_empty() -> None:
-    ident = load_frozen_d5_identity(REPO)
-    pointers = load_frozen_pointers(ident)
-    assert len(pointers) == 4234
-    assert sum(1 for p in pointers if p.sweep_id == "S1") == 37
-    assert sum(1 for p in pointers if p.sweep_id == "S4") == 4197
-    assert all(p.raw_capture_pointer for p in pointers)
-    assert all(p.expected_sha256 == p.raw_capture_pointer.rsplit("/", 1)[-1] for p in pointers)
-
-
-def test_hurdat2_expected_sha256_matches_v2_executor() -> None:
-    specs = hurdat2_archive_specs()
-    assert specs[0].url == HURDAT2_ATLANTIC_URL
-    assert specs[1].url == HURDAT2_PACIFIC_URL
-    assert specs[0].expected_sha256 == S4_ATLANTIC_SHA256
-    assert specs[1].expected_sha256 == S4_PACIFIC_SHA256
-    assert specs[0].capture_id == hurdat2_capture_candidate_id(HURDAT2_ATLANTIC_URL)
-    assert specs[1].capture_id == hurdat2_capture_candidate_id(HURDAT2_PACIFIC_URL)
-    assert specs[0].capture_id == "S4-hurdat-acff99953be3"
-    assert specs[1].capture_id == "S4-hurdat-11be4a281f9a"
-
-
-def test_hurdat2_urls_match_ratified_prereg_endpoints() -> None:
-    cfg = yaml.safe_load(
-        (REPO / "config/discovery/prereg_rules.yaml").read_text(encoding="utf-8")
-    )
-    s4 = next(a for a in cfg["source_archives"] if a["sweep_id"] == "S4")
-    assert s4["endpoints"] == [HURDAT2_ATLANTIC_URL, HURDAT2_PACIFIC_URL]
-
-
-def test_verified_pointer_matches_manifest_and_sha(tmp_path: Path) -> None:
-    pointer = _pointer(tmp_path, sweep="S1", capture_id="S1-LRH-2020-0001", payload=b"raw-a")
-    chk = verify_pointer_object(pointer, store_root=tmp_path, store_blocker=None)
-    assert chk.status == STATUS_VERIFIED
-
-
-def test_missing_object_is_missing_not_zero(tmp_path: Path) -> None:
-    (tmp_path / "sweeps" / "S1").mkdir(parents=True)
-    pointer = FrozenPointer(
-        candidate_id="CAND-0001",
-        sweep_id="S1",
-        source_reference="doc-a",
-        raw_capture_pointer="sweeps/S1/S1-LRH-2020-0001/objects/" + ("a" * 64),
-        expected_sha256="a" * 64,
-        capture_id="S1-LRH-2020-0001",
-    )
-    chk = verify_pointer_object(pointer, store_root=tmp_path, store_blocker=None)
-    assert chk.status == STATUS_MISSING
-    assert chk.status != STATUS_VERIFIED
-
-
-def test_store_absent_is_unknown_not_verified() -> None:
-    pointer = FrozenPointer(
-        candidate_id="CAND-0001",
-        sweep_id="S1",
-        source_reference="doc-a",
-        raw_capture_pointer="sweeps/S1/S1-LRH-2020-0001/objects/" + ("b" * 64),
-        expected_sha256="b" * 64,
-        capture_id="S1-LRH-2020-0001",
-    )
-    chk = verify_pointer_object(
-        pointer,
-        store_root=None,
-        store_blocker=BLOCKER_CAPTURE_STORE_MISSING,
-    )
-    assert chk.status == STATUS_UNKNOWN
-    assert chk.status != STATUS_VERIFIED
-
-
-def test_manifest_gap_fail_closed(tmp_path: Path) -> None:
-    payload = b"orphan"
+def test_missing_and_corrupt_objects(tmp_path: Path) -> None:
+    payload = b"good-bytes"
     digest = _sha(payload)
-    obj = tmp_path / "sweeps" / "S1" / "S1-X" / "objects" / digest
-    obj.parent.mkdir(parents=True)
-    obj.write_bytes(payload)
-    pointer = FrozenPointer(
-        candidate_id="CAND-0001",
+    missing_pointer = f"sweeps/S1/S1-LRH-2020-0001/objects/{digest}"
+    status, observed, man = _check_object_and_manifest(
+        data_root=tmp_path, pointer=missing_pointer
+    )
+    assert status == "missing"
+    assert observed == ""
+    assert man == "missing"
+
+    capture_candidate_evidence(
         sweep_id="S1",
-        source_reference="doc-a",
-        raw_capture_pointer=f"sweeps/S1/S1-X/objects/{digest}",
-        expected_sha256=digest,
-        capture_id="S1-X",
+        candidate_id="S1-LRH-2020-0001",
+        raw_bytes=payload,
+        source_reference="LRH-2020-0001",
+        sweeps_subdir="sweeps",
+        data_root_path=tmp_path,
     )
-    chk = verify_pointer_object(pointer, store_root=tmp_path, store_blocker=None)
-    assert chk.status == STATUS_MANIFEST_GAP
+    obj = tmp_path / "sweeps" / "S1" / "S1-LRH-2020-0001" / "objects" / digest
+    obj.write_bytes(b"CORRUPTED-CONTENT")
+    status, observed, man = _check_object_and_manifest(
+        data_root=tmp_path, pointer=missing_pointer
+    )
+    assert status == "corrupt"
+    assert observed == _sha(b"CORRUPTED-CONTENT")
+    assert man == "mismatch"
 
 
-def test_inventory_does_not_rewrite_frozen_identity(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_unset_root_is_unknown_not_missing() -> None:
+    digest = "a" * 64
+    pointer = f"sweeps/S4/S4-AL012018-WCSC-08UQ/objects/{digest}"
+    status, observed, man = _check_object_and_manifest(data_root=None, pointer=pointer)
+    assert status == "unknown"
+    assert observed == ""
+    assert man == "unknown"
+
+
+def test_discover_capture_root_from_hints(tmp_path: Path) -> None:
+    tree = tmp_path / "grain"
+    (tree / "sweeps" / "S4").mkdir(parents=True)
+    root, origin, searched = find_capture_data_root(
+        search_hints=(tmp_path / "empty", tree)
+    )
+    assert origin == "discovered"
+    assert root == tree
+    assert str(tree) in searched
+
+
+def test_enrich_refuses_minted_cand_dir_and_absent_dir(tmp_path: Path) -> None:
+    with pytest.raises(EvidenceInventoryError, match="CAND-"):
+        enrich_existing_capture_dir(
+            sweep_id="S1",
+            capture_dir="CAND-0001",
+            raw_bytes=b"x",
+            source_reference="doc",
+            data_root_path=tmp_path,
+        )
+    with pytest.raises(EvidenceInventoryError, match="does not exist"):
+        enrich_existing_capture_dir(
+            sweep_id="S1",
+            capture_dir="S1-LRH-2020-0001",
+            raw_bytes=b"x",
+            source_reference="doc",
+            data_root_path=tmp_path,
+        )
+
+
+def test_enrich_appends_to_existing_source_derived_dir(tmp_path: Path) -> None:
+    first = capture_candidate_evidence(
+        sweep_id="S4",
+        candidate_id="S4-AL012018-WCSC-08UQ",
+        raw_bytes=b"node-hit",
+        source_reference="AL012018:WCSC-08UQ",
+        sweeps_subdir="sweeps",
+        data_root_path=tmp_path,
+    )
+    extra = enrich_existing_capture_dir(
+        sweep_id="S4",
+        capture_dir="S4-AL012018-WCSC-08UQ",
+        raw_bytes=b"corroboration",
+        source_reference="authorized-ops-note",
+        data_root_path=tmp_path,
+    )
+    assert extra.sha256 != first.sha256
+    man = yaml.safe_load(
+        (
+            tmp_path
+            / "sweeps"
+            / "S4"
+            / "S4-AL012018-WCSC-08UQ"
+            / "manifest.yaml"
+        ).read_text(encoding="utf-8")
+    )
+    assert [r["source_reference"] for r in man["records"]] == [
+        "AL012018:WCSC-08UQ",
+        "authorized-ops-note",
+    ]
+    assert not (tmp_path / "episodes").exists()
+    assert not list(tmp_path.glob("**/CAND-*"))
+
+
+def test_build_inventory_unknown_without_data_root_does_not_mutate_d5(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.delenv("GRAIN_DATA_ROOT", raising=False)
-    csv_path = REPO / "research/episodes/discovery/candidates/candidates.csv"
-    man_path = REPO / "research/episodes/discovery/candidates/candidate_universe.yaml"
-    csv_before = csv_path.read_bytes()
-    man_before = man_path.read_bytes()
-    report = run_d6_evidence_inventory(
+    before_csv = (REPO / CANONICAL_CANDIDATES_RELATIVE).read_bytes()
+    before_man = (REPO / CANONICAL_CANDIDATE_UNIVERSE_MANIFEST_RELATIVE).read_bytes()
+    result = build_evidence_inventory(
         repo_root=REPO,
-        data_root_path=tmp_path / "no-such-root",
-        refetch_hurdat2=False,
+        search_hints=(tmp_path / "nope",),
         persist=False,
     )
-    assert csv_path.read_bytes() == csv_before
-    assert man_path.read_bytes() == man_before
-    assert report.cand_ids_unchanged is True
-    assert report.candidate_universe_version_unchanged is True
-    assert report.complete is False
-    assert report.blocker == BLOCKER_CAPTURE_STORE_MISSING
-    assert report.pointers_expected == 4234
-    assert report.pointers_verified == 0
-    assert report.hurdat2_expected == 2
-    assert report.hurdat2_capture_verified == 0
+    assert result.access_gate == BLOCKER_CAPTURE_STORE_MISSING
+    assert result.candidate_universe_version == FROZEN_CANDIDATE_UNIVERSE_VERSION
+    assert result.hit_set_digest == FROZEN_HIT_SET_DIGEST
+    assert result.candidates_digest == FROZEN_CANDIDATES_DIGEST
+    assert result.candidate_count == FROZEN_CANDIDATE_COUNT
+    assert result.counts["S1"]["unknown"] == FROZEN_S1_COUNT
+    assert result.counts["S4"]["unknown"] == FROZEN_S4_COUNT
+    assert result.counts["S1"]["missing"] == 0
+    assert result.counts["S4"]["missing"] == 0
+    assert result.hurdat2_counts["unknown"] == 2
+    assert result.enrichment_count == 0
+    assert {row.sweep_id for row in result.rows} == {"S1", "S4"}
+    assert len({row.candidate_id for row in result.rows}) == FROZEN_CANDIDATE_COUNT
+    s4_dirs = {row.capture_dir for row in result.rows if row.sweep_id == "S4"}
+    assert not any(name.startswith("CAND-") for name in s4_dirs)
+    storms = {row.capture_dir.split("-")[1] for row in result.rows if row.sweep_id == "S4"}
+    assert len(storms) > 1
+    assert (REPO / CANONICAL_CANDIDATES_RELATIVE).read_bytes() == before_csv
+    assert (REPO / CANONICAL_CANDIDATE_UNIVERSE_MANIFEST_RELATIVE).read_bytes() == before_man
+    real_eps = [
+        p
+        for p in (REPO / "research/episodes/entries").glob("*.yaml")
+        if not p.name.startswith("EP-0000-000")
+    ]
+    assert real_eps == []
 
 
-def test_unset_grain_data_root_unknown_all_pointers(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_explicit_empty_root_counts_missing_not_unknown(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.delenv("GRAIN_DATA_ROOT", raising=False)
-    report = run_d6_evidence_inventory(
-        repo_root=REPO,
-        data_root_path=None,
-        refetch_hurdat2=False,
-        persist=False,
-    )
-    assert report.blocker == BLOCKER_CAPTURE_STORE_MISSING
-    assert report.grain_data_root_set is False
-    assert report.capture_store_present is False
-    assert report.pointers_verified == 0
-    assert report.pointers_unknown == 4234
-    assert report.pointers_missing == 0
-    assert report.hurdat2_capture_unknown == 2
-    assert report.complete is False
-
-
-def test_empty_sweeps_dir_counts_missing(tmp_path: Path) -> None:
-    (tmp_path / "sweeps").mkdir()
-    report = run_d6_evidence_inventory(
+    result = build_evidence_inventory(
         repo_root=REPO,
         data_root_path=tmp_path,
-        refetch_hurdat2=False,
         persist=False,
     )
-    assert report.blocker == BLOCKER_CAPTURE_STORE_MISSING
-    assert report.capture_store_present is True
-    assert report.pointers_verified == 0
-    assert report.pointers_missing == 4234
-    assert report.pointers_unknown == 0
-    assert report.hurdat2_capture_missing == 2
-    assert report.hurdat2_capture_verified == 0
+    assert result.access_gate == BLOCKER_CAPTURE_STORE_MISSING
+    assert result.counts["S1"]["missing"] == FROZEN_S1_COUNT
+    assert result.counts["S4"]["missing"] == FROZEN_S4_COUNT
+    assert result.counts["S1"]["unknown"] == 0
+    assert result.hurdat2_counts["missing"] == 2
+    assert all(row.i2_field_sufficiency == I2_NEEDS_PRIMARY for row in result.rows if row.sweep_id == "S4")
 
 
-def test_hurdat2_public_refetch_mocked_does_not_invent_capture(tmp_path: Path) -> None:
-    atlantic = b"ATLANTIC-BYTES"
-    pacific = b"PACIFIC-BYTES"
-    # Digests will not match expected frozen SHA256; mock still returns bytes.
-    calls: list[str] = []
+def test_schema_documents_inventory_shape() -> None:
+    schema = yaml.safe_load((REPO / INVENTORY_SCHEMA_RELATIVE).read_text(encoding="utf-8"))
+    assert schema["record_kind"] == "d6_evidence_inventory"
+    assert schema["csv_required_fields"] == list(INVENTORY_CSV_FIELDNAMES)
+    assert "episode_id" in schema["forbidden_fields"]
+    assert "reason_code" in schema["forbidden_fields"]
+    assert FORBIDDEN_INVENTORY_FIELDS <= set(schema["forbidden_fields"])
+
+
+def test_committed_inventory_is_d5_keyed_when_present() -> None:
+    csv_path = REPO / INVENTORY_CSV_RELATIVE
+    summary_path = REPO / INVENTORY_SUMMARY_RELATIVE
+    if not csv_path.is_file() or not summary_path.is_file():
+        pytest.skip("derived inventory not persisted in this tree")
+    summary = yaml.safe_load(summary_path.read_text(encoding="utf-8"))
+    assert summary["candidate_universe_version"] == FROZEN_CANDIDATE_UNIVERSE_VERSION
+    assert summary["hit_set_digest"] == FROZEN_HIT_SET_DIGEST
+    assert summary["candidates_digest"] == FROZEN_CANDIDATES_DIGEST
+    assert summary["candidate_count"] == FROZEN_CANDIDATE_COUNT
+    assert hashlib.sha256(csv_path.read_bytes()).hexdigest() == summary["inventory_csv_digest"]
+    with csv_path.open(encoding="utf-8", newline="") as fh:
+        rows = list(csv.DictReader(fh))
+    assert list(rows[0].keys()) == list(INVENTORY_CSV_FIELDNAMES)
+    assert len(rows) == FROZEN_CANDIDATE_COUNT
+    with (REPO / CANONICAL_CANDIDATES_RELATIVE).open(encoding="utf-8", newline="") as fh:
+        cand = list(csv.DictReader(fh))
+    assert [r["candidate_id"] for r in rows] == [r["candidate_id"] for r in cand]
+    assert all(set(FORBIDDEN_INVENTORY_FIELDS).isdisjoint(row) for row in rows)
+    s4 = [r for r in rows if r["sweep_id"] == "S4"]
+    assert len(s4) == FROZEN_S4_COUNT
+    assert all(r["i2_field_sufficiency"] == I2_NEEDS_PRIMARY for r in s4)
+    assert not any(r["capture_dir"].startswith("CAND-") for r in rows)
+    assert not (REPO / "research/episodes/discovery/candidates/no_episode_dispositions.csv").exists()
+    assert summary["access_gate"] == BLOCKER_CAPTURE_STORE_MISSING
+    assert summary.get("hurdat2_public_verified") == 2
+    for rec in summary["hurdat2_archives"]:
+        assert rec["pointer_status"] == "unknown"
+        assert rec["public_refetch_status"] == "verified"
+        assert rec["public_observed_sha256"] == rec["expected_sha256"]
+
+
+def test_hurdat2_public_refetch_does_not_invent_capture(tmp_path: Path) -> None:
+    payloads = {
+        HURDAT2_ARCHIVES[0]["source_reference"]: b"not-the-atlantic-archive",
+        HURDAT2_ARCHIVES[1]["source_reference"]: b"not-the-pacific-archive",
+    }
 
     def fake_fetch(url: str, *, timeout: int = 120):
-        calls.append(url)
-        if "nepac" in url:
-            return True, pacific, None
-        return True, atlantic, None
+        return True, payloads[url], None
 
     (tmp_path / "sweeps").mkdir()
-    report = run_d6_evidence_inventory(
+    result = build_evidence_inventory(
         repo_root=REPO,
         data_root_path=tmp_path,
-        refetch_hurdat2=True,
-        enrich_hurdat2=True,
         persist=False,
+        refetch_hurdat2=True,
         fetch_fn=fake_fetch,
     )
-    assert report.hurdat2_public_verified == 0  # digest mismatch; not invented
-    assert report.enrichment_appended == 0
+    assert result.hurdat2_public_verified == 0
+    assert all(h.public_refetch_status == "mismatch" for h in result.hurdat2)
     assert not (tmp_path / "sweeps" / "S4").exists()
-    assert report.blocker == BLOCKER_CAPTURE_STORE_MISSING
-    assert set(calls) == {HURDAT2_ATLANTIC_URL, HURDAT2_PACIFIC_URL}
-
-
-def test_append_only_enrichment_requires_existing_dir(tmp_path: Path) -> None:
-    spec = hurdat2_archive_specs()[0]
-    created = enrich_hurdat2_archive_if_present(
-        spec, store_root=tmp_path, raw_bytes=b"x" * 10
-    )
-    assert created is False
-    assert not (tmp_path / "sweeps" / "S4" / spec.capture_id).exists()
-
-
-def test_append_only_enrichment_idempotent_on_existing_dir(tmp_path: Path) -> None:
-    spec = hurdat2_archive_specs()[0]
-    payload = b"hurdat-archive-bytes"
-    # Existing capture dir (not a D5 remint).
-    capture_candidate_evidence(
-        sweep_id="S4",
-        candidate_id=spec.capture_id,
-        raw_bytes=payload,
-        source_reference=spec.url,
-        sweeps_subdir="sweeps",
-        data_root_path=tmp_path,
-        original_filename=spec.url.rsplit("/", 1)[-1],
-        content_type="text/plain",
-    )
-    man1 = yaml.safe_load(
-        (tmp_path / "sweeps" / "S4" / spec.capture_id / "manifest.yaml").read_text(
-            encoding="utf-8"
-        )
-    )
-    # Wrong digest must refuse rather than overwrite.
-    with pytest.raises(EvidenceInventoryError, match="refuse to enrich"):
-        enrich_hurdat2_archive_if_present(
-            spec, store_root=tmp_path, raw_bytes=payload
-        )
-    # Matching digest (spec expected SHA is the real HURDAT2 hash, not payload).
-    # Persist the real expected digest as the object name by using expected bytes
-    # only when we construct a matching payload — here we only check no overwrite
-    # of the existing object after a second identical capture_candidate_evidence.
-    rec = capture_candidate_evidence(
-        sweep_id="S4",
-        candidate_id=spec.capture_id,
-        raw_bytes=payload,
-        source_reference=spec.url,
-        sweeps_subdir="sweeps",
-        data_root_path=tmp_path,
-        original_filename=spec.url.rsplit("/", 1)[-1],
-        content_type="text/plain",
-    )
-    obj = tmp_path / "sweeps" / "S4" / spec.capture_id / "objects" / rec.sha256
-    assert obj.read_bytes() == payload
-    man2 = yaml.safe_load(
-        (tmp_path / "sweeps" / "S4" / spec.capture_id / "manifest.yaml").read_text(
-            encoding="utf-8"
-        )
-    )
-    assert man2["records"] == man1["records"]
-
-
-def test_hurdat2_local_object_verified(tmp_path: Path) -> None:
-    spec = hurdat2_archive_specs()[0]
-    payload = b"local-hurdat"
-    # Store under the expected sha filename only after capture hashes payload.
-    rec = capture_candidate_evidence(
-        sweep_id="S4",
-        candidate_id=spec.capture_id,
-        raw_bytes=payload,
-        source_reference=spec.url,
-        sweeps_subdir="sweeps",
-        data_root_path=tmp_path,
-    )
-    # The real expected SHA is the published archive digest, not this payload.
-    chk = verify_hurdat2_archive(
-        spec,
-        store_root=tmp_path,
-        store_blocker=None,
-        refetch=False,
-    )
-    assert rec.sha256 != spec.expected_sha256
-    assert chk.capture_object_status == STATUS_MISSING
-
-    # Place a correctly named object + manifest via capture of bytes whose hash
-    # cannot be forced; instead, copy bytes to expected filename only if we
-    # also update spec — we must not invent the published digest. Missing is
-    # the correct fail-closed result for a non-matching local object name.
-    assert chk.capture_object_status != STATUS_VERIFIED
-
-
-def test_hurdat2_verified_when_object_named_for_expected_digest(tmp_path: Path) -> None:
-    spec = hurdat2_archive_specs()[0]
-    # Capture writes objects/<sha(payload)>. To verify the archive path we need
-    # objects/<expected_sha256>. Use a stub spec-equivalent by writing through
-    # capture and then checking a second spec built from that payload.
-    payload = b"digest-named-archive"
-    rec = capture_candidate_evidence(
-        sweep_id="S4",
-        candidate_id=spec.capture_id,
-        raw_bytes=payload,
-        source_reference=spec.url,
-        sweeps_subdir="sweeps",
-        data_root_path=tmp_path,
-    )
-    from grainsys.discovery.evidence_inventory import Hurdat2ArchiveSpec
-
-    local_spec = Hurdat2ArchiveSpec(spec.basin, spec.url, rec.sha256)
-    assert local_spec.capture_id == spec.capture_id
-    chk = verify_hurdat2_archive(
-        local_spec,
-        store_root=tmp_path,
-        store_blocker=None,
-        refetch=False,
-    )
-    assert chk.capture_object_status == STATUS_VERIFIED
-
-
-def test_persist_writes_inventory_not_candidates(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.delenv("GRAIN_DATA_ROOT", raising=False)
-    # Persist into a copy of repo identity files under tmp by using live repo
-    # persist=True would write into the workspace; use a sandbox replica of
-    # the two frozen artifacts plus schema path.
-    sandbox = tmp_path / "repo"
-    cand_dir = sandbox / "research/episodes/discovery/candidates"
-    cand_dir.mkdir(parents=True)
-    src = REPO / "research/episodes/discovery/candidates"
-    (cand_dir / "candidates.csv").write_bytes((src / "candidates.csv").read_bytes())
-    (cand_dir / "candidate_universe.yaml").write_bytes(
-        (src / "candidate_universe.yaml").read_bytes()
-    )
-    csv_before = (cand_dir / "candidates.csv").read_bytes()
-    man_before = (cand_dir / "candidate_universe.yaml").read_bytes()
-    report = run_d6_evidence_inventory(
-        repo_root=sandbox,
-        data_root_path=None,
-        refetch_hurdat2=False,
-        persist=True,
-    )
-    assert (sandbox / INVENTORY_RELATIVE).is_file()
-    assert (cand_dir / "candidates.csv").read_bytes() == csv_before
-    assert (cand_dir / "candidate_universe.yaml").read_bytes() == man_before
-    loaded = yaml.safe_load((sandbox / INVENTORY_RELATIVE).read_text(encoding="utf-8"))
-    assert loaded["blocker"] == BLOCKER_CAPTURE_STORE_MISSING
-    assert loaded["complete"] is False
-    assert loaded["frozen_d5"]["candidate_universe_version"] == FROZEN_CANDIDATE_UNIVERSE_VERSION
-    assert loaded["pointers"]["expected"] == 4234
-    assert loaded["pointers"]["verified"] == 0
-    assert loaded["hurdat2_archives"]["expected"] == 2
-    assert "market_outcome" not in loaded
-    assert report.cand_ids_unchanged is True
-    again = render_inventory_yaml(report)
-    assert again == (sandbox / INVENTORY_RELATIVE).read_bytes()
-
-
-def test_committed_inventory_yaml_fail_closed_identity() -> None:
-    path = REPO / INVENTORY_RELATIVE
-    data = yaml.safe_load(path.read_text(encoding="utf-8"))
-    assert data["record_kind"] == "d6_evidence_pack_inventory"
-    assert data["complete"] is False
-    assert data["blocker"] == BLOCKER_CAPTURE_STORE_MISSING
-    assert data["frozen_d5"]["candidate_count"] == 4234
-    assert data["frozen_d5"]["candidates_digest"] == FROZEN_CANDIDATES_DIGEST
-    assert data["frozen_d5"]["hit_set_digest"] == FROZEN_HIT_SET_DIGEST
-    assert data["frozen_d5"]["candidate_universe_version"] == FROZEN_CANDIDATE_UNIVERSE_VERSION
-    assert data["frozen_d5"]["cand_ids_unchanged"] is True
-    assert data["pointers"]["expected"] == 4234
-    assert data["pointers"]["verified"] == 0
-    assert data["pointers"]["unknown"] == 4234
-    assert data["hurdat2_archives"]["expected"] == 2
-    assert data["hurdat2_archives"]["capture_verified"] == 0
-    assert data["hurdat2_archives"]["public_refetch_verified"] == 2
-    assert data["enrichment_appended"] == 0
-    sha = {r["basin"]: r["expected_sha256"] for r in data["hurdat2_archives"]["records"]}
-    assert sha["atlantic"] == S4_ATLANTIC_SHA256
-    assert sha["pacific"] == S4_PACIFIC_SHA256
-
-
-def test_inventory_schema_documents_fail_closed_shape() -> None:
-    schema = yaml.safe_load((REPO / INVENTORY_SCHEMA_RELATIVE).read_text(encoding="utf-8"))
-    assert schema["record_kind"] == "d6_evidence_pack_inventory"
-    assert "CAPTURE_STORE_MISSING" in schema["blocker_vocabulary"]
-    assert "unknown" in schema["pointer_status_vocabulary"]
-    assert "market_outcome" in schema["forbidden_fields"]
-    assert "h7_survivor" in schema["forbidden_fields"]
-
-
-def test_cli_nonzero_on_blocker(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.delenv("GRAIN_DATA_ROOT", raising=False)
-    from grainsys.discovery.evidence_inventory import main
-
-    rc = main(["--repo-root", str(REPO)])
-    assert rc == 2
+    assert result.access_gate == BLOCKER_CAPTURE_STORE_MISSING
+    assert result.enrichment_count == 0

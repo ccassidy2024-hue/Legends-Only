@@ -1,0 +1,100 @@
+schema_version: '1.0'
+record_kind: d6_evidence_inventory
+candidate_universe_version: d5cu-1cb416ee3b6e9103b4edd60748865d7dd147c80611adfb6c6b5b37eba5258d97
+hit_set_digest: 1cb416ee3b6e9103b4edd60748865d7dd147c80611adfb6c6b5b37eba5258d97
+candidates_digest: df7f7ffb41f339d75d6a8a2ef68ab113c70490822e03ad21c9ebd8e26dae2c66
+candidate_count: 4234
+inventory_csv_relative: research/episodes/discovery/d6_evidence_inventory.csv
+inventory_csv_digest: 09d6a59095fd5a4e66bb910541adafed6f6e9ff0a3bc8ce72b8ca2e404ea6b1d
+access_gate: CAPTURE_STORE_MISSING
+data_root_status: unavailable
+data_root: null
+searched_paths:
+- /data
+- /data/grain
+- /data/grainsys
+- /data/grain_data
+- /workspace/data
+- /workspace/data/raw
+- /tmp/grain_data
+- /tmp/grainsys
+- /opt/grain_data
+- /opt/grainsys
+- /var/lib/grain
+- /var/lib/grainsys
+- /home/ubuntu/grain_data
+- /home/ubuntu/grainsys-data
+- /mnt/grain_data
+- /mnt/data
+pointer_counts:
+  S1:
+    verified: 0
+    missing: 0
+    corrupt: 0
+    unknown: 37
+  S4:
+    verified: 0
+    missing: 0
+    corrupt: 0
+    unknown: 4197
+hurdat2_archives:
+- basin: atlantic
+  dir_prefix: S4-hurdat-acff99953be3
+  expected_sha256: 1b9b0c7beed5b4505838658b1d30e159fc84330c60891a58cfcf43ae55c37202
+  pointer_status: unknown
+  observed_sha256: null
+  manifest_status: unknown
+  capture_dir: S4-hurdat-acff99953be3
+  public_refetch_status: verified
+  public_observed_sha256: 1b9b0c7beed5b4505838658b1d30e159fc84330c60891a58cfcf43ae55c37202
+- basin: pacific
+  dir_prefix: S4-hurdat-11be4a281f9a
+  expected_sha256: db65f8bc538d5c05e15f738c96111861d6ce3572c007879de58e44d4d05a9cd6
+  pointer_status: unknown
+  observed_sha256: null
+  manifest_status: unknown
+  capture_dir: S4-hurdat-11be4a281f9a
+  public_refetch_status: verified
+  public_observed_sha256: db65f8bc538d5c05e15f738c96111861d6ce3572c007879de58e44d4d05a9cd6
+hurdat2_counts:
+  verified: 0
+  missing: 0
+  corrupt: 0
+  unknown: 2
+hurdat2_public_verified: 2
+enrichment_count: 0
+s4_field_sufficiency:
+  census_variant: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP
+  census_nodes: 677
+  track_geometry: POINT_ONLY
+  proximity_radius_nm: 100
+  boundary_inequality: inclusive_<=
+  already_sufficient_from_hurdat2_and_registry_when_object_verified:
+  - storm_id
+  - node_id
+  - node_coordinates
+  - point_only_100nm_proximity_fact
+  - first_matching_position_timestamp
+  - driver_identity
+  needs_additional_primary_operational_evidence:
+  - i2_operational_materiality
+  - public_anchor
+  - event_mechanism_logistics_consequence
+  protocol_note: A storm track is a driver, not an episode. No blind pre-collapse
+    of 4197 storm-node hits into storm-level D5 rows. H1/H2/H4 grouping happens later
+    at episode authoring.
+s1_field_sufficiency:
+  when_body_unreadable: unknown
+  when_body_verified: body_present_not_adjudicated
+  protocol_note: I1/I2/I3 admission is Phase 2. Inventory does not score or drop candidates.
+notes:
+- GRAIN_DATA_ROOT capture tree is not available on this host.
+- Inaccessible bodies are UNKNOWN (not zero, not coverage-absent).
+- No capture bytes were invented. HURDAT2 storm-node objects were not rebuilt.
+- HURDAT2 public re-fetch verifies digest only and is not a new candidate.
+- S4 I2/public_anchor/event-mechanism remain needs_additional_primary_operational.
+- H1/H2/H4 grouping and episode admission are deferred to Phase 2.
+next_phase2_step: 'After GRAIN_DATA_ROOT restore and pointer re-verification: Phase-2
+  I1/I2/I3 triage per candidate (quote-or-null; S4 requires primary operational evidence
+  beyond HURDAT2 proximity). No episode YAML and no no-episode dispositions in D6
+  inventory.'
