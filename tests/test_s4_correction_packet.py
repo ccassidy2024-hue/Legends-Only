@@ -30,6 +30,8 @@ PACKET_FILES = (
     "S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml",
     "S4_CENSUS_B_WCSC_D2GRAIN_DOCK_COMMODITIES.yaml",
     "S4_CENSUS_C_WCSC_D2GRAIN_EXPORT_BASINS.yaml",
+    "S4_OBSERVED_NATIVE_VALUES.yaml",
+    "S4_FGIS_CORROBORATION.yaml",
     "S4_DISTANCE_POINT_ONLY.yaml",
     "S4_DISTANCE_SEGMENT.yaml",
 )
@@ -368,9 +370,12 @@ def test_fgis_is_corroboration_only_with_public_release_default_no() -> None:
     assert len(rows) == 655
     assert sum(1 for row in rows if row.get("LocationName")) == 0
     fac = _load("S4_FACILITY_BINDING.yaml")
-    assert fac["fgis_registered_exporters"]["join"] == "NO_FACILITY_JOIN"
+    assert fac["fgis_registered_exporters"]["join"] == "EXPLICIT_MATCH_UNMATCH_AMBIGUOUS"
     assert fac["fgis_registered_exporters"]["location_name_nonnull"] == 0
     assert fac["fgis_registered_exporters"]["public_release_default"] == "No"
+    assert fac["fgis_registered_exporters"]["matched_count"] == 1
+    assert fac["fgis_registered_exporters"]["unmatched_count"] == 654
+    assert fac["fgis_registered_exporters"]["ambiguous_count"] == 0
     html = (PROPOSALS / "s4_sources" / "fgis_ddr_export_registration_instructions.html").read_text(
         encoding="utf-8", errors="replace"
     )
@@ -455,6 +460,10 @@ def test_source_family_endpoints_verified_and_no_out_of_d2_hidden() -> None:
     rerelease = provenance["independent_rerelease"]
     assert rerelease["xlsx_sha256"] == NDC_XLSX_SHA
     assert rerelease["xlsx_sha256_unchanged"] is True
+    rereceipt = provenance["independent_rereceipt"]
+    assert rereceipt["sha256"] == NDC_XLSX_SHA
+    assert rereceipt["matches_frozen_bytes"] is True
+    assert rereceipt["http_status"] == 200
     rules = _load("S4_JOIN_RULES.yaml")
     assert "grain" in rules["observed_matching_tokens"]
     assert "wheat" in rules["observed_matching_tokens"]
@@ -462,6 +471,8 @@ def test_source_family_endpoints_verified_and_no_out_of_d2_hidden() -> None:
     atoms = rules["observed_source_native_commodity_atoms_matching_filter"]
     assert "Wheat" in atoms
     assert "Corn" in atoms
+    assert rules["observed_native_values_file"] == "S4_OBSERVED_NATIVE_VALUES.yaml"
+    assert rules["fgis_corroboration_file"] == "S4_FGIS_CORROBORATION.yaml"
 
 
 def test_packet_does_not_modify_production_guard_surfaces() -> None:
@@ -471,3 +482,47 @@ def test_packet_does_not_modify_production_guard_surfaces() -> None:
     live = yaml.safe_load(LIVE_PREREG.read_text(encoding="utf-8"))
     assert "s4_node_registry" not in live
     assert live["schema_version"] == "0.2"
+
+
+def test_fgis_corroboration_binds_matched_unmatched_ambiguous() -> None:
+    fgis = _load("S4_FGIS_CORROBORATION.yaml")
+    assert fgis["row_count"] == 655
+    assert fgis["location_name_nonnull"] == 0
+    assert fgis["matched_count"] == 1
+    assert fgis["unmatched_count"] == 654
+    assert fgis["ambiguous_count"] == 0
+    assert fgis["exhaustive_coverage_claimed"] is False
+    assert fgis["matched_count"] + fgis["unmatched_count"] + fgis["ambiguous_count"] == 655
+    matched = fgis["matched_positive_evidence"]
+    assert matched[0]["nav_unit_id"] == "0V9G"
+    assert matched[0]["exporter_name"] == "Prairie Creek Grain Company, Inc."
+    assert matched[0]["year"] == "2026"
+    unmatched_doc = _load("S4_UNMATCHED_AND_EXPANSIONS.yaml")
+    assert unmatched_doc["fgis_join"]["matched_count"] == 1
+    assert unmatched_doc["fgis_join"]["unmatched_count"] == 654
+    assert unmatched_doc["fgis_join"]["ambiguous_count"] == 0
+    assert len(unmatched_doc["unmatched_grain_token_rows"]) == 1167
+
+
+def test_observed_native_values_file_enumerates_commodities_and_purpose() -> None:
+    observed = _load("S4_OBSERVED_NATIVE_VALUES.yaml")
+    tokens = [
+        row["value"]
+        for row in observed["observed_native_commodities_pipe_tokens_with_grain_in_variant_A"]
+    ]
+    assert tokens == [
+        "Animal Feed, Grain Mill Products, Flour, Processed Grains",
+        "Barley, Rye, Oats, Rice and Sorghum Grains",
+        "Corn",
+        "Oilseeds (Soybean, Flaxseed and Others)",
+        "Wheat",
+    ]
+    assert observed["observed_native_commodities_pipe_token_count"] == 5
+    assert observed["observed_native_purpose_value_count"] == 135
+    counts = {
+        row["value"]: row["included_row_count"]
+        for row in observed["observed_native_commodities_pipe_tokens_with_grain_in_variant_A"]
+    }
+    assert counts["Corn"] == 410
+    assert counts["Wheat"] == 328
+

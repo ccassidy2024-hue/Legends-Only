@@ -47,14 +47,22 @@ fgis_registered_exporters:
   retrieved: true
   row_count: 655
   location_name_nonnull: 0
-  join: NO_FACILITY_JOIN
+  join: EXPLICIT_MATCH_UNMATCH_AMBIGUOUS
+  public_year_filter: "2026"
+  matched_count: 1
+  unmatched_count: 654
+  ambiguous_count: 0
+  matched_nav_unit_id: "0V9G"
+  binding_file: S4_FGIS_CORROBORATION.yaml
   public_release_default: "No"
   role: corroboration_only_not_physical_census
   reason: >-
-    GetFGISExportsList LocationName is null on every row. Official DDR
-    instructions default additional export locations to No for public
-    release. The public FGIS location report is not an exhaustive terminal
-    census and is not used to enumerate S4 nodes.
+    GetFGISExportsList LocationName is null on every row. Exact Year=2026
+    ExporterName=NAV_UNIT_NAME yields one positive-evidence row (Prairie
+    Creek Grain Company, Inc. / 0V9G). Official DDR instructions default
+    additional export locations to No for public release. The public FGIS
+    location report is not an exhaustive terminal census and is not used
+    to enumerate S4 nodes.
 
 recommended_census_id: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP
 recommended_census_file: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml

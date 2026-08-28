@@ -81,4 +81,6 @@ observed_source_native_commodity_atoms_matching_filter:
   Animal Feed, Grain Mill Products, Flour, Processed Grains: 320
   Barley, Rye, Oats, Rice and Sorghum Grains: 219
 observed_purpose_value_count_among_included_rows: 135
+observed_native_values_file: S4_OBSERVED_NATIVE_VALUES.yaml
+fgis_corroboration_file: S4_FGIS_CORROBORATION.yaml
 source_snapshot_sha256: ab1a8c00c142e6c4cd1412d745275ac4521064e946d535a4c7db470665bf4e20

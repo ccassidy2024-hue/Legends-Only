@@ -12,6 +12,14 @@ independent_rerelease:
   xlsx_bytes: 6517079
   xlsx_sha256_unchanged: true
   getdocdatapub_delta: DOWNLOADCOUNT 15 at freeze vs 17 at independent rerelease; frozen getdoc snapshot retained because the census workbook bytes are unchanged
+independent_rereceipt:
+  retrieval_ts: '2026-08-28T00:01:43Z'
+  agent: bc-ca50e3ad-3e7c-5ad0-a771-bb9d614348b4
+  download_url: https://ndclibrary.sec.usace.army.mil/api/download?id=bebe0d17-f103-4ac7-b753-997429a178e5&filename=Navigation%20Facilities%2007%2031%202026.xlsx
+  http_status: 200
+  bytes: 6517079
+  sha256: ab1a8c00c142e6c4cd1412d745275ac4521064e946d535a4c7db470665bf4e20
+  matches_frozen_bytes: true
 user_agent: Mozilla/5.0 (research retrieval for PR44 S4 correction packet)
 sources:
 - id: NDC_LIBRARY_NAVIGATION_FACILITIES_08012026
@@ -40,7 +48,7 @@ sources:
   workbook:
     sheets: [Navigation Facilities, Data Dictionary]
     facility_rows: 20548
-    fields_used: [NAV_UNIT_ID, NAV_UNIT_NAME, FAC_TYPE, LATITUDE, LONGITUDE, WTWY_NAME, PURPOSE, COMMODITIES, DATA_RECORD_STATUS]
+    fields_used: [NAV_UNIT_ID, NAV_UNIT_NAME, FAC_TYPE, LATITUDE, LONGITUDE, WTWY, WTWY_NAME, PURPOSE, COMMODITIES, DATA_RECORD_STATUS]
   coverage_limitations:
   - Official snapshot of navigation facilities, not an FGIS export-elevator census.
   - COMMODITIES/PURPOSE are free-text; word-boundary grain tokens can overinclude general-cargo docks that list wheat/corn among many commodities.
