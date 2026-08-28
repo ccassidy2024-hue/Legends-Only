@@ -1,0 +1,55 @@
+# Empty-sample closeout for Milestones 2–5.
+# Status/docs/tests only. Do not invent series, release_ts, or episode YAML.
+# Do not treat UNKNOWN or missing I2 as zero. Do not open market data.
+
+schema_version: "1"
+marker: M2_NEGATIVE_RESULT_EMPTY_SAMPLE
+m1_merged_main: b7d402713ef5eaed33cdff44f4128382e3b38be7
+m1_reviewed_head: 9812df348c053af3024fd007a4ee486494aac954
+m1_pr: 51
+
+m2:
+  result: M2_NEGATIVE_RESULT_EMPTY_SAMPLE
+  catalogued_real_series: 0
+  real_asof_panel_rows: 0
+  fabricated_observations: false
+  panel_py_changed: false
+  synthetic_panel_and_leakage_tests: already_on_main
+  episode_anchored_sample: empty
+  review_tier_note: >
+    Empty deterministic closeout is C or B-STANDARD. B-RED only if panel.py,
+    as-of joins, release_ts alignment, or core leakage tests change.
+  legal_basis:
+    - ADR-0001 series_id, period_end, release_ts, value; release_ts <= anchor
+    - build_asof_panel is series-keyed, not episode-keyed
+    - M1 N_episodes=0 does not by itself forbid series-based rows
+    - 0 catalogued real series; inventing source IDs or release delays is forbidden
+    - a non-empty real panel would be fabrication
+    - do not resurrect dropped D5 candidates as series or observations
+
+m3:
+  result: NOT_ESTIMABLE
+  reason: zero_ledger_windows
+  n_episodes: 0
+  n_independent_driver_clusters: 0
+  lagscan_is_exploratory_plumbing: true
+  universe_screen_authorized: false
+  min_obs_default: 104
+
+m4:
+  result: NOT_ESTIMABLE
+  reason: zero_identified_shocks
+  local_projections_require_one_identified_shock: true
+  residual_threshold_shock_would_be_tier_a: true
+  early_networkx: false
+
+m5:
+  artifact: research/memos/M5_EMPTY_SAMPLE_FOUR_STATEMENTS.md
+  four_statements_required: true
+  market_outcomes_opened: false
+  gate_f_default: no_mispricing
+
+kill_condition:
+  sample_p: 0
+  threshold_usable_episodes: 6
+  triggered: true

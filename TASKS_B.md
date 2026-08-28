@@ -32,9 +32,9 @@ Build against synthetic fixtures before real USDA/market panels exist.
 ## Current milestone focus
 
 Validate plumbing on synthetic data (done in foundation tests). Milestone 1
-is closed as an empty-ledger negative result (0 admissible episodes). Support
-Milestone 2–3 without fabricating episode-anchored rows or running a
-real-data universe screen until authorized.
+is closed as an empty-ledger negative result (0 admissible episodes). M2 is
+`M2_NEGATIVE_RESULT_EMPTY_SAMPLE`; M3/M4 are not-estimable; do not run a
+real-data universe screen or invent a residual-threshold shock.
 
 ## Review sensitivity
 

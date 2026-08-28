@@ -30,10 +30,12 @@ Ship synthetic fixtures first so B is never blocked on real data.
 empty-ledger negative result (4234 no-episode dispositions, 0 survivors,
 0 admissible rows). Market outcomes remain unopened.
 
-**Milestone 2 — As-of panel + leakage protection** on real series once
-catalogued. With 0 admissible episodes the episode-anchored sample is
-empty/not-estimable; do not fabricate rows or resurrect dropped D5
-candidates.
+**Milestones 2–5:** M2 is `M2_NEGATIVE_RESULT_EMPTY_SAMPLE` (0 catalogued
+real series; do not fabricate `release_ts` or resurrect dropped D5
+candidates). M3/M4 are written not-estimable (zero ledger windows / zero
+identified shocks). M5 four-statement memo is
+`research/memos/M5_EMPTY_SAMPLE_FOUR_STATEMENTS.md`. Synthetic `panel.py`
+plumbing stays; do not edit it for this closeout.
 
 ## Review sensitivity
 
