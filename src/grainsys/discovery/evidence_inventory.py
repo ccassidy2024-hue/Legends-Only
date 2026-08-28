@@ -594,12 +594,24 @@ def build_evidence_inventory(
             "H1/H2/H4 grouping and episode admission are deferred to Phase 2.",
         )
     else:
-        notes = (
+        notes_list = [
             "Pointer verification used live candidate-keyed capture dirs from GRAIN_DATA_ROOT.",
             "HURDAT2 public re-fetch verifies digest only and is not a new candidate.",
             "S4 I2/public_anchor/event-mechanism remain needs_additional_primary_operational.",
             "H1/H2/H4 grouping and episode admission are deferred to Phase 2.",
-        )
+        ]
+        missing_s1 = counts["S1"]["missing"]
+        missing_s4 = counts["S4"]["missing"]
+        if missing_s1 or missing_s4:
+            notes_list.insert(
+                1,
+                (
+                    "Some frozen D5 pointers are missing on this capture root "
+                    f"(S1 missing={missing_s1}, S4 missing={missing_s4}); "
+                    "missing is not zero."
+                ),
+            )
+        notes = tuple(notes_list)
 
     csv_digest: str | None = None
     if persist:

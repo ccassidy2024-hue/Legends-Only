@@ -130,7 +130,8 @@ def test_unset_root_is_unknown_not_missing() -> None:
     assert man == "unknown"
 
 
-def test_discover_capture_root_from_hints(tmp_path: Path) -> None:
+def test_discover_capture_root_from_hints(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("GRAIN_DATA_ROOT", raising=False)
     tree = tmp_path / "grain"
     (tree / "sweeps" / "S4").mkdir(parents=True)
     root, origin, searched = find_capture_data_root(
@@ -282,12 +283,22 @@ def test_committed_inventory_is_d5_keyed_when_present() -> None:
     assert all(r["i2_field_sufficiency"] == I2_NEEDS_PRIMARY for r in s4)
     assert not any(r["capture_dir"].startswith("CAND-") for r in rows)
     assert not (REPO / "research/episodes/discovery/candidates/no_episode_dispositions.csv").exists()
-    assert summary["access_gate"] == BLOCKER_CAPTURE_STORE_MISSING
     assert summary.get("hurdat2_public_verified") == 2
     for rec in summary["hurdat2_archives"]:
-        assert rec["pointer_status"] == "unknown"
         assert rec["public_refetch_status"] == "verified"
         assert rec["public_observed_sha256"] == rec["expected_sha256"]
+    # Live capture root verifies S4 + HURDAT2; S1 objects may still be missing.
+    if summary["access_gate"] == BLOCKER_CAPTURE_STORE_MISSING:
+        assert summary["pointer_counts"]["S1"]["unknown"] == FROZEN_S1_COUNT
+        assert summary["pointer_counts"]["S4"]["unknown"] == FROZEN_S4_COUNT
+        for rec in summary["hurdat2_archives"]:
+            assert rec["pointer_status"] == "unknown"
+    else:
+        assert summary["access_gate"] == "ok"
+        assert summary["pointer_counts"]["S4"]["verified"] == FROZEN_S4_COUNT
+        assert summary["pointer_counts"]["S1"]["missing"] == FROZEN_S1_COUNT
+        for rec in summary["hurdat2_archives"]:
+            assert rec["pointer_status"] == "verified"
 
 
 def test_hurdat2_public_refetch_does_not_invent_capture(tmp_path: Path) -> None:
