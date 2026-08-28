@@ -24,12 +24,16 @@ required_packet_files:
   - S4_DISTANCE_SEGMENT.yaml
 
 required_source_files:
+  - s4_sources/Navigation_Facilities_08012026.xlsx
+  - s4_sources/ndc_08012026_catalog_record.json
+  - s4_sources/ndc_08012026_getdocdatapub.json
   - s4_sources/usace_bts_docks_layer_metadata.json
   - s4_sources/usace_bts_docks_query_grain.json
   - s4_sources/usace_bts_docks_query_d2_commodity_tokens.json
   - s4_sources/fgis_GetFGISExportsList.json
   - s4_sources/fgis_GetLastOrganizationUpdated.json
   - s4_sources/fgis_exportRegionDefinitionTables0801.pdf
+  - s4_sources/fgis_ddr_export_registration_instructions.html
 
 manifest_required_fields:
   - schema_version

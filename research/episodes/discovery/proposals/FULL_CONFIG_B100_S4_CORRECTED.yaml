@@ -9,8 +9,8 @@
 # Historical defective digest (not executable):
 # 9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1
 #
-# Recommended census file digest:
-# 0b38e45c31b6c3ef258cb63e39deaab51e819f70079d37c4b3efede531d0a37b
+# Recommended census file digest (NDC 08012026 census A, 677 Dock rows):
+# b3ba56f2c6108491cc8cef784b24dd38f7d40c18ff121a936a47f222c43da92b
 #
 # Marker: FULL_CONFIG_B100_S4_CORRECTED_CENSUS_A_POINT_ONLY
 
@@ -247,6 +247,7 @@ s2_gauge_registry:
 s4_node_registry:
   status: PROPOSED_RECOMMENDED_CENSUS_A_POINT_ONLY
   census_variant: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP
+  census_source: NDC Library Navigation Facilities DOCUMENTIDENTIFIER 08012026
   proximity_radius_nm: 100
   nautical_mile_m: 1852
   radius_m: 185200
@@ -257,7 +258,7 @@ s4_node_registry:
   texas_gulf_in_default: false
   puget_sound_in_default: false
   great_lakes_in_default: false
-  row_count: 534
+  row_count: 677
   nodes:
   - node_id: WCSC-021Y
     name: WINDUST
@@ -289,6 +290,12 @@ s4_node_registry:
     lon: -122.9718
     basin: columbia_snake
     nav_unit_id: 0PU3
+  - node_id: WCSC-0PU4
+    name: 'PORT OF LONGVIEW BERTH # 2 & 3'
+    lat: 46.1089
+    lon: -122.9577
+    basin: columbia_snake
+    nav_unit_id: 0PU4
   - node_id: WCSC-0PU5
     name: 'PORT OF LONGVIEW BERTH # 4'
     lat: 46.1088
@@ -307,18 +314,42 @@ s4_node_registry:
     lon: -122.773365
     basin: columbia_snake
     nav_unit_id: 0PU7
+  - node_id: WCSC-0QD7
+    name: 'PORT OF LONGVIEW BERTH # 1'
+    lat: 46.10333
+    lon: -122.94778
+    basin: columbia_snake
+    nav_unit_id: 0QD7
   - node_id: WCSC-0R29
     name: CEREAL FOOD PROCESSORS, PORTLAND BERTH B-401
     lat: 45.60528
     lon: -122.77972
     basin: columbia_snake
     nav_unit_id: 0R29
+  - node_id: WCSC-0R2A
+    name: INTERNATIONAL TERMINALS BERTHS 1-5
+    lat: 45.60944
+    lon: -122.78222
+    basin: columbia_snake
+    nav_unit_id: 0R2A
   - node_id: WCSC-0R2B
     name: TEMCO WHEAT ELEVATOR TERMINALS, PORTLAND
     lat: 45.53528
     lon: -122.67556
     basin: columbia_snake
     nav_unit_id: 0R2B
+  - node_id: WCSC-0R5V
+    name: PORT OF PORTLAND TERM 4 BERTHS 414-415
+    lat: 45.600894
+    lon: -122.774999
+    basin: columbia_snake
+    nav_unit_id: 0R5V
+  - node_id: WCSC-0R5X
+    name: PORT OF PORTLAND TERMINAL 2, BERTHS 204,205, & 206
+    lat: 45.544411
+    lon: -122.693682
+    basin: columbia_snake
+    nav_unit_id: 0R5X
   - node_id: WCSC-0RA1
     name: TIDEWATER TERMINAL CO., WILMA DOCK
     lat: 46.42167
@@ -337,6 +368,12 @@ s4_node_registry:
     lon: -119.01833
     basin: columbia_snake
     nav_unit_id: 0RAE
+  - node_id: WCSC-0RAQ
+    name: PORT OF VANCOUVER, TERMINAL 5
+    lat: 45.64556
+    lon: -122.7325
+    basin: columbia_snake
+    nav_unit_id: 0RAQ
   - node_id: WCSC-0RK6
     name: PORT OF WHITMAN COUNTY SITE H & I WHARVES
     lat: 46.42111
@@ -451,6 +488,12 @@ s4_node_registry:
     lon: -122.69388
     basin: columbia_snake
     nav_unit_id: 0UHF
+  - node_id: WCSC-0UHG
+    name: PORT OF PORTLAND SWAN ISL SHIP RPR YD BER 301-314
+    lat: 45.563611
+    lon: -122.72277
+    basin: columbia_snake
+    nav_unit_id: 0UHG
   - node_id: WCSC-0UHQ
     name: PENDLETON GRAIN GROWERS MCNARY ELEVATOR DOCK
     lat: 45.929722
@@ -463,6 +506,18 @@ s4_node_registry:
     lon: -122.77527
     basin: columbia_snake
     nav_unit_id: 0UJ3
+  - node_id: WCSC-0UJ5
+    name: KINDER MORGAN WILLBRIDGE PLANT
+    lat: 45.5675
+    lon: -122.73861
+    basin: columbia_snake
+    nav_unit_id: 0UJ5
+  - node_id: WCSC-0UJ7
+    name: KINDER MORGAN LINNTON TERMINAL
+    lat: 45.604167
+    lon: -122.78583
+    basin: columbia_snake
+    nav_unit_id: 0UJ7
   - node_id: WCSC-0UJQ
     name: SHAVER TRANSP CO PORTLAND MOORING
     lat: 45.56
@@ -529,6 +584,42 @@ s4_node_registry:
     lon: -119.02583
     basin: columbia_snake
     nav_unit_id: 0USR
+  - node_id: WCSC-0UU9
+    name: CHINOOK VENTURES, LONGVIEW PLANT
+    lat: 46.135556
+    lon: -123.00083
+    basin: columbia_snake
+    nav_unit_id: 0UU9
+  - node_id: WCSC-0UUN
+    name: PORT OF VANCOUVER TERM NO 2 BERTHS 1-4
+    lat: 45.632778
+    lon: -122.69777
+    basin: columbia_snake
+    nav_unit_id: 0UUN
+  - node_id: WCSC-0UUP
+    name: PORT OF VANCOUVER TERMINAL NO 3, BERTHS 8-9
+    lat: 45.638333
+    lon: -122.70833
+    basin: columbia_snake
+    nav_unit_id: 0UUP
+  - node_id: WCSC-0UUQ
+    name: PORT OF VANCOUVER, DRY BULK MATERIALS LOADING WHF
+    lat: 45.637222
+    lon: -122.70583
+    basin: columbia_snake
+    nav_unit_id: 0UUQ
+  - node_id: WCSC-0UUR
+    name: 'PORT OF LONGVIEW BERTH # 6 & 7'
+    lat: 46.102222
+    lon: -122.94472
+    basin: columbia_snake
+    nav_unit_id: 0UUR
+  - node_id: WCSC-0UV4
+    name: PORT OF VANCOUVER, TERMINAL 2 BERTH 5, OIL DOCK
+    lat: 45.634722
+    lon: -122.70166
+    basin: columbia_snake
+    nav_unit_id: 0UV4
   - node_id: WCSC-0UV5
     name: UNITED HARVEST VANCOUVER GRAIN ELEVATOR WHARF
     lat: 45.630278
@@ -571,6 +662,12 @@ s4_node_registry:
     lon: -122.868692
     basin: columbia_snake
     nav_unit_id: 0UXM
+  - node_id: WCSC-0YZ3
+    name: STEELSCAPE
+    lat: 46.043182
+    lon: -122.876663
+    basin: columbia_snake
+    nav_unit_id: 0YZ3
   - node_id: WCSC-0ZB9
     name: TEMCO (CHS CARGILL), KALAMA GRAIN ELEVATOR
     lat: 45.984409
@@ -613,6 +710,12 @@ s4_node_registry:
     lon: -117.09444
     basin: columbia_snake
     nav_unit_id: 0ZC0
+  - node_id: WCSC-0ZDW
+    name: PORT OF PORTLAND TERM 5, BERTH 503 BULK HANDLING
+    lat: 45.639167
+    lon: -122.77694
+    basin: columbia_snake
+    nav_unit_id: 0ZDW
   - node_id: WCSC-11TB
     name: PORT OF LONGVIEW BERTH 9 EGT
     lat: 46.1089
@@ -649,6 +752,30 @@ s4_node_registry:
     lon: -88.42944
     basin: illinois
     nav_unit_id: 0Q0F
+  - node_id: WCSC-0Q0P
+    name: OTTAWA BARGE TERMINAL, DOCK
+    lat: 41.326769
+    lon: -88.893584
+    basin: illinois
+    nav_unit_id: 0Q0P
+  - node_id: WCSC-0Q0Q
+    name: GARVEY INTERNATIONAL, OTTAWA TERMINAL DOCK
+    lat: 41.33389
+    lon: -88.77556
+    basin: illinois
+    nav_unit_id: 0Q0Q
+  - node_id: WCSC-0QJJ
+    name: ADM/GROWMARK RIVER SYSTEM, LASALLE DOCKS
+    lat: 41.32306
+    lon: -89.11194
+    basin: illinois
+    nav_unit_id: 0QJJ
+  - node_id: WCSC-0QJK
+    name: CONSOLIDATED GRAIN & BARGE CO., UTICA TERMINAL DOCK
+    lat: 41.32528
+    lon: -89.02306
+    basin: illinois
+    nav_unit_id: 0QJK
   - node_id: WCSC-0QJN
     name: TERMINAL FLEET, HENNEPIN MOORINGS & DOCK
     lat: 41.27306
@@ -817,6 +944,12 @@ s4_node_registry:
     lon: -90.564335
     basin: illinois
     nav_unit_id: 0UXX
+  - node_id: WCSC-0UXY
+    name: MEREDOSIA TERMINAL WHARF AND PIER
+    lat: 39.836389
+    lon: -90.570556
+    basin: illinois
+    nav_unit_id: 0UXY
   - node_id: WCSC-0UY0
     name: JERSEY COUNTY GRAIN CO DOCK
     lat: 39.148889
@@ -859,6 +992,18 @@ s4_node_registry:
     lon: -89.617222
     basin: illinois
     nav_unit_id: 0VGT
+  - node_id: WCSC-0VGV
+    name: PEORIA BARGE TERMINAL WHARF
+    lat: 40.665278
+    lon: -89.615556
+    basin: illinois
+    nav_unit_id: 0VGV
+  - node_id: WCSC-0VGW
+    name: J & L DOCK FACILITIES WHARF
+    lat: 40.667778
+    lon: -89.613333
+    basin: illinois
+    nav_unit_id: 0VGW
   - node_id: WCSC-0VKU
     name: CARGILL AGHORIZONS, SENECA GRAIN ELEVATOR WHARF
     lat: 41.3
@@ -1057,6 +1202,12 @@ s4_node_registry:
     lon: -88.091667
     basin: illinois
     nav_unit_id: 0ZHQ
+  - node_id: WCSC-0ZKZ
+    name: MARQUIS MARINE TERMINAL HENNEPIN IL
+    lat: 41.275
+    lon: -89.3375
+    basin: illinois
+    nav_unit_id: 0ZKZ
   - node_id: WCSC-0B4Y
     name: ALLIED
     lat: 34.362613
@@ -1123,36 +1274,270 @@ s4_node_registry:
     lon: -90.30356
     basin: lower_mississippi
     nav_unit_id: 0EX5
+  - node_id: WCSC-0EZA
+    name: BEKER
+    lat: 30.12972
+    lon: -90.94712
+    basin: lower_mississippi
+    nav_unit_id: 0EZA
+  - node_id: WCSC-0MWW
+    name: BOOTHVILLE ANCHORAGE
+    lat: 29.3398
+    lon: -89.40149
+    basin: lower_mississippi
+    nav_unit_id: 0MWW
+  - node_id: WCSC-0N8K
+    name: POINT CELESTE ANCHORAGE
+    lat: 29.60181
+    lon: -89.8462
+    basin: lower_mississippi
+    nav_unit_id: 0N8K
   - node_id: WCSC-0NE2
     name: EMPIRE ANCHORAGE
     lat: 29.38508
     lon: -89.58851
     basin: lower_mississippi
     nav_unit_id: 0NE2
+  - node_id: WCSC-0NE3
+    name: 'CGB BUOYS MILE134 '
+    lat: 30.052281
+    lon: -90.491113
+    basin: lower_mississippi
+    nav_unit_id: 0NE3
+  - node_id: WCSC-0NPA
+    name: LAPLACE ANCHORAGE
+    lat: 30.04523
+    lon: -90.47698
+    basin: lower_mississippi
+    nav_unit_id: 0NPA
+  - node_id: WCSC-0NPC
+    name: RESERVE ANCHORAGE (FOREIGN)
+    lat: 30.04903
+    lon: -90.55678
+    basin: lower_mississippi
+    nav_unit_id: 0NPC
+  - node_id: WCSC-0PJ1
+    name: DAVANT ANCHORAGE
+    lat: 29.60424
+    lon: -89.86244
+    basin: lower_mississippi
+    nav_unit_id: 0PJ1
+  - node_id: WCSC-0PNQ
+    name: ST. JAMES STEVORDORING (LOWER) BUOYS
+    lat: 30.0862
+    lon: -90.90876
+    basin: lower_mississippi
+    nav_unit_id: 0PNQ
+  - node_id: WCSC-0Q0R
+    name: 'ALANTIC ALUMINA (ATALCO) GRAMERCY REFINERY '
+    lat: 30.05333
+    lon: -90.65889
+    basin: lower_mississippi
+    nav_unit_id: 0Q0R
+  - node_id: WCSC-0Q0S
+    name: EQUILON PIPELINE, ST. JAMES SUGARLAND TERMINAL, DOCKS
+    lat: 30.000431
+    lon: -90.834806
+    basin: lower_mississippi
+    nav_unit_id: 0Q0S
+  - node_id: WCSC-0Q0X
+    name: NUSTAR ENERGY, ST. JAMES TERMINAL
+    lat: 30.02722
+    lon: -90.83972
+    basin: lower_mississippi
+    nav_unit_id: 0Q0X
+  - node_id: WCSC-0Q0Y
+    name: CGB MARINE BUOYS MILES 132 AND 133
+    lat: 30.04523
+    lon: -90.47698
+    basin: lower_mississippi
+    nav_unit_id: 0Q0Y
+  - node_id: WCSC-0Q0Z
+    name: PORT OF SOUTH LOUISIANA, GLOBALPLEX INTERMODAL TERMINAL WHARVES
+    lat: 30.05417
+    lon: -90.56944
+    basin: lower_mississippi
+    nav_unit_id: 0Q0Z
+  - node_id: WCSC-0Q11
+    name: SHELL NORCO
+    lat: 29.99056
+    lon: -90.405
+    basin: lower_mississippi
+    nav_unit_id: 0Q11
   - node_id: WCSC-0Q13
     name: GNOTS-RESERVE, ST. ROSE EAST & WEST BANK FLEET MOORINGS
     lat: 29.93407
     lon: -90.32779
     basin: lower_mississippi
     nav_unit_id: 0Q13
+  - node_id: WCSC-0Q15
+    name: BUNGE NORTH AMERICA, DESTREHAN ELEVATOR WHARF
+    lat: 29.93806
+    lon: -90.34806
+    basin: lower_mississippi
+    nav_unit_id: 0Q15
+  - node_id: WCSC-0Q1C
+    name: ARTCO TULANE FLEETING, KENNER BEND FLEET MOORING
+    lat: 29.96167
+    lon: -90.28222
+    basin: lower_mississippi
+    nav_unit_id: 0Q1C
+  - node_id: WCSC-0Q1D
+    name: INTERNATIONAL MATEX, ST. ROSE TERMINALS
+    lat: 29.93806
+    lon: -90.32583
+    basin: lower_mississippi
+    nav_unit_id: 0Q1D
+  - node_id: WCSC-0Q1E
+    name: BUCKEYE MIDSTREAM PARTNERS L.P.
+    lat: 29.905
+    lon: -90.11
+    basin: lower_mississippi
+    nav_unit_id: 0Q1E
+  - node_id: WCSC-0Q1F
+    name: DELTA KINDER MORGAN TERMINAL SERVICES, LLC, WHARVES 1-4
+    lat: 29.91111
+    lon: -90.0875
+    basin: lower_mississippi
+    nav_unit_id: 0Q1F
+  - node_id: WCSC-0Q1K
+    name: JOHN W STONE OIL DISTRIBUTOR LLC GRETNA DOCKS
+    lat: 29.92694
+    lon: -90.05833
+    basin: lower_mississippi
+    nav_unit_id: 0Q1K
+  - node_id: WCSC-0Q1M
+    name: CARGILL INC  WESTWEGO ELEVATOR WHARF
+    lat: 29.93833
+    lon: -90.14167
+    basin: lower_mississippi
+    nav_unit_id: 0Q1M
+  - node_id: WCSC-0Q1N
+    name: ELMWOOD MARINE SERVICES INC
+    lat: 29.94472
+    lon: -90.0175
+    basin: lower_mississippi
+    nav_unit_id: 0Q1N
+  - node_id: WCSC-0Q1P
+    name: WOOD MATERIALS
+    lat: 29.937494
+    lon: -90.184407
+    basin: lower_mississippi
+    nav_unit_id: 0Q1P
   - node_id: WCSC-0Q1R
     name: HOST AVONDALE MARINE TERMINALS
     lat: 29.93194
     lon: -90.17778
     basin: lower_mississippi
     nav_unit_id: 0Q1R
+  - node_id: WCSC-0Q1S
+    name: INTERNATIONAL - MATEX TANK TERMINALS AVONDALE DOCK NOS 1, 2 AND 3
+    lat: 29.92111
+    lon: -90.19722
+    basin: lower_mississippi
+    nav_unit_id: 0Q1S
   - node_id: WCSC-0Q1U
     name: INGRAM BARGE CO., COLUMBUS DOCK & FLEETS 1 THRU 23
     lat: 36.76797
     lon: -89.11213
     basin: lower_mississippi
     nav_unit_id: 0Q1U
+  - node_id: WCSC-0Q1V
+    name: PBF ENERGY INC.CHALMETTE
+    lat: 29.92806
+    lon: -89.97167
+    basin: lower_mississippi
+    nav_unit_id: 0Q1V
+  - node_id: WCSC-0Q1W
+    name: CHALMETTE SLIP DOCK NO 1 AND NO 2
+    lat: 29.9425
+    lon: -89.99639
+    basin: lower_mississippi
+    nav_unit_id: 0Q1W
+  - node_id: WCSC-0Q1Y
+    name: LOUISIANA AVENUE WHARVES A THRU G
+    lat: 29.91444
+    lon: -90.09306
+    basin: lower_mississippi
+    nav_unit_id: 0Q1Y
+  - node_id: WCSC-0Q1Z
+    name: NAPOLEON AVENUE WHARF
+    lat: 29.91194
+    lon: -90.10583
+    basin: lower_mississippi
+    nav_unit_id: 0Q1Z
+  - node_id: WCSC-0Q20
+    name: NASHVILLE AVENUE WHARVES A, B AND C
+    lat: 29.91278
+    lon: -90.12417
+    basin: lower_mississippi
+    nav_unit_id: 0Q20
+  - node_id: WCSC-0Q26
+    name: INTERNATIONAL MARINE TERMINALS
+    lat: 29.624635
+    lon: -89.917645
+    basin: lower_mississippi
+    nav_unit_id: 0Q26
+  - node_id: WCSC-0Q27
+    name: HARVEST MIDSTREAM ALLIANCE TERMINAL
+    lat: 29.68
+    lon: -89.96694
+    basin: lower_mississippi
+    nav_unit_id: 0Q27
+  - node_id: WCSC-0QAJ
+    name: STOLTHAVEN NEW ORLEANS, BERTHS NO. 3 & 4
+    lat: 29.87109
+    lon: -89.945176
+    basin: lower_mississippi
+    nav_unit_id: 0QAJ
+  - node_id: WCSC-0QAK
+    name: ARTCO TULANE FLEETING, CANIZARO FLEET MOORING
+    lat: 29.94778
+    lon: -90.3825
+    basin: lower_mississippi
+    nav_unit_id: 0QAK
   - node_id: WCSC-0QBU
     name: WOOD RESOURCES CORP ARTCO SARAH FLEET MOORING
     lat: 29.945
     lon: -90.22611
     basin: lower_mississippi
     nav_unit_id: 0QBU
+  - node_id: WCSC-0QC2
+    name: THE MOSAIC COMPANY, FAUSTINA WHARF
+    lat: 30.08972
+    lon: -90.91333
+    basin: lower_mississippi
+    nav_unit_id: 0QC2
+  - node_id: WCSC-0QC3
+    name: IMPALA TERMINALS, BURNSIDE
+    lat: 30.131422
+    lon: -90.919324
+    basin: lower_mississippi
+    nav_unit_id: 0QC3
+  - node_id: WCSC-0QGK
+    name: GENERAL ANCHORAGE
+    lat: 29.93414
+    lon: -89.99111
+    basin: lower_mississippi
+    nav_unit_id: 0QGK
+  - node_id: WCSC-0QLR
+    name: BONNET CARRE ANCHORAGE
+    lat: 29.99528
+    lon: -90.44015
+    basin: lower_mississippi
+    nav_unit_id: 0QLR
+  - node_id: WCSC-0QWQ
+    name: ARABI MOORING SERVICES
+    lat: 29.94177
+    lon: -90.00484
+    basin: lower_mississippi
+    nav_unit_id: 0QWQ
+  - node_id: WCSC-0QZX
+    name: SHIP TO BARGE MIDSTREAMING
+    lat: 30.04204
+    lon: -90.60444
+    basin: lower_mississippi
+    nav_unit_id: 0QZX
   - node_id: WCSC-0R0Y
     name: BIG RIVER RICE AND GRAIN, LAKE PROVIDENCE TERMINAL
     lat: 32.751502
@@ -1165,12 +1550,42 @@ s4_node_registry:
     lon: -90.250796
     basin: lower_mississippi
     nav_unit_id: 0R0Z
+  - node_id: WCSC-0RLM
+    name: CARVILLE-WHITE CASTLE FERRY LANDING
+    lat: 30.17922
+    lon: -91.13653
+    basin: lower_mississippi
+    nav_unit_id: 0RLM
+  - node_id: WCSC-0RLY
+    name: WEBER MARINE WHARF, DRY BULK TRANSFER AND FLEET MOORINGS
+    lat: 30.09583
+    lon: -90.90889
+    basin: lower_mississippi
+    nav_unit_id: 0RLY
+  - node_id: WCSC-0RLZ
+    name: SHELL CONVENT REFINERY
+    lat: 30.11139
+    lon: -90.91222
+    basin: lower_mississippi
+    nav_unit_id: 0RLZ
   - node_id: WCSC-0RM3
     name: C F INDUSTRIES, DONALDSONVILLE WHARVES
     lat: 30.10306
     lon: -90.95944
     basin: lower_mississippi
     nav_unit_id: 0RM3
+  - node_id: WCSC-0RM7
+    name: CARGILL INC ELEVATOR WHARFS
+    lat: 30.0525
+    lon: -90.58833
+    basin: lower_mississippi
+    nav_unit_id: 0RM7
+  - node_id: WCSC-0RM9
+    name: ST JOHNS FLEETING MILES 140.5 AND 141
+    lat: 30.04204
+    lon: -90.60444
+    basin: lower_mississippi
+    nav_unit_id: 0RM9
   - node_id: WCSC-0S97
     name: Cooper/T. Smith Stevedoring, Mile 175 Dry-Bulk Transfer Mooring.
     lat: 30.114682
@@ -1268,7 +1683,8 @@ s4_node_registry:
     basin: lower_mississippi
     nav_unit_id: 0TX7
   - node_id: WCSC-0TYL
-    name: KINDER MORGAN ENERGY PARTNERS, GLOBALPLEX INTERMODAL TERMINAL, RESERVE SLIP WHARVES
+    name: KINDER MORGAN ENERGY PARTNERS, GLOBALPLEX INTERMODAL TERMINAL, RESERVE SLIP
+      WHARVES
     lat: 30.054167
     lon: -90.569444
     basin: lower_mississippi
@@ -1303,6 +1719,12 @@ s4_node_registry:
     lon: -91.439444
     basin: lower_mississippi
     nav_unit_id: 0U2B
+  - node_id: WCSC-0WLG
+    name: PREMCOR A VALERO CO., WEST MEMPHIS TERMINAL DOCK
+    lat: 35.121667
+    lon: -90.172139
+    basin: lower_mississippi
+    nav_unit_id: 0WLG
   - node_id: WCSC-0WLH
     name: AMERICAN COMMERCIAL TERMINALS, MEMPHIS DOCK
     lat: 35.123111
@@ -1393,6 +1815,12 @@ s4_node_registry:
     lon: -90.590833
     basin: lower_mississippi
     nav_unit_id: 0WPT
+  - node_id: WCSC-0WUH
+    name: KINDER MORGAN, ST. GABRIEL TERMINAL
+    lat: 30.228422
+    lon: -91.131889
+    basin: lower_mississippi
+    nav_unit_id: 0WUH
   - node_id: WCSC-0WUS
     name: ADM GROWMARK, PAULINA TERMINAL, GRAIN ELEVATOR WHARF
     lat: 30.017967
@@ -1423,12 +1851,30 @@ s4_node_registry:
     lon: -91.022349
     basin: lower_mississippi
     nav_unit_id: 0WVD
+  - node_id: WCSC-0WVQ
+    name: UPPER ST. ROSE REPAIR WHARF AND FLEET MOORING
+    lat: 29.99111
+    lon: -90.426516
+    basin: lower_mississippi
+    nav_unit_id: 0WVQ
+  - node_id: WCSC-0WVV
+    name: ARCELORMITTAL RECYCLING, LA PLACE WHARF
+    lat: 30.039049
+    lon: -90.470408
+    basin: lower_mississippi
+    nav_unit_id: 0WVV
   - node_id: WCSC-0WVW
     name: ADM/GROWMARK, DESTREHAN ELEVATOR WHARF
     lat: 29.940893
     lon: -90.356809
     basin: lower_mississippi
     nav_unit_id: 0WVW
+  - node_id: WCSC-0WVX
+    name: ARTCO TULANE FLTG DESTREHAN DRY BULK TRANSF & ROSE LAUN SVC, LDG
+    lat: 29.941375
+    lon: -90.359279
+    basin: lower_mississippi
+    nav_unit_id: 0WVX
   - node_id: WCSC-0WW0
     name: ARTCO TWELVE MILE FLEET MOORING
     lat: 29.933443
@@ -1441,6 +1887,12 @@ s4_node_registry:
     lon: -90.228611
     basin: lower_mississippi
     nav_unit_id: 0WW2
+  - node_id: WCSC-0WW5
+    name: AZALEA FLEET INC MOORING
+    lat: 29.961327
+    lon: -90.239649
+    basin: lower_mississippi
+    nav_unit_id: 0WW5
   - node_id: WCSC-0WWH
     name: WATERWAYS MARINE OF GREENVILLE VALLEY FLEET MOORING
     lat: 33.37453
@@ -1459,6 +1911,12 @@ s4_node_registry:
     lon: -91.228333
     basin: lower_mississippi
     nav_unit_id: 0WWN
+  - node_id: WCSC-0WWT
+    name: CRESCENT SHIP SERVICE, AMA LANDING
+    lat: 29.970904
+    lon: -90.283955
+    basin: lower_mississippi
+    nav_unit_id: 0WWT
   - node_id: WCSC-0WWV
     name: ARTCO TULANE FLEETING, TULANE FLEET MOORING
     lat: 29.952221
@@ -1477,12 +1935,36 @@ s4_node_registry:
     lon: -91.237947
     basin: lower_mississippi
     nav_unit_id: 0WWY
+  - node_id: WCSC-0WWZ
+    name: TRANSMONTAIGNE PRODUCT SERVICES, ARKANSAS CITY WHARF
+    lat: 33.554444
+    lon: -91.235833
+    basin: lower_mississippi
+    nav_unit_id: 0WWZ
+  - node_id: WCSC-0WXJ
+    name: KINDER MORGAN BULK TERMINALS, GRAMERCY BULK TERMINAL WHARF
+    lat: 30.054516
+    lon: -90.656912
+    basin: lower_mississippi
+    nav_unit_id: 0WXJ
   - node_id: WCSC-0WXK
     name: CARGO CARRIERS TERRE HAUTE LANDING & UPPER TERRE HAUTE FLEET MOOR
     lat: 30.044304
     lon: -90.647176
     basin: lower_mississippi
     nav_unit_id: 0WXK
+  - node_id: WCSC-0WXL
+    name: PETROLEUM FUEL AND TERMINAL (PFT) MT AIRY
+    lat: 30.053804
+    lon: -90.648598
+    basin: lower_mississippi
+    nav_unit_id: 0WXL
+  - node_id: WCSC-0WXM
+    name: CII-CARBON, GRAMERCY PLANT, COKE DOCK
+    lat: 30.050833
+    lon: -90.667778
+    basin: lower_mississippi
+    nav_unit_id: 0WXM
   - node_id: WCSC-0WXQ
     name: LOUIS DREYFUS COMMODITIES LLC PORT ALLEN
     lat: 30.434003
@@ -1519,12 +2001,24 @@ s4_node_registry:
     lon: -90.950518
     basin: lower_mississippi
     nav_unit_id: 0WYG
+  - node_id: WCSC-0WYH
+    name: THE MOSAIC CO., UNCLE SAM PLANT DOCK
+    lat: 30.038409
+    lon: -90.834681
+    basin: lower_mississippi
+    nav_unit_id: 0WYH
   - node_id: WCSC-0WYJ
     name: DELTA BULK TERMINAL, GRAIN TRANSFER MOORING
     lat: 30.015247
     lon: -90.829665
     basin: lower_mississippi
     nav_unit_id: 0WYJ
+  - node_id: WCSC-0WYK
+    name: ELMWOOD MARINE SERVICES, CONVENT REPAIR WHARF AND FLEET MOORINGS
+    lat: 30.009478
+    lon: -90.828653
+    basin: lower_mississippi
+    nav_unit_id: 0WYK
   - node_id: WCSC-0WYP
     name: ADM GROWMARK RIVER SYSTEMS, MEMPHIS DOCK
     lat: 35.094444
@@ -1537,6 +2031,12 @@ s4_node_registry:
     lon: -90.105333
     basin: lower_mississippi
     nav_unit_id: 0WYQ
+  - node_id: WCSC-0WYR
+    name: SHELL CHEMICAL, L.P., GEISMAR PLANT WHARF
+    lat: 30.178268
+    lon: -91.006071
+    basin: lower_mississippi
+    nav_unit_id: 0WYR
   - node_id: WCSC-0WYZ
     name: ZEN-NOH GRAIN CORP. WHARF.
     lat: 30.065545
@@ -1549,6 +2049,18 @@ s4_node_registry:
     lon: -90.111056
     basin: lower_mississippi
     nav_unit_id: 0WZ4
+  - node_id: WCSC-0WZ7
+    name: LBC PETRO UNITED TERMINAL, SUNSHINE TERMINAL WHARF
+    lat: 30.283842
+    lon: -91.154681
+    basin: lower_mississippi
+    nav_unit_id: 0WZ7
+  - node_id: WCSC-0WZB
+    name: CGB MARINE SERVICES AT 164, REPAIR WHARF AND CONVENT FLEET MOORIN
+    lat: 30.070965
+    lon: -90.896026
+    basin: lower_mississippi
+    nav_unit_id: 0WZB
   - node_id: WCSC-0WZM
     name: RIVER CEMENT SALES CO., MEMPHIS TERMINAL DOCK
     lat: 35.080389
@@ -1573,6 +2085,30 @@ s4_node_registry:
     lon: -90.143889
     basin: lower_mississippi
     nav_unit_id: 0X02
+  - node_id: WCSC-0X0B
+    name: GRANDVIEW ANCHORAGE OR CRESCENT SHIP SERVICE
+    lat: 30.029964
+    lon: -90.705349
+    basin: lower_mississippi
+    nav_unit_id: 0X0B
+  - node_id: WCSC-0X0S
+    name: ASSOCIATED TERMINALS, BATON ROUGE DRY BULK TRANSFER MOORING
+    lat: 30.432991
+    lon: -91.193321
+    basin: lower_mississippi
+    nav_unit_id: 0X0S
+  - node_id: WCSC-0X18
+    name: INGRAM CAPITAL FLEET LANDING, AND FLEETS NOS. 2, 3, 4 & 5
+    lat: 30.451944
+    lon: -91.191389
+    basin: lower_mississippi
+    nav_unit_id: 0X18
+  - node_id: WCSC-0X20
+    name: CAPITAL MARINE SUPPLY, LUCY FLEET MOORING
+    lat: 30.049116
+    lon: -90.492466
+    basin: lower_mississippi
+    nav_unit_id: 0X20
   - node_id: WCSC-0X24
     name: OXBOW CARBON AND MINERALS
     lat: 30.494762
@@ -1633,12 +2169,24 @@ s4_node_registry:
     lon: -91.164722
     basin: lower_mississippi
     nav_unit_id: 0X59
+  - node_id: WCSC-0X5U
+    name: FIRST STREET WHARF
+    lat: 29.921944
+    lon: -90.072222
+    basin: lower_mississippi
+    nav_unit_id: 0X5U
   - node_id: WCSC-0X62
     name: VIOLET DOCK PORT INC BERTHING FACILITY
     lat: 29.890837
     lon: -89.900428
     basin: lower_mississippi
     nav_unit_id: 0X62
+  - node_id: WCSC-0X64
+    name: VALERO ENERGY CORP., MERAUX TERMINAL
+    lat: 29.924998
+    lon: -89.946399
+    basin: lower_mississippi
+    nav_unit_id: 0X64
   - node_id: WCSC-0X6B
     name: BUNGE NORTH AMERICA, DESOTO LANDING WHARF
     lat: 33.692222
@@ -1663,12 +2211,30 @@ s4_node_registry:
     lon: -91.078611
     basin: lower_mississippi
     nav_unit_id: 0X6E
+  - node_id: WCSC-0X6G
+    name: ALABO STREET WHARF
+    lat: 29.953062
+    lon: -90.018225
+    basin: lower_mississippi
+    nav_unit_id: 0X6G
   - node_id: WCSC-0X6H
     name: ANDRY STREET WHARF
     lat: 29.954755
     lon: -90.021005
     basin: lower_mississippi
     nav_unit_id: 0X6H
+  - node_id: WCSC-0X6J
+    name: POLAND AVENUE WHARF BERTHS NOS 4 AND 5
+    lat: 29.95906
+    lon: -90.03509
+    basin: lower_mississippi
+    nav_unit_id: 0X6J
+  - node_id: WCSC-0X6K
+    name: PAULINE STREET WHARF
+    lat: 29.96
+    lon: -90.037778
+    basin: lower_mississippi
+    nav_unit_id: 0X6K
   - node_id: WCSC-0X6L
     name: CENEX HARVEST STATES COOPERATIVES, MYRTLE GROVE TERMINAL WHARF
     lat: 29.674167
@@ -1711,6 +2277,30 @@ s4_node_registry:
     lon: -89.555866
     basin: lower_mississippi
     nav_unit_id: 0X78
+  - node_id: WCSC-0X7G
+    name: ENTERGY LOUISIANA NINE MILE POINT STEAM ELECTRIC STATION FUEL OIL
+    lat: 29.947031
+    lon: -90.143606
+    basin: lower_mississippi
+    nav_unit_id: 0X7G
+  - node_id: WCSC-0X7L
+    name: SEVENTH STREET WHARF
+    lat: 29.919013
+    lon: -90.080524
+    basin: lower_mississippi
+    nav_unit_id: 0X7L
+  - node_id: WCSC-0X7M
+    name: HARMONY STREET WHARF
+    lat: 29.917778
+    lon: -90.083333
+    basin: lower_mississippi
+    nav_unit_id: 0X7M
+  - node_id: WCSC-0X7N
+    name: MILAN STREET WHARF
+    lat: 29.913543
+    lon: -90.098617
+    basin: lower_mississippi
+    nav_unit_id: 0X7N
   - node_id: WCSC-0X7Q
     name: ST. JUDE & NEW MADRID HAR SER, NEW MADRID FT MOOR(CWIS 110502)
     lat: 36.582778
@@ -1735,6 +2325,18 @@ s4_node_registry:
     lon: -91.195556
     basin: lower_mississippi
     nav_unit_id: 0X7T
+  - node_id: WCSC-0X84
+    name: HENRY CLAY AVENUE WHARF
+    lat: 29.914974
+    lon: -90.130277
+    basin: lower_mississippi
+    nav_unit_id: 0X84
+  - node_id: WCSC-0X8B
+    name: TERRAL RIVERSERVICE, INC VIDALIA LA
+    lat: 31.56744
+    lon: -91.416636
+    basin: lower_mississippi
+    nav_unit_id: 0X8B
   - node_id: WCSC-0X8T
     name: BERTUCCI CONTRACTING CORP MOORING
     lat: 29.956216
@@ -1837,6 +2439,12 @@ s4_node_registry:
     lon: -89.698889
     basin: lower_mississippi
     nav_unit_id: 0XA0
+  - node_id: WCSC-0XA1
+    name: TERRAL RIVER SERVICE, LAKE PROVIDENCE DOCK
+    lat: 32.756454
+    lon: -91.171791
+    basin: lower_mississippi
+    nav_unit_id: 0XA1
   - node_id: WCSC-0XAC
     name: WATERFRONT SERVICES CO., FLEET MOORINGS
     lat: 36.980278
@@ -1867,12 +2475,24 @@ s4_node_registry:
     lon: -90.921667
     basin: lower_mississippi
     nav_unit_id: 0XAH
+  - node_id: WCSC-0XAJ
+    name: ERGON MARINE AND INDUSTRIAL SUPPLY, WHARF
+    lat: 32.325833
+    lon: -90.896389
+    basin: lower_mississippi
+    nav_unit_id: 0XAJ
   - node_id: WCSC-0XAK
     name: KINDER MORGAN ENERGY PARTNERS, L.P., BLYTHEVILLE PLANT DOCK
     lat: 35.893611
     lon: -89.769444
     basin: lower_mississippi
     nav_unit_id: 0XAK
+  - node_id: WCSC-0XAL
+    name: TERRA INDUSTRIES, BLYTHEVILLE PLANT DOCK
+    lat: 35.903056
+    lon: -89.755833
+    basin: lower_mississippi
+    nav_unit_id: 0XAL
   - node_id: WCSC-0XAM
     name: BUNGE CORP., BARFIELD TERMINAL DOCK
     lat: 35.900833
@@ -1909,6 +2529,12 @@ s4_node_registry:
     lon: -91.121145
     basin: lower_mississippi
     nav_unit_id: 0XAZ
+  - node_id: WCSC-0XB1
+    name: NUCOR STEEL, BLYTHEVILLE DOCK
+    lat: 35.948056
+    lon: -89.696111
+    basin: lower_mississippi
+    nav_unit_id: 0XB1
   - node_id: WCSC-0XB2
     name: BUNGE CORP., HUFFMAN ELEVATOR DOCK
     lat: 35.981389
@@ -1981,6 +2607,30 @@ s4_node_registry:
     lon: -89.214444
     basin: lower_mississippi
     nav_unit_id: 0YA6
+  - node_id: WCSC-0YAC
+    name: LAUDERDALE RIVER TERMINALS, HALES POINT DOCK
+    lat: 35.895
+    lon: -89.64
+    basin: lower_mississippi
+    nav_unit_id: 0YAC
+  - node_id: WCSC-0YAD
+    name: INTERCONTINENTAL TERMINALS CO., ANCHORAGE CHEMICAL TERMINAL WHARF
+    lat: 30.481908
+    lon: -91.20094
+    basin: lower_mississippi
+    nav_unit_id: 0YAD
+  - node_id: WCSC-0YCU
+    name: PORT SHIP SERVICES INC 9 MILE ANCHORAGE WEST BANK LANDING
+    lat: 29.897997
+    lon: -89.912985
+    basin: lower_mississippi
+    nav_unit_id: 0YCU
+  - node_id: WCSC-0YF8
+    name: BELLE CHASSE MARINE TRANSPORTATION 9 MILE ANCHORAGE WEST BANK LDG
+    lat: 29.891561
+    lon: -89.910418
+    basin: lower_mississippi
+    nav_unit_id: 0YF8
   - node_id: WCSC-0YPD
     name: BELLE CHASSE MARINE TRANSPORTATION, DAVANT LANDING
     lat: 29.605066
@@ -1999,6 +2649,24 @@ s4_node_registry:
     lon: -90.143165
     basin: lower_mississippi
     nav_unit_id: 0YSP
+  - node_id: WCSC-0YST
+    name: PERRY STREET WHARF
+    lat: 29.933833
+    lon: -90.054901
+    basin: lower_mississippi
+    nav_unit_id: 0YST
+  - node_id: WCSC-0Z9R
+    name: IC RAILMARINE, TERMINAL WHARF
+    lat: 30.044798
+    lon: -90.836404
+    basin: lower_mississippi
+    nav_unit_id: 0Z9R
+  - node_id: WCSC-0ZAN
+    name: WEPFER MARINE, MEMPHIS REPAIR YARD MOORING
+    lat: 35.08025
+    lon: -90.1305
+    basin: lower_mississippi
+    nav_unit_id: 0ZAN
   - node_id: WCSC-0ZRU
     name: APAC-MISSISSIPPI, GREENVILLE DOCK
     lat: 33.362492
@@ -2089,6 +2757,12 @@ s4_node_registry:
     lon: -90.169417
     basin: middle_mississippi
     nav_unit_id: 0W2K
+  - node_id: WCSC-0W2L
+    name: SCF LEWIS & CLARK TERMINALS LLC GRANITE CITY AMERICA'S CENTRAL PORT
+    lat: 38.714167
+    lon: -90.170278
+    basin: middle_mississippi
+    nav_unit_id: 0W2L
   - node_id: WCSC-0W2P
     name: ADM/GROWMARK RIVER SYSTEMS CO., ST. LOUIS WHARF
     lat: 38.681944
@@ -2149,6 +2823,12 @@ s4_node_registry:
     lon: -89.817867
     basin: middle_mississippi
     nav_unit_id: 0WUY
+  - node_id: WCSC-0WV0
+    name: LONE STAR INDUSTRIES, CAPE GIRARDEAU PLANT DOCK
+    lat: 37.267716
+    lon: -89.528033
+    basin: middle_mississippi
+    nav_unit_id: 0WV0
   - node_id: WCSC-0WV1
     name: BIOKYOWA, CAPE GIRARDEAU TERMINAL DOCK
     lat: 37.271767
@@ -2185,6 +2865,12 @@ s4_node_registry:
     lon: -89.509946
     basin: middle_mississippi
     nav_unit_id: 0WV8
+  - node_id: WCSC-0WW6
+    name: TOWER ROCK STONE CO., LOADING DOCKS AND FLEET MOORING
+    lat: 38.013611
+    lon: -90.086389
+    basin: middle_mississippi
+    nav_unit_id: 0WW6
   - node_id: WCSC-0WW9
     name: BUNGE NORTH AMERICA, FOUNTAIN BLUFF DOCK
     lat: 37.664444
@@ -2275,6 +2961,18 @@ s4_node_registry:
     lon: -90.177722
     basin: middle_mississippi
     nav_unit_id: 0X1B
+  - node_id: WCSC-0X1T
+    name: U. S. STEEL, GRANITE CITY DOCK AND FLEET MOORING, AMERICA'S CENTRAL PORT
+    lat: 38.707778
+    lon: -90.175
+    basin: middle_mississippi
+    nav_unit_id: 0X1T
+  - node_id: WCSC-0X1U
+    name: MID-COAST TERMINAL CO., GRANITE CITY DOCK, AMERICA'S CENTRAL PORT
+    lat: 38.706833
+    lon: -90.175861
+    basin: middle_mississippi
+    nav_unit_id: 0X1U
   - node_id: WCSC-0X1W
     name: EXXON MOBIL CORP., SAUGET TERMINAL DOCK
     lat: 38.578333
@@ -2323,6 +3021,12 @@ s4_node_registry:
     lon: -89.36335
     basin: middle_mississippi
     nav_unit_id: 0X5T
+  - node_id: WCSC-0X6A
+    name: SOUTHEAST MISSOURI (SEMO) REGIONAL PORT AUTHORITY DOCK CWIS 87404
+    lat: 37.246472
+    lon: -89.496777
+    basin: middle_mississippi
+    nav_unit_id: 0X6A
   - node_id: WCSC-0X6M
     name: CGB MARINE SERVICES, BIRDS POINT AND CAIRO FLEETS MOORING
     lat: 36.974444
@@ -2401,6 +3105,12 @@ s4_node_registry:
     lon: -88.60428
     basin: ohio
     nav_unit_id: 0A8U
+  - node_id: WCSC-0ACE
+    name: ARTCO Mt. Vernon, IN
+    lat: 37.928136
+    lon: -87.886815
+    basin: ohio
+    nav_unit_id: 0ACE
   - node_id: WCSC-0ACF
     name: CONSOLIDATED GRAIN & BARGE MOUNT VERNON GRAIN TERMINAL
     lat: 37.921761
@@ -2449,12 +3159,36 @@ s4_node_registry:
     lon: -87.35038
     basin: ohio
     nav_unit_id: 0PTU
+  - node_id: WCSC-0R2S
+    name: KINDER MORGAN RIVER TRANSPORTATION CO
+    lat: 39.09306
+    lon: -84.65194
+    basin: ohio
+    nav_unit_id: 0R2S
+  - node_id: WCSC-0R2T
+    name: MCGINNIS INC FLEET
+    lat: 39.096988
+    lon: -84.659497
+    basin: ohio
+    nav_unit_id: 0R2T
+  - node_id: WCSC-0R2U
+    name: CONSOLIDATED GRAIN & BARGE CO
+    lat: 39.14722
+    lon: -84.74194
+    basin: ohio
+    nav_unit_id: 0R2U
   - node_id: WCSC-0R2V
     name: 'GREATER CINCINNATI ASPHALT TERMINAL #2'
     lat: 39.132915
     lon: -84.772574
     basin: ohio
     nav_unit_id: 0R2V
+  - node_id: WCSC-0R37
+    name: CINCINNATI BULK TERM DIV OF HATFIELD TERM
+    lat: 39.09694
+    lon: -84.53361
+    basin: ohio
+    nav_unit_id: 0R37
   - node_id: WCSC-0R3A
     name: LOUISIANA DOCK CO INC FLEETING
     lat: 37.065537
@@ -2463,16 +3197,40 @@ s4_node_registry:
     nav_unit_id: 0R3A
   - node_id: WCSC-0R6X
     name: WATERFRONT SERVICES CO  CAIRO ILL
-    lat: 37
+    lat: 37.0
     lon: -89.16194
     basin: ohio
     nav_unit_id: 0R6X
+  - node_id: WCSC-0R7H
+    name: ALIQUIPPA TERMINALS, DOCKS
+    lat: 40.595893
+    lon: -80.240206
+    basin: ohio
+    nav_unit_id: 0R7H
+  - node_id: WCSC-0RAV
+    name: METALS USA
+    lat: 38.319199
+    lon: -85.661501
+    basin: ohio
+    nav_unit_id: 0RAV
   - node_id: WCSC-0RB3
     name: WATCO
     lat: 38.276054
     lon: -85.708372
     basin: ohio
     nav_unit_id: 0RB3
+  - node_id: WCSC-0RB4
+    name: CGB FERTILIZER DOCK JEFFERSONVILLE
+    lat: 38.27778
+    lon: -85.72056
+    basin: ohio
+    nav_unit_id: 0RB4
+  - node_id: WCSC-0RBE
+    name: ASHLAND PETROLEUM CO.
+    lat: 38.22833
+    lon: -85.84083
+    basin: ohio
+    nav_unit_id: 0RBE
   - node_id: WCSC-0RBF
     name: RIVERWAY LOUISVILLE TERMINAL CO.
     lat: 38.26361
@@ -2491,6 +3249,24 @@ s4_node_registry:
     lon: -87.10111
     basin: ohio
     nav_unit_id: 0REG
+  - node_id: WCSC-0REH
+    name: OWENSBORO RIVERPORT AUTHORITY
+    lat: 37.793554
+    lon: -87.142277
+    basin: ohio
+    nav_unit_id: 0REH
+  - node_id: WCSC-0REX
+    name: MCGOVNEY RIVER TERMINAL
+    lat: 38.72972
+    lon: -82.97
+    basin: ohio
+    nav_unit_id: 0REX
+  - node_id: WCSC-0RH8
+    name: HENDERSON COUNTY RIVERPORT AUTHORITY WHARVES
+    lat: 37.82382
+    lon: -87.68099
+    basin: ohio
+    nav_unit_id: 0RH8
   - node_id: WCSC-0TBM
     name: River Road Terminal, Upper Wharf.
     lat: 38.278056
@@ -2599,6 +3375,12 @@ s4_node_registry:
     lon: -84.511996
     basin: ohio
     nav_unit_id: 0W1K
+  - node_id: WCSC-0W1U
+    name: Cincinnati Bulk Terminals, Port of Cincinnati
+    lat: 39.098056
+    lon: -84.536389
+    basin: ohio
+    nav_unit_id: 0W1U
   - node_id: WCSC-0W1X
     name: CONSOLIDTED GRAIN & BARGE CO
     lat: 39.083104
@@ -2611,6 +3393,12 @@ s4_node_registry:
     lon: -84.573204
     basin: ohio
     nav_unit_id: 0W1Z
+  - node_id: WCSC-0W22
+    name: KOTTER READY-MIX INC
+    lat: 37.141667
+    lon: -88.717222
+    basin: ohio
+    nav_unit_id: 0W22
   - node_id: WCSC-0W26
     name: ADM/GROWMARK  MOUND CITY
     lat: 37.083611
@@ -2659,6 +3447,12 @@ s4_node_registry:
     lon: -88.348611
     basin: ohio
     nav_unit_id: 0W55
+  - node_id: WCSC-0W5P
+    name: LAFARGE CORP
+    lat: 37.2125
+    lon: -88.879167
+    basin: ohio
+    nav_unit_id: 0W5P
   - node_id: WCSC-0W75
     name: GROWMARK FERTILIZER
     lat: 39.089296
@@ -2719,6 +3513,12 @@ s4_node_registry:
     lon: -85.665666
     basin: ohio
     nav_unit_id: 0WF3
+  - node_id: WCSC-0WF9
+    name: D. W. DICKEY & SON, EAST LIVERPOOL WHARF
+    lat: 40.624722
+    lon: -80.559444
+    basin: ohio
+    nav_unit_id: 0WF9
   - node_id: WCSC-0WG6
     name: CONSOLIDATED GRAIN & BARGE CO
     lat: 38.736667
@@ -2737,6 +3537,12 @@ s4_node_registry:
     lon: -85.848742
     basin: ohio
     nav_unit_id: 0WH3
+  - node_id: WCSC-0WHQ
+    name: PORT OF LOUISVILLE TERM (ACBL TERM)
+    lat: 38.260556
+    lon: -85.745833
+    basin: ohio
+    nav_unit_id: 0WHQ
   - node_id: WCSC-0WJA
     name: LOUISIANA DOCK CO.
     lat: 38.273246
@@ -2749,6 +3555,18 @@ s4_node_registry:
     lon: -85.903056
     basin: ohio
     nav_unit_id: 0WJE
+  - node_id: WCSC-0WKA
+    name: KINDER MORGAN OWENSBORO GATEWAY TERMINAL
+    lat: 37.843889
+    lon: -87.0425
+    basin: ohio
+    nav_unit_id: 0WKA
+  - node_id: WCSC-0WKB
+    name: ROCKPORT RIVER TERMINAL
+    lat: 37.895833
+    lon: -87.044167
+    basin: ohio
+    nav_unit_id: 0WKB
   - node_id: WCSC-0WNB
     name: OWENSBORO RIVER RAIL TERMINAL
     lat: 37.77656
@@ -2803,6 +3621,12 @@ s4_node_registry:
     lon: -87.913198
     basin: ohio
     nav_unit_id: 0WS0
+  - node_id: WCSC-0WT4
+    name: PORT OF EVANSVILLE
+    lat: 37.975833
+    lon: -87.591667
+    basin: ohio
+    nav_unit_id: 0WT4
   - node_id: WCSC-0WTP
     name: ADM (Archer Daniels Midland Co.)
     lat: 37.975732
@@ -3193,6 +4017,12 @@ s4_node_registry:
     lon: -91.664167
     basin: upper_mississippi
     nav_unit_id: 0WHH
+  - node_id: WCSC-0WHX
+    name: GREAT WESTERN DOCK & TERMINAL CO., BARGE WHARF
+    lat: 44.939167
+    lon: -93.051111
+    basin: upper_mississippi
+    nav_unit_id: 0WHX
   - node_id: WCSC-0WJ0
     name: DAIRYLAND POWER COOPERATIVE, ALMA POWER PLANT DOCK
     lat: 44.306667
@@ -3259,6 +4089,12 @@ s4_node_registry:
     lon: -91.415278
     basin: upper_mississippi
     nav_unit_id: 0WKM
+  - node_id: WCSC-0WKN
+    name: QUINCY MUNICIPAL BARGE TERMINAL WHARF
+    lat: 39.915833
+    lon: -91.415
+    basin: upper_mississippi
+    nav_unit_id: 0WKN
   - node_id: WCSC-0WKP
     name: BUNGE NORTH AMERICA, LAGRANGE GRAIN ELEVATOR DOCK
     lat: 40.039444
@@ -3337,6 +4173,18 @@ s4_node_registry:
     lon: -90.783223
     basin: upper_mississippi
     nav_unit_id: 0WPX
+  - node_id: WCSC-0WPY
+    name: LAFARGE NORTH AMERICA, DAVENPORT PLANT WHARF
+    lat: 41.521053
+    lon: -90.492933
+    basin: upper_mississippi
+    nav_unit_id: 0WPY
+  - node_id: WCSC-0WPZ
+    name: LINWOOD MINING & MINERALS CORP. DOCK
+    lat: 41.461685
+    lon: -90.682572
+    basin: upper_mississippi
+    nav_unit_id: 0WPZ
   - node_id: WCSC-0WQ0
     name: KOCH MATERIALS CO., DAVENPORT DOCK
     lat: 41.463028
@@ -3367,6 +4215,12 @@ s4_node_registry:
     lon: -91.099245
     basin: upper_mississippi
     nav_unit_id: 0WQ5
+  - node_id: WCSC-0WQH
+    name: ALTER LOGISTICS DAVEPORT
+    lat: 41.463056
+    lon: -90.670556
+    basin: upper_mississippi
+    nav_unit_id: 0WQH
   - node_id: WCSC-0WQL
     name: RIVER/GULF GRAIN CO., DAVENPORT DOCK
     lat: 41.522778
@@ -3433,6 +4287,12 @@ s4_node_registry:
     lon: -91.098736
     basin: upper_mississippi
     nav_unit_id: 0YTH
+  - node_id: WCSC-0Z55
+    name: HANKE TERMINALS DOCK
+    lat: 43.795556
+    lon: -91.259722
+    basin: upper_mississippi
+    nav_unit_id: 0Z55
   - node_id: WCSC-0ZB5
     name: ADM/ALLIANCE, QUINCY DOCK
     lat: 39.925278
@@ -3463,7 +4323,6 @@ s4_node_registry:
     lon: -93.123889
     basin: upper_mississippi
     nav_unit_id: 0ZJS
-
 event_windows:
   pre_event_horizon: "4 weeks"
   reference_horizon: "prior-year same calendar weeks"

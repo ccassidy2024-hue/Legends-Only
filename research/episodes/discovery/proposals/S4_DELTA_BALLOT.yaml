@@ -19,7 +19,7 @@ recommended_binding:
   S4_NODE_CENSUS: A
   S4_TRACK_GEOMETRY: POINT_ONLY
   corrected_b100: FULL_CONFIG_B100_S4_CORRECTED.yaml
-  corrected_b100_sha256: "f13589a240316c8d287bf25c63af9439bf5f52619175cbabbe6747f77c378551"
+  corrected_b100_sha256: "743a809be45cf954e2fe4485349425a5656a4a71cde2df9c995a7c8806448e13"
 
 human_fields:
   - field_id: S4_NODE_CENSUS
@@ -31,18 +31,18 @@ human_fields:
     options:
       - id: A
         file: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml
-        sha256: "0b38e45c31b6c3ef258cb63e39deaab51e819f70079d37c4b3efede531d0a37b"
-        row_count: 534
-        rule: WCSC Dock + live D2 waterway + grain token in COMMODITIES or PURPOSE
+        sha256: "b3ba56f2c6108491cc8cef784b24dd38f7d40c18ff121a936a47f222c43da92b"
+        row_count: 677
+        rule: NDC 08012026 Dock + live D2 waterway + grain token in COMMODITIES or PURPOSE
       - id: B
         file: S4_CENSUS_B_WCSC_D2GRAIN_DOCK_COMMODITIES.yaml
-        sha256: "1c219297b0df6d1ddfe51318628893c9e9216681e2a04dfc78ae37bedc5ab9d3"
-        row_count: 405
+        sha256: "1e1b3734aba0b00121ae5bf340e71649905530315337cf1792b72f1c7e71a5e4"
+        row_count: 593
         rule: Same as A, COMMODITIES only
       - id: C
         file: S4_CENSUS_C_WCSC_D2GRAIN_EXPORT_BASINS.yaml
-        sha256: "294a38860e275b906312934eb9998a79972f089cc6c4f48705d3be4722412ff4"
-        row_count: 227
+        sha256: "6351dd044e713417d262a0f41cf74f4679f88d69288cedfbd20f618b3abe63cd"
+        row_count: 330
         rule: Same as A, lower_mississippi + columbia_snake only
     not_asked: [S2, S4_RADIUS, V2_GOVERNANCE, S4_GEODESIC]
     humans_must_not_invent: [census_product, source_hash, match_rule]
@@ -73,4 +73,4 @@ approval_line_template: >-
   | S4_GEODESIC=HAVERSINE_NM_SPHERE (mechanical)
   | V2_GOVERNANCE=APPROVE (preserved)
 
-marker: S4_CORRECTION_DELTA_BALLOT_ENUMERATED_ABC_POINT_SEGMENT
+marker: S4_CORRECTION_DELTA_BALLOT_NDC_08012026_ABC_POINT_SEGMENT

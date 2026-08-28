@@ -8,6 +8,7 @@ import math
 import re
 from pathlib import Path
 
+import pandas as pd
 import yaml
 
 REPO = Path(__file__).resolve().parents[1]
@@ -34,10 +35,11 @@ PACKET_FILES = (
 )
 
 HISTORICAL_B100 = "9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1"
-CORRECTED_B100 = "f13589a240316c8d287bf25c63af9439bf5f52619175cbabbe6747f77c378551"
-CENSUS_A_SHA = "0b38e45c31b6c3ef258cb63e39deaab51e819f70079d37c4b3efede531d0a37b"
-CENSUS_B_SHA = "1c219297b0df6d1ddfe51318628893c9e9216681e2a04dfc78ae37bedc5ab9d3"
-CENSUS_C_SHA = "294a38860e275b906312934eb9998a79972f089cc6c4f48705d3be4722412ff4"
+CORRECTED_B100 = "743a809be45cf954e2fe4485349425a5656a4a71cde2df9c995a7c8806448e13"
+CENSUS_A_SHA = "b3ba56f2c6108491cc8cef784b24dd38f7d40c18ff121a936a47f222c43da92b"
+CENSUS_B_SHA = "1e1b3734aba0b00121ae5bf340e71649905530315337cf1792b72f1c7e71a5e4"
+CENSUS_C_SHA = "6351dd044e713417d262a0f41cf74f4679f88d69288cedfbd20f618b3abe63cd"
+NDC_XLSX_SHA = "ab1a8c00c142e6c4cd1412d745275ac4521064e946d535a4c7db470665bf4e20"
 EARTH_RADIUS_M = 1852 * 10800 / math.pi
 LIVE_D2 = (
     "lower_mississippi",
@@ -87,41 +89,44 @@ def _sha256(name: str) -> str:
     return hashlib.sha256((PROPOSALS / name).read_bytes()).hexdigest()
 
 
-def _features(name: str) -> dict[str, dict]:
-    data = json.loads((PROPOSALS / "s4_sources" / name).read_text(encoding="utf-8"))
-    out: dict[str, dict] = {}
-    for feat in data["features"]:
-        attrs = feat["attributes"]
-        out[attrs["NAV_UNIT_ID"]] = attrs
-    return out
+def _grain_in(text, rx: re.Pattern) -> bool:
+    if text is None or (isinstance(text, float) and math.isnan(text)):
+        return False
+    return bool(rx.search(str(text)))
 
 
 def _reconstruct_rows() -> tuple[list[dict], list[dict], list[dict], int]:
     rules = _load("S4_JOIN_RULES.yaml")
     wtwy = rules["wtwy_name_to_d2_basin"]
     rx = re.compile(rules["grain_token_regex"], re.I)
-    union = _features("usace_bts_docks_query_grain.json")
-    for nid, attrs in _features("usace_bts_docks_query_d2_commodity_tokens.json").items():
-        union.setdefault(nid, attrs)
-
-    def grain_in(text: str | None) -> bool:
-        return bool(rx.search(text or ""))
-
+    df = pd.read_excel(
+        PROPOSALS / "s4_sources" / "Navigation_Facilities_08012026.xlsx",
+        sheet_name="Navigation Facilities",
+    )
     rows_a: list[dict] = []
     unmatched = 0
-    for attrs in union.values():
-        comm = attrs.get("COMMODITIES") or ""
-        purpose = attrs.get("PURPOSE") or ""
-        if not (grain_in(comm) or grain_in(purpose)):
+    for rec in df.to_dict("records"):
+        comm = rec.get("COMMODITIES")
+        purpose = rec.get("PURPOSE")
+        if not (_grain_in(comm, rx) or _grain_in(purpose, rx)):
             continue
-        lat, lon = attrs.get("LATITUDE"), attrs.get("LONGITUDE")
-        basin = wtwy.get(attrs.get("WTWY_NAME"))
-        if attrs.get("FAC_TYPE") != "Dock" or basin is None or lat in (None, 0) or lon in (None, 0):
+        lat, lon = rec.get("LATITUDE"), rec.get("LONGITUDE")
+        basin = wtwy.get(rec.get("WTWY_NAME"))
+        fac = rec.get("FAC_TYPE")
+        bad_coord = (
+            lat is None
+            or lon is None
+            or (isinstance(lat, float) and (math.isnan(lat) or lat == 0))
+            or (isinstance(lon, float) and (math.isnan(lon) or lon == 0))
+        )
+        if fac != "Dock" or basin is None or bad_coord:
             unmatched += 1
             continue
-        rows_a.append(attrs)
-    rows_b = [row for row in rows_a if grain_in(row.get("COMMODITIES") or "")]
-    rows_c = [row for row in rows_a if wtwy[row["WTWY_NAME"]] in EXPORT_BASINS]
+        rec["_basin"] = basin
+        rec["_in_c"] = _grain_in(comm, rx)
+        rows_a.append(rec)
+    rows_b = [row for row in rows_a if row["_in_c"]]
+    rows_c = [row for row in rows_a if row["_basin"] in EXPORT_BASINS]
     return rows_a, rows_b, rows_c, unmatched
 
 
@@ -193,7 +198,8 @@ def test_live_d2_basins_match_production_prereg() -> None:
     assert tuple(schema["live_d2_basins"]) == LIVE_D2
 
 
-def test_census_files_match_reconstruction_and_digests() -> None:
+def test_census_files_match_ndc_08012026_reconstruction_and_digests() -> None:
+    assert _sha256("s4_sources/Navigation_Facilities_08012026.xlsx") == NDC_XLSX_SHA
     rows_a, rows_b, rows_c, unmatched = _reconstruct_rows()
     census_a = _load("S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml")
     census_b = _load("S4_CENSUS_B_WCSC_D2GRAIN_DOCK_COMMODITIES.yaml")
@@ -202,22 +208,23 @@ def test_census_files_match_reconstruction_and_digests() -> None:
     assert _sha256("S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml") == CENSUS_A_SHA
     assert _sha256("S4_CENSUS_B_WCSC_D2GRAIN_DOCK_COMMODITIES.yaml") == CENSUS_B_SHA
     assert _sha256("S4_CENSUS_C_WCSC_D2GRAIN_EXPORT_BASINS.yaml") == CENSUS_C_SHA
-    assert census_a["row_count"] == 534 == len(rows_a) == len(census_a["nodes"])
-    assert census_b["row_count"] == 405 == len(rows_b) == len(census_b["nodes"])
-    assert census_c["row_count"] == 227 == len(rows_c) == len(census_c["nodes"])
-    assert unmatched_doc["grain_token_rows_not_in_default"] == unmatched == 455
+    assert census_a["row_count"] == 677 == len(rows_a) == len(census_a["nodes"])
+    assert census_b["row_count"] == 593 == len(rows_b) == len(census_b["nodes"])
+    assert census_c["row_count"] == 330 == len(rows_c) == len(census_c["nodes"])
+    assert unmatched_doc["grain_token_rows_not_in_default"] == unmatched == 1167
     assert {row["nav_unit_id"] for row in census_a["nodes"]} == {
-        row["NAV_UNIT_ID"] for row in rows_a
+        str(row["NAV_UNIT_ID"]) for row in rows_a
     }
     assert {row["nav_unit_id"] for row in census_b["nodes"]} == {
-        row["NAV_UNIT_ID"] for row in rows_b
+        str(row["NAV_UNIT_ID"]) for row in rows_b
     }
     assert {row["nav_unit_id"] for row in census_c["nodes"]} == {
-        row["NAV_UNIT_ID"] for row in rows_c
+        str(row["NAV_UNIT_ID"]) for row in rows_c
     }
     assert census_a["completeness_claim"] == "NOT_CLAIMED"
     ids = [row["nav_unit_id"] for row in census_a["nodes"]]
     assert len(ids) == len(set(ids))
+    assert census_a["source_product"].endswith("08012026")
 
 
 def test_recommended_default_is_census_a_live_d2_only() -> None:
@@ -225,10 +232,10 @@ def test_recommended_default_is_census_a_live_d2_only() -> None:
     cfg = _load("FULL_CONFIG_B100_S4_CORRECTED.yaml")
     census_a = _load("S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml")
     registry = cfg["s4_node_registry"]
-    assert fac["row_count"] == 534
+    assert fac["row_count"] == 677
     assert fac["completeness_claim"] == "NOT_CLAIMED"
     assert fac["recommended_census_id"] == "S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP"
-    assert registry["row_count"] == 534
+    assert registry["row_count"] == 677
     assert registry["proximity_radius_nm"] == 100
     assert registry["texas_gulf_in_default"] is False
     assert registry["puget_sound_in_default"] is False
@@ -291,6 +298,7 @@ def test_ballot_enumerates_census_and_track_only() -> None:
     census = next(row for row in ballot["human_fields"] if row["field_id"] == "S4_NODE_CENSUS")
     assert [opt["id"] for opt in census["options"]] == ["A", "B", "C"]
     assert census["recommended"] == "A"
+    assert census["options"][0]["row_count"] == 677
     track = next(row for row in ballot["human_fields"] if row["field_id"] == "S4_TRACK_GEOMETRY")
     assert [opt["id"] for opt in track["options"]] == ["POINT_ONLY", "SEGMENT"]
     assert track["recommended"] == "POINT_ONLY"
@@ -330,7 +338,7 @@ def test_distance_contract_binds_100nm_and_haversine_nm_sphere() -> None:
     assert abs(segment["geodesic"]["earth_radius_m"] - EARTH_RADIUS_M) < 1e-9
 
 
-def test_fgis_location_name_all_null_and_not_joined() -> None:
+def test_fgis_is_corroboration_only_with_public_release_default_no() -> None:
     fgis = json.loads(
         (PROPOSALS / "s4_sources" / "fgis_GetFGISExportsList.json").read_text(encoding="utf-8")
     )
@@ -340,6 +348,12 @@ def test_fgis_location_name_all_null_and_not_joined() -> None:
     fac = _load("S4_FACILITY_BINDING.yaml")
     assert fac["fgis_registered_exporters"]["join"] == "NO_FACILITY_JOIN"
     assert fac["fgis_registered_exporters"]["location_name_nonnull"] == 0
+    assert fac["fgis_registered_exporters"]["public_release_default"] == "No"
+    html = (PROPOSALS / "s4_sources" / "fgis_ddr_export_registration_instructions.html").read_text(
+        encoding="utf-8", errors="replace"
+    )
+    assert "defaulted to no" in html.lower()
+    assert "publish as an export location" in html.lower()
 
 
 def test_named_export_elevators_and_census_b_drops_purpose_only() -> None:
@@ -348,12 +362,12 @@ def test_named_export_elevators_and_census_b_drops_purpose_only() -> None:
     names_a = {row["name"] for row in census_a["nodes"]}
     names_b = {row["name"] for row in census_b["nodes"]}
     assert "PORT OF LONGVIEW BERTH 9 EGT" in names_a
-    assert "PORT OF LONGVIEW BERTH 9 EGT" in names_b
     assert "TEMCO (CHS CARGILL), KALAMA GRAIN ELEVATOR" in names_a
+    assert "ADM/GROWMARK, AMA GRAIN ELEVATOR DOCK" in names_a
     for name in (
-        "ADM/GROWMARK, AMA GRAIN ELEVATOR DOCK",
-        "ADM/GROWMARK, DESTREHAN ELEVATOR WHARF",
-        "ZEN-NOH GRAIN CORP. WHARF.",
+        "CARGILL, TERMINAL 4 GRAIN ELEVATOR, BERTH NO. 401",
+        "Cargill, Westwego Elevator Wharf.",
+        "Bunge Corp., Destrehan Elevator Wharf.",
     ):
         assert name in names_a
         assert name not in names_b
@@ -405,14 +419,17 @@ def test_source_family_endpoints_verified_and_no_out_of_d2_hidden() -> None:
     s8 = next(row for row in cfg["source_archives"] if row["sweep_id"] == "S8")
     assert "endpoint" not in s8
     provenance = _load("S4_SOURCE_RETRIEVAL_PROVENANCE.yaml")
+    assert provenance["primary_census_source"] == "NDC_LIBRARY_NAVIGATION_FACILITIES_08012026"
+    assert provenance["sources"][0]["id"] == "NDC_LIBRARY_NAVIGATION_FACILITIES_08012026"
+    assert provenance["sources"][0]["document_identifier"] == "08012026"
     verified = provenance["endpoint_verification"]
     assert verified["https://www.navcen.uscg.gov/msib"] == 404
     assert verified["https://navcen.uscg.gov/msib-national"] == 200
     assert verified["https://corpslocks.usace.army.mil/"] == "DNS_FAIL"
     assert verified["https://ndc.ops.usace.army.mil/ords/r/lpms/corps-locks/home"] == 200
     assert verified["https://portnola.com/notices"] == 404
-    assert provenance["sources"][-1]["id"] == "NOAA_USACE_IENC"
-    assert provenance["sources"][-1]["retrieved"] is False
+    ienc = next(row for row in provenance["sources"] if row["id"] == "NOAA_USACE_IENC")
+    assert ienc["retrieved"] is False
 
 
 def test_packet_does_not_modify_production_guard_surfaces() -> None:

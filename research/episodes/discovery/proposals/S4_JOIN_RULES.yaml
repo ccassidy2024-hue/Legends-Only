@@ -1,6 +1,8 @@
 schema_version: '1.0'
 proposal_id: S4_JOIN_RULES
-retrieval_ts: '2026-08-27T23:41:05Z'
+census_source_product: NDC Library Navigation Facilities DOCUMENTIDENTIFIER 08012026
+census_source_file: s4_sources/Navigation_Facilities_08012026.xlsx
+retrieval_ts: '2026-08-27T23:53:57Z'
 live_d2_basins:
 - lower_mississippi
 - middle_mississippi

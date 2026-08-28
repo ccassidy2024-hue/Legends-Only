@@ -1,55 +1,60 @@
 schema_version: '1.0'
 proposal_id: S4_UNMATCHED_AND_EXPANSIONS
-grain_token_rows_not_in_default: 455
+census_source: NDC Library Navigation Facilities 08012026
+grain_token_rows_not_in_default: 1167
 excluded_fac_types_in_mapped_or_unmapped:
-  Dock: 306
-  Milepoint: 133
+  Dock: 842
+  Fleeting Area: 8
+  Milepoint: 150
+  Lock and/or Dam: 127
+  Anchorage: 22
+  Bridge: 1
   Junction: 1
-  Open Water: 6
-  Fleeting Area: 6
-  Anchorage: 2
-  'null': 1
+  Open Water: 14
+  Marina: 1
+  None: 1
 top_unmapped_waterways:
-- wtwy_name: Tennessee River, TN, AL and KY
-  n: 42
-- wtwy_name: Arkansas River, AR
-  n: 26
 - wtwy_name: Houston Ship Channel, TX
-  n: 11
-- wtwy_name: Missouri River, Kansas City to the Mouth
-  n: 9
-- wtwy_name: Calumet Harbor and River, IL and IN
-  n: 8
-- wtwy_name: Minnesota River, MN
-  n: 8
-- wtwy_name: Missouri River, Omaha to Kansas City
-  n: 8
-- wtwy_name: Tennessee Tombigbee Waterway
-  n: 7
-- wtwy_name: Lake Michigan
-  n: 7
-- wtwy_name: Yazoo River, MS Mouth of
-  n: 6
-- wtwy_name: White River, AR below Batesville, AR
-  n: 6
-- wtwy_name: Superior Wisconsin
-  n: 6
-- wtwy_name: Duluth MN
-  n: 6
-- wtwy_name: Lake Erie, Including Upper Niagara River
-  n: 6
-- wtwy_name: Sacramento River Deepwater Ship Channel, CA
-  n: 5
-- wtwy_name: Calcasieu River and Pass, LA
-  n: 5
+  n: 63
+- wtwy_name: Tennessee River, TN, AL and KY
+  n: 62
+- wtwy_name: Arkansas River, AR
+  n: 44
+- wtwy_name: Port of Los Angeles, CA
+  n: 30
 - wtwy_name: San Juan Harbor, PR
-  n: 5
-- wtwy_name: Cumberland River, Mouth to Nashville, TN
-  n: 5
-- wtwy_name: Chicago Sanitary and Ship Canal, IL
-  n: 5
-- wtwy_name: Clearwater River, ID
-  n: 5
+  n: 30
+- wtwy_name: Port of Long Beach, CA
+  n: 28
+- wtwy_name: Newark Bay, NJ (Included in NewarK Bay, NJ Consolidated Report and Port
+    of New York)
+  n: 24
+- wtwy_name: Tennessee Tombigbee Waterway
+  n: 21
+- wtwy_name: Norfolk Harbor, VA
+  n: 19
+- wtwy_name: Miami River, FL
+  n: 16
+- wtwy_name: Seattle, WA
+  n: 15
+- wtwy_name: Galveston, TX
+  n: 15
+- wtwy_name: Port Everglades Harbor, FL
+  n: 14
+- wtwy_name: Tacoma Harbor, WA
+  n: 14
+- wtwy_name: Oakland Harbor, CA
+  n: 14
+- wtwy_name: Baltimore, MD
+  n: 12
+- wtwy_name: Port of Savannah, GA
+  n: 12
+- wtwy_name: Calcasieu River and Pass, LA
+  n: 11
+- wtwy_name: Gulf Intracoastal Waterway, Mississippi River, LA, to Sabine River, TX
+  n: 11
+- wtwy_name: Delaware River, Philadelphia, PA to the Sea
+  n: 11
 unapproved_expansions_observed_in_wcsc_grain_tokens:
   TEXAS_GULF:
   - Houston Ship Channel, TX
@@ -64,10 +69,20 @@ unapproved_expansions_observed_in_wcsc_grain_tokens:
   - Lake Erie, Including Upper Niagara River
   - Superior Wisconsin
 included_in_corrected_default: false
+featureserver_query_subset:
+  note: Live ArcGIS Dock FeatureServer grain-token queries produced 534 D2 Dock rows,
+    a subset of the official 08012026 workbook. Ballot variants use the NDC workbook,
+    not the incomplete GIS extract.
+  featureserver_d2_dock_grain_rows: 534
+  xlsx_d2_dock_grain_rows: 677
+  xlsx_only: 143
 fgis_join:
   attempted: true
   result: NO_FACILITY_JOIN
-  reason: GetFGISExportsList LocationName is null on all 655 rows; business addresses are not dock coordinates.
-ambiguous_rows: 'None inside a chosen variant: NAV_UNIT_ID is unique. Unmapped waterways are excluded,
-  not guessed.'
-marker: S4_UNMATCHED_AND_EXPANSIONS_v1
+  role: corroboration_only_not_physical_census
+  reason: GetFGISExportsList LocationName is null on all 655 rows. Official DDR instructions
+    default additional locations to No for public release. Public FGIS location report
+    is not an exhaustive terminal census.
+ambiguous_rows: 'None inside a chosen variant: NAV_UNIT_ID is unique. Unmapped waterways
+  are excluded, not guessed.'
+marker: S4_UNMATCHED_AND_EXPANSIONS_v2

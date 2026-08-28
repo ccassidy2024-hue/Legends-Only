@@ -1,4 +1,4 @@
-# S4 facility binding after official census retrieval and D2 join.
+# S4 facility binding after NDC Navigation Facilities 08012026 retrieval and D2 join.
 # Proposal only. Completeness is not claimed.
 
 schema_version: "1.0"
@@ -33,94 +33,102 @@ live_d2_basins:
   - columbia_snake
 
 retrieval_executed: true
-retrieval_ts: "2026-08-27T23:41:05Z"
+census_source_product: NDC Library Navigation Facilities DOCUMENTIDENTIFIER 08012026
+census_source_file: s4_sources/Navigation_Facilities_08012026.xlsx
+census_source_sha256: "ab1a8c00c142e6c4cd1412d745275ac4521064e946d535a4c7db470665bf4e20"
+retrieval_ts: "2026-08-27T23:53:57Z"
 join_rules_file: S4_JOIN_RULES.yaml
 match_key: NAV_UNIT_ID
-coordinate_product: USACE/BTS Navigation Facilities (Dock) LATITUDE/LONGITUDE
+coordinate_product: NDC Library Navigation Facilities 08012026 LATITUDE/LONGITUDE
 ienc_used: false
+fgis_used_as: corroboration_only_not_physical_census
 
 fgis_registered_exporters:
   retrieved: true
   row_count: 655
   location_name_nonnull: 0
   join: NO_FACILITY_JOIN
+  public_release_default: No
+  role: corroboration_only_not_physical_census
   reason: >-
-    GetFGISExportsList LocationName is null on every row. Rows are exporter
-    business identities, not named docks with coordinates.
+    GetFGISExportsList LocationName is null on every row. Official DDR
+    instructions default additional export locations to No for public
+    release. The public FGIS location report is not an exhaustive terminal
+    census and is not used to enumerate S4 nodes.
 
 recommended_census_id: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP
 recommended_census_file: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml
-recommended_census_sha256: "0b38e45c31b6c3ef258cb63e39deaab51e819f70079d37c4b3efede531d0a37b"
-row_count: 534
+recommended_census_sha256: "b3ba56f2c6108491cc8cef784b24dd38f7d40c18ff121a936a47f222c43da92b"
+row_count: 677
 completeness_claim: NOT_CLAIMED
 inclusion_rule: >-
-  FAC_TYPE==Dock AND valid official lat/lon AND WTWY_NAME in the frozen
-  live-D2 waterway map AND word-boundary grain token in COMMODITIES or
-  PURPOSE. NAV_UNIT_ID is the exact match key. Unmapped waterways and
-  non-Dock types are excluded, not guessed.
+  Official 08012026 workbook. FAC_TYPE==Dock AND valid official lat/lon AND
+  WTWY_NAME in the frozen live-D2 waterway map AND word-boundary grain token
+  in COMMODITIES or PURPOSE. NAV_UNIT_ID is the exact match key. Unmapped
+  waterways and non-Dock types are excluded, not guessed. Record status is
+  not used as a completeness filter.
 
 default_facility_rows:
   source_file: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml
-  sha256: "0b38e45c31b6c3ef258cb63e39deaab51e819f70079d37c4b3efede531d0a37b"
-  row_count: 534
+  sha256: "b3ba56f2c6108491cc8cef784b24dd38f7d40c18ff121a936a47f222c43da92b"
+  row_count: 677
   compact_copy: FULL_CONFIG_B100_S4_CORRECTED.yaml s4_node_registry.nodes
 
 census_variants:
   - id: A
     selector: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP
     file: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml
-    sha256: "0b38e45c31b6c3ef258cb63e39deaab51e819f70079d37c4b3efede531d0a37b"
-    row_count: 534
+    sha256: "b3ba56f2c6108491cc8cef784b24dd38f7d40c18ff121a936a47f222c43da92b"
+    row_count: 677
     recommended: true
     least_change: true
     rule: Dock + live-D2 waterway + grain token in COMMODITIES or PURPOSE
     basin_counts:
-      lower_mississippi: 167
-      upper_mississippi: 101
-      ohio: 82
-      illinois: 73
-      columbia_snake: 60
-      middle_mississippi: 51
+      lower_mississippi: 253
+      ohio: 102
+      upper_mississippi: 107
+      illinois: 81
+      columbia_snake: 77
+      middle_mississippi: 57
   - id: B
     selector: S4_CENSUS_B_WCSC_D2GRAIN_DOCK_COMMODITIES
     file: S4_CENSUS_B_WCSC_D2GRAIN_DOCK_COMMODITIES.yaml
-    sha256: "1c219297b0df6d1ddfe51318628893c9e9216681e2a04dfc78ae37bedc5ab9d3"
-    row_count: 405
+    sha256: "1e1b3734aba0b00121ae5bf340e71649905530315337cf1792b72f1c7e71a5e4"
+    row_count: 593
     recommended: false
     rule: Same as A except grain token must appear in COMMODITIES
-    drops_purpose_only_export_elevators:
-      - ADM/GROWMARK, AMA GRAIN ELEVATOR DOCK
-      - ADM/GROWMARK, DESTREHAN ELEVATOR WHARF
-      - ZEN-NOH GRAIN CORP. WHARF.
+    drops_purpose_only_examples:
+      - CARGILL, TERMINAL 4 GRAIN ELEVATOR, BERTH NO. 401
+      - Cargill, Westwego Elevator Wharf.
+      - Bunge Corp., Destrehan Elevator Wharf.
+      - CARGILL-RESERVE ELEVATOR WHARF
   - id: C
     selector: S4_CENSUS_C_WCSC_D2GRAIN_EXPORT_BASINS
     file: S4_CENSUS_C_WCSC_D2GRAIN_EXPORT_BASINS.yaml
-    sha256: "294a38860e275b906312934eb9998a79972f089cc6c4f48705d3be4722412ff4"
-    row_count: 227
+    sha256: "6351dd044e713417d262a0f41cf74f4679f88d69288cedfbd20f618b3abe63cd"
+    row_count: 330
     recommended: false
     rule: Same as A restricted to lower_mississippi and columbia_snake
     basin_counts:
-      lower_mississippi: 167
-      columbia_snake: 60
+      lower_mississippi: 253
+      columbia_snake: 77
 
 recommendation_basis: >-
   A is least change from ratified S4 object class (export/transfer, not
-  export-only) and keeps PURPOSE-only official grain elevators that B
-  drops. C silently chooses export-basin completeness. Humans pick A, B,
-  or C; they do not invent a product or hash.
+  export-only) and from using the official Navigation Facilities snapshot
+  without dropping PURPOSE-only grain elevators. C silently chooses
+  export-basin completeness. Humans pick A, B, or C.
 
 notable_included_under_A:
   - name: ADM/GROWMARK, AMA GRAIN ELEVATOR DOCK
-    nav_unit_id: included_in_census_A
   - name: PORT OF LONGVIEW BERTH 9 EGT
     note: Commodities Wheat|Corn|Oilseeds; name has neither ELEVATOR nor GRAIN
   - name: TEMCO (CHS CARGILL), KALAMA GRAIN ELEVATOR
-    note: >-
-      Official WCSC grain dock. S8 corporate-only exclusion does not apply
-      to S4 physical nodes when WCSC is the census.
+    note: Official NDC grain dock. S8 corporate-only exclusion does not apply to S4 physical nodes.
 
-unmatched_grain_token_rows: 455
+unmatched_grain_token_rows: 1167
 ambiguous_rows: none_inside_variant_NAV_UNIT_ID_unique
+featureserver_gis_subset_not_on_ballot: 534
 
 unapproved_expansions:
   - id: TEXAS_GULF
@@ -141,9 +149,7 @@ unapproved_expansions:
     live_d2: false
     episode_schema_vocab_token: great_lakes_seaway
     included_in_corrected_default: false
-    note: >-
-      Coast Guard district D9 is omitted from proposed S3. Great Lakes
-      waterways observed in WCSC grain-token rows stay unmatched.
+    note: Coast Guard district D9 is omitted from proposed S3. Great Lakes waterways stay unmatched.
 
 withdrawn_pr42_default_rows:
   - node_id: GULF-01
@@ -172,8 +178,8 @@ irreducible_selector:
   options: [A, B, C]
   recommended: A
   why_irreducible: >-
-    Official bytes plus live-D2 Dock join still leave three defensible finite
-    rules. Each is materialized with exact rows and SHA256.
+    Official 08012026 bytes plus live-D2 Dock join still leave three defensible
+    finite grain-field rules. Each is materialized with exact rows and SHA256.
   not_silently_chosen: true
 
-marker: S4_FACILITY_BINDING_CENSUS_ABC_ENUMERATED
+marker: S4_FACILITY_BINDING_NDC_08012026_ABC_ENUMERATED
