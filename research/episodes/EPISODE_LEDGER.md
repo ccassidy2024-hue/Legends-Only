@@ -147,7 +147,7 @@ think it happens | what we expect next | how it could be traded.
 M1 merge: PR #51, `b7d402713ef5eaed33cdff44f4128382e3b38be7` (reviewed head
 `9812df348c053af3024fd007a4ee486494aac954`). Downstream empty-sample closeout
 (M2–M8) lives in `research/milestones/`. M5 Gate C FAIL memo:
-`research/memos/M5_NEGATIVE_RESULT_MECHANISM.md` (human signatures pending).
+`research/memos/M5_NEGATIVE_RESULT_MECHANISM.md` (Gate C FAIL signed; M5 complete).
 M6/M7 skipped under the <6 kill. M8 written negative result:
 `research/milestones/M8_WRITTEN_NEGATIVE_RESULT.md`. UNKNOWN is not zero.
 
@@ -159,3 +159,4 @@ M6/M7 skipped under the <6 kill. M8 written negative result:
 | 2026-08-28 | — | M1 merged to main (PR #51). M2–M5 empty-sample closeout: `M2_NEGATIVE_RESULT_EMPTY_SAMPLE`; M3/M4 not-estimable; M5 four-statement memo. | A (agent) |
 | 2026-08-28 | — | Kill closeout: M3 family size = 0 tests performed (never-run); M6/M7 skipped; M8 written unanswerable result. Marker `M1_CLOSEOUT_GROK_TAKEOVER`. | A (agent) |
 | 2026-08-28 | — | M5 Gate C FAIL / negative-result retained memo; A/B human signatures pending. Marker `GENUINE_M5_NEGATIVE_RESULT_MEMO_COMPLETION`. | A (agent) |
+| 2026-08-28 | — | Record A+B `SIGN_FAIL_NEGATIVE_RESULT` on freeze `0e58688` (Slack TS `1787903087.410749`). Marker `M5_SIGNED_FINAL_STATE`. | A (agent) |

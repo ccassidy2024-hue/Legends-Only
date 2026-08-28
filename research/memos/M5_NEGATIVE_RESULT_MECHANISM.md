@@ -1,12 +1,12 @@
 # Mechanism Memo: empty-sample negative result (no identified shock-to-flow arrow)
 
-Status: **Gate C FAIL / negative-result retained**. Awaiting Person A and Person B
-human signatures on the frozen SHA named in §9. This file is the M5 mechanism /
-literature memo required by `BLUEPRINT_REVIEW.md` revised milestone 5 and
-`research/memos/MEMO_TEMPLATE.md`. It does **not** reopen market outcomes, mint
-episodes, or claim a trade thesis.
+Status: **Gate C FAIL signed; M5 complete**. Negative-result retained. Not a
+positive thesis, not evidence of no disruption, and not evidence of market
+efficiency. This file is the M5 mechanism / literature memo required by
+`BLUEPRINT_REVIEW.md` revised milestone 5 and `research/memos/MEMO_TEMPLATE.md`.
+It does **not** reopen market outcomes, mint episodes, or claim a trade thesis.
 
-Marker: `GENUINE_M5_NEGATIVE_RESULT_MEMO_COMPLETION`
+Marker: `M5_SIGNED_FINAL_STATE`
 
 Regenerable counts: frozen D5 / Phase-2 / catalog / ledger artifacts plus
 `tests/test_m5_negative_result_memo.py`. `make all` must pass. No empirical
@@ -255,17 +255,22 @@ Allowed template values: `pass | fail | unexplained-but-retained`.
 This memo uses **fail**, with the negative result retained as the M5 record
 (aligned with M8 `M8_WRITTEN_NEGATIVE_RESULT_UNANSWERABLE`).
 
-Human signatures are **pending**. They are not forged. They bind to the final
-frozen SHA of this file after red-team insertion and CI, not to an earlier
-draft.
+Human signatures are **signed**. They were not forged in this commit. They
+record the Slack A+B approval of frozen memo head
+`0e58688260e8fe42f210a70cf55a04dd19ac3c59` (PR #54), which is an ancestor of
+post-merge `origin/main` `52c3bcb47e677f081300d9b250cbc5712111be4b`.
 
-| Role | Decision requested | Signature | SHA bound |
+Provenance: Slack TS `1787903087.410749` (channel C0BS23LRC05):
+`M5_GATE_C_SIGN @ 0e58688260e8fe42f210a70cf55a04dd19ac3c59 | A=SIGN_FAIL_NEGATIVE_RESULT | B=SIGN_FAIL_NEGATIVE_RESULT`
+
+| Role | Decision | Signature | SHA bound |
 |---|---|---|---|
-| Person A | `SIGN_FAIL_NEGATIVE_RESULT` | pending | final freeze SHA |
-| Person B | `SIGN_FAIL_NEGATIVE_RESULT` | pending | final freeze SHA |
+| Person A | `SIGN_FAIL_NEGATIVE_RESULT` | signed | `0e58688260e8fe42f210a70cf55a04dd19ac3c59` |
+| Person B | `SIGN_FAIL_NEGATIVE_RESULT` | signed | `0e58688260e8fe42f210a70cf55a04dd19ac3c59` |
 
-M5 is **not genuinely complete** until those human signatures exist.
-Automation must not merge a claim of Gate C completion.
+**Gate C FAIL signed; M5 complete.** This remains a negative-result retained,
+not a PASS, not a trade thesis, and not a finding that disruptions did not
+occur or that markets are efficient.
 
 ---
 
@@ -275,5 +280,5 @@ Automation must not merge a claim of Gate C completion.
 |---|---|
 | What the data show | D5=4234, all disposed, 0 survivors, N_episodes=0, no real event-window screener/LP; UNKNOWN is not zero; missing I2 is not no disruption |
 | Why we think it happens | Construction: closed I1/I2/I3 plus no invented series. Hypotheses (not findings): residual duration, substitution, navigation-basin IV |
-| What we expect next | M6/M7 stay skipped. Market data stays closed. Human A/B Gate C FAIL signatures on the freeze SHA |
+| What we expect next | M5 complete as Gate C FAIL signed. M6/M7 stay skipped. Market data stays closed. |
 | How it could be traded | It cannot. Gate F #5 **no mispricing** is the default. Items 1–4 cannot be evidenced. No thesis. |

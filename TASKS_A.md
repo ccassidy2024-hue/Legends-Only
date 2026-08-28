@@ -34,7 +34,7 @@ empty-ledger negative result (4234 no-episode dispositions, 0 survivors,
 real series; do not fabricate `release_ts` or resurrect dropped D5
 candidates). M3/M4 are written not-estimable (zero ledger windows / zero
 identified shocks). M3 family size = 0 tests performed. M5 Gate C FAIL memo
-`research/memos/M5_NEGATIVE_RESULT_MECHANISM.md` awaits A/B human signatures.
+`research/memos/M5_NEGATIVE_RESULT_MECHANISM.md` is Gate C FAIL signed; M5 complete.
 M6/M7 skipped
 under the <6 kill. M8 is `M8_WRITTEN_NEGATIVE_RESULT_UNANSWERABLE`.
 Synthetic `panel.py` plumbing stays; do not edit it for this closeout.
