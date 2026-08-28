@@ -1,7 +1,8 @@
 """M5 Gate C FAIL memo invariants.
 
 Does not mint episodes, series, observations, or reopen outcomes.
-Does not forge A/B human signatures. Does not invent beta/lag/t/p.
+Does not invent beta/lag/t/p. Records Slack-bound A+B signatures; does not
+forge them.
 """
 
 from __future__ import annotations
@@ -17,7 +18,9 @@ CLOSEOUT_YAML = REPO / "research/milestones/empty_sample_closeout.yaml"
 MEMO = REPO / "research/memos/M5_NEGATIVE_RESULT_MECHANISM.md"
 STUB = REPO / "research/memos/M5_EMPTY_SAMPLE_FOUR_STATEMENTS.md"
 SETTINGS_PATH = REPO / "config/settings.yaml"
-MARKER = "GENUINE_M5_NEGATIVE_RESULT_MEMO_COMPLETION"
+MARKER = "M5_SIGNED_FINAL_STATE"
+SIGNED_HEAD = "0e58688260e8fe42f210a70cf55a04dd19ac3c59"
+SLACK_TS = "1787903087.410749"
 SECTIONS = [
     "## 1. Claim",
     "## 2. What the data show",
@@ -35,13 +38,16 @@ def _closeout() -> dict:
     return yaml.safe_load(CLOSEOUT_YAML.read_text(encoding="utf-8"))
 
 
-def test_m5_yaml_gate_c_fail_signatures_pending() -> None:
+def test_m5_yaml_gate_c_fail_signatures_signed() -> None:
     doc = _closeout()
     m5 = doc["m5"]
     assert m5["artifact"] == "research/memos/M5_NEGATIVE_RESULT_MECHANISM.md"
     assert m5["gate_c"] == "FAIL_NEGATIVE_RESULT"
-    assert m5["gate_c_complete"] is False
-    assert m5["human_signatures"] == "pending"
+    assert m5["gate_c_complete"] is True
+    assert m5["human_signatures"] == "signed"
+    assert m5["signed_decision"] == "SIGN_FAIL_NEGATIVE_RESULT"
+    assert m5["signed_memo_head"] == SIGNED_HEAD
+    assert m5["slack_approval_ts"] == SLACK_TS
     assert m5["school_database_search_performed"] is False
     assert m5["market_outcomes_opened"] is False
     assert m5["gate_f_default"] == "no_mispricing"
@@ -49,7 +55,7 @@ def test_m5_yaml_gate_c_fail_signatures_pending() -> None:
     assert settings["project"]["phase"] == "m8_written_negative_result"
     assert settings["project"]["next_milestone"] == "none_kill_closed"
     assert settings["project"]["m5_gate_c"] == "FAIL_NEGATIVE_RESULT"
-    assert settings["project"]["m5_human_signatures"] == "pending"
+    assert settings["project"]["m5_human_signatures"] == "signed"
 
 
 def test_m5_memo_template_sections_and_honesty() -> None:
@@ -57,6 +63,7 @@ def test_m5_memo_template_sections_and_honesty() -> None:
     for heading in SECTIONS:
         assert heading in text
     assert MARKER in text
+    assert "Gate C FAIL signed; M5 complete" in text
     assert str(FROZEN_CANDIDATE_COUNT) in text
     assert "Effective N = number of episodes = **0**" in text
     assert "not estimable" in text.lower()
@@ -65,8 +72,11 @@ def test_m5_memo_template_sections_and_honesty() -> None:
     assert "driver identity only" in text
     assert "Gate C: **fail / negative-result retained**" in text
     assert "Signed by: A (agent" not in text
-    assert "| Person A | `SIGN_FAIL_NEGATIVE_RESULT` | pending |" in text
-    assert "| Person B | `SIGN_FAIL_NEGATIVE_RESULT` | pending |" in text
+    assert "| Person A | `SIGN_FAIL_NEGATIVE_RESULT` | signed |" in text
+    assert "| Person B | `SIGN_FAIL_NEGATIVE_RESULT` | signed |" in text
+    assert SIGNED_HEAD in text
+    assert SLACK_TS in text
+    assert "pending |" not in text
     assert "School academic-database search" in text
     assert "**not performed**" in text
     assert "no mispricing" in text.lower()

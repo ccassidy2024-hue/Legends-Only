@@ -40,7 +40,7 @@ the later critique never existed.
 2. As-of panel + leakage protection ← **closed: `M2_NEGATIVE_RESULT_EMPTY_SAMPLE` (0 real series)**
 3. Exploratory screener with honest multiple-testing treatment ← **not estimable (0 ledger windows)**
 4. Direct shock-response modeling / local projections ← **not estimable (0 identified shocks)**
-5. Mechanism research + literature review ← **Gate C FAIL memo awaiting A/B human signatures**
+5. Mechanism research + literature review ← **Gate C FAIL signed; M5 complete**
 6. Stronger causal/dynamic identification where justified ← **skipped under <6 kill**
 7. Historical replay ← **skipped under <6 kill**
 8. Trade thesis **or** written negative result ← **closed: unanswerable (Sample P = 0)**
@@ -101,8 +101,8 @@ Market outcomes remain unopened. See `research/episodes/EPISODE_LEDGER.md`.
 **M2–M5:** `M2_NEGATIVE_RESULT_EMPTY_SAMPLE` (0 catalogued real series; do not
 fabricate rows). M3/M4 not-estimable. M3 multiplicity: planned family size = 0
 tests performed (never-run, not ran-and-null). M5 Gate C FAIL memo:
-`research/memos/M5_NEGATIVE_RESULT_MECHANISM.md` (awaiting A/B human
-signatures; not complete). Synthetic panel plumbing
+`research/memos/M5_NEGATIVE_RESULT_MECHANISM.md` (Gate C FAIL signed; M5
+complete; negative-result retained). Synthetic panel plumbing
 is unchanged. **M6/M7 skipped** under the `WORKFLOW.md` <6 kill.
 **M8 closed:** written negative result — the question is unanswerable with
 this data; Gate F #5 no mispricing. See
