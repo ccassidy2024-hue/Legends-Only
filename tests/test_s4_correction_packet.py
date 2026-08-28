@@ -496,12 +496,18 @@ def test_source_family_endpoints_verified_and_no_out_of_d2_hidden() -> None:
 
 
 def test_packet_does_not_modify_production_guard_surfaces() -> None:
+    """PR44 packet artifacts remain non-authorizing; live persist is a later B-RED change."""
     assert LIVE_PREREG.is_file()
     assert PRODUCTION_MANIFEST.is_file()
     assert GOVERNANCE_PY.is_file()
-    live = yaml.safe_load(LIVE_PREREG.read_text(encoding="utf-8"))
-    assert "s4_node_registry" not in live
-    assert live["schema_version"] == "0.2"
+    packet_manifest = _load("S4_CORRECTION_PACKET_MANIFEST.yaml")
+    assert packet_manifest["production_persistence"] == "forbidden"
+    assert packet_manifest["implementation_authorization"] is False
+    packet_cfg = _load("FULL_CONFIG_B100_S4_CORRECTED.yaml")
+    assert packet_cfg["marker"] == "FULL_CONFIG_B100_S4_CORRECTED_CENSUS_A_POINT_ONLY"
+    assert packet_cfg["s4_node_registry"]["status"] == (
+        "PROPOSED_RECOMMENDED_CENSUS_A_POINT_ONLY"
+    )
 
 
 def test_fgis_corroboration_binds_matched_unmatched_ambiguous() -> None:
