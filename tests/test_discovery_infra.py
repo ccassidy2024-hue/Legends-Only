@@ -1034,7 +1034,9 @@ def test_n3_blocks_unbound_path(tmp_path: Path) -> None:
     _git(root, "tag", PREREG_TAG_V2)
     with pytest.raises(RatificationError, match="extra|interpretation|load-bearing"):
         assert_sweep_authorized(root)
-    root2 = _build_ratified_repo(tmp_path / "unbound-adr")
+    adr_tmp = tmp_path / "unbound-adr"
+    adr_tmp.mkdir()
+    root2 = _build_ratified_repo(adr_tmp)
     cfg_path = root2 / "config" / "discovery" / "prereg_rules.yaml"
     cfg = yaml.safe_load(cfg_path.read_text(encoding="utf-8"))
     cfg["governing_adr"] = "docs/decisions/not-load-bearing.md"
