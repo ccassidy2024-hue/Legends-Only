@@ -1,0 +1,57 @@
+# D6 evidence-pack inventory schema (mechanical / outcome-blind).
+#
+# SCHEMA/SHAPE DOCUMENTATION ONLY.
+# Inventory records verify frozen D5 raw_capture_pointer objects and the two
+# HURDAT2 archive captures against capture manifests and SHA256.
+# They do not remint candidates, rewrite candidates.csv identity, author
+# episodes, or inspect market outcomes.
+# UNKNOWN is never treated as zero verified.
+
+schema_version: "1.0"
+record_kind: d6_evidence_pack_inventory
+
+top_level_required_fields:
+  - schema_version
+  - record_kind
+  - outcome_blind
+  - blocker
+  - blocker_detail
+  - complete
+  - grain_data_root_set
+  - capture_store_present
+  - frozen_d5
+  - pointers
+  - hurdat2_archives
+  - enrichment_appended
+  - notes
+
+blocker_vocabulary:
+  - null
+  - CAPTURE_STORE_MISSING
+  - EXTERNAL_ACCESS_BLOCKED
+  - FROZEN_D5_IDENTITY_DRIFT
+
+pointer_status_vocabulary:
+  - verified
+  - missing
+  - unknown
+  - mismatch
+  - manifest_gap
+
+semantics:
+  - frozen CAND IDs and candidate_universe_version must remain byte-identical
+  - raw object identity is sha256; manifest records are provenance
+  - missing or unreadable objects fail closed (not counted as verified)
+  - UNKNOWN is not zero
+  - HURDAT2 public re-fetch verifies digest only and is not a new candidate
+  - append-only enrichment never creates a new capture directory
+  - no overwrite of existing capture objects
+
+forbidden_fields:
+  - episode_id
+  - severity
+  - market_outcome
+  - price
+  - futures
+  - basis
+  - h7_survivor
