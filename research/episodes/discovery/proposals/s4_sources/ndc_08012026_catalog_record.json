@@ -1,0 +1,19 @@
+{
+  "OBJECTID": "bebe0d17-f103-4ac7-b753-997429a178e5",
+  "TITLE": "Navigation Facilities ",
+  "DOCUMENTIDENTIFIER": "08012026",
+  "FILENAME": "Navigation Facilities 07 31 2026.xlsx",
+  "FILETYPE": "xlsx",
+  "FILESIZE": 6517079,
+  "RELEASEMONTH": "August",
+  "RELEASEYEAR": 2026,
+  "COLLECTION": "Navigation Data Center",
+  "DATEUPLOADED": "2026-07-31T15:56:09.000Z",
+  "DATELASTMETADATAENTRY": "2026-07-31T15:56:09.000Z",
+  "download_url": "https://ndclibrary.sec.usace.army.mil/api/download?id=bebe0d17-f103-4ac7-b753-997429a178e5&filename=Navigation%20Facilities%2007%2031%202026.xlsx",
+  "keywordsearchpub_url": "https://ndclibrary.sec.usace.army.mil/api/keywordsearchpub?term=08012026",
+  "getdocdatapub_url": "https://ndclibrary.sec.usace.army.mil/api/getdocdatapub/bebe0d17-f103-4ac7-b753-997429a178e5",
+  "sha256": "ab1a8c00c142e6c4cd1412d745275ac4521064e946d535a4c7db470665bf4e20",
+  "bytes": 6517079,
+  "retrieval_ts": "2026-08-27T23:53:57Z"
+}

@@ -1,0 +1,88 @@
+schema_version: '1.0'
+proposal_id: S4_JOIN_RULES
+census_source_product: NDC Library Navigation Facilities DOCUMENTIDENTIFIER 08012026
+census_source_file: s4_sources/Navigation_Facilities_08012026.xlsx
+retrieval_ts: '2026-08-27T23:53:57Z'
+live_d2_basins:
+- lower_mississippi
+- middle_mississippi
+- upper_mississippi
+- ohio
+- illinois
+- columbia_snake
+grain_token_regex: \b(grain|grains|wheat|corn|maize|soybean|soybeans|soy|rice|barley|oats|oat|sorghum|rye)\b
+grain_token_authority: D2 WCUS grain publication names in docs/sources/USACE_D2_WCUS_NTAD2009_EVIDENCE.md
+  plus GRAIN
+fac_type_required: Dock
+wtwy_name_to_d2_basin:
+  Mississippi River, Minneapolis, MN to Mouth of Missouri River: upper_mississippi
+  Mississippi River, Mouth of Missouri River to Mouth of Ohio River: middle_mississippi
+  Mississippi River, Mouth of Ohio River to Baton Rouge, LA: lower_mississippi
+  Mississippi River, Baton Rouge, LA to New Orleans, LA: lower_mississippi
+  Mississippi River, New Orleans, LA to Mouth of Passes: lower_mississippi
+  Memphis Harbor, TN: lower_mississippi
+  Ohio River: ohio
+  Illinois River, IL: illinois
+  Columbia and Lower Willamette Rivers below Vancouver, WA and Portland, OR: columbia_snake
+  Columbia River between Vancouver, WA and The Dalles, OR: columbia_snake
+  Columbia River above The Dalles Dam, WA and OR to Mcnary Lock and Dam, OR and WA: columbia_snake
+  Columbia River and Tributaries above Mcnary Lock and Dam to Kennewick, WA: columbia_snake
+  Snake River, OR, WA and ID: columbia_snake
+  Lower Willamette River: columbia_snake
+excluded_from_default_examples:
+- Tennessee River, TN, AL and KY
+- Arkansas River, AR
+- Houston Ship Channel, TX
+- Missouri River, Kansas City to the Mouth
+- Lake Michigan
+- Seattle, WA
+- Tacoma Harbor, WA
+- Duluth MN
+- Corpus Christi Ship Channel, TX
+- Galveston, TX
+match_key: NAV_UNIT_ID
+coordinate_fields:
+- LATITUDE
+- LONGITUDE
+marker: S4_JOIN_RULES_v2
+deterministic_filter: FAC_TYPE == Dock AND LATITUDE/LONGITUDE present and nonzero AND WTWY_NAME in wtwy_name_to_d2_basin
+  AND word-boundary grain_token_regex match in COMMODITIES or PURPOSE. Completeness is not claimed beyond
+  the frozen 08012026 snapshot.
+unobserved_regex_tokens_in_included_rows:
+- maize
+- oat
+- soy
+observed_matching_tokens:
+- barley
+- corn
+- grain
+- grains
+- oats
+- rice
+- rye
+- sorghum
+- soybean
+- soybeans
+- wheat
+observed_matching_token_counts:
+  barley: 219
+  corn: 420
+  grain: 588
+  grains: 416
+  oats: 220
+  rice: 227
+  rye: 220
+  sorghum: 220
+  soybean: 420
+  soybeans: 13
+  wheat: 339
+observed_source_native_commodity_atoms_matching_filter:
+  Corn: 410
+  Oilseeds (Soybean, Flaxseed and Others): 408
+  Wheat: 328
+  Animal Feed, Grain Mill Products, Flour, Processed Grains: 320
+  Barley, Rye, Oats, Rice and Sorghum Grains: 219
+observed_purpose_value_count_among_included_rows: 135
+observed_native_values_file: S4_OBSERVED_NATIVE_VALUES.yaml
+fgis_corroboration_file: S4_FGIS_CORROBORATION.yaml
+source_snapshot_sha256: ab1a8c00c142e6c4cd1412d745275ac4521064e946d535a4c7db470665bf4e20

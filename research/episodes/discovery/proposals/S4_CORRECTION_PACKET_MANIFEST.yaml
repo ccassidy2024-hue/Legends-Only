@@ -1,0 +1,95 @@
+# PR42 S4 binding-correction packet manifest.
+# New artifacts only. Does not edit frozen PR42 files or production config.
+
+schema_version: "1.0"
+packet_id: PR42_S4_BINDING_CORRECTION
+packet_date: "2026-08-27"
+packet_status: PR44_EXACT_DELTA_BALLOT_READY
+review_tier: A
+implementation_authorization: false
+
+current_main: a6f1b81c40f15a6f986ecbbe4e2e3128242a3b9c
+frozen_pr42_head: "840d9891473d3ebf248c2d44a9bbeac270d614ca"
+pr42_branch: cursor/m1-amendment-packet-e03a
+correction_branch: cursor/pr42-s4-binding-correction
+
+historical_b100_digest_sha256: "9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1"
+historical_b100_digest_status: historical_evidence_only_not_executable
+historical_b100:
+  path_on_pr42: research/episodes/discovery/proposals/FULL_CONFIG_B100.yaml
+  digest_sha256: "9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1"
+  status: historical_evidence_only_not_executable
+  note: >-
+    A+B approved this digest with S2=B, S4=100NM, v2. The S4 node bytes are
+    defective. Do not persist or sweep from those bytes.
+
+supersession_delta:
+  supersedes: research/episodes/discovery/proposals/FULL_CONFIG_B100.yaml
+  does_not_edit_frozen_pr42: true
+  production_prereg_rules_yaml: unchanged
+  production_ratification_manifest: unchanged
+  governance_py: unchanged
+  s2_gauges: preserved_from_approved_B_mode
+  s4_radius_nm: 100
+  s4_nodes: recommended_census_A_677_ndc_08012026_d2_grain_docks
+  s4_geodesic: HAVERSINE_NM_SPHERE
+  s4_texas_gulf_puget_sound_great_lakes: not_in_corrected_default
+  s3_uscg_districts: [D8, D13]
+
+corrected_b100_path: research/episodes/discovery/proposals/FULL_CONFIG_B100_S4_CORRECTED.yaml
+corrected_b100_digest_sha256: "200797f9c287ab213d6007fc9c7d542e55bb3a2b2752459ec5569da796d5da8c"
+corrected_b100_status: PROPOSED_RECOMMENDED_CENSUS_A_POINT_ONLY_NOT_PRODUCTION
+
+packet_file_digests_sha256:
+  FULL_CONFIG_B100_S4_CORRECTED.yaml: "200797f9c287ab213d6007fc9c7d542e55bb3a2b2752459ec5569da796d5da8c"
+  S4_FACILITY_BINDING.yaml: "a6a34422db64a98ce8f459c6910d1246228940849acabe210d0e868c73744178"
+  S4_DISTANCE_CONTRACT.yaml: "a3c6daeb5eaf3f38de2f9db8c02d93e216791b6be257e0d5f63906dc7b069986"
+  S4_DELTA_BALLOT.yaml: "bb5acc8ee669115fae4aeabba83f19ac951367780eac5f9dafe426dd531a7cd4"
+  s4_correction_packet.schema.yaml: "71c63135f9e00f13da60c34ac79b63f8fe0605bb6f163aedcad921709185c94e"
+  S4_JOIN_RULES.yaml: "4b98c0c74fb29bba24b206fcb9b47ccc1eb8e9030fb58e885fa157f13f9eb329"
+  S4_SOURCE_RETRIEVAL_PROVENANCE.yaml: "5338d67da9e5b07ef600209e9361633bf74e0bcba7e4667072e52a65535ac4ae"
+  S4_UNMATCHED_AND_EXPANSIONS.yaml: "4aa4e0e574f26822a4336295d89581464a65bbcd7ce18d55388c6787b8ebb8cd"
+  S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml: "d3fa78d0b20596806a673250de3eb6ad4672236c83dc41930fabbb5112249076"
+  S4_CENSUS_B_WCSC_D2GRAIN_DOCK_COMMODITIES.yaml: "19022712e51189edbf76b6cdb4d67d5c07b73b32ac6628551a3a58ee5f89e2b0"
+  S4_CENSUS_C_WCSC_D2GRAIN_EXPORT_BASINS.yaml: "755d1a2b35df4fc10f8f1298246d8fabece5ac92375e42859decd421b2b7f8a6"
+  S4_OBSERVED_NATIVE_VALUES.yaml: "06a8e1070f9be7a55455529425c1045993ae32080fe2aa4a8f4283865f91c5ab"
+  S4_FGIS_CORROBORATION.yaml: "ed08a84294deca851f11a6614a6a64b746ee216ea4acb996809adebb1c4f6a21"
+  S4_DISTANCE_POINT_ONLY.yaml: "7170f9b674794ff7eea252ef7b41470ce1cbb5a1009ab629650e14bb12be7590"
+  S4_DISTANCE_SEGMENT.yaml: "9d3a95ef91611ff196c7ab0d423c54233c7890d9e38934530147f8905ae14c1d"
+  s4_sources/Navigation_Facilities_08012026.xlsx: "ab1a8c00c142e6c4cd1412d745275ac4521064e946d535a4c7db470665bf4e20"
+  s4_sources/ndc_08012026_catalog_record.json: "b997e097374c2da27755c8fc5daf10a810123daa6e4aed7a2657c594d381df21"
+  s4_sources/ndc_08012026_getdocdatapub.json: "9bf137c94d325778090c84a29e57c96e7b1686f21a13ee9ba7a10933bb186767"
+  s4_sources/usace_bts_docks_layer_metadata.json: "8641ae9e961d61e75fd5ea224c66fc0c4581f3318a953d7f306954848e9f5af9"
+  s4_sources/usace_bts_docks_query_grain.json: "f1299d4549edbd5a41be62f4541b2180305b7faab9b45cc727725f6c28882460"
+  s4_sources/usace_bts_docks_query_d2_commodity_tokens.json: "c6e20fdfd898d7fc09a2a70aff4643b01552b6acb0d5c999905176865ce2431f"
+  s4_sources/fgis_GetFGISExportsList.json: "7b34ca0c932d7536985a0faa939a07a4e34003c8ca435ef9d0d8d3ea760e8329"
+  s4_sources/fgis_GetLastOrganizationUpdated.json: "6aacc50e9e172887b96df0f02052406f1459dd6a4c6756ed6679efb6cc40bb44"
+  s4_sources/fgis_exportRegionDefinitionTables0801.pdf: "c94a017aa1f1e8f1db44f05cb2216387104a828cf3937694511c82b20db8d5c7"
+  s4_sources/fgis_ddr_export_registration_instructions.html: "2bc483390cc8896afd65ff7203a644c5d1fa175f04decb86207f0d09a55260b4"
+preserved_science:
+  S2: USE_B_OPERATIONAL_RESTRICTION_ONLY
+  S4_RADIUS: 100_NM
+  V2_GOVERNANCE: APPROVE
+  S4_GEODESIC: HAVERSINE_NM_SPHERE
+
+irreducible_selectors:
+  - S4_NODE_CENSUS
+  - S4_TRACK_GEOMETRY
+recommended_choice:
+  S4_NODE_CENSUS: A
+  S4_TRACK_GEOMETRY: POINT_ONLY
+
+production_persistence: forbidden
+sweep_execution: forbidden
+inherited_test_freeze_infra:
+  note: >-
+    Landed on this branch at 92e614b before takeover. Required to freeze the
+    official xlsx and reconstruct census A/B/C in packet tests. Not production
+    config, not a scientific value, not a census invention.
+  files:
+    - path: .gitattributes
+      change: "*.xlsx binary"
+    - path: pyproject.toml
+      change: "dev extra openpyxl>=3.1"
+
+marker: PR42_S4_BINDING_CORRECTION_MANIFEST_v6

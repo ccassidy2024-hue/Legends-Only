@@ -1,0 +1,407 @@
+schema_version: '1.0'
+proposal_id: S4_OBSERVED_NATIVE_VALUES
+census_source_product: NDC Library Navigation Facilities DOCUMENTIDENTIFIER 08012026
+source_snapshot_sha256: ab1a8c00c142e6c4cd1412d745275ac4521064e946d535a4c7db470665bf4e20
+deterministic_filter:
+  fac_type: Dock
+  live_d2_wtwy_name_map: S4_JOIN_RULES.yaml wtwy_name_to_d2_basin
+  valid_nonzero_lat_lon: true
+  grain_token_regex: \b(grain|grains|wheat|corn|maize|soybean|soybeans|soy|rice|barley|oats|oat|sorghum|rye)\b
+  variant_A: grain token in COMMODITIES or PURPOSE
+  variant_B: grain token in COMMODITIES
+  variant_C: variant A restricted to lower_mississippi and columbia_snake
+observed_native_commodities_pipe_tokens_with_grain_in_variant_A:
+- value: Animal Feed, Grain Mill Products, Flour, Processed Grains
+  included_row_count: 320
+- value: Barley, Rye, Oats, Rice and Sorghum Grains
+  included_row_count: 219
+- value: Corn
+  included_row_count: 410
+- value: Oilseeds (Soybean, Flaxseed and Others)
+  included_row_count: 408
+- value: Wheat
+  included_row_count: 328
+observed_native_commodities_pipe_token_count: 5
+observed_native_purpose_values_with_grain_in_variant_A:
+- value: Shipment of grain.
+  included_row_count: 131
+- value: Receipt and shipment of grain.
+  included_row_count: 10
+- value: Shipment of grain; and mooring barges for fleeting. (See Remarks.)
+  included_row_count: 6
+- value: Shipment of grain
+  included_row_count: 3
+- value: Receipt and shipment of general cargo, steel products, scrap metal, and dry-bulk
+    commodities including grain, fertilizer, and aggregates; mooring company-owned floating
+    equipment and barges for fleeting.
+  included_row_count: 2
+- value: Receipt and shipment of grain; fleeting barges.
+  included_row_count: 2
+- value: Receipt of grain by barge.
+  included_row_count: 2
+- value: Receipt of liquid fertilizer; and shipment of grain.
+  included_row_count: 2
+- value: Receipt of liquid-bulk fertilizer; and shipment of grain.
+  included_row_count: 2
+- value: Shipment of grain and grain by-products.
+  included_row_count: 2
+- value: Shipment of grain and soybeans.
+  included_row_count: 2
+- value: Shipment of grain; and fleeting barges.  (See Remarks.)
+  included_row_count: 2
+- value: Shipment of grain; and mooring barges for fleeting.  (See Remarks.)
+  included_row_count: 2
+- value: Shipment of rice.
+  included_row_count: 2
+- value: '!!!!SHIPS ONLY!!!!_x000D_
+
+    DRY DISTILLERS GRAIN PRODUCT OF ETHANOL, ETHANOL'
+  included_row_count: 1
+- value: 'Aggregates, minerals, project cargo, AG products such as rice, wheat, corn etc. '
+  included_row_count: 1
+- value: Bulk commodities such as grain, salt, scrap metal, sand, coal, project cargo
+  included_row_count: 1
+- value: 'Bunge North America: Receipt and shipment of grain._x000D_
+
+    Terral River Service, Inc.: Receipt of liquid-bulk  fertilizer.'
+  included_row_count: 1
+- value: Buy store and ship grain
+  included_row_count: 1
+- value: Commodities handled white corn, yellow corn, non-GMO yellow corn, soybeans, non GMO
+    soybeans, milo and wheat.
+  included_row_count: 1
+- value: 'Dry bulk products, project cargo, heavy lift, bulk salt, dry commodities, aggregates,
+    cement, general materials, grains transloaded to barge, scrap._x000D_
+
+    _x000D_
+
+    Dry cargo barge cleaning'
+  included_row_count: 1
+- value: Grain, salt, fertilizer, aggregate, bulk, liquid, steel, heavy lifts, pig iron, lumber,
+    pipe, limestone, solite, sand, gravel
+  included_row_count: 1
+- value: 'Handles Sand and aggregates, pipe, grain, fertilizer, salt, cement, building materials,
+    other dry bulk, supersacks._x000D_
+
+    _x000D_
+
+    Offload crane for multiple bulk commodities, 50+ acres - 55K sq ft covered.'
+  included_row_count: 1
+- value: 'Handles:  Aggregate, Cement, Clinker, Coal, Coiled Steel, Coke, Fly Ash, Ignots,
+    Mulch, Paper, Plate Steel, Sand, Stone, Wood, Machinery & Equip, Grain, Coton Seed, Block
+    & Brick_x000D_
+
+    _x000D_
+
+    Dry cargo barge cleaning, transloading, stevedoring, fleeting'
+  included_row_count: 1
+- value: 'Handles:  Salt, coal, grain prodcuts, dry fertilizer, steel, dry and packaged goods'
+  included_row_count: 1
+- value: 'Loading of grain, primarily corn and beans._x000D_
+
+    Occasionally fertilizers.'
+  included_row_count: 1
+- value: Mooring floating drydock and company-owned towboats; mooring grain barges for fleeting,
+    cleaning, and repair   transiting to adjacent Bunge North America, Destrehan Elevator
+    Wharf (Ref. No. 211).
+  included_row_count: 1
+- value: Mooring floating grain elevator; and transfer of grain and grain by-products between
+    vessel and barge.
+  included_row_count: 1
+- value: Offloading and loading of barges, trucks, storage of grain, fertilizer, general cargo,
+    bulk cargo, timber, steel and bagging.
+  included_row_count: 1
+- value: 'PM Ag Products, Inc.: Receipt and shipment of molasses and liquid fertilizer. _x000D_
+
+    Cargill Inc.: Receipt of grain.'
+  included_row_count: 1
+- value: Receipt and shipment of break-bulk general cargo and miscellaneous dry-bulk commodities
+    including steel, coal, and grain.  (See Remarks.)
+  included_row_count: 1
+- value: Receipt and shipment of conventional-and-containerized general cargo; steel and steel
+    by-products; and liquid- and dry-bulk commodities including grain, fertilizer, ammonia,
+    and caustic soda.
+  included_row_count: 1
+- value: 'Receipt and shipment of dry-bulk commodities including coal; receipt of grain (soybeans),
+    agricultural limestone, fertilizers including urea, and sand, gravel, and lime- stone. '
+  included_row_count: 1
+- value: Receipt and shipment of dry-bulk commodities including sand, crushed stone, ores,
+    coal, fertilizer, salt, aggre- gates, and occasional salvaged grain.
+  included_row_count: 1
+- value: Receipt and shipment of fertilizer and other dry-bulk materials namely salt; shipment
+    of grain.
+  included_row_count: 1
+- value: Receipt and shipment of general cargo and heavy-lift items; dry-bulk commodities
+    including grain, coal, coke, sand, scrap metal, and ores; and liquid-bulk commodities.
+  included_row_count: 1
+- value: Receipt and shipment of general cargo and steel products; shipment of cottonseed,
+    grain, and miscellaneous dry-bulk commodities.
+  included_row_count: 1
+- value: Receipt and shipment of general cargo including heavy-lift items and miscellaneous
+    dry-bulk materials by conventional and roll-on/roll-off method; shipment of soybeans;
+    mooring barges for fleeting. (See Remarks.)
+  included_row_count: 1
+- value: Receipt and shipment of general cargo including steel products, cottonseed, soybeans,
+    and miscellaneous dry-bulk commodities.
+  included_row_count: 1
+- value: Receipt and shipment of general cargo including steel products, grain, grain by-products,
+    and dry and liquid chemicals including benzene; liquid- and dry-bulk fertilizer; and dry-bulk
+    commodities including coal, stone, and sand. (See Remarks.)
+  included_row_count: 1
+- value: Receipt and shipment of general cargo, miscellaneous dry- bulk materials, and steel
+    products; shipment of grain.
+  included_row_count: 1
+- value: Receipt and shipment of general cargo; receipt of steel, lumber-and-paper products,
+    twine, coal, shell, aggregate, and salt; shipment of grain, livestock feed, and pelletized
+    sugar beets.
+  included_row_count: 1
+- value: Receipt and shipment of grain by barge.
+  included_row_count: 1
+- value: Receipt and shipment of grain, dry-bulk fertilizer, cottonseed, aggregate, and wood
+    pulp; mooring company- owned floating equipment and barges for cleaning and minor topside
+    repairs.
+  included_row_count: 1
+- value: Receipt and shipment of grain; and mooring barges for fleeting. (See Remarks.)
+  included_row_count: 1
+- value: Receipt and shipment of grain; shipment of soybean meal; and fleeting barges.
+  included_row_count: 1
+- value: Receipt and shipment of heavy-lift items and miscellaneous dry-bulk commodities;
+    receipt of liquid fertilizer; and  shipment of grain.
+  included_row_count: 1
+- value: Receipt and shipment of liquid fertilizer; and shipment of bagged products and general
+    cargo in foreign-and-domestic trade, including lumber, soybean oil, and dry-bulk commodities
+    including grain and fertilizer.
+  included_row_count: 1
+- value: Receipt and shipment of liquid-bulk fertilizer; shipment of grain.
+  included_row_count: 1
+- value: Receipt and shipment of miscellaneous dry-bulk commodi- ties, including receipt of
+    coal-tar pitch and alumina; and shipment of soda ash, bentonite clay, talc, sodium sulphite,
+    and soybean meal.
+  included_row_count: 1
+- value: Receipt and shipment of miscellaneous dry-bulk commodities including coal and rice.
+  included_row_count: 1
+- value: Receipt and shipment of miscellaneous dry-bulk commodities including fertilizer and
+    wood bark; receipt of steel; and shipment of grain by-products.
+  included_row_count: 1
+- value: Receipt and shipment of miscellaneous dry-bulk materials including coal, salt, and
+    fertilizer; shipment of grain.
+  included_row_count: 1
+- value: Receipt and shipment of miscellaneous dry-bulk materials including coal, sand, and
+    crushed stone; receipt of steel products; and shipment of grain.
+  included_row_count: 1
+- value: Receipt and shipment of miscellaneous dry-bulk materials including grain and coal;
+    receipt of machinery and heavy-lift equipment.
+  included_row_count: 1
+- value: Receipt and shipment of miscellaneous dry-bulk materials including grain, coal, salt,
+    fertilizer, and livestock feed.
+  included_row_count: 1
+- value: Receipt and shipment of miscellaneous dry-bulk materials including sand, stone, coal,
+    and grain.
+  included_row_count: 1
+- value: Receipt and shipment of miscellaneous dry-bulk materials, including wood chips, bauxite,
+    fluorspar, ferroalloys, fertilizer, urea, potash, barite, and cement; shipment of bagged
+    rice and animal feed; fleeting barges. (See Remarks.)
+  included_row_count: 1
+- value: Receipt and shipment of soybean oil.
+  included_row_count: 1
+- value: Receipt and shipment of steel products and miscellaneous dry-bulk materials including
+    fertilizer, ores, salt, coal, and pig iron; shipment of grain.
+  included_row_count: 1
+- value: Receipt and shipment of steel products and miscellaneous dry-bulk materials; receipt
+    of coal; and shipment of grain.
+  included_row_count: 1
+- value: Receipt and shipment of steel products, lumber, and dry- bulk commodities including
+    sand, grain, coal, and coke; mooring steel barges for scrapping.
+  included_row_count: 1
+- value: Receipt and shipment of steel products, unitized and heavy- lift general cargo, and
+    dry-bulk materials including fertilizer, coal, salt, stone, pig iron, and scrap metal;  receipt
+    of grain and lumber.
+  included_row_count: 1
+- value: Receipt and shipment of steel, heavy equipment, general cargo, scrap metal, fertilizer,
+    sand, gravel, and limestone; shipment of coal and grain; mooring barges for fleeting.
+  included_row_count: 1
+- value: Receipt of bark mulch and some grain; mooring barges for fleeting.
+  included_row_count: 1
+- value: Receipt of coal, petroleum coke, sand, and grain.
+  included_row_count: 1
+- value: Receipt of dry-bulk commodities including coal, salt, stone, potash, urea, ammonium
+    sulfate, ores, pig iron, and steel products; and shipment of iron ore, scrap metal, and
+    grain; mooring barges for fleeting.
+  included_row_count: 1
+- value: Receipt of dry-bulk commodities including limestone, crushed stone, and sand; shipment
+    of grain.
+  included_row_count: 1
+- value: Receipt of dry-bulk fertilizer; and occasional receipt of grain.
+  included_row_count: 1
+- value: Receipt of dry-bulk fertilizer; and shipment of grain.
+  included_row_count: 1
+- value: Receipt of fertilizer and other miscellaneous dry-bulk material; shipment of grain.
+  included_row_count: 1
+- value: Receipt of grain (corn); and shipment of feed products.
+  included_row_count: 1
+- value: Receipt of grain (wheat).
+  included_row_count: 1
+- value: Receipt of grain and miscellaneous dry-bulk materials including fertilizer; mooring
+    barges for fleeting. (See Remarks.)
+  included_row_count: 1
+- value: Receipt of grain by barge with shipment by vessel; mooring grain barges at dolphins
+    below wharf.
+  included_row_count: 1
+- value: Receipt of grain by barge, shipment by vessel and barge.
+  included_row_count: 1
+- value: Receipt of grain by barge, with shipment by vessel.
+  included_row_count: 1
+- value: Receipt of grain; and shipment of grain, meal, and soybean oil. (See Remarks.)
+  included_row_count: 1
+- value: Receipt of grain; and shipment of soybean meal and soybean oil.
+  included_row_count: 1
+- value: Receipt of grain; and shipment of soybean meal.
+  included_row_count: 1
+- value: Receipt of liquid- and dry-bulk fertilizer; and dry-bulk commodities including coal,
+    coke, miscellaneous ores, grain, and salt. (See Remarks.)
+  included_row_count: 1
+- value: Receipt of liquid- and dry-bulk fertilizer; shipment of grain (primarily corn, soybeans,
+    and wheat).
+  included_row_count: 1
+- value: Receipt of liquid- and dry-bulk fertilizer; shipment of grain.
+  included_row_count: 1
+- value: Receipt of liquid- and dry-bulk fertilizer; shipment of grain; and mooring barges
+    for fleeting.  (See Remarks.)
+  included_row_count: 1
+- value: Receipt of liquid-bulk fertilizer; and shipment of grain (wheat, rice, and cottonseed);
+    mooring company-owned floating equipment for maintenance-and-repair; and mooring barges
+    for fleeting.
+  included_row_count: 1
+- value: Receipt of miscellaneous dry-bulk materials including fer- tilizer, coal, salt, oats,
+    and occasionally steel products; shipment of grain; and mooring barges for fleeting.  (See
+    Remarks.)
+  included_row_count: 1
+- value: Receipt of miscellaneous dry-bulk materials including fertilizer and salt; receipt
+    of steel coils; and shipment of grain.
+  included_row_count: 1
+- value: Receipt of molasses, liquid- and dry-bulk fertilizer, coal, fish solubles, and miscellaneous
+    liquid- and dry-bulk materials; shipment of soybean oil.
+  included_row_count: 1
+- value: Receipt of rock and grain.
+  included_row_count: 1
+- value: Receipt of steel products and miscellaneous dry-bulk materials including fertilizer,
+    coal, coke, and crushed stone; shipment of grain.
+  included_row_count: 1
+- value: Receipt of vegetable and coconut oil; shipment of grain and meal.
+  included_row_count: 1
+- value: Receipt of wheat and occasionally rye; shipment of midds pellets (pressed wheat-processing
+    waste).
+  included_row_count: 1
+- value: 'Receipt of wheat; and shipment of flour. '
+  included_row_count: 1
+- value: Receive corn, soybeans and grains. Buyers of Yellow Corn, White Corn, Non GMO Corn
+    & Soybeans, Conventional Corn & Soybeans, Soft Red Winter Wheat
+  included_row_count: 1
+- value: Receive grain products by truck and ship by barge.
+  included_row_count: 1
+- value: 'Ship & Receipt of miscellaneous bulk materials including fertilizer, salt, flyash,
+    slag, grain, pig-iron, steel, minerals, and alloys_x000D_
+
+    _x000D_
+
+    *****NO COAL***** PER RANDY GROSS'
+  included_row_count: 1
+- value: 'Ship Corn, Soybeans, Wheat and Milo '
+  included_row_count: 1
+- value: Shipment and occassional receipt of various grain products.
+  included_row_count: 1
+- value: Shipment of coal, grain, and other miscellaneous dry-bulk materials.
+  included_row_count: 1
+- value: Shipment of corn pellets.
+  included_row_count: 1
+- value: Shipment of distillers spent grain and livestock feed.
+  included_row_count: 1
+- value: Shipment of dry-bulk commodities including grain and grain by-products.
+  included_row_count: 1
+- value: Shipment of grain alcohol.
+  included_row_count: 1
+- value: Shipment of grain and aggregate.
+  included_row_count: 1
+- value: Shipment of grain and animal feed.
+  included_row_count: 1
+- value: Shipment of grain and grain by-products, soda ash, and miscellaneous dry-bulk commodities
+    including coal; fleeting of barges.
+  included_row_count: 1
+- value: Shipment of grain and miscellaneous dry-bulk materials.
+  included_row_count: 1
+- value: Shipment of grain and potash.
+  included_row_count: 1
+- value: Shipment of grain and rice.
+  included_row_count: 1
+- value: Shipment of grain including soybeans, soybean meal, wheat, milo, sorghum, rice, and
+    soybean hulls; and mooring barges for fleeting.  (See Remarks.)
+  included_row_count: 1
+- value: Shipment of grain, distillers dried grain, animal feed, and alcohol.
+  included_row_count: 1
+- value: Shipment of grain, formerly mooring barges for fleeting.
+  included_row_count: 1
+- value: Shipment of grain, grain by-products, and aggregate.
+  included_row_count: 1
+- value: Shipment of grain, grain by-products, soybean meal, soda ash, and miscellaneous dry-bulk
+    commodities including coal; and mooring barges for fleeting.
+  included_row_count: 1
+- value: Shipment of grain, meal, sunflower oil, and linseed oil.
+  included_row_count: 1
+- value: Shipment of grain, receipt of liquid fertilizer
+  included_row_count: 1
+- value: Shipment of grain; and fleeting barges. (See Remarks.)
+  included_row_count: 1
+- value: Shipment of grain; and handling equipment and supplies.
+  included_row_count: 1
+- value: Shipment of grain; and mooring barges for fleeting.
+  included_row_count: 1
+- value: Shipment of grain; and other miscellaneous dry-bulk materials.
+  included_row_count: 1
+- value: Shipment of grains and fertilizers
+  included_row_count: 1
+- value: Shipment of grains, wheat, corn etc.
+  included_row_count: 1
+- value: Shipment of livestock feed and other grain by-products.
+  included_row_count: 1
+- value: Shipment of miscellaneous dry-bulk materials including fertilizer, clay, grain, feed
+    pellets, salt, and ferrous sulphate; shipment of liquid chemical (DAC), vegetable oil,
+    and ethanol.
+  included_row_count: 1
+- value: Shipment of miscellaneous dry-bulk materials including stone, coal, grain, and fertilizer.
+  included_row_count: 1
+- value: Shipment of mostly corn and soybeans.  Grain is received at the Terminal by truck
+  included_row_count: 1
+- value: Shipment of soybean oil.
+  included_row_count: 1
+- value: Shipment of soybeans.
+  included_row_count: 1
+- value: Soybean Processing, producing soybean meal, soybean oil and hulls
+  included_row_count: 1
+- value: Transfer of miscellaneous dry-bulk commodities including coke, meal, grain, and fertilizers
+    between vessel and barge; landing for ship-service launches and towboats; mooring barges
+    for fleeting.
+  included_row_count: 1
+- value: Transfer of miscellaneous dry-bulk commodities including ores, meal, grain, fertilizers,
+    and sugar between vessel and barge.
+  included_row_count: 1
+- value: 'Upper berth: Receipt of coal._x000D_
+
+    Lower berth: Receipt and shipment of dry-bulk materials including grain, grain by-products,
+    fertilizer, and chemicals.'
+  included_row_count: 1
+- value: 'With renovation to Port of WV, efficiently handles various cargo, including grain,
+    steel, and heavy-lift project cargo (MAR 4/8/25)._x000D_
+
+    _x000D_
+
+    Receipt of iron-ore fines, coal, and coke; fleeting barges.'
+  included_row_count: 1
+- value: "receiving grains, soybeans, their byproducts and other bulk commodities and efficiently\
+    \ shipping them either domestically or to the export market._x000D_\n "
+  included_row_count: 1
+- value: shipment of grain by barge.
+  included_row_count: 1
+observed_native_purpose_value_count: 135
+note: Pipe tokens are COMMODITIES split on '|'. Completeness is not claimed beyond the frozen
+  08012026 snapshot plus the frozen live-D2 waterway map.
+marker: S4_OBSERVED_NATIVE_VALUES_NDC_08012026

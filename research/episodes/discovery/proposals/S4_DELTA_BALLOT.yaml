@@ -1,0 +1,76 @@
+# Compact S4 correction delta ballot.
+# Does not re-ask S2, 100 NM, v2 governance, or Haversine vs WGS84.
+
+schema_version: "1.0"
+ballot_id: S4_CORRECTION_DELTA_BALLOT
+ballot_date: "2026-08-27"
+review_tier: A
+packet_status: PR44_EXACT_DELTA_BALLOT_READY
+
+preserved_without_reasking:
+  S2: USE_B_OPERATIONAL_RESTRICTION_ONLY
+  S4_RADIUS: 100_NM
+  V2_GOVERNANCE: APPROVE
+  S4_GEODESIC: HAVERSINE_NM_SPHERE
+  historical_b100_digest_sha256: "9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1"
+  historical_b100_digest_status: historical_evidence_only_not_executable
+
+recommended_binding:
+  S4_NODE_CENSUS: A
+  S4_TRACK_GEOMETRY: POINT_ONLY
+  corrected_b100: FULL_CONFIG_B100_S4_CORRECTED.yaml
+  corrected_b100_sha256: "200797f9c287ab213d6007fc9c7d542e55bb3a2b2752459ec5569da796d5da8c"
+
+human_fields:
+  - field_id: S4_NODE_CENSUS
+    batched: true
+    required: true
+    irreducible: true
+    ask: A or B or C
+    recommended: A
+    options:
+      - id: A
+        file: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml
+        sha256: "d3fa78d0b20596806a673250de3eb6ad4672236c83dc41930fabbb5112249076"
+        row_count: 677
+        rule: NDC 08012026 Dock + live D2 waterway + grain token in COMMODITIES or PURPOSE
+      - id: B
+        file: S4_CENSUS_B_WCSC_D2GRAIN_DOCK_COMMODITIES.yaml
+        sha256: "19022712e51189edbf76b6cdb4d67d5c07b73b32ac6628551a3a58ee5f89e2b0"
+        row_count: 593
+        rule: Same as A, COMMODITIES only
+      - id: C
+        file: S4_CENSUS_C_WCSC_D2GRAIN_EXPORT_BASINS.yaml
+        sha256: "755d1a2b35df4fc10f8f1298246d8fabece5ac92375e42859decd421b2b7f8a6"
+        row_count: 330
+        rule: Same as A, lower_mississippi + columbia_snake only
+    not_asked: [S2, S4_RADIUS, V2_GOVERNANCE, S4_GEODESIC]
+    humans_must_not_invent: [census_product, source_hash, match_rule]
+
+  - field_id: S4_TRACK_GEOMETRY
+    batched: true
+    required: true
+    irreducible: true
+    ask: POINT_ONLY or SEGMENT
+    recommended: POINT_ONLY
+    options:
+      - id: POINT_ONLY
+        file: S4_DISTANCE_POINT_ONLY.yaml
+        sha256: "7170f9b674794ff7eea252ef7b41470ce1cbb5a1009ab629650e14bb12be7590"
+      - id: SEGMENT
+        file: S4_DISTANCE_SEGMENT.yaml
+        sha256: "9d3a95ef91611ff196c7ab0d423c54233c7890d9e38934530147f8905ae14c1d"
+    why: >-
+      Not uniquely settled by HURDAT2 format. Changes whether a storm whose
+      closest approach is between published points is in-sample at 100 NM.
+
+approval_line_template: >-
+  A+B APPROVE S4_CORRECTION_DELTA @ <EXACT_PACKET_HEAD_SHA>
+  | S4_NODE_CENSUS=A or B or C
+  | S4_TRACK_GEOMETRY=POINT_ONLY or SEGMENT
+  | S2=USE_B_OPERATIONAL_RESTRICTION_ONLY (preserved)
+  | S4_RADIUS=100_NM (preserved)
+  | S4_GEODESIC=HAVERSINE_NM_SPHERE (mechanical)
+  | V2_GOVERNANCE=APPROVE (preserved)
+
+marker: S4_CORRECTION_DELTA_BALLOT_NDC_08012026_ABC_POINT_SEGMENT

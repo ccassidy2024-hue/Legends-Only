@@ -1,0 +1,187 @@
+schema_version: '1.0'
+proposal_id: S4_SOURCE_RETRIEVAL_PROVENANCE
+primary_census_source: NDC_LIBRARY_NAVIGATION_FACILITIES_08012026
+retrieval_ts: '2026-08-27T23:53:57Z'
+independent_rerelease:
+  retrieval_ts: '2026-08-28T00:02:59Z'
+  agent: bc-2e93161a-6e61-56cf-85c9-e894d07a6823
+  keywordsearchpub_http_status: 200
+  download_http_status: 200
+  getdocdatapub_http_status: 200
+  xlsx_sha256: ab1a8c00c142e6c4cd1412d745275ac4521064e946d535a4c7db470665bf4e20
+  xlsx_bytes: 6517079
+  xlsx_sha256_unchanged: true
+  getdocdatapub_delta: DOWNLOADCOUNT 15 at freeze vs 17 at independent rerelease; frozen getdoc snapshot retained because the census workbook bytes are unchanged
+independent_rereceipt:
+  retrieval_ts: '2026-08-28T00:01:43Z'
+  agent: bc-ca50e3ad-3e7c-5ad0-a771-bb9d614348b4
+  download_url: https://ndclibrary.sec.usace.army.mil/api/download?id=bebe0d17-f103-4ac7-b753-997429a178e5&filename=Navigation%20Facilities%2007%2031%202026.xlsx
+  http_status: 200
+  bytes: 6517079
+  sha256: ab1a8c00c142e6c4cd1412d745275ac4521064e946d535a4c7db470665bf4e20
+  matches_frozen_bytes: true
+independent_rereceipt_execution_check:
+  retrieval_ts: '2026-08-28T00:14:18Z'
+  agent: bc-a53ba4a0-0807-5b29-a997-1d89d407573c
+  catalog_query: https://ndclibrary.sec.usace.army.mil/api/keywordsearchpub?term=08012026
+  getdoc_url: https://ndclibrary.sec.usace.army.mil/api/getdocdatapub/bebe0d17-f103-4ac7-b753-997429a178e5
+  download_url: https://ndclibrary.sec.usace.army.mil/api/download?id=bebe0d17-f103-4ac7-b753-997429a178e5&filename=Navigation%20Facilities%2007%2031%202026.xlsx
+  keywordsearchpub_http_status: 200
+  getdocdatapub_http_status: 200
+  download_http_status: 200
+  bytes: 6517079
+  sha256: ab1a8c00c142e6c4cd1412d745275ac4521064e946d535a4c7db470665bf4e20
+  matches_frozen_bytes: true
+  getdocdatapub_downloadcount: 18
+  getdocdatapub_delta: DOWNLOADCOUNT 15 at freeze vs 18 at this rereceipt; frozen getdoc snapshot retained because the census workbook bytes are unchanged
+user_agent: Mozilla/5.0 (research retrieval for PR44 S4 correction packet)
+sources:
+- id: NDC_LIBRARY_NAVIGATION_FACILITIES_08012026
+  role: primary_physical_facility_census
+  authority: USACE Navigation and Civil Works Decision Support Center / WCSC
+  product: Navigation Facilities
+  document_identifier: '08012026'
+  release: August 2026
+  filename: Navigation Facilities 07 31 2026.xlsx
+  object_id: bebe0d17-f103-4ac7-b753-997429a178e5
+  catalog_urls:
+    keywordsearchpub: https://ndclibrary.sec.usace.army.mil/api/keywordsearchpub?term=08012026
+    getdocdatapub: https://ndclibrary.sec.usace.army.mil/api/getdocdatapub/bebe0d17-f103-4ac7-b753-997429a178e5
+    download: https://ndclibrary.sec.usace.army.mil/api/download?id=bebe0d17-f103-4ac7-b753-997429a178e5&filename=Navigation%20Facilities%2007%2031%202026.xlsx
+  http_status: 200
+  frozen_files:
+  - path: research/episodes/discovery/proposals/s4_sources/Navigation_Facilities_08012026.xlsx
+    bytes: 6517079
+    sha256: ab1a8c00c142e6c4cd1412d745275ac4521064e946d535a4c7db470665bf4e20
+  - path: research/episodes/discovery/proposals/s4_sources/ndc_08012026_catalog_record.json
+    bytes: 954
+    sha256: b997e097374c2da27755c8fc5daf10a810123daa6e4aed7a2657c594d381df21
+  - path: research/episodes/discovery/proposals/s4_sources/ndc_08012026_getdocdatapub.json
+    bytes: 53080
+    sha256: 9bf137c94d325778090c84a29e57c96e7b1686f21a13ee9ba7a10933bb186767
+  workbook:
+    sheets: [Navigation Facilities, Data Dictionary]
+    facility_rows: 20548
+    fields_used: [NAV_UNIT_ID, NAV_UNIT_NAME, FAC_TYPE, LATITUDE, LONGITUDE, WTWY, WTWY_NAME, PURPOSE, COMMODITIES, DATA_RECORD_STATUS]
+  coverage_limitations:
+  - Official snapshot of navigation facilities, not an FGIS export-elevator census.
+  - COMMODITIES/PURPOSE are free-text; word-boundary grain tokens can overinclude general-cargo docks that list wheat/corn among many commodities.
+  - FAC_TYPE includes Milepoint/Open Water/Junction/Fleeting Area/Anchorage/Lock which are excluded from S4 facility rows.
+  - Completeness is not claimed beyond this snapshot plus the frozen live-D2 waterway map.
+- id: USACE_BTS_NAVIGATION_FACILITIES_DOCK
+  role: live_gis_corroboration_not_ballot_source
+  authority: U.S. Army Corps of Engineers Waterborne Commerce Statistics Center / USDOT BTS
+  product: Navigation Facilities (Dock) ArcGIS FeatureServer layer 0
+  url: https://services7.arcgis.com/n1YM8pTrFmm7L4hs/arcgis/rest/services/Docks/FeatureServer/0
+  item_id: db8bdecc473646cd859c625508334483
+  owner: USDOT_BTS
+  data_last_edit: '2026-08-06T17:50:41.479000+00:00'
+  data_last_edit_ms: 1786038641479
+  retrieval_ts: '2026-08-27T23:41:05Z'
+  frozen_files:
+  - path: research/episodes/discovery/proposals/s4_sources/usace_bts_docks_layer_metadata.json
+    bytes: 23567
+    sha256: 8641ae9e961d61e75fd5ea224c66fc0c4581f3318a953d7f306954848e9f5af9
+  - path: research/episodes/discovery/proposals/s4_sources/usace_bts_docks_query_grain.json
+    bytes: 715853
+    sha256: f1299d4549edbd5a41be62f4541b2180305b7faab9b45cc727725f6c28882460
+  - path: research/episodes/discovery/proposals/s4_sources/usace_bts_docks_query_d2_commodity_tokens.json
+    bytes: 1080959
+    sha256: c6e20fdfd898d7fc09a2a70aff4643b01552b6acb0d5c999905176865ce2431f
+  coverage_limitations:
+  - Same field family as 08012026. Grain-token GIS queries produced 534 live-D2 Dock rows, a subset of the 677 rows from the official workbook. Ballot variants use the workbook.
+- id: FGIS_REGISTERED_GRAIN_EXPORTERS
+  role: corroboration_only_not_physical_census
+  authority: USDA AMS Federal Grain Inspection Service
+  product: Registered Grain Exporters Kendo grid GetFGISExportsList
+  url: https://fgisonline.ams.usda.gov/MyFGIS/RegisteredGrainExporters/GetFGISExportsList
+  last_updated_endpoint: https://fgisonline.ams.usda.gov/MyFGIS/RegisteredGrainExporters/GetLastOrganizationUpdated
+  last_updated: Aug 19, 2026
+  frozen_files:
+  - path: research/episodes/discovery/proposals/s4_sources/fgis_GetFGISExportsList.json
+    bytes: 312013
+    sha256: 7b34ca0c932d7536985a0faa939a07a4e34003c8ca435ef9d0d8d3ea760e8329
+  - path: research/episodes/discovery/proposals/s4_sources/fgis_GetLastOrganizationUpdated.json
+    bytes: 14
+    sha256: 6aacc50e9e172887b96df0f02052406f1459dd6a4c6756ed6679efb6cc40bb44
+  row_count: 655
+  location_name_nonnull: 0
+  coverage_limitations:
+  - Rows are registered exporter business identities with HQ/business addresses.
+  - LocationName is null on every retrieved row. No mechanical facility join without inventing a name matcher.
+- id: FGIS_DDR_EXPORT_REGISTRATION_INSTRUCTIONS
+  role: coverage_limitation_authority
+  authority: USDA AMS FGIS
+  url: https://www.ams.usda.gov/services/fgis/ddr-export-registration-instructions
+  http_status: 200
+  frozen_files:
+  - path: research/episodes/discovery/proposals/s4_sources/fgis_ddr_export_registration_instructions.html
+    bytes: 56156
+    sha256: 2bc483390cc8896afd65ff7203a644c5d1fa175f04decb86207f0d09a55260b4
+  quoted_limit: >-
+    FGIS only publishes business addresses on the public directory. Additional
+    addresses appear on the Registered Grain Exporting Locations report only if
+    the registrant selects yes for "Publish as an Export Location". The system
+    is defaulted to no for all addresses added in that section.
+  implication: Public FGIS location report is not an exhaustive physical-terminal census.
+- id: FGIS_EXPORT_REGION_TABLES
+  authority: USDA AMS FGIS
+  url: https://fgisonline.ams.usda.gov/F_DEC/exportRegionDefinitionTables0801.pdf
+  frozen_files:
+  - path: research/episodes/discovery/proposals/s4_sources/fgis_exportRegionDefinitionTables0801.pdf
+    bytes: 130969
+    sha256: c94a017aa1f1e8f1db44f05cb2216387104a828cf3937694511c82b20db8d5c7
+  last_modified: Fri, 24 Jul 2026 15:49:41 GMT
+  coverage_limitations:
+  - Defines FGIS regions/ports, not facility points. Texas and Puget Sound regions exist here and remain unapproved expansions relative to live D2.
+- id: NHC_HURDAT2
+  authority: NOAA National Hurricane Center
+  index_url: https://www.nhc.noaa.gov/data/hurdat/
+  files:
+    atlantic_current:
+      url: https://www.nhc.noaa.gov/data/hurdat/hurdat2-1851-2025-02272026.txt
+      sha256: 1b9b0c7beed5b4505838658b1d30e159fc84330c60891a58cfcf43ae55c37202
+      bytes: 7082381
+      last_modified: Thu, 05 Mar 2026 16:03:11 GMT
+      http_status: 200
+    pacific_ne_nc_current:
+      url: https://www.nhc.noaa.gov/data/hurdat/hurdat2-nepac-1949-2025-02272026.txt
+      sha256: db65f8bc538d5c05e15f738c96111861d6ce3572c007879de58e44d4d05a9cd6
+      bytes: 4083231
+      last_modified: Thu, 05 Mar 2026 16:03:11 GMT
+      http_status: 200
+    atlantic_pr42_inherited:
+      url: https://www.nhc.noaa.gov/data/hurdat/hurdat2-1851-2024-040425.txt
+      sha256: d595ada8aaa64e402c26eeb80efb344b52ef420b1627d8c0ee6ee65f0729923b
+      bytes: 7034638
+      http_status: 200
+      note: PR42 filename still exists; current NHC Atlantic file is hurdat2-1851-2025-02272026.txt
+  note: Full storm files hashed at retrieval; not stored in this packet because of size. Distance variants bind these URLs and SHA256.
+- id: NOAA_USACE_IENC
+  retrieved: false
+  reason: >-
+    Not required. NDC Navigation Facilities 08012026 already supplies official
+    LATITUDE/LONGITUDE for every joined census row.
+endpoint_verification:
+  https://ndclibrary.sec.usace.army.mil/api/keywordsearchpub?term=08012026: 200
+  https://ndclibrary.sec.usace.army.mil/api/download?id=bebe0d17-f103-4ac7-b753-997429a178e5&filename=Navigation%20Facilities%2007%2031%202026.xlsx: 200
+  https://www.ams.usda.gov/services/fgis/ddr-export-registration-instructions: 200
+  https://www.navcen.uscg.gov/msib: 404
+  https://navcen.uscg.gov/msib-national: 200
+  https://www.navcen.uscg.gov/msib-national: 200
+  https://www.nhc.noaa.gov/data/hurdat/hurdat2-1851-2024-040425.txt: 200
+  https://www.nhc.noaa.gov/data/hurdat/hurdat2-1851-2025-02272026.txt: 200
+  https://www.nhc.noaa.gov/data/hurdat/hurdat2-1851-2025-022726.txt: 404
+  https://www.ams.usda.gov/services/transportation-analysis/gtr: 200
+  https://corpslocks.usace.army.mil/: DNS_FAIL
+  https://ndc.ops.usace.army.mil/ords/r/lpms/corps-locks/home: 200
+  https://www.stb.gov/: 200
+  https://www.stb.gov/proceedings-actions/search-stb-records/: 200
+  https://portnola.com/notices: 404
+packet_supporting_mechanics:
+  not_science: true
+  not_production_auth: true
+  xlsx_gitattributes: '*.xlsx binary so the frozen 08012026 workbook is not treated as text'
+  openpyxl_dev_extra: pyproject.toml optional-dependencies.dev openpyxl>=3.1 so packet tests can reconstruct the census from the frozen xlsx
+  purpose_bytes: census YAML PURPOSE/COMMODITIES match pandas.read_excel strings including _x000D_
+marker: S4_SOURCE_RETRIEVAL_PROVENANCE_v6

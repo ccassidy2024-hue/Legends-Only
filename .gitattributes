@@ -16,6 +16,7 @@
 *.jpeg binary
 *.gif binary
 *.pdf binary
+*.xlsx binary
 *.parquet binary
 *.zip binary
 *.gz binary

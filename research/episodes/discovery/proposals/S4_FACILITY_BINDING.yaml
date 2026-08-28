@@ -1,0 +1,207 @@
+# S4 facility binding after NDC Navigation Facilities 08012026 retrieval and D2 join.
+# Proposal only. Completeness is not claimed.
+
+schema_version: "1.0"
+proposal_id: S4_FACILITY_BINDING
+proposal_date: "2026-08-27"
+packet_status: PR44_EXACT_DELTA_BALLOT_READY
+defect_accepted:
+  audit_marker: PR42_PACKET_DEFECT
+  frozen_pr42_head: "840d9891473d3ebf248c2d44a9bbeac270d614ca"
+  finding: >-
+    All 10 PR42 S4 rows are ports, cities, gauges, or centroids, not named
+    grain export/transfer facilities. Texas Gulf and Puget Sound rows are
+    outside the live D2 basin universe.
+
+mechanical_filters_applied:
+  object_class: >-
+    Named grain export/transfer facility or terminal. Ports, cities, gauges,
+    gages, and regional centroids are not S4 nodes.
+  object_class_sources:
+    - research/episodes/EPISODE_PROTOCOL.md
+    - research/episodes/discovery/S2_S8_ADAPTER_INVENTORY.md
+    - docs/governance/s2_s8_ratification.yaml
+  geography: live D2 navigation_basins only
+  geography_source: config/discovery/prereg_rules.yaml
+
+live_d2_basins:
+  - lower_mississippi
+  - middle_mississippi
+  - upper_mississippi
+  - ohio
+  - illinois
+  - columbia_snake
+
+retrieval_executed: true
+census_source_product: NDC Library Navigation Facilities DOCUMENTIDENTIFIER 08012026
+census_source_file: s4_sources/Navigation_Facilities_08012026.xlsx
+census_source_sha256: "ab1a8c00c142e6c4cd1412d745275ac4521064e946d535a4c7db470665bf4e20"
+retrieval_ts: "2026-08-27T23:53:57Z"
+join_rules_file: S4_JOIN_RULES.yaml
+match_key: NAV_UNIT_ID
+coordinate_product: NDC Library Navigation Facilities 08012026 LATITUDE/LONGITUDE
+ienc_used: false
+fgis_used_as: corroboration_only_not_physical_census
+
+fgis_registered_exporters:
+  retrieved: true
+  row_count: 655
+  location_name_nonnull: 0
+  join: EXPLICIT_MATCH_UNMATCH_AMBIGUOUS
+  public_year_filter: "2026"
+  matched_count: 1
+  unmatched_count: 654
+  ambiguous_count: 0
+  matched_nav_unit_id: "0V9G"
+  binding_file: S4_FGIS_CORROBORATION.yaml
+  public_release_default: "No"
+  role: corroboration_only_not_physical_census
+  reason: >-
+    GetFGISExportsList LocationName is null on every row. Exact Year=2026
+    ExporterName=NAV_UNIT_NAME yields one positive-evidence row (Prairie
+    Creek Grain Company, Inc. / 0V9G). Official DDR instructions default
+    additional export locations to No for public release. The public FGIS
+    location report is not an exhaustive terminal census and is not used
+    to enumerate S4 nodes.
+
+recommended_census_id: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP
+recommended_census_file: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml
+recommended_census_sha256: "d3fa78d0b20596806a673250de3eb6ad4672236c83dc41930fabbb5112249076"
+row_count: 677
+completeness_claim: NOT_CLAIMED
+inclusion_rule: >-
+  Official 08012026 workbook. FAC_TYPE==Dock AND valid official lat/lon AND
+  WTWY_NAME in the frozen live-D2 waterway map AND word-boundary grain token
+  in COMMODITIES or PURPOSE. NAV_UNIT_ID is the exact match key. Unmapped
+  waterways and non-Dock types are excluded, not guessed. Record status is
+  not used as a completeness filter.
+
+default_facility_rows:
+  source_file: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml
+  sha256: "d3fa78d0b20596806a673250de3eb6ad4672236c83dc41930fabbb5112249076"
+  row_count: 677
+  compact_copy: FULL_CONFIG_B100_S4_CORRECTED.yaml s4_node_registry.nodes
+  per_row_bindings:
+    - nav_unit_id
+    - name
+    - latitude
+    - longitude
+    - coordinate_provenance
+    - wtwy
+    - wtwy_name
+    - d2_basin
+    - commodities
+    - purpose
+    - grain_function_evidence
+    - inclusion_rationale
+    - source_snapshot_sha256
+
+census_variants:
+  - id: A
+    selector: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP
+    file: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml
+    sha256: "d3fa78d0b20596806a673250de3eb6ad4672236c83dc41930fabbb5112249076"
+    row_count: 677
+    recommended: true
+    least_change: true
+    rule: Dock + live-D2 waterway + grain token in COMMODITIES or PURPOSE
+    basin_counts:
+      lower_mississippi: 253
+      ohio: 102
+      upper_mississippi: 107
+      illinois: 81
+      columbia_snake: 77
+      middle_mississippi: 57
+  - id: B
+    selector: S4_CENSUS_B_WCSC_D2GRAIN_DOCK_COMMODITIES
+    file: S4_CENSUS_B_WCSC_D2GRAIN_DOCK_COMMODITIES.yaml
+    sha256: "19022712e51189edbf76b6cdb4d67d5c07b73b32ac6628551a3a58ee5f89e2b0"
+    row_count: 593
+    recommended: false
+    rule: Same as A except grain token must appear in COMMODITIES
+    drops_purpose_only_examples:
+      - CARGILL, TERMINAL 4 GRAIN ELEVATOR, BERTH NO. 401
+      - Cargill, Westwego Elevator Wharf.
+      - Bunge Corp., Destrehan Elevator Wharf.
+      - CARGILL-RESERVE ELEVATOR WHARF
+  - id: C
+    selector: S4_CENSUS_C_WCSC_D2GRAIN_EXPORT_BASINS
+    file: S4_CENSUS_C_WCSC_D2GRAIN_EXPORT_BASINS.yaml
+    sha256: "755d1a2b35df4fc10f8f1298246d8fabece5ac92375e42859decd421b2b7f8a6"
+    row_count: 330
+    recommended: false
+    rule: Same as A restricted to lower_mississippi and columbia_snake
+    basin_counts:
+      lower_mississippi: 253
+      columbia_snake: 77
+
+recommendation_basis: >-
+  A is least change from ratified S4 object class (export/transfer, not
+  export-only) and from using the official Navigation Facilities snapshot
+  without dropping PURPOSE-only grain elevators. C silently chooses
+  export-basin completeness. Humans pick A, B, or C.
+
+notable_included_under_A:
+  - name: ADM/GROWMARK, AMA GRAIN ELEVATOR DOCK
+  - name: PORT OF LONGVIEW BERTH 9 EGT
+    note: Commodities Wheat|Corn|Oilseeds; name has neither ELEVATOR nor GRAIN
+  - name: TEMCO (CHS CARGILL), KALAMA GRAIN ELEVATOR
+    note: Official NDC grain dock. S8 corporate-only exclusion does not apply to S4 physical nodes.
+
+unmatched_grain_token_rows: 1167
+ambiguous_rows: none_inside_variant_NAV_UNIT_ID_unique
+featureserver_gis_subset_not_on_ballot: 534
+
+unapproved_expansions:
+  - id: TEXAS_GULF
+    pr42_rows: [GULF-03, GULF-04, GULF-05]
+    labels: [Houston Ship Channel, Corpus Christi, Galveston]
+    live_d2: false
+    episode_schema_vocab_token: texas_gulf_coast
+    included_in_corrected_default: false
+  - id: PUGET_SOUND
+    pr42_rows: [PNW-04, PNW-05]
+    labels: [Seattle, Tacoma]
+    live_d2: false
+    episode_schema_vocab_token: null
+    note: puget_sound is not a live D2 basin and is not in episode_schema navigation_basin vocab
+    included_in_corrected_default: false
+  - id: GREAT_LAKES
+    pr42_s4_rows: []
+    live_d2: false
+    episode_schema_vocab_token: great_lakes_seaway
+    included_in_corrected_default: false
+    note: Coast Guard district D9 is omitted from proposed S3. Great Lakes waterways stay unmatched.
+
+withdrawn_pr42_default_rows:
+  - node_id: GULF-01
+    reason: FGIS region centroid / South Louisiana (general); not a facility
+  - node_id: GULF-02
+    reason: USACE gage / New Orleans city proxy; not a facility
+  - node_id: GULF-03
+    reason: generic port / Houston city-center; Texas Gulf not live D2
+  - node_id: GULF-04
+    reason: generic port / Corpus Christi city-center; Texas Gulf not live D2
+  - node_id: GULF-05
+    reason: generic port / Galveston city-center; Texas Gulf not live D2
+  - node_id: PNW-01
+    reason: Portland city-center; not a named Columbia grain terminal
+  - node_id: PNW-02
+    reason: Vancouver WA city-center; not a named transfer facility
+  - node_id: PNW-03
+    reason: Longview city-center; not EGT or other elevator
+  - node_id: PNW-04
+    reason: Seattle city-center; Puget Sound not live D2
+  - node_id: PNW-05
+    reason: Tacoma city-center; Puget Sound not live D2
+
+irreducible_selector:
+  field_id: S4_NODE_CENSUS
+  options: [A, B, C]
+  recommended: A
+  why_irreducible: >-
+    Official 08012026 bytes plus live-D2 Dock join still leave three defensible
+    finite grain-field rules. Each is materialized with exact rows and SHA256.
+  not_silently_chosen: true
+
+marker: S4_FACILITY_BINDING_NDC_08012026_ABC_ENUMERATED

@@ -1,0 +1,116 @@
+# S4 distance contract. 100 NM preserved. Haversine NM-sphere bound mechanically.
+# Track geometry remains the only distance selector.
+
+schema_version: "1.0"
+proposal_id: S4_DISTANCE_CONTRACT
+proposal_date: "2026-08-27"
+packet_status: PR44_EXACT_DELTA_BALLOT_READY
+
+proximity_radius_nm: 100
+preserved:
+  proximity_radius_nm: 100
+  source: A+B approval S4_RADIUS=100_NM at PR42 head 840d989; radius not reopened
+
+nautical_mile_m: 1852
+nautical_mile_authority: >-
+  International nautical mile, exactly 1852 metres (First International
+  Extraordinary Hydrographic Conference, Monaco, 1929; SI coherent use).
+radius_m: 185200
+boundary_inequality: "<="
+boundary_predicate: "distance_m <= 185200"
+boundary_reading: >-
+  "Within 100 NM" is inclusive. A storm position or track segment at exact
+  equality is in-sample.
+
+geodesic_mechanical: true
+geodesic:
+  id: HAVERSINE_NM_SPHERE
+  algorithm: haversine_sphere
+  mechanical_from_pr42: true
+  pr42_approval: explicit Haversine
+  formula: >-
+    d = 2 * R * asin(sqrt(sin^2(dphi/2) + cos(phi1)*cos(phi2)*sin^2(dlon/2)))
+    with phi, lambda in radians, d and R in metres.
+  earth_radius_m: 6366707.019493707
+  earth_radius_rule: "R = 1852 * 10800 / pi"
+  earth_radius_authority: >-
+    Sphere on which one arc-minute of great circle equals one international
+    nautical mile (1852 m). This is the unique sphere that makes Haversine
+    distances native to a 100 NM threshold.
+  rejected_mixed_wording: >-
+    PR42 "Haversine formula on WGS84 ellipsoid" is internally contradictory.
+    Keep the approved Haversine algorithm; drop the ellipsoid clause.
+  not: WGS84 ellipsoidal geodesic / Karney
+
+track_geometry_mechanical: false
+track_geometry_options:
+  POINT_ONLY:
+    recommended: true
+    mechanical_from_pr42: true
+    pr42_text: storm center position (lat/lon from HURDAT2 best track)
+    file: S4_DISTANCE_POINT_ONLY.yaml
+    sha256: "7170f9b674794ff7eea252ef7b41470ce1cbb5a1009ab629650e14bb12be7590"
+  SEGMENT:
+    recommended: false
+    mechanical_from_pr42: false
+    file: S4_DISTANCE_SEGMENT.yaml
+    sha256: "9d3a95ef91611ff196c7ab0d423c54233c7890d9e38934530147f8905ae14c1d"
+    rule: >-
+      Minimum Haversine distance to the great-circle segment between
+      consecutive chronological published HURDAT2 positions of the same
+      storm, omitting any segment that would cross a skipped missing
+      position.
+
+hurdat2_treatment:
+  authority: "NHC HURDAT2 Atlantic and NE/NC Pacific format (Landsea / NHC format note)"
+  format_url: https://www.nhc.noaa.gov/data/hurdat/
+  format_doc: https://www.aoml.noaa.gov/hrd/hurdat/hurdat2-format.pdf
+  files:
+    atlantic_current:
+      url: https://www.nhc.noaa.gov/data/hurdat/hurdat2-1851-2025-02272026.txt
+      sha256: "1b9b0c7beed5b4505838658b1d30e159fc84330c60891a58cfcf43ae55c37202"
+      bytes: 7082381
+      last_modified: "Thu, 05 Mar 2026 16:03:11 GMT"
+      http_status: 200
+      required: true
+    pacific_ne_nc_current:
+      url: https://www.nhc.noaa.gov/data/hurdat/hurdat2-nepac-1949-2025-02272026.txt
+      sha256: "db65f8bc538d5c05e15f738c96111861d6ce3572c007879de58e44d4d05a9cd6"
+      bytes: 4083231
+      last_modified: "Thu, 05 Mar 2026 16:03:11 GMT"
+      http_status: 200
+      required: true
+      why: columbia_snake is in census A/B/C
+    atlantic_pr42_filename_not_used:
+      url: https://www.nhc.noaa.gov/data/hurdat/hurdat2-1851-2024-040425.txt
+      sha256: "d595ada8aaa64e402c26eeb80efb344b52ef420b1627d8c0ee6ee65f0729923b"
+      note: Still published; current NHC Atlantic file is hurdat2-1851-2025-02272026.txt
+  positions_used: >-
+    Every HURDAT2 detail (data) line with a parseable latitude and longitude,
+    including non-synoptic times (landfall L and other ATCF identifiers).
+    Header lines are not positions.
+  coordinate_parse: >-
+    Latitude like 29.1N / 16.5N and longitude like 90.2W / 78.9W as published.
+    North and East positive; South and West negative. Tenths of a degree as
+    published; do not add precision.
+  missing_positions: >-
+    If latitude or longitude is missing or unparseable, skip that detail
+    row. Do not invent a position. Do not interpolate across a skipped row.
+  duplicate_positions: >-
+    Exact duplicate tuples (storm_id, datetime_utc, lat, lon) collapse to
+    one. Distinct coordinates at the same timestamp are both kept.
+  unused_fields: >-
+    Wind radii and radius of maximum wind are storm-size fields in nautical
+    miles. They are not the track-center-to-facility distance.
+  interpolation_mechanical: false
+  interpolation_changes_membership: true
+
+exposed_fields:
+  - field_id: S4_TRACK_GEOMETRY
+    options: [POINT_ONLY, SEGMENT]
+    recommended: POINT_ONLY
+    why_exposed: >-
+      POINT_ONLY follows PR42 "storm center position". SEGMENT can change
+      membership when the closest approach is between 6-hour points.
+
+marker: S4_DISTANCE_CONTRACT_100NM_HAVERSINE_NM_SPHERE_BOUND
