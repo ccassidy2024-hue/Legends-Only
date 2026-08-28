@@ -44,4 +44,41 @@ match_key: NAV_UNIT_ID
 coordinate_fields:
 - LATITUDE
 - LONGITUDE
-marker: S4_JOIN_RULES_v1
+marker: S4_JOIN_RULES_v2
+deterministic_filter: >-
+  FAC_TYPE == Dock AND LATITUDE/LONGITUDE present and nonzero AND WTWY_NAME in
+  wtwy_name_to_d2_basin AND word-boundary grain_token_regex match in COMMODITIES
+  or PURPOSE. Completeness is not claimed beyond the frozen 08012026 snapshot.
+unobserved_regex_tokens_in_included_rows: [maize, oat, soy]
+observed_matching_tokens:
+- barley
+- corn
+- grain
+- grains
+- oats
+- rice
+- rye
+- sorghum
+- soybean
+- soybeans
+- wheat
+observed_matching_token_counts:
+  barley: 219
+  corn: 420
+  grain: 588
+  grains: 416
+  oats: 220
+  rice: 227
+  rye: 220
+  sorghum: 220
+  soybean: 420
+  soybeans: 13
+  wheat: 339
+observed_source_native_commodity_atoms_matching_filter:
+  Corn: 410
+  Oilseeds (Soybean, Flaxseed and Others): 408
+  Wheat: 328
+  Animal Feed, Grain Mill Products, Flour, Processed Grains: 320
+  Barley, Rye, Oats, Rice and Sorghum Grains: 219
+observed_purpose_value_count_among_included_rows: 135
+source_snapshot_sha256: ab1a8c00c142e6c4cd1412d745275ac4521064e946d535a4c7db470665bf4e20

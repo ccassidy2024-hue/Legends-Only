@@ -35,10 +35,10 @@ PACKET_FILES = (
 )
 
 HISTORICAL_B100 = "9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1"
-CORRECTED_B100 = "743a809be45cf954e2fe4485349425a5656a4a71cde2df9c995a7c8806448e13"
-CENSUS_A_SHA = "b3ba56f2c6108491cc8cef784b24dd38f7d40c18ff121a936a47f222c43da92b"
-CENSUS_B_SHA = "1e1b3734aba0b00121ae5bf340e71649905530315337cf1792b72f1c7e71a5e4"
-CENSUS_C_SHA = "6351dd044e713417d262a0f41cf74f4679f88d69288cedfbd20f618b3abe63cd"
+CORRECTED_B100 = "52bdd29ff1833a8fa88b0b66462c4156d0cc4a7d8a68897632ee28c18c51675b"
+CENSUS_A_SHA = "eb8e43cde2904406e6a6718675c30dd2c6afdbe19996ef98b611e411c06e3688"
+CENSUS_B_SHA = "545c02b5bec8294859292512d9393b13247b7bf2f6e32df9d55a8a9357a75890"
+CENSUS_C_SHA = "d310690c629ac0141a97bf760f2c3c86c942a7c4e4d2d3abb9e253eb2c537250"
 NDC_XLSX_SHA = "ab1a8c00c142e6c4cd1412d745275ac4521064e946d535a4c7db470665bf4e20"
 EARTH_RADIUS_M = 1852 * 10800 / math.pi
 LIVE_D2 = (
@@ -225,6 +225,28 @@ def test_census_files_match_ndc_08012026_reconstruction_and_digests() -> None:
     ids = [row["nav_unit_id"] for row in census_a["nodes"]]
     assert len(ids) == len(set(ids))
     assert census_a["source_product"].endswith("08012026")
+    required_row_fields = (
+        "nav_unit_id",
+        "name",
+        "latitude",
+        "longitude",
+        "coordinate_provenance",
+        "wtwy",
+        "wtwy_name",
+        "d2_basin",
+        "commodities",
+        "purpose",
+        "grain_function_evidence",
+        "inclusion_rationale",
+        "source_snapshot_sha256",
+    )
+    for row in census_a["nodes"]:
+        for field in required_row_fields:
+            assert field in row, field
+        assert row["source_snapshot_sha256"] == NDC_XLSX_SHA
+        assert row["coordinate_provenance"].startswith("NDC Library Navigation Facilities 08012026")
+        assert row["wtwy"] is not None
+        assert row["inclusion_rationale"].startswith("FAC_TYPE=Dock")
 
 
 def test_recommended_default_is_census_a_live_d2_only() -> None:
@@ -430,6 +452,16 @@ def test_source_family_endpoints_verified_and_no_out_of_d2_hidden() -> None:
     assert verified["https://portnola.com/notices"] == 404
     ienc = next(row for row in provenance["sources"] if row["id"] == "NOAA_USACE_IENC")
     assert ienc["retrieved"] is False
+    rerelease = provenance["independent_rerelease"]
+    assert rerelease["xlsx_sha256"] == NDC_XLSX_SHA
+    assert rerelease["xlsx_sha256_unchanged"] is True
+    rules = _load("S4_JOIN_RULES.yaml")
+    assert "grain" in rules["observed_matching_tokens"]
+    assert "wheat" in rules["observed_matching_tokens"]
+    assert "maize" in rules["unobserved_regex_tokens_in_included_rows"]
+    atoms = rules["observed_source_native_commodity_atoms_matching_filter"]
+    assert "Wheat" in atoms
+    assert "Corn" in atoms
 
 
 def test_packet_does_not_modify_production_guard_surfaces() -> None:

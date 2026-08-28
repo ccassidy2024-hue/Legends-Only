@@ -58,7 +58,7 @@ fgis_registered_exporters:
 
 recommended_census_id: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP
 recommended_census_file: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml
-recommended_census_sha256: "b3ba56f2c6108491cc8cef784b24dd38f7d40c18ff121a936a47f222c43da92b"
+recommended_census_sha256: "eb8e43cde2904406e6a6718675c30dd2c6afdbe19996ef98b611e411c06e3688"
 row_count: 677
 completeness_claim: NOT_CLAIMED
 inclusion_rule: >-
@@ -70,15 +70,29 @@ inclusion_rule: >-
 
 default_facility_rows:
   source_file: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml
-  sha256: "b3ba56f2c6108491cc8cef784b24dd38f7d40c18ff121a936a47f222c43da92b"
+  sha256: "eb8e43cde2904406e6a6718675c30dd2c6afdbe19996ef98b611e411c06e3688"
   row_count: 677
   compact_copy: FULL_CONFIG_B100_S4_CORRECTED.yaml s4_node_registry.nodes
+  per_row_bindings:
+    - nav_unit_id
+    - name
+    - latitude
+    - longitude
+    - coordinate_provenance
+    - wtwy
+    - wtwy_name
+    - d2_basin
+    - commodities
+    - purpose
+    - grain_function_evidence
+    - inclusion_rationale
+    - source_snapshot_sha256
 
 census_variants:
   - id: A
     selector: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP
     file: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml
-    sha256: "b3ba56f2c6108491cc8cef784b24dd38f7d40c18ff121a936a47f222c43da92b"
+    sha256: "eb8e43cde2904406e6a6718675c30dd2c6afdbe19996ef98b611e411c06e3688"
     row_count: 677
     recommended: true
     least_change: true
@@ -93,7 +107,7 @@ census_variants:
   - id: B
     selector: S4_CENSUS_B_WCSC_D2GRAIN_DOCK_COMMODITIES
     file: S4_CENSUS_B_WCSC_D2GRAIN_DOCK_COMMODITIES.yaml
-    sha256: "1e1b3734aba0b00121ae5bf340e71649905530315337cf1792b72f1c7e71a5e4"
+    sha256: "545c02b5bec8294859292512d9393b13247b7bf2f6e32df9d55a8a9357a75890"
     row_count: 593
     recommended: false
     rule: Same as A except grain token must appear in COMMODITIES
@@ -105,7 +119,7 @@ census_variants:
   - id: C
     selector: S4_CENSUS_C_WCSC_D2GRAIN_EXPORT_BASINS
     file: S4_CENSUS_C_WCSC_D2GRAIN_EXPORT_BASINS.yaml
-    sha256: "6351dd044e713417d262a0f41cf74f4679f88d69288cedfbd20f618b3abe63cd"
+    sha256: "d310690c629ac0141a97bf760f2c3c86c942a7c4e4d2d3abb9e253eb2c537250"
     row_count: 330
     recommended: false
     rule: Same as A restricted to lower_mississippi and columbia_snake

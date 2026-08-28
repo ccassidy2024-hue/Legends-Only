@@ -19,7 +19,7 @@ recommended_binding:
   S4_NODE_CENSUS: A
   S4_TRACK_GEOMETRY: POINT_ONLY
   corrected_b100: FULL_CONFIG_B100_S4_CORRECTED.yaml
-  corrected_b100_sha256: "743a809be45cf954e2fe4485349425a5656a4a71cde2df9c995a7c8806448e13"
+  corrected_b100_sha256: "52bdd29ff1833a8fa88b0b66462c4156d0cc4a7d8a68897632ee28c18c51675b"
 
 human_fields:
   - field_id: S4_NODE_CENSUS
@@ -31,17 +31,17 @@ human_fields:
     options:
       - id: A
         file: S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP.yaml
-        sha256: "b3ba56f2c6108491cc8cef784b24dd38f7d40c18ff121a936a47f222c43da92b"
+        sha256: "eb8e43cde2904406e6a6718675c30dd2c6afdbe19996ef98b611e411c06e3688"
         row_count: 677
         rule: NDC 08012026 Dock + live D2 waterway + grain token in COMMODITIES or PURPOSE
       - id: B
         file: S4_CENSUS_B_WCSC_D2GRAIN_DOCK_COMMODITIES.yaml
-        sha256: "1e1b3734aba0b00121ae5bf340e71649905530315337cf1792b72f1c7e71a5e4"
+        sha256: "545c02b5bec8294859292512d9393b13247b7bf2f6e32df9d55a8a9357a75890"
         row_count: 593
         rule: Same as A, COMMODITIES only
       - id: C
         file: S4_CENSUS_C_WCSC_D2GRAIN_EXPORT_BASINS.yaml
-        sha256: "6351dd044e713417d262a0f41cf74f4679f88d69288cedfbd20f618b3abe63cd"
+        sha256: "d310690c629ac0141a97bf760f2c3c86c942a7c4e4d2d3abb9e253eb2c537250"
         row_count: 330
         rule: Same as A, lower_mississippi + columbia_snake only
     not_asked: [S2, S4_RADIUS, V2_GOVERNANCE, S4_GEODESIC]

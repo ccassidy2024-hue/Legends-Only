@@ -2,6 +2,16 @@ schema_version: '1.0'
 proposal_id: S4_SOURCE_RETRIEVAL_PROVENANCE
 primary_census_source: NDC_LIBRARY_NAVIGATION_FACILITIES_08012026
 retrieval_ts: '2026-08-27T23:53:57Z'
+independent_rerelease:
+  retrieval_ts: '2026-08-28T00:02:59Z'
+  agent: bc-2e93161a-6e61-56cf-85c9-e894d07a6823
+  keywordsearchpub_http_status: 200
+  download_http_status: 200
+  getdocdatapub_http_status: 200
+  xlsx_sha256: ab1a8c00c142e6c4cd1412d745275ac4521064e946d535a4c7db470665bf4e20
+  xlsx_bytes: 6517079
+  xlsx_sha256_unchanged: true
+  getdocdatapub_delta: DOWNLOADCOUNT 15 at freeze vs 17 at independent rerelease; frozen getdoc snapshot retained because the census workbook bytes are unchanged
 user_agent: Mozilla/5.0 (research retrieval for PR44 S4 correction packet)
 sources:
 - id: NDC_LIBRARY_NAVIGATION_FACILITIES_08012026
@@ -146,4 +156,4 @@ endpoint_verification:
   https://www.stb.gov/: 200
   https://www.stb.gov/proceedings-actions/search-stb-records/: 200
   https://portnola.com/notices: 404
-marker: S4_SOURCE_RETRIEVAL_PROVENANCE_v3
+marker: S4_SOURCE_RETRIEVAL_PROVENANCE_v4
