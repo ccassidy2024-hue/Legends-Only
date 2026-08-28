@@ -178,4 +178,10 @@ endpoint_verification:
   https://www.stb.gov/: 200
   https://www.stb.gov/proceedings-actions/search-stb-records/: 200
   https://portnola.com/notices: 404
-marker: S4_SOURCE_RETRIEVAL_PROVENANCE_v5
+packet_supporting_mechanics:
+  not_science: true
+  not_production_auth: true
+  xlsx_gitattributes: '*.xlsx binary so the frozen 08012026 workbook is not treated as text'
+  openpyxl_dev_extra: pyproject.toml optional-dependencies.dev openpyxl>=3.1 so packet tests can reconstruct the census from the frozen xlsx
+  purpose_bytes: census YAML PURPOSE/COMMODITIES match pandas.read_excel strings including _x000D_
+marker: S4_SOURCE_RETRIEVAL_PROVENANCE_v6

@@ -546,3 +546,14 @@ def test_observed_native_values_file_enumerates_commodities_and_purpose() -> Non
     assert counts["Corn"] == 410
     assert counts["Wheat"] == 328
 
+
+def test_packet_supporting_mechanics_are_xlsx_freeze_only() -> None:
+    provenance = _load("S4_SOURCE_RETRIEVAL_PROVENANCE.yaml")
+    mechanics = provenance["packet_supporting_mechanics"]
+    assert mechanics["not_science"] is True
+    assert mechanics["not_production_auth"] is True
+    gitattributes = (REPO / ".gitattributes").read_text(encoding="utf-8")
+    assert "*.xlsx binary" in gitattributes
+    pyproject = (REPO / "pyproject.toml").read_text(encoding="utf-8")
+    assert "openpyxl>=3.1" in pyproject
+
