@@ -1,0 +1,26 @@
+# Honest multiplicity bookkeeping for a never-run M3 family.
+# 0 tests performed is not "nothing survived max-t".
+# Do not treat empty lagscan output as a discovery.
+
+schema_version: "1"
+marker: M3_EMPTY_FAMILY_MULTIPLICITY
+family: m3_episode_window_screener
+authorized_event_study_windows: 0
+planned_family_size: 0
+tests_performed: 0
+bh_corrections_applied: 0
+maxt_corrections_applied: 0
+status: never_run
+ran_and_null: false
+universe_screen_authorized: false
+min_obs_default: 104
+scan_universe_on_empty_pairs: empty_dataframe
+interpretation: >
+  Zero accepted Episode Ledger windows. The planned multiple-testing family
+  has size 0 and was never run. WORKFLOW.md weeks 4–5 "nothing survives
+  max-t → skip screener" is a ran-and-null path and does not apply.
+  Naive best-lag p is not evidence. Do not read silence as a result.
+honesty:
+  unknown_is_not_zero: true
+  missing_i2_is_not_proof_of_no_disruption: true
+  s4_proximity_is_driver_identity_only_absent_i2: true

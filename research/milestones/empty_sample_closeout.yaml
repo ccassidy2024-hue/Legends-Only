@@ -1,9 +1,10 @@
-# Empty-sample closeout for Milestones 2–5.
+# Empty-sample closeout for Milestones 2–8.
 # Status/docs/tests only. Do not invent series, release_ts, or episode YAML.
 # Do not treat UNKNOWN or missing I2 as zero. Do not open market data.
 
 schema_version: "1"
 marker: M2_NEGATIVE_RESULT_EMPTY_SAMPLE
+m8_marker: M8_WRITTEN_NEGATIVE_RESULT_UNANSWERABLE
 m1_merged_main: b7d402713ef5eaed33cdff44f4128382e3b38be7
 m1_reviewed_head: 9812df348c053af3024fd007a4ee486494aac954
 m1_pr: 51
@@ -35,6 +36,12 @@ m3:
   lagscan_is_exploratory_plumbing: true
   universe_screen_authorized: false
   min_obs_default: 104
+  multiplicity:
+    artifact: research/milestones/m3_empty_family_multiplicity.yaml
+    planned_family_size: 0
+    tests_performed: 0
+    status: never_run
+    ran_and_null: false
 
 m4:
   result: NOT_ESTIMABLE
@@ -49,7 +56,29 @@ m5:
   market_outcomes_opened: false
   gate_f_default: no_mispricing
 
+m6:
+  result: SKIPPED_UNDER_KILL
+  reason: sample_p_below_kill
+  artifact: research/milestones/M6_M7_SKIPPED_UNDER_KILL.md
+  instrument_invented: false
+
+m7:
+  result: SKIPPED_UNDER_KILL
+  reason: sample_p_below_kill
+  artifact: research/milestones/M6_M7_SKIPPED_UNDER_KILL.md
+  replay_invented: false
+
+m8:
+  result: M8_WRITTEN_NEGATIVE_RESULT_UNANSWERABLE
+  artifact: research/milestones/M8_WRITTEN_NEGATIVE_RESULT.md
+  estimated_null: false
+  question_answerable: false
+  market_outcomes_opened: false
+  gate_f: no_mispricing
+
 kill_condition:
   sample_p: 0
   threshold_usable_episodes: 6
   triggered: true
+  stop: true
+  next_milestone: none_kill_closed

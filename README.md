@@ -41,9 +41,9 @@ the later critique never existed.
 3. Exploratory screener with honest multiple-testing treatment ← **not estimable (0 ledger windows)**
 4. Direct shock-response modeling / local projections ← **not estimable (0 identified shocks)**
 5. Mechanism research + literature review ← **empty-sample four-statement memo**
-6. Stronger causal/dynamic identification where justified
-7. Historical replay
-8. Trade thesis **or** written negative result
+6. Stronger causal/dynamic identification where justified ← **skipped under <6 kill**
+7. Historical replay ← **skipped under <6 kill**
+8. Trade thesis **or** written negative result ← **closed: unanswerable (Sample P = 0)**
 
 Do **not** reintroduce a NetworkX cascade graph as an early milestone.
 Do **not** build ABM / system-dynamics / optimizer / trading UI / deep learning
@@ -99,6 +99,10 @@ survivors=0; admissible episode rows=0. UNKNOWN is not zero; missing I2 is
 not proof of no physical disruption; S4 proximity is driver-only absent I2.
 Market outcomes remain unopened. See `research/episodes/EPISODE_LEDGER.md`.
 **M2–M5:** `M2_NEGATIVE_RESULT_EMPTY_SAMPLE` (0 catalogued real series; do not
-fabricate rows). M3/M4 not-estimable. M5 memo:
+fabricate rows). M3/M4 not-estimable. M3 multiplicity: planned family size = 0
+tests performed (never-run, not ran-and-null). M5 memo:
 `research/memos/M5_EMPTY_SAMPLE_FOUR_STATEMENTS.md`. Synthetic panel plumbing
-is unchanged. **Next:** Milestone 6 is not opened here.
+is unchanged. **M6/M7 skipped** under the `WORKFLOW.md` <6 kill.
+**M8 closed:** written negative result — the question is unanswerable with
+this data; Gate F #5 no mispricing. See
+`research/milestones/M8_WRITTEN_NEGATIVE_RESULT.md`.

@@ -98,5 +98,5 @@ SHA, not to this prose.
 |---|---|
 | What the data show | 4234 triaged, 0 accepted, 0 real series, M2 empty, M3/M4 not-estimable; UNKNOWN ≠ 0; missing I2 ≠ no disruption |
 | Why we think it happens | Closed I1/I2/I3 gates plus no invented series metadata; not a physical-flow story |
-| What we expect next | M6–M8 remain unopened. Without episodes and without catalogued series, authorized estimation stays not-estimable. A written negative result remains a valid M8 outcome. |
+| What we expect next | M6/M7 skipped under the <6 kill. M8 is the written unanswerable result (`research/milestones/M8_WRITTEN_NEGATIVE_RESULT.md`). Authorized estimation stays not-estimable. |
 | How it could be traded | It cannot. No thesis. Market data stays closed. Gate F default: no mispricing. |
