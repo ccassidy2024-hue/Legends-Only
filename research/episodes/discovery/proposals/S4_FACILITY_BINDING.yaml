@@ -48,7 +48,7 @@ fgis_registered_exporters:
   row_count: 655
   location_name_nonnull: 0
   join: NO_FACILITY_JOIN
-  public_release_default: No
+  public_release_default: "No"
   role: corroboration_only_not_physical_census
   reason: >-
     GetFGISExportsList LocationName is null on every row. Official DDR
