@@ -886,7 +886,7 @@ def verify_historical_ratification(
     Does not read the live working tree (except git). Used so v1 remains
     verifiable after live bytes move to v2.
     """
-    from grainsys.discovery.config import REPO_ROOT, DEFAULT_PREREG_RELATIVE
+    from grainsys.discovery.config import DEFAULT_PREREG_RELATIVE, REPO_ROOT
 
     if not isinstance(tag, str) or tag not in ALLOWED_PREREG_TAGS:
         raise RatificationError(
