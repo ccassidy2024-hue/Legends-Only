@@ -143,8 +143,14 @@ Not applicable: 0 survivors, 0 admissible rows, 0 calibration-set entries.
 When later analysing an episode, keep separate: what the data show | why we
 think it happens | what we expect next | how it could be traded.
 
+M1 merge: PR #51, `b7d402713ef5eaed33cdff44f4128382e3b38be7` (reviewed head
+`9812df348c053af3024fd007a4ee486494aac954`). Downstream empty-sample closeout
+(M2–M5) lives in `research/milestones/` and
+`research/memos/M5_EMPTY_SAMPLE_FOUR_STATEMENTS.md`. UNKNOWN is not zero.
+
 ## Change log
 
 | date | episode_id | change | author |
 |------|------------|--------|--------|
 | 2026-08-28 | — | M1 empty-ledger negative-result closeout: 4234 candidates mechanically triaged, 4234 no-episode dispositions, 0 survivors, 0 admissible episode rows. Marker `M1_CLOSEOUT_RETRY_AFTER_CURSOR_LAUNCH_FAILURE`. | A (agent) |
+| 2026-08-28 | — | M1 merged to main (PR #51). M2–M5 empty-sample closeout: `M2_NEGATIVE_RESULT_EMPTY_SAMPLE`; M3/M4 not-estimable; M5 four-statement memo. | A (agent) |

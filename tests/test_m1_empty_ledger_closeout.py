@@ -100,5 +100,5 @@ def test_closeout_status_artifacts() -> None:
     assert PR50_REVIEWED_HEAD in ledger
     assert "market data remains unopened" in ledger
     settings = yaml.safe_load(SETTINGS_PATH.read_text(encoding="utf-8"))
-    assert settings["project"]["phase"] == "milestone_1_negative_result_empty_ledger"
-    assert settings["project"]["next_milestone"] == "2_asof_panel"
+    assert settings["data_policy"]["invent_source_metadata"] is False
+    assert CLOSEOUT_MARKER in ledger

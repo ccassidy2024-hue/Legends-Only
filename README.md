@@ -37,10 +37,10 @@ the later critique never existed.
 
 0. Repository / research setup ← foundation complete
 1. Episode Ledger / pre-registration ← **closed: empty-ledger negative result (0 admissible episodes)**
-2. As-of panel + leakage protection (real series)
-3. Exploratory screener with honest multiple-testing treatment
-4. Direct shock-response modeling / local projections
-5. Mechanism research + literature review
+2. As-of panel + leakage protection ← **closed: `M2_NEGATIVE_RESULT_EMPTY_SAMPLE` (0 real series)**
+3. Exploratory screener with honest multiple-testing treatment ← **not estimable (0 ledger windows)**
+4. Direct shock-response modeling / local projections ← **not estimable (0 identified shocks)**
+5. Mechanism research + literature review ← **empty-sample four-statement memo**
 6. Stronger causal/dynamic identification where justified
 7. Historical replay
 8. Trade thesis **or** written negative result
@@ -98,5 +98,7 @@ D5=4234 candidates were mechanically triaged (S1=37 R12, S4=4197 R3);
 survivors=0; admissible episode rows=0. UNKNOWN is not zero; missing I2 is
 not proof of no physical disruption; S4 proximity is driver-only absent I2.
 Market outcomes remain unopened. See `research/episodes/EPISODE_LEDGER.md`.
-**Next:** Milestone 2 — as-of panel + leakage protection (real series), which
-is empty/not-estimable as an episode-anchored sample while N_episodes=0.
+**M2–M5:** `M2_NEGATIVE_RESULT_EMPTY_SAMPLE` (0 catalogued real series; do not
+fabricate rows). M3/M4 not-estimable. M5 memo:
+`research/memos/M5_EMPTY_SAMPLE_FOUR_STATEMENTS.md`. Synthetic panel plumbing
+is unchanged. **Next:** Milestone 6 is not opened here.
