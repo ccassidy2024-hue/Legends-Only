@@ -748,20 +748,29 @@ def test_n2_missing_sweep_status_illegal() -> None:
 # ---------------------------------------------------------------------------
 
 
-def test_n3_real_repo_blocks_until_v2_tag() -> None:
-    """v2 live config is not v1-authorized; prereg-rules-v2 does not exist yet."""
-    with pytest.raises(RatificationError):
-        assert_sweep_authorized(REPO)
-    with pytest.raises(SweepError, match="ratification guard blocked"):
-        SweepEnumerator.from_repo(REPO)
+# Reviewed PR #46 head; prereg-rules-v2 points here (not the merge commit).
+_PREREG_V2_TAGGED_COMMIT = "07fe83e1d168fffc2b0d352b94b8713677e0cbdc"
+_PREREG_V2_CONFIG_DIGEST = (
+    "d3ef01162de1d443041242eec08749de0e9c16d30fab9ba4a8822146aff19871"
+)
+_PREREG_V1_CONFIG_DIGEST = (
+    "a0eee0add8057c82fb6251daf2d93745a157b129862c4bd2ae25d0027ef3df0e"
+)
+
+
+def test_n3_real_repo_authorizes_v2_and_preserves_v1() -> None:
+    """Live tree is v2-authorized; historical v1 verification still passes."""
+    prov = assert_sweep_authorized(REPO)
+    assert prov.prereg_tag == PREREG_TAG_V2
+    assert prov.prereg_config_digest == _PREREG_V2_CONFIG_DIGEST
     v1 = subprocess.run(
-        ["git", "tag", "-l", PREREG_TAG],
+        ["git", "tag", "-l", PREREG_TAG_V1],
         cwd=REPO,
         check=True,
         capture_output=True,
         text=True,
     ).stdout.splitlines()
-    assert PREREG_TAG in v1
+    assert PREREG_TAG_V1 in v1
     tagged_v1 = subprocess.run(
         ["git", "rev-list", "-n", "1", PREREG_TAG_V1],
         cwd=REPO,
@@ -770,17 +779,18 @@ def test_n3_real_repo_blocks_until_v2_tag() -> None:
         text=True,
     ).stdout.strip()
     assert tagged_v1 == PREREG_V1_TAGGED_COMMIT
-    v2 = subprocess.run(
-        ["git", "tag", "-l", PREREG_TAG_V2],
+    tagged_v2 = subprocess.run(
+        ["git", "rev-list", "-n", "1", PREREG_TAG_V2],
         cwd=REPO,
         check=True,
         capture_output=True,
         text=True,
     ).stdout.strip()
-    assert v2 == ""
+    assert tagged_v2 == _PREREG_V2_TAGGED_COMMIT
     hist = verify_historical_ratification(REPO, tag=PREREG_TAG_V1)
     assert hist.prereg_tag == PREREG_TAG_V1
     assert hist.execution_commit_sha == PREREG_V1_TAGGED_COMMIT
+    assert hist.prereg_config_digest == _PREREG_V1_CONFIG_DIGEST
 
 
 def test_n3_isolated_repo_authorizes_when_all_conditions_met(tmp_path: Path) -> None:
@@ -1109,8 +1119,9 @@ def test_n3_no_unauthorized_outcomes() -> None:
         "GRAIN_DATA_ROOT",
     ):
         assert banned not in src
-    with pytest.raises(SweepError, match="ratification guard blocked"):
-        SweepEnumerator.from_repo(REPO)
+    # Live repo is now v2-authorized; the guard still must not read outcomes.
+    prov = assert_sweep_authorized(REPO)
+    assert prov.prereg_tag == PREREG_TAG_V2
 
 
 # ---------------------------------------------------------------------------

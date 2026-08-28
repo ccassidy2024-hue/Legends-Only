@@ -1,0 +1,17 @@
+schema_version: '0.2'
+record_kind: source_coverage
+source_family: S7
+authority: Surface Transportation Board
+district: national
+vehicle: STB docket filings and service events
+endpoint: https://www.stb.gov/proceedings-actions/search-stb-records/
+earliest_available: null
+latest_available: null
+retrieved_on: '2026-08-28'
+coverage_status: present
+sweep_status: enumerated
+records_matched: 0
+scope_start: '2010-01-01'
+scope_end: '2024-12-31'
+notes: Listing-page keyword scan only. Inner PDF/document full_text extraction is
+  UNKNOWN. listed_inner_rows=0. matched_terms=[].

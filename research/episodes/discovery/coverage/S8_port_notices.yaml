@@ -1,0 +1,17 @@
+schema_version: '0.2'
+record_kind: source_coverage
+source_family: S8
+authority: Port Authorities
+district: census_A_nodes
+vehicle: Official port terminal operational notices
+endpoint: null
+earliest_available: null
+latest_available: null
+retrieved_on: '2026-08-28'
+coverage_status: unknown
+sweep_status: not_attempted
+records_matched: null
+scope_start: null
+scope_end: null
+notes: No verified notice URL in ratified v2 config (nodes='S4 node registry census
+  A'). UNKNOWN, not zero.

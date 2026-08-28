@@ -466,7 +466,7 @@ def test_live_candidates_csv_in_repo() -> None:
     import yaml
     with (REPO / CANONICAL_CANDIDATE_UNIVERSE_MANIFEST_RELATIVE).open() as f:
         manifest = yaml.safe_load(f)
-    assert manifest["candidate_count"] == 37
+    assert manifest["candidate_count"] == 4234
 
 
 def test_candidate_universe_yaml_in_repo() -> None:
