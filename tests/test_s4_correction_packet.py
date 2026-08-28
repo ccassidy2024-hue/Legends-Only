@@ -496,12 +496,18 @@ def test_source_family_endpoints_verified_and_no_out_of_d2_hidden() -> None:
 
 
 def test_packet_does_not_modify_production_guard_surfaces() -> None:
+    """After persist, live production bytes equal the approved corrected packet."""
     assert LIVE_PREREG.is_file()
     assert PRODUCTION_MANIFEST.is_file()
     assert GOVERNANCE_PY.is_file()
     live = yaml.safe_load(LIVE_PREREG.read_text(encoding="utf-8"))
-    assert "s4_node_registry" not in live
-    assert live["schema_version"] == "0.2"
+    assert live["schema_version"] == "0.3"
+    assert live["s4_node_registry"]["row_count"] == 677
+    assert live["s4_node_registry"]["track_geometry"] == "POINT_ONLY"
+    assert live["s4_node_registry"]["census_variant"] == (
+        "S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP"
+    )
+    assert hashlib.sha256(LIVE_PREREG.read_bytes()).hexdigest() == CORRECTED_B100
 
 
 def test_fgis_corroboration_binds_matched_unmatched_ambiguous() -> None:

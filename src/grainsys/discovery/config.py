@@ -25,6 +25,10 @@ ALLOWED_KEYWORD_MATCH_MODES = frozenset({"substring", "whole_word"})
 PROTOCOL_SWEEP_FAMILIES = frozenset({f"S{i}" for i in range(1, 9)})
 
 PREREG_SCHEMA_VERSION = "0.2"
+PREREG_SCHEMA_VERSION_V2 = "0.3"
+ALLOWED_PREREG_SCHEMA_VERSIONS = frozenset(
+    {PREREG_SCHEMA_VERSION, PREREG_SCHEMA_VERSION_V2}
+)
 
 # Exact live-config key sets — unknown/missing keys fail closed (no silent retain).
 PREREG_TOP_LEVEL_KEYS: tuple[str, ...] = (
@@ -43,6 +47,12 @@ PREREG_TOP_LEVEL_KEYS: tuple[str, ...] = (
     "concurrent_shocks",
     "analysis_anchor_grid",
 )
+PREREG_TOP_LEVEL_KEYS_V2: tuple[str, ...] = (
+    *PREREG_TOP_LEVEL_KEYS,
+    "s2_gauge_registry",
+    "s4_node_registry",
+    "marker",
+)
 SAMPLE_PERIOD_KEYS: tuple[str, ...] = ("sample_start", "sample_end")
 CORRIDORS_KEYS: tuple[str, ...] = ("navigation_basins",)
 SOURCE_ARCHIVE_ENTRY_KEYS: tuple[str, ...] = (
@@ -52,6 +62,112 @@ SOURCE_ARCHIVE_ENTRY_KEYS: tuple[str, ...] = (
     "vehicle",
     "endpoint",
 )
+# Schema 0.3 per-family exact keys (approved A + POINT_ONLY packet).
+# S2 is registry-only, not an archive row.
+SOURCE_ARCHIVE_KEYS_BY_SWEEP_V2: dict[str, tuple[str, ...]] = {
+    "S1": SOURCE_ARCHIVE_ENTRY_KEYS,
+    "S3": (
+        "sweep_id",
+        "authority",
+        "vehicle",
+        "endpoint",
+        "districts",
+        "positive_evidence_only",
+        "verification",
+    ),
+    "S4": (
+        "sweep_id",
+        "authority",
+        "vehicle",
+        "endpoints",
+        "geodesic",
+        "positive_evidence_only",
+        "proximity_radius_nm",
+        "track_geometry",
+        "verification",
+    ),
+    "S5": (
+        "sweep_id",
+        "authority",
+        "vehicle",
+        "endpoint",
+        "positive_evidence_only",
+        "verification",
+    ),
+    "S6": (
+        "sweep_id",
+        "authority",
+        "vehicle",
+        "endpoint",
+        "positive_evidence_only",
+        "verification",
+    ),
+    "S7": (
+        "sweep_id",
+        "authority",
+        "vehicle",
+        "endpoint",
+        "docket_prefixes",
+        "positive_evidence_only",
+        "verification",
+    ),
+    "S8": (
+        "sweep_id",
+        "authority",
+        "vehicle",
+        "nodes",
+        "positive_evidence_only",
+        "verification",
+    ),
+}
+S2_GAUGE_REGISTRY_KEYS: tuple[str, ...] = (
+    "interpretation",
+    "semantics",
+    "row_count",
+    "gauges",
+)
+S2_GAUGE_ROW_KEYS: tuple[str, ...] = ("station_id", "name", "basin", "lat", "lon")
+S2_GAUGE_INTERPRETATION_V2 = "OPERATIONAL_RESTRICTION_ONLY"
+S2_GAUGE_ROW_COUNT_V2 = 10
+S3_DISTRICTS_V2: tuple[str, ...] = ("D8", "D13")
+S4_NODE_REGISTRY_KEYS: tuple[str, ...] = (
+    "status",
+    "census_variant",
+    "census_source",
+    "proximity_radius_nm",
+    "nautical_mile_m",
+    "radius_m",
+    "boundary_inequality",
+    "geodesic",
+    "earth_radius_m",
+    "track_geometry",
+    "texas_gulf_in_default",
+    "puget_sound_in_default",
+    "great_lakes_in_default",
+    "row_count",
+    "nodes",
+)
+S4_NODE_ROW_KEYS: tuple[str, ...] = (
+    "node_id",
+    "name",
+    "lat",
+    "lon",
+    "basin",
+    "nav_unit_id",
+)
+S4_NODE_ROW_COUNT_V2 = 677
+S4_PROXIMITY_RADIUS_NM_V2 = 100
+S4_NAUTICAL_MILE_M_V2 = 1852
+S4_RADIUS_M_V2 = 185200
+S4_BOUNDARY_INEQUALITY_V2 = "<="
+S4_GEODESIC_V2 = "haversine_nm_sphere"
+S4_EARTH_RADIUS_M_V2 = 6366707.019493707
+S4_TRACK_GEOMETRY_V2 = "POINT_ONLY"
+S4_CENSUS_VARIANT_V2 = "S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP"
+S4_CENSUS_SOURCE_V2 = "NDC Library Navigation Facilities DOCUMENTIDENTIFIER 08012026"
+S4_STATUS_V2 = "PROPOSED_RECOMMENDED_CENSUS_A_POINT_ONLY"
+S4_S8_NODES_V2 = "S4 node registry census A"
+PREREG_MARKER_V2 = "FULL_CONFIG_B100_S4_CORRECTED_CENSUS_A_POINT_ONLY"
 KEYWORD_POLICY_KEYS: tuple[str, ...] = ("terms", "match", "case_sensitive", "fields")
 CANDIDATES_KEYS: tuple[str, ...] = (
     "table_path",
@@ -200,6 +316,20 @@ def require_nonempty_str(value: Any, *, field: str) -> str:
         raise DiscoveryConfigError(
             f"{field} must be a canonical trimmed string; refuse untrimmed"
         )
+    if not value:
+        raise DiscoveryConfigError(f"{field} must be a nonempty string; refuse blank")
+    return value
+
+
+def require_source_native_str(value: Any, *, field: str) -> str:
+    """Nonempty string from a source-native field; do not trim or coerce."""
+    if not isinstance(value, str):
+        raise DiscoveryConfigError(
+            f"{field} must be a nonempty string (got {type(value).__name__}); "
+            "refuse coercion"
+        )
+    if "\x00" in value:
+        raise DiscoveryConfigError(f"{field} contains NUL; refuse")
     if not value:
         raise DiscoveryConfigError(f"{field} must be a nonempty string; refuse blank")
     return value
@@ -533,6 +663,386 @@ def _validate_concurrent_shocks(block: dict[str, Any]) -> None:
     )
 
 
+def require_actual_bool(value: Any, *, field: str) -> bool:
+    if not isinstance(value, bool):
+        raise DiscoveryConfigError(
+            f"{field} must be an actual bool (got {type(value).__name__}); refuse coercion"
+        )
+    return value
+
+
+def require_actual_int(value: Any, *, field: str) -> int:
+    if isinstance(value, bool) or not isinstance(value, int):
+        raise DiscoveryConfigError(
+            f"{field} must be an actual int (got {type(value).__name__}); refuse coercion"
+        )
+    return value
+
+
+def require_finite_number(value: Any, *, field: str) -> float:
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise DiscoveryConfigError(
+            f"{field} must be an actual number (got {type(value).__name__}); refuse coercion"
+        )
+    number = float(value)
+    if number != number or number in {float("inf"), float("-inf")}:
+        raise DiscoveryConfigError(f"{field} must be a finite number; refuse")
+    return number
+
+
+def require_latitude(value: Any, *, field: str) -> float:
+    lat = require_finite_number(value, field=field)
+    if lat < -90.0 or lat > 90.0:
+        raise DiscoveryConfigError(f"{field}={lat!r} is outside [-90, 90]; refuse")
+    return lat
+
+
+def require_longitude(value: Any, *, field: str) -> float:
+    lon = require_finite_number(value, field=field)
+    if lon < -180.0 or lon > 180.0:
+        raise DiscoveryConfigError(f"{field}={lon!r} is outside [-180, 180]; refuse")
+    return lon
+
+
+def _archive_identity(entry: dict[str, Any], *, index: int) -> tuple[str, ...]:
+    identity: list[str] = []
+    for field in ("sweep_id", "authority", "vehicle", "endpoint", "district"):
+        if field not in entry:
+            continue
+        identity.append(
+            require_nonempty_str(
+                entry.get(field), field=f"source_archives[{index}].{field}"
+            )
+        )
+    return tuple(identity)
+
+
+def _validate_source_archives_v1(archives: list[Any]) -> None:
+    seen_identities: set[tuple[str, ...]] = set()
+    for i, entry in enumerate(archives):
+        require_exact_mapping_keys(
+            entry,
+            field=f"source_archives[{i}]",
+            required=SOURCE_ARCHIVE_ENTRY_KEYS,
+        )
+        identity: list[str] = []
+        for field in SOURCE_ARCHIVE_ENTRY_KEYS:
+            text = require_nonempty_str(
+                entry.get(field), field=f"source_archives[{i}].{field}"
+            )
+            identity.append(text)
+        sweep_id = identity[0]
+        if sweep_id not in PROTOCOL_SWEEP_FAMILIES:
+            raise DiscoveryConfigError(
+                f"source_archives[{i}].sweep_id={sweep_id!r} must be one of "
+                f"protocol families {sorted(PROTOCOL_SWEEP_FAMILIES)}"
+            )
+        ident = tuple(identity)
+        if ident in seen_identities:
+            raise DiscoveryConfigError(
+                f"source_archives[{i}] duplicates archive identity {ident}; refuse"
+            )
+        seen_identities.add(ident)
+
+
+def _validate_source_archives_v2(archives: list[Any]) -> None:
+    seen_identities: set[tuple[str, ...]] = set()
+    seen_sweep_non_s1: set[str] = set()
+    for i, entry in enumerate(archives):
+        if not isinstance(entry, dict):
+            raise DiscoveryConfigError(f"source_archives[{i}] must be a mapping")
+        sweep_id_raw = entry.get("sweep_id")
+        sweep_id = require_nonempty_str(
+            sweep_id_raw, field=f"source_archives[{i}].sweep_id"
+        )
+        if sweep_id == "S2":
+            raise DiscoveryConfigError(
+                "source_archives must not include S2 under schema 0.3; "
+                "S2 is registry-only corroboration (binding_operational_restriction_only)"
+            )
+        required = SOURCE_ARCHIVE_KEYS_BY_SWEEP_V2.get(sweep_id)
+        if required is None:
+            raise DiscoveryConfigError(
+                f"source_archives[{i}].sweep_id={sweep_id!r} is not a schema-0.3 "
+                "archive family; refuse"
+            )
+        require_exact_mapping_keys(
+            entry,
+            field=f"source_archives[{i}]",
+            required=required,
+        )
+        ident = _archive_identity(entry, index=i)
+        if ident in seen_identities:
+            raise DiscoveryConfigError(
+                f"source_archives[{i}] duplicates archive identity {ident}; refuse"
+            )
+        seen_identities.add(ident)
+        if sweep_id != "S1":
+            if sweep_id in seen_sweep_non_s1:
+                raise DiscoveryConfigError(
+                    f"source_archives[{i}] duplicates non-S1 sweep_id {sweep_id!r}; refuse"
+                )
+            seen_sweep_non_s1.add(sweep_id)
+        if sweep_id == "S3":
+            districts = require_unique_nonempty_str_list(
+                entry.get("districts"), field=f"source_archives[{i}].districts"
+            )
+            if tuple(districts) != S3_DISTRICTS_V2:
+                raise DiscoveryConfigError(
+                    f"source_archives[{i}].districts must be {list(S3_DISTRICTS_V2)}; "
+                    "refuse"
+                )
+        if sweep_id == "S4":
+            require_unique_nonempty_str_list(
+                entry.get("endpoints"), field=f"source_archives[{i}].endpoints"
+            )
+            radius = require_actual_int(
+                entry.get("proximity_radius_nm"),
+                field=f"source_archives[{i}].proximity_radius_nm",
+            )
+            if radius != S4_PROXIMITY_RADIUS_NM_V2:
+                raise DiscoveryConfigError(
+                    f"source_archives[{i}].proximity_radius_nm must be "
+                    f"{S4_PROXIMITY_RADIUS_NM_V2} (B100); refuse"
+                )
+            geodesic = require_nonempty_str(
+                entry.get("geodesic"), field=f"source_archives[{i}].geodesic"
+            )
+            if geodesic != S4_GEODESIC_V2:
+                raise DiscoveryConfigError(
+                    f"source_archives[{i}].geodesic must be {S4_GEODESIC_V2!r}; refuse"
+                )
+            track_geometry = require_nonempty_str(
+                entry.get("track_geometry"),
+                field=f"source_archives[{i}].track_geometry",
+            )
+            if track_geometry != S4_TRACK_GEOMETRY_V2:
+                raise DiscoveryConfigError(
+                    f"source_archives[{i}].track_geometry must be "
+                    f"{S4_TRACK_GEOMETRY_V2!r}; refuse"
+                )
+        if sweep_id == "S7":
+            require_unique_nonempty_str_list(
+                entry.get("docket_prefixes"),
+                field=f"source_archives[{i}].docket_prefixes",
+            )
+        if sweep_id == "S8":
+            nodes = require_nonempty_str(
+                entry.get("nodes"), field=f"source_archives[{i}].nodes"
+            )
+            if nodes != S4_S8_NODES_V2:
+                raise DiscoveryConfigError(
+                    f"source_archives[{i}].nodes must be {S4_S8_NODES_V2!r}; refuse"
+                )
+        if "verification" in entry:
+            require_nonempty_str(
+                entry.get("verification"), field=f"source_archives[{i}].verification"
+            )
+        if "positive_evidence_only" in entry:
+            flag = require_actual_bool(
+                entry.get("positive_evidence_only"),
+                field=f"source_archives[{i}].positive_evidence_only",
+            )
+            if flag is not True:
+                raise DiscoveryConfigError(
+                    f"source_archives[{i}].positive_evidence_only must be true; refuse"
+                )
+
+
+def _validate_s2_gauge_registry(
+    block: dict[str, Any], *, allowed_basins: frozenset[str]
+) -> None:
+    require_exact_mapping_keys(
+        block, field="s2_gauge_registry", required=S2_GAUGE_REGISTRY_KEYS
+    )
+    interpretation = require_nonempty_str(
+        block.get("interpretation"), field="s2_gauge_registry.interpretation"
+    )
+    if interpretation != S2_GAUGE_INTERPRETATION_V2:
+        raise DiscoveryConfigError(
+            f"s2_gauge_registry.interpretation must be {S2_GAUGE_INTERPRETATION_V2!r}; "
+            "refuse invented numeric-threshold mode"
+        )
+    require_nonempty_str(block.get("semantics"), field="s2_gauge_registry.semantics")
+    row_count = require_actual_int(
+        block.get("row_count"), field="s2_gauge_registry.row_count"
+    )
+    if row_count != S2_GAUGE_ROW_COUNT_V2:
+        raise DiscoveryConfigError(
+            f"s2_gauge_registry.row_count must be {S2_GAUGE_ROW_COUNT_V2} (B100); refuse"
+        )
+    gauges = block.get("gauges")
+    if not isinstance(gauges, list):
+        raise DiscoveryConfigError("s2_gauge_registry.gauges must be a list")
+    if len(gauges) != S2_GAUGE_ROW_COUNT_V2:
+        raise DiscoveryConfigError(
+            f"s2_gauge_registry.gauges must contain exactly {S2_GAUGE_ROW_COUNT_V2} rows"
+        )
+    seen_ids: set[str] = set()
+    for i, row in enumerate(gauges):
+        require_exact_mapping_keys(
+            row, field=f"s2_gauge_registry.gauges[{i}]", required=S2_GAUGE_ROW_KEYS
+        )
+        station_id = require_nonempty_str(
+            row.get("station_id"), field=f"s2_gauge_registry.gauges[{i}].station_id"
+        )
+        if station_id in seen_ids:
+            raise DiscoveryConfigError(
+                f"s2_gauge_registry.gauges duplicate station_id {station_id!r}; refuse"
+            )
+        seen_ids.add(station_id)
+        require_nonempty_str(row.get("name"), field=f"s2_gauge_registry.gauges[{i}].name")
+        basin = require_nonempty_str(
+            row.get("basin"), field=f"s2_gauge_registry.gauges[{i}].basin"
+        )
+        if basin not in allowed_basins:
+            raise DiscoveryConfigError(
+                f"s2_gauge_registry.gauges[{i}].basin={basin!r} is outside "
+                "episode-schema navigation_basin vocabulary"
+            )
+        require_latitude(row.get("lat"), field=f"s2_gauge_registry.gauges[{i}].lat")
+        require_longitude(row.get("lon"), field=f"s2_gauge_registry.gauges[{i}].lon")
+
+
+def _validate_s4_node_registry(
+    block: dict[str, Any], *, allowed_basins: frozenset[str]
+) -> None:
+    require_exact_mapping_keys(
+        block, field="s4_node_registry", required=S4_NODE_REGISTRY_KEYS
+    )
+    status = require_nonempty_str(block.get("status"), field="s4_node_registry.status")
+    if status != S4_STATUS_V2:
+        raise DiscoveryConfigError(
+            f"s4_node_registry.status must be {S4_STATUS_V2!r}; refuse"
+        )
+    census_variant = require_nonempty_str(
+        block.get("census_variant"), field="s4_node_registry.census_variant"
+    )
+    if census_variant != S4_CENSUS_VARIANT_V2:
+        raise DiscoveryConfigError(
+            f"s4_node_registry.census_variant must be {S4_CENSUS_VARIANT_V2!r}; refuse"
+        )
+    census_source = require_nonempty_str(
+        block.get("census_source"), field="s4_node_registry.census_source"
+    )
+    if census_source != S4_CENSUS_SOURCE_V2:
+        raise DiscoveryConfigError(
+            f"s4_node_registry.census_source must be {S4_CENSUS_SOURCE_V2!r}; refuse"
+        )
+    radius = require_actual_int(
+        block.get("proximity_radius_nm"),
+        field="s4_node_registry.proximity_radius_nm",
+    )
+    if radius != S4_PROXIMITY_RADIUS_NM_V2:
+        raise DiscoveryConfigError(
+            f"s4_node_registry.proximity_radius_nm must be {S4_PROXIMITY_RADIUS_NM_V2} "
+            "(B100); refuse"
+        )
+    nautical_mile_m = require_actual_int(
+        block.get("nautical_mile_m"), field="s4_node_registry.nautical_mile_m"
+    )
+    if nautical_mile_m != S4_NAUTICAL_MILE_M_V2:
+        raise DiscoveryConfigError(
+            f"s4_node_registry.nautical_mile_m must be {S4_NAUTICAL_MILE_M_V2}; refuse"
+        )
+    radius_m = require_actual_int(
+        block.get("radius_m"), field="s4_node_registry.radius_m"
+    )
+    if radius_m != S4_RADIUS_M_V2:
+        raise DiscoveryConfigError(
+            f"s4_node_registry.radius_m must be {S4_RADIUS_M_V2}; refuse"
+        )
+    if radius_m != nautical_mile_m * radius:
+        raise DiscoveryConfigError(
+            "s4_node_registry.radius_m must equal nautical_mile_m * "
+            "proximity_radius_nm; refuse"
+        )
+    boundary = require_nonempty_str(
+        block.get("boundary_inequality"), field="s4_node_registry.boundary_inequality"
+    )
+    if boundary != S4_BOUNDARY_INEQUALITY_V2:
+        raise DiscoveryConfigError(
+            f"s4_node_registry.boundary_inequality must be {S4_BOUNDARY_INEQUALITY_V2!r}; "
+            "refuse"
+        )
+    geodesic = require_nonempty_str(
+        block.get("geodesic"), field="s4_node_registry.geodesic"
+    )
+    if geodesic != S4_GEODESIC_V2:
+        raise DiscoveryConfigError(
+            f"s4_node_registry.geodesic must be {S4_GEODESIC_V2!r}; refuse"
+        )
+    earth_radius_m = require_finite_number(
+        block.get("earth_radius_m"), field="s4_node_registry.earth_radius_m"
+    )
+    if earth_radius_m != S4_EARTH_RADIUS_M_V2:
+        raise DiscoveryConfigError(
+            f"s4_node_registry.earth_radius_m must be {S4_EARTH_RADIUS_M_V2}; refuse"
+        )
+    track_geometry = require_nonempty_str(
+        block.get("track_geometry"), field="s4_node_registry.track_geometry"
+    )
+    if track_geometry != S4_TRACK_GEOMETRY_V2:
+        raise DiscoveryConfigError(
+            f"s4_node_registry.track_geometry must be {S4_TRACK_GEOMETRY_V2!r}; refuse"
+        )
+    for flag_key in (
+        "texas_gulf_in_default",
+        "puget_sound_in_default",
+        "great_lakes_in_default",
+    ):
+        flag = require_actual_bool(
+            block.get(flag_key), field=f"s4_node_registry.{flag_key}"
+        )
+        if flag is not False:
+            raise DiscoveryConfigError(
+                f"s4_node_registry.{flag_key} must be false; refuse"
+            )
+    row_count = require_actual_int(
+        block.get("row_count"), field="s4_node_registry.row_count"
+    )
+    if row_count != S4_NODE_ROW_COUNT_V2:
+        raise DiscoveryConfigError(
+            f"s4_node_registry.row_count must be {S4_NODE_ROW_COUNT_V2} (census A); refuse"
+        )
+    nodes = block.get("nodes")
+    if not isinstance(nodes, list):
+        raise DiscoveryConfigError("s4_node_registry.nodes must be a list")
+    if len(nodes) != S4_NODE_ROW_COUNT_V2:
+        raise DiscoveryConfigError(
+            f"s4_node_registry.nodes must contain exactly {S4_NODE_ROW_COUNT_V2} rows"
+        )
+    seen_ids: set[str] = set()
+    for i, row in enumerate(nodes):
+        require_exact_mapping_keys(
+            row, field=f"s4_node_registry.nodes[{i}]", required=S4_NODE_ROW_KEYS
+        )
+        node_id = require_nonempty_str(
+            row.get("node_id"), field=f"s4_node_registry.nodes[{i}].node_id"
+        )
+        if node_id in seen_ids:
+            raise DiscoveryConfigError(
+                f"s4_node_registry.nodes duplicate node_id {node_id!r}; refuse"
+            )
+        seen_ids.add(node_id)
+        require_source_native_str(
+            row.get("name"), field=f"s4_node_registry.nodes[{i}].name"
+        )
+        require_latitude(row.get("lat"), field=f"s4_node_registry.nodes[{i}].lat")
+        require_longitude(row.get("lon"), field=f"s4_node_registry.nodes[{i}].lon")
+        basin = require_nonempty_str(
+            row.get("basin"), field=f"s4_node_registry.nodes[{i}].basin"
+        )
+        if basin not in allowed_basins:
+            raise DiscoveryConfigError(
+                f"s4_node_registry.nodes[{i}].basin={basin!r} is outside "
+                "episode-schema navigation_basin vocabulary"
+            )
+        require_nonempty_str(
+            row.get("nav_unit_id"), field=f"s4_node_registry.nodes[{i}].nav_unit_id"
+        )
+
+
 def load_prereg_rules(repo_root: Path | None = None) -> dict[str, Any]:
     """Load and validate live preregistration config.
 
@@ -554,17 +1064,22 @@ def load_prereg_rules(repo_root: Path | None = None) -> dict[str, Any]:
         )
 
     data = _load_yaml_mapping(path)
-    require_exact_mapping_keys(
-        data, field="prereg_rules.yaml", required=PREREG_TOP_LEVEL_KEYS
-    )
-
     schema_version = require_nonempty_str(
         data.get("schema_version"), field="schema_version"
     )
-    if schema_version != PREREG_SCHEMA_VERSION:
+    if schema_version not in ALLOWED_PREREG_SCHEMA_VERSIONS:
         raise DiscoveryConfigError(
-            f"schema_version={schema_version!r} is not {PREREG_SCHEMA_VERSION!r}; refuse"
+            f"schema_version={schema_version!r} is not one of "
+            f"{sorted(ALLOWED_PREREG_SCHEMA_VERSIONS)}; refuse"
         )
+    top_keys = (
+        PREREG_TOP_LEVEL_KEYS_V2
+        if schema_version == PREREG_SCHEMA_VERSION_V2
+        else PREREG_TOP_LEVEL_KEYS
+    )
+    require_exact_mapping_keys(
+        data, field="prereg_rules.yaml", required=top_keys
+    )
     require_nonempty_str(data.get("governing_adr"), field="governing_adr")
 
     sample = require_exact_mapping_keys(
@@ -606,31 +1121,10 @@ def load_prereg_rules(repo_root: Path | None = None) -> dict[str, Any]:
         raise DiscoveryConfigError(
             "source_archives must be a non-empty list (D3); no hidden district defaults."
         )
-    seen_identities: set[tuple[str, ...]] = set()
-    for i, entry in enumerate(archives):
-        require_exact_mapping_keys(
-            entry,
-            field=f"source_archives[{i}]",
-            required=SOURCE_ARCHIVE_ENTRY_KEYS,
-        )
-        identity: list[str] = []
-        for field in SOURCE_ARCHIVE_ENTRY_KEYS:
-            text = require_nonempty_str(
-                entry.get(field), field=f"source_archives[{i}].{field}"
-            )
-            identity.append(text)
-        sweep_id = identity[0]
-        if sweep_id not in PROTOCOL_SWEEP_FAMILIES:
-            raise DiscoveryConfigError(
-                f"source_archives[{i}].sweep_id={sweep_id!r} must be one of "
-                f"protocol families {sorted(PROTOCOL_SWEEP_FAMILIES)}"
-            )
-        ident = tuple(identity)
-        if ident in seen_identities:
-            raise DiscoveryConfigError(
-                f"source_archives[{i}] duplicates archive identity {ident}; refuse"
-            )
-        seen_identities.add(ident)
+    if schema_version == PREREG_SCHEMA_VERSION_V2:
+        _validate_source_archives_v2(archives)
+    else:
+        _validate_source_archives_v1(archives)
 
     keywords = require_exact_mapping_keys(
         data.get("keyword_policy"),
@@ -756,5 +1250,41 @@ def load_prereg_rules(repo_root: Path | None = None) -> dict[str, Any]:
     )
     for key in ANALYSIS_ANCHOR_GRID_KEYS:
         require_nonempty_str(grid[key], field=f"analysis_anchor_grid.{key}")
+
+    if schema_version == PREREG_SCHEMA_VERSION_V2:
+        s2 = data.get("s2_gauge_registry")
+        if not isinstance(s2, dict):
+            raise DiscoveryConfigError("s2_gauge_registry must be a mapping")
+        _validate_s2_gauge_registry(s2, allowed_basins=allowed_basins)
+        s4 = data.get("s4_node_registry")
+        if not isinstance(s4, dict):
+            raise DiscoveryConfigError("s4_node_registry must be a mapping")
+        _validate_s4_node_registry(s4, allowed_basins=allowed_basins)
+        s4_archives = [
+            entry
+            for entry in archives
+            if isinstance(entry, dict) and entry.get("sweep_id") == "S4"
+        ]
+        for entry in s4_archives:
+            if entry.get("proximity_radius_nm") != s4["proximity_radius_nm"]:
+                raise DiscoveryConfigError(
+                    "S4 source_archives.proximity_radius_nm must match "
+                    "s4_node_registry.proximity_radius_nm; refuse"
+                )
+            if entry.get("track_geometry") != s4["track_geometry"]:
+                raise DiscoveryConfigError(
+                    "S4 source_archives.track_geometry must match "
+                    "s4_node_registry.track_geometry; refuse"
+                )
+            if entry.get("geodesic") != s4["geodesic"]:
+                raise DiscoveryConfigError(
+                    "S4 source_archives.geodesic must match "
+                    "s4_node_registry.geodesic; refuse"
+                )
+        marker = require_nonempty_str(data.get("marker"), field="marker")
+        if marker != PREREG_MARKER_V2:
+            raise DiscoveryConfigError(
+                f"marker must be {PREREG_MARKER_V2!r}; refuse"
+            )
 
     return data

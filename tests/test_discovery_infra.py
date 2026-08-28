@@ -43,6 +43,7 @@ from grainsys.discovery.governance import (
     LOAD_BEARING_RELATIVE_PATHS,
     MANIFEST_RELATIVE,
     PREREG_TAG,
+    PREREG_TAG_V2,
     RULINGS_PATH_CANONICAL,
     RULINGS_RELATIVE,
     RatificationError,
@@ -485,12 +486,31 @@ def test_repo_has_live_prereg_rules() -> None:
 def test_live_prereg_rules_loads_without_error() -> None:
     """The committed prereg_rules.yaml must load and validate successfully."""
     cfg = load_prereg_rules(REPO)
-    assert cfg["schema_version"] == "0.2"
+    live = prereg_rules_path(REPO)
+    assert (
+        sha256_file(live)
+        == "200797f9c287ab213d6007fc9c7d542e55bb3a2b2752459ec5569da796d5da8c"
+    )
+    assert cfg["schema_version"] == "0.3"
     assert cfg["governing_adr"] == "docs/decisions/0002-episode-preregistration.md"
     assert cfg["sample_period"]["sample_start"] == "2010-01-01"
     assert cfg["sample_period"]["sample_end"] == "2024-12-31"
     assert "response_horizon" in cfg["event_windows"]
     assert cfg["physical_thresholds"]["mode"] == "binding_operational_restriction_only"
+    assert cfg["s2_gauge_registry"]["interpretation"] == "OPERATIONAL_RESTRICTION_ONLY"
+    assert cfg["s2_gauge_registry"]["row_count"] == 10
+    registry = cfg["s4_node_registry"]
+    assert registry["proximity_radius_nm"] == 100
+    assert registry["row_count"] == 677 == len(registry["nodes"])
+    assert registry["track_geometry"] == "POINT_ONLY"
+    assert registry["census_variant"] == "S4_CENSUS_A_WCSC_D2GRAIN_DOCK_COMMPURP"
+    assert registry["geodesic"] == "haversine_nm_sphere"
+    assert registry["earth_radius_m"] == 6366707.019493707
+    assert registry["texas_gulf_in_default"] is False
+    assert registry["puget_sound_in_default"] is False
+    assert registry["great_lakes_in_default"] is False
+    assert cfg["marker"] == "FULL_CONFIG_B100_S4_CORRECTED_CENSUS_A_POINT_ONLY"
+    assert not any(entry["sweep_id"] == "S2" for entry in cfg["source_archives"])
 
 
 # ---------------------------------------------------------------------------
@@ -734,20 +754,42 @@ def test_n2_missing_sweep_status_illegal() -> None:
 # ---------------------------------------------------------------------------
 
 
-def test_n3_real_repo_authorizes_live_sweep_execution() -> None:
-    """Current canonical repo has prereg-rules-v1 tag — must authorize."""
-    prov = assert_sweep_authorized(REPO)
-    assert prov.prereg_tag == PREREG_TAG
-    enum = SweepEnumerator.from_repo(REPO)
-    assert len(list(enum.iter_archives(sweep_id="S1"))) == 10
-    tags = subprocess.run(
+def test_n3_real_repo_blocks_until_v2_tag() -> None:
+    """B100 live config is not v1-authorized; prereg-rules-v2 does not exist yet."""
+    with pytest.raises(RatificationError):
+        assert_sweep_authorized(REPO)
+    with pytest.raises(SweepError, match="ratification guard blocked"):
+        SweepEnumerator.from_repo(REPO)
+    v1 = subprocess.run(
         ["git", "tag", "-l", PREREG_TAG],
         cwd=REPO,
         check=True,
         capture_output=True,
         text=True,
+    ).stdout.splitlines()
+    assert PREREG_TAG in v1
+    v2 = subprocess.run(
+        ["git", "tag", "-l", "prereg-rules-v2"],
+        cwd=REPO,
+        check=True,
+        capture_output=True,
+        text=True,
     ).stdout.strip()
-    assert tags == PREREG_TAG
+    assert v2 == ""
+
+
+def test_live_b100_s1_archives_enumerable_without_authorization() -> None:
+    """Constructor matching may use live S1 archives; from_repo remains gated."""
+    cfg = load_prereg_rules(REPO)
+    s1_only = dict(cfg)
+    s1_only["source_archives"] = [
+        entry for entry in cfg["source_archives"] if entry["sweep_id"] == "S1"
+    ]
+    enum = SweepEnumerator(s1_only)
+    s1 = list(enum.iter_archives(sweep_id="S1"))
+    assert len(s1) == 10
+    assert all(target.district for target in s1)
+    assert not any(entry["sweep_id"] == "S2" for entry in cfg["source_archives"])
 
 
 def test_n3_isolated_repo_authorizes_when_all_conditions_met(tmp_path: Path) -> None:
@@ -827,6 +869,11 @@ def test_n3_positive_only_s1_contract_is_load_bearing_and_drift_blocks(
     adapter = "src/grainsys/ingest/ntni.py"
     assert adr15 in LOAD_BEARING_RELATIVE_PATHS
     assert adapter in LOAD_BEARING_RELATIVE_PATHS
+    assert "src/grainsys/ingest/uscg_msib.py" in LOAD_BEARING_RELATIVE_PATHS
+    assert "src/grainsys/ingest/ams_gtr.py" in LOAD_BEARING_RELATIVE_PATHS
+    assert "src/grainsys/ingest/usace_lpms.py" in LOAD_BEARING_RELATIVE_PATHS
+    assert "src/grainsys/ingest/stb_dockets.py" in LOAD_BEARING_RELATIVE_PATHS
+    assert "src/grainsys/ingest/port_advisory.py" in LOAD_BEARING_RELATIVE_PATHS
 
     root = _build_ratified_repo(tmp_path)
     digests = build_interpretation_digests(root)
@@ -879,6 +926,157 @@ def test_n3_provenance_helper_ready() -> None:
             execution_commit_sha="def",
             governing_adr="docs/decisions/0003-phase0-prereg-hardening.md",
         )
+    v2_stamp = make_sweep_provenance(
+        prereg_config_digest=digest,
+        execution_commit_sha=sha,
+        governing_adr="docs/decisions/0003-phase0-prereg-hardening.md",
+        prereg_tag=PREREG_TAG_V2,
+    )
+    assert v2_stamp.prereg_tag == PREREG_TAG_V2
+    with pytest.raises(RatificationError, match="prereg_tag"):
+        make_sweep_provenance(
+            prereg_config_digest=digest,
+            execution_commit_sha=sha,
+            governing_adr="docs/decisions/0003-phase0-prereg-hardening.md",
+            prereg_tag="prereg-rules-v3",
+        )
+
+
+def test_n3_v2_tag_authorizes_when_all_conditions_met(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    _git(root, "tag", PREREG_TAG_V2)
+    prov = assert_sweep_authorized(root)
+    assert prov.prereg_tag == PREREG_TAG_V2
+    enum = SweepEnumerator.from_repo(root)
+    assert len(list(enum.iter_archives())) == 1
+
+
+def test_n3_v2_wrong_digest_fail_closed(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    _git(root, "tag", PREREG_TAG_V2)
+    cfg_path = root / "config" / "discovery" / "prereg_rules.yaml"
+    cfg = yaml.safe_load(cfg_path.read_text(encoding="utf-8"))
+    cfg["sample_period"]["sample_end"] = "2099-06-30"
+    cfg_path.write_text(yaml.safe_dump(cfg), encoding="utf-8", newline="\n")
+    _git(root, "add", "-A")
+    _git(root, "commit", "-m", "mutate-config-after-v2")
+    with pytest.raises(RatificationError, match="digest"):
+        assert_sweep_authorized(root)
+
+
+def test_n3_v2_dirty_tree_fail_closed(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    _git(root, "tag", PREREG_TAG_V2)
+    target = root / "src/grainsys/discovery/governance.py"
+    target.write_bytes(target.read_bytes() + b"\n# dirty\n")
+    with pytest.raises(RatificationError, match="working tree drift|fresh normalized"):
+        assert_sweep_authorized(root)
+
+
+def test_n3_v2_unbound_interpretation_path_fail_closed(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    man_path = root / MANIFEST_RELATIVE
+    manifest = yaml.safe_load(man_path.read_text(encoding="utf-8"))
+    manifest["interpretation_digests"]["docs/decisions/0004-not-real.md"] = "a" * 64
+    man_path.write_text(yaml.safe_dump(manifest), encoding="utf-8")
+    cfg_path = root / "config" / "discovery" / "prereg_rules.yaml"
+    cfg = yaml.safe_load(cfg_path.read_text(encoding="utf-8"))
+    cfg["sample_period"]["sample_end"] = "2099-06-30"
+    cfg_path.write_text(yaml.safe_dump(cfg), encoding="utf-8", newline="\n")
+    _git(root, "add", "-A")
+    _git(root, "commit", "-m", "unbound-interp")
+    _git(root, "tag", PREREG_TAG_V2)
+    with pytest.raises(RatificationError, match="extra|interpretation|load-bearing"):
+        assert_sweep_authorized(root)
+
+
+def test_n3_v2_tag_must_descend_from_v1(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    _git(root, "checkout", "--orphan", "not-from-v1")
+    (root / "orphan.txt").write_text("x", encoding="utf-8")
+    _git(root, "add", "-A")
+    _git(root, "commit", "-m", "orphan-v2")
+    _git(root, "tag", PREREG_TAG_V2)
+    with pytest.raises(RatificationError, match="descendant of prereg-rules-v1"):
+        assert_sweep_authorized(root)
+
+
+def test_n3_v1_remains_valid_when_head_is_not_descendant_of_v2(
+    tmp_path: Path,
+) -> None:
+    root = _build_ratified_repo(tmp_path)
+    v1_sha = _git(root, "rev-parse", "HEAD").stdout.strip()
+    cfg_path = root / "config" / "discovery" / "prereg_rules.yaml"
+    cfg = yaml.safe_load(cfg_path.read_text(encoding="utf-8"))
+    cfg["sample_period"]["sample_end"] = "2099-06-30"
+    cfg_path.write_text(yaml.safe_dump(cfg), encoding="utf-8", newline="\n")
+    _git(root, "add", "-A")
+    _git(root, "commit", "-m", "v2-bytes")
+    manifest = build_ratification_manifest(root)
+    (root / MANIFEST_RELATIVE).write_bytes(serialize_ratification_manifest(manifest))
+    _git(root, "add", "-A")
+    _git(root, "commit", "-m", "v2-manifest")
+    _git(root, "tag", PREREG_TAG_V2)
+    _git(root, "checkout", "--detach", v1_sha)
+    prov = assert_sweep_authorized(root)
+    assert prov.prereg_tag == PREREG_TAG
+
+
+def test_n3_config_cannot_self_select_unauthorized_v2(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    live = REPO / "config" / "discovery" / "prereg_rules.yaml"
+    (root / "config" / "discovery" / "prereg_rules.yaml").write_bytes(live.read_bytes())
+    _git(root, "add", "-A")
+    _git(root, "commit", "-m", "unauthorized-v2-bytes")
+    tags = {
+        t.strip()
+        for t in _git(root, "tag", "-l").stdout.splitlines()
+        if t.strip()
+    }
+    assert PREREG_TAG in tags
+    assert PREREG_TAG_V2 not in tags
+    with pytest.raises(RatificationError):
+        assert_sweep_authorized(root)
+
+
+def test_n3_wrong_tag_name_does_not_authorize(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path, create_tag=False)
+    _git(root, "tag", "prereg-rules-v2-rc")
+    with pytest.raises(RatificationError, match="absent"):
+        assert_sweep_authorized(root)
+
+
+def test_n3_v2_crlf_drift_fail_closed(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    _git(root, "tag", PREREG_TAG_V2)
+    target = root / "src/grainsys/discovery/config.py"
+    lf = target.read_bytes()
+    assert b"\r\n" not in lf
+    target.write_bytes(lf.replace(b"\n", b"\r\n"))
+    with pytest.raises(RatificationError, match="working tree drift|CRLF|fresh normalized"):
+        assert_sweep_authorized(root)
+
+
+def test_n3_v2_non_descendant_checkout_fail_closed(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    _git(root, "tag", PREREG_TAG_V2)
+    _git(root, "checkout", "--orphan", "orphan-branch")
+    (root / "orphan.txt").write_text("x", encoding="utf-8")
+    _git(root, "add", "-A")
+    _git(root, "commit", "-m", "orphan")
+    with pytest.raises(RatificationError, match="descendant"):
+        assert_sweep_authorized(root)
+
+
+def test_n3_guard_does_not_bind_unauthorized_outcomes_or_captures() -> None:
+    joined = " ".join(LOAD_BEARING_RELATIVE_PATHS)
+    assert "candidates.csv" not in joined
+    assert "/captures" not in joined
+    assert "research/episodes/entries" not in joined
+    assert "proposals/" not in joined
+    src = (REPO / "src/grainsys/discovery/governance.py").read_text(encoding="utf-8")
+    assert "candidates.csv" not in src
+    assert "FULL_CONFIG_B100" not in src
 
 
 # ---------------------------------------------------------------------------
@@ -1628,7 +1826,11 @@ def test_c_live_manifest_in_repo_is_valid() -> None:
     import yaml
     with open(manifest_path) as f:
         loaded = yaml.safe_load(f)
-    validate_ratification_manifest_mapping(loaded)
+    validate_ratification_manifest_mapping(loaded, load_bearing=None)
+    live_paths = set(loaded["interpretation_digests"])
+    current = set(LOAD_BEARING_RELATIVE_PATHS)
+    if live_paths == current:
+        validate_ratification_manifest_mapping(loaded)
 
 
 def test_c_format_block_example_ignored_in_rulings_parse() -> None:
