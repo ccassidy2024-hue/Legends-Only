@@ -596,7 +596,9 @@ def _persist_inventory(
     summary_path = repo_root / INVENTORY_SUMMARY_RELATIVE
     csv_path.parent.mkdir(parents=True, exist_ok=True)
     with csv_path.open("w", encoding="utf-8", newline="") as fh:
-        writer = csv.DictWriter(fh, fieldnames=list(INVENTORY_CSV_FIELDNAMES))
+        writer = csv.DictWriter(
+            fh, fieldnames=list(INVENTORY_CSV_FIELDNAMES), lineterminator="\n"
+        )
         writer.writeheader()
         for row in rows:
             mapping = row.to_mapping()
