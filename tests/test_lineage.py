@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import csv
 from pathlib import Path
 
 import pytest
@@ -474,10 +475,13 @@ def test_candidate_universe_yaml_in_repo() -> None:
     assert (REPO / CANONICAL_CANDIDATE_UNIVERSE_MANIFEST_RELATIVE).exists()
 
 
-def test_no_live_no_episode_dispositions_csv() -> None:
-    assert not (
-        REPO / "research/episodes/discovery/candidates/no_episode_dispositions.csv"
-    ).exists()
+def test_live_no_episode_dispositions_csv_accounts_universe() -> None:
+    path = REPO / "research/episodes/discovery/candidates/no_episode_dispositions.csv"
+    assert path.is_file()
+    with path.open(encoding="utf-8", newline="") as fh:
+        rows = list(csv.DictReader(fh))
+    assert len(rows) == 4234
+    assert {r["reason_code"] for r in rows} <= {"R3", "R12"}
 
 
 def test_prereg_rules_yaml_exists_in_repo() -> None:
