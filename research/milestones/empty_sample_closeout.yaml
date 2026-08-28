@@ -51,9 +51,15 @@ m4:
   early_networkx: false
 
 m5:
-  artifact: research/memos/M5_EMPTY_SAMPLE_FOUR_STATEMENTS.md
+  artifact: research/memos/M5_NEGATIVE_RESULT_MECHANISM.md
+  stub_artifact: research/memos/M5_EMPTY_SAMPLE_FOUR_STATEMENTS.md
   four_statements_required: true
   market_outcomes_opened: false
+  gate_c: FAIL_NEGATIVE_RESULT
+  gate_c_complete: false
+  human_signatures: pending
+  school_database_search_performed: false
+  red_team_status: pending_draft_freeze
   gate_f_default: no_mispricing
 
 m6:

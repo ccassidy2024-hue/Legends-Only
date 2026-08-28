@@ -6,6 +6,8 @@ project:
   package: grainsys
   phase: m8_written_negative_result
   next_milestone: none_kill_closed
+  m5_gate_c: FAIL_NEGATIVE_RESULT
+  m5_human_signatures: pending
 
 paths:
   catalog_series: catalog/series
