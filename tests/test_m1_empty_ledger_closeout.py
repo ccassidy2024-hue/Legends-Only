@@ -63,7 +63,7 @@ def test_triage_is_full_universe_no_survivors() -> None:
     assert result.s4_by_reason == {S4_REASON: FROZEN_S4_COUNT}
 
 
-def test_empty_ledger_summary_and_kill_condition_honesty() -> None:
+def test_empty_ledger_generated_summary_is_zero_rows() -> None:
     rows, fx = check(ENTRIES_DIR, REPO / "research/episodes/episode_schema.yaml")
     assert fx.errors == []
     real = [r for r in rows if not r.get("example")]
@@ -72,8 +72,8 @@ def test_empty_ledger_summary_and_kill_condition_honesty() -> None:
     assert "N_episodes (accepted rows): **0**" in summary
     assert "N_independent_driver_clusters: **0**" in summary
     assert "primary sample (Sample P): **0**" in summary
-    assert "*(none)*" in summary
-    assert "empty ledger; market outcomes unopened" in summary
+    assert "*(none yet)*" in summary
+    assert "blank during pre-registration" in summary
     assert "EP-0000-000" not in summary
     ledger = LEDGER_PATH.read_text(encoding="utf-8")
     assert summary in ledger

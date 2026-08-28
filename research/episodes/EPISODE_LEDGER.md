@@ -89,7 +89,7 @@ stale, so the table is always reproducible from committed entries
 
 | episode_id | event_name | event_class | public_anchor | end_date | navigation_basin | severity_class | sample | status | outcomes_reviewed |
 |---|---|---|---|---|---|---|---|---|---|
-| *(none)* | | | | | | | | | *empty ledger; market outcomes unopened* |
+| *(none yet)* | | | | | | | | | *blank during pre-registration* |
 
 **Independence audit (protocol H.2)**
 
