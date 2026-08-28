@@ -11,9 +11,12 @@
 # YAML keys fail closed. Strings must be canonical (no untrimmed retain).
 #
 # N3: a complete live file still does NOT authorize a sweep until
-# governing ADR is accepted, tag prereg-rules-v1 exists with a digest
-# manifest, digests match, HEAD descends from the tagged commit, and the
-# working tree matches actual HEAD blobs byte-for-byte.
+# governing ADR is accepted, the newest valid chain tag
+# (prereg-rules-v1 or prereg-rules-v2) exists with a digest
+# manifest, digests match, HEAD descends from the tagged commit,
+# v2 (if present) descends from v1, and the working tree matches
+# actual HEAD blobs byte-for-byte. Schema 0.2 is v1; live v2 is 0.3
+# and also requires s2_gauge_registry + s4_node_registry.
 
 schema_version: "0.2"
 

@@ -43,6 +43,9 @@ from grainsys.discovery.governance import (
     LOAD_BEARING_RELATIVE_PATHS,
     MANIFEST_RELATIVE,
     PREREG_TAG,
+    PREREG_TAG_V1,
+    PREREG_TAG_V2,
+    PREREG_V1_TAGGED_COMMIT,
     RULINGS_PATH_CANONICAL,
     RULINGS_RELATIVE,
     RatificationError,
@@ -57,6 +60,7 @@ from grainsys.discovery.governance import (
     serialize_ratification_manifest,
     sha256_file,
     validate_ratification_manifest_mapping,
+    verify_historical_ratification,
 )
 from grainsys.discovery.sweep import SweepEnumerator, SweepError
 
@@ -485,12 +489,22 @@ def test_repo_has_live_prereg_rules() -> None:
 def test_live_prereg_rules_loads_without_error() -> None:
     """The committed prereg_rules.yaml must load and validate successfully."""
     cfg = load_prereg_rules(REPO)
-    assert cfg["schema_version"] == "0.2"
+    assert cfg["schema_version"] == "0.3"
     assert cfg["governing_adr"] == "docs/decisions/0002-episode-preregistration.md"
     assert cfg["sample_period"]["sample_start"] == "2010-01-01"
     assert cfg["sample_period"]["sample_end"] == "2024-12-31"
     assert "response_horizon" in cfg["event_windows"]
     assert cfg["physical_thresholds"]["mode"] == "binding_operational_restriction_only"
+    assert cfg["s2_gauge_registry"]["interpretation"] == "OPERATIONAL_RESTRICTION_ONLY"
+    assert cfg["s2_gauge_registry"]["row_count"] == 10
+    assert len(cfg["s2_gauge_registry"]["gauges"]) == 10
+    assert cfg["s4_node_registry"]["proximity_radius_nm"] == 100
+    assert cfg["s4_node_registry"]["track_geometry"] == "POINT_ONLY"
+    assert cfg["s4_node_registry"]["geodesic"] == "haversine_nm_sphere"
+    assert cfg["s4_node_registry"]["row_count"] == 677
+    assert len(cfg["s4_node_registry"]["nodes"]) == 677
+    assert "marker" not in cfg
+    assert "status" not in cfg["s4_node_registry"]
 
 
 # ---------------------------------------------------------------------------
@@ -734,20 +748,39 @@ def test_n2_missing_sweep_status_illegal() -> None:
 # ---------------------------------------------------------------------------
 
 
-def test_n3_real_repo_authorizes_live_sweep_execution() -> None:
-    """Current canonical repo has prereg-rules-v1 tag — must authorize."""
-    prov = assert_sweep_authorized(REPO)
-    assert prov.prereg_tag == PREREG_TAG
-    enum = SweepEnumerator.from_repo(REPO)
-    assert len(list(enum.iter_archives(sweep_id="S1"))) == 10
-    tags = subprocess.run(
+def test_n3_real_repo_blocks_until_v2_tag() -> None:
+    """v2 live config is not v1-authorized; prereg-rules-v2 does not exist yet."""
+    with pytest.raises(RatificationError):
+        assert_sweep_authorized(REPO)
+    with pytest.raises(SweepError, match="ratification guard blocked"):
+        SweepEnumerator.from_repo(REPO)
+    v1 = subprocess.run(
         ["git", "tag", "-l", PREREG_TAG],
         cwd=REPO,
         check=True,
         capture_output=True,
         text=True,
+    ).stdout.splitlines()
+    assert PREREG_TAG in v1
+    tagged_v1 = subprocess.run(
+        ["git", "rev-list", "-n", "1", PREREG_TAG_V1],
+        cwd=REPO,
+        check=True,
+        capture_output=True,
+        text=True,
     ).stdout.strip()
-    assert tags == PREREG_TAG
+    assert tagged_v1 == PREREG_V1_TAGGED_COMMIT
+    v2 = subprocess.run(
+        ["git", "tag", "-l", PREREG_TAG_V2],
+        cwd=REPO,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    assert v2 == ""
+    hist = verify_historical_ratification(REPO, tag=PREREG_TAG_V1)
+    assert hist.prereg_tag == PREREG_TAG_V1
+    assert hist.execution_commit_sha == PREREG_V1_TAGGED_COMMIT
 
 
 def test_n3_isolated_repo_authorizes_when_all_conditions_met(tmp_path: Path) -> None:
@@ -827,6 +860,11 @@ def test_n3_positive_only_s1_contract_is_load_bearing_and_drift_blocks(
     adapter = "src/grainsys/ingest/ntni.py"
     assert adr15 in LOAD_BEARING_RELATIVE_PATHS
     assert adapter in LOAD_BEARING_RELATIVE_PATHS
+    assert "src/grainsys/ingest/uscg_msib.py" in LOAD_BEARING_RELATIVE_PATHS
+    assert "src/grainsys/ingest/ams_gtr.py" in LOAD_BEARING_RELATIVE_PATHS
+    assert "src/grainsys/ingest/usace_lpms.py" in LOAD_BEARING_RELATIVE_PATHS
+    assert "src/grainsys/ingest/stb_dockets.py" in LOAD_BEARING_RELATIVE_PATHS
+    assert "src/grainsys/ingest/port_advisory.py" in LOAD_BEARING_RELATIVE_PATHS
 
     root = _build_ratified_repo(tmp_path)
     digests = build_interpretation_digests(root)
@@ -879,6 +917,198 @@ def test_n3_provenance_helper_ready() -> None:
             execution_commit_sha="def",
             governing_adr="docs/decisions/0003-phase0-prereg-hardening.md",
         )
+    v2_stamp = make_sweep_provenance(
+        prereg_config_digest=digest,
+        execution_commit_sha=sha,
+        governing_adr="docs/decisions/0003-phase0-prereg-hardening.md",
+        prereg_tag=PREREG_TAG_V2,
+    )
+    assert v2_stamp.prereg_tag == PREREG_TAG_V2
+    with pytest.raises(RatificationError, match="prereg_tag"):
+        make_sweep_provenance(
+            prereg_config_digest=digest,
+            execution_commit_sha=sha,
+            governing_adr="docs/decisions/0003-phase0-prereg-hardening.md",
+            prereg_tag="prereg-rules-v3",
+        )
+
+
+def _promote_isolated_repo_to_v2(root: Path) -> None:
+    """Commit a distinct v2-era snapshot and tag prereg-rules-v2 on that commit."""
+    cfg_path = root / "config" / "discovery" / "prereg_rules.yaml"
+    cfg = yaml.safe_load(cfg_path.read_text(encoding="utf-8"))
+    cfg["event_windows"]["pre_event_horizon"] = "SYNTHETIC_V2_PRE_EVENT_HORIZON"
+    cfg_path.write_text(yaml.safe_dump(cfg), encoding="utf-8", newline="\n")
+    _git(root, "add", "-A")
+    _git(root, "commit", "-m", "v2-config")
+    manifest = build_ratification_manifest(root)
+    man_path = root / MANIFEST_RELATIVE
+    man_path.write_bytes(serialize_ratification_manifest(manifest))
+    _git(root, "add", "-A")
+    _git(root, "commit", "-m", "v2-manifest")
+    _git(root, "tag", PREREG_TAG_V2)
+
+
+def test_n3_v2_authorizes_on_exact_tag_and_digest(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    _promote_isolated_repo_to_v2(root)
+    prov = assert_sweep_authorized(root)
+    assert prov.prereg_tag == PREREG_TAG_V2
+    enum = SweepEnumerator.from_repo(root)
+    assert len(list(enum.iter_archives())) == 1
+
+
+def test_n3_v1_history_verifiable_after_v2(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    hist_before = verify_historical_ratification(root, tag=PREREG_TAG_V1)
+    _promote_isolated_repo_to_v2(root)
+    live = assert_sweep_authorized(root)
+    assert live.prereg_tag == PREREG_TAG_V2
+    hist = verify_historical_ratification(root, tag=PREREG_TAG_V1)
+    assert hist.prereg_tag == PREREG_TAG_V1
+    assert hist.prereg_config_digest == hist_before.prereg_config_digest
+    assert hist.execution_commit_sha == hist_before.execution_commit_sha
+
+
+def test_n3_v1_only_tree_still_authorizes_as_v1(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    _promote_isolated_repo_to_v2(root)
+    v1 = _git(root, "rev-list", "-n", "1", PREREG_TAG_V1).stdout.strip()
+    _git(root, "checkout", v1)
+    prov = assert_sweep_authorized(root)
+    assert prov.prereg_tag == PREREG_TAG_V1
+
+
+def test_n3_config_manifest_cannot_select_v2(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    cfg_path = root / "config" / "discovery" / "prereg_rules.yaml"
+    cfg = yaml.safe_load(cfg_path.read_text(encoding="utf-8"))
+    cfg["prereg_tag"] = PREREG_TAG_V2
+    cfg_path.write_text(yaml.safe_dump(cfg), encoding="utf-8", newline="\n")
+    with pytest.raises(DiscoveryConfigError, match="unknown keys"):
+        load_prereg_rules(root)
+    cfg.pop("prereg_tag")
+    cfg["event_windows"]["pre_event_horizon"] = "SYNTHETIC_V2_PRE_EVENT_HORIZON"
+    cfg_path.write_text(yaml.safe_dump(cfg), encoding="utf-8", newline="\n")
+    _git(root, "add", "-A")
+    _git(root, "commit", "-m", "v2-config-without-v2-tag")
+    with pytest.raises(RatificationError, match="digest"):
+        assert_sweep_authorized(root)
+    man_path = root / MANIFEST_RELATIVE
+    manifest = yaml.safe_load(man_path.read_text(encoding="utf-8"))
+    manifest["prereg_tag"] = PREREG_TAG_V2
+    with pytest.raises(RatificationError, match="unknown top-level keys"):
+        validate_ratification_manifest_mapping(manifest)
+
+
+def test_n3_blocks_wrong_v2_tag_or_digest(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    _promote_isolated_repo_to_v2(root)
+    cfg_path = root / "config" / "discovery" / "prereg_rules.yaml"
+    cfg = yaml.safe_load(cfg_path.read_text(encoding="utf-8"))
+    cfg["sample_period"]["sample_end"] = "2099-06-30"
+    cfg_path.write_text(yaml.safe_dump(cfg), encoding="utf-8", newline="\n")
+    _git(root, "add", "-A")
+    _git(root, "commit", "-m", "mutate-config-after-v2")
+    with pytest.raises(RatificationError, match="digest"):
+        assert_sweep_authorized(root)
+
+
+def test_n3_blocks_dirty_or_crlf_on_v2(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    _promote_isolated_repo_to_v2(root)
+    target = root / "src/grainsys/discovery/governance.py"
+    target.write_bytes(target.read_bytes().replace(b"\n", b"\r\n"))
+    with pytest.raises(RatificationError, match="working tree drift|fresh normalized"):
+        assert_sweep_authorized(root)
+
+
+def test_n3_blocks_unbound_path(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    man_path = root / MANIFEST_RELATIVE
+    manifest = yaml.safe_load(man_path.read_text(encoding="utf-8"))
+    manifest["interpretation_digests"]["docs/decisions/0004-not-real.md"] = "a" * 64
+    man_path.write_text(yaml.safe_dump(manifest), encoding="utf-8")
+    _git(root, "add", "-A")
+    _git(root, "commit", "-m", "unbound-interp")
+    _git(root, "tag", PREREG_TAG_V2)
+    with pytest.raises(RatificationError, match="extra|interpretation|load-bearing"):
+        assert_sweep_authorized(root)
+    root2 = _build_ratified_repo(tmp_path / "unbound-adr")
+    cfg_path = root2 / "config" / "discovery" / "prereg_rules.yaml"
+    cfg = yaml.safe_load(cfg_path.read_text(encoding="utf-8"))
+    cfg["governing_adr"] = "docs/decisions/not-load-bearing.md"
+    cfg_path.write_text(yaml.safe_dump(cfg), encoding="utf-8", newline="\n")
+    _git(root2, "add", "-A")
+    _git(root2, "commit", "-m", "unbound-adr")
+    with pytest.raises(RatificationError, match="not a load-bearing"):
+        assert_sweep_authorized(root2)
+
+
+def test_n3_blocks_non_descendant_of_v2(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    _promote_isolated_repo_to_v2(root)
+    v1 = _git(root, "rev-list", "-n", "1", PREREG_TAG_V1).stdout.strip()
+    _git(root, "checkout", "-b", "v1-sibling", v1)
+    cfg_path = root / "config" / "discovery" / "prereg_rules.yaml"
+    cfg = yaml.safe_load(cfg_path.read_text(encoding="utf-8"))
+    cfg["event_windows"]["pre_event_horizon"] = "SYNTHETIC_V2_PRE_EVENT_HORIZON"
+    cfg_path.write_text(yaml.safe_dump(cfg), encoding="utf-8", newline="\n")
+    _git(root, "add", "-A")
+    _git(root, "commit", "-m", "v2-bytes-not-from-v2-tag")
+    manifest = build_ratification_manifest(root)
+    (root / MANIFEST_RELATIVE).write_bytes(serialize_ratification_manifest(manifest))
+    _git(root, "add", "-A")
+    _git(root, "commit", "-m", "v2-manifest-sibling")
+    with pytest.raises(RatificationError, match="digest"):
+        assert_sweep_authorized(root)
+
+
+def test_n3_blocks_v2_tag_not_descendant_of_v1(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    _git(root, "checkout", "--orphan", "orphan-v2")
+    (root / "orphan-v2.txt").write_text("x", encoding="utf-8")
+    _git(root, "add", "-A")
+    _git(root, "commit", "-m", "orphan-v2")
+    _git(root, "tag", PREREG_TAG_V2)
+    with pytest.raises(RatificationError, match="not a descendant of"):
+        assert_sweep_authorized(root)
+
+
+def test_n3_provenance_accepts_chain_tags_only() -> None:
+    digest = "a" * 64
+    sha = "b" * 40
+    for tag in (PREREG_TAG_V1, PREREG_TAG_V2):
+        stamp = make_sweep_provenance(
+            prereg_config_digest=digest,
+            execution_commit_sha=sha,
+            governing_adr="docs/decisions/0003-phase0-prereg-hardening.md",
+            prereg_tag=tag,
+        )
+        assert stamp.prereg_tag == tag
+    with pytest.raises(RatificationError, match="prereg_tag"):
+        make_sweep_provenance(
+            prereg_config_digest=digest,
+            execution_commit_sha=sha,
+            governing_adr="docs/decisions/0003-phase0-prereg-hardening.md",
+            prereg_tag="wrong-tag",
+        )
+
+
+def test_n3_no_unauthorized_outcomes() -> None:
+    import inspect
+
+    src = inspect.getsource(assert_sweep_authorized)
+    for banned in (
+        "market_outcomes_reviewed",
+        "episode_id",
+        "candidates.csv",
+        "raw_capture_pointer",
+        "GRAIN_DATA_ROOT",
+    ):
+        assert banned not in src
+    with pytest.raises(SweepError, match="ratification guard blocked"):
+        SweepEnumerator.from_repo(REPO)
 
 
 # ---------------------------------------------------------------------------

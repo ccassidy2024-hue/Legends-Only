@@ -7,14 +7,21 @@ Authorization requires ALL of:
 1. Live config identifies its governing ADR (repo-relative load-bearing path)
 2. Governing ADR status is ``accepted``
 3. Every load-bearing ``docs/decisions/*.md`` ADR status is ``accepted``
-4. Git tag ``prereg-rules-v1`` exists
-5. Tagged commit contains a ratification manifest with the config digest
-6. Current live config digest matches the ratified digest
-7. Executing commit is a **descendant** of the tagged commit (mandatory)
-8. Manifest also binds digests of load-bearing interpretation files
-9. Manifest binds append-only RULINGS section digests (prefix-stable) with
-   canonical path ``research/episodes/RULINGS.md``
-10. Undecidable conditions ⇒ **block**
+4. Live authorization selects the newest valid chain tag
+   (``prereg-rules-v1`` then ``prereg-rules-v2``) whose tagged commit is an
+   ancestor of actual HEAD
+5. A ``prereg-rules-v2`` tagged commit must itself be a descendant of v1
+6. Tagged commit contains a ratification manifest with the config digest
+7. Current live config digest matches the selected tag's ratified digest
+8. Executing commit is a **descendant** of the selected tagged commit
+9. Manifest also binds digests of load-bearing interpretation files
+10. Manifest binds append-only RULINGS section digests (prefix-stable) with
+    canonical path ``research/episodes/RULINGS.md``
+11. Undecidable conditions ⇒ **block**
+
+v1 remains historically verifiable via ``verify_historical_ratification``
+(reads tagged-commit blobs; does not use the live tree). Config/manifest
+cannot self-select an unauthorized v2. UNKNOWN is never treated as zero.
 
 Manifest **build** additionally requires a fresh normalized checkout: the live
 prereg config and every load-bearing working-tree file must match its committed
@@ -23,8 +30,8 @@ HEAD blob byte-for-byte (dirty trees and CRLF drift fail closed).
 No permanent tag is created by this module. Tests use isolated temporary repos.
 
 ADR-0004 is deliberately **not** load-bearing on this branch (file absent until
-PR #6 merges). It must be added to ``LOAD_BEARING_RELATIVE_PATHS`` before the
-real ``prereg-rules-v1`` tag.
+PR #6 merges). It must be added to ``LOAD_BEARING_RELATIVE_PATHS`` before a
+real authorizing tag that includes it.
 """
 
 from __future__ import annotations
@@ -42,7 +49,12 @@ import yaml
 
 from grainsys.discovery.config import DiscoveryConfigError, load_prereg_rules, prereg_rules_path
 
-PREREG_TAG = "prereg-rules-v1"
+PREREG_TAG_V1 = "prereg-rules-v1"
+PREREG_TAG_V2 = "prereg-rules-v2"
+PREREG_TAG = PREREG_TAG_V1  # historical alias; live auth selects newest chain tag
+PREREG_TAG_CHAIN: tuple[str, ...] = (PREREG_TAG_V1, PREREG_TAG_V2)
+ALLOWED_PREREG_TAGS = frozenset(PREREG_TAG_CHAIN)
+PREREG_V1_TAGGED_COMMIT = "a74e3fb925b80f308407cc2f1508d6aecd868326"
 MANIFEST_RELATIVE = Path("config") / "discovery" / "prereg_ratification_manifest.yaml"
 RULINGS_RELATIVE = Path("research") / "episodes" / "RULINGS.md"
 RULINGS_PATH_CANONICAL = RULINGS_RELATIVE.as_posix()
@@ -56,6 +68,11 @@ LOAD_BEARING_RELATIVE_PATHS: tuple[str, ...] = (
     "src/grainsys/discovery/archive_listing.py",
     "src/grainsys/discovery/capture.py",
     "src/grainsys/ingest/ntni.py",
+    "src/grainsys/ingest/uscg_msib.py",
+    "src/grainsys/ingest/ams_gtr.py",
+    "src/grainsys/ingest/usace_lpms.py",
+    "src/grainsys/ingest/stb_dockets.py",
+    "src/grainsys/ingest/port_advisory.py",
     "src/grainsys/episodes.py",
     "research/episodes/EPISODE_PROTOCOL.md",
     "research/episodes/ADMISSION_CHECKLIST.md",
@@ -512,8 +529,18 @@ def assert_rulings_binding_holds(
             )
 
 
-def validate_ratification_manifest_mapping(manifest: Mapping[str, Any]) -> None:
-    """Reject unknown keys and malformed digests / interpretation sets."""
+def validate_ratification_manifest_mapping(
+    manifest: Mapping[str, Any],
+    *,
+    load_bearing: Sequence[str] | None = LOAD_BEARING_RELATIVE_PATHS,
+) -> None:
+    """Reject unknown keys and malformed digests / interpretation sets.
+
+    When ``load_bearing`` is provided, interpretation paths must match that set
+    exactly (current-era build and v2 live authorization). When ``load_bearing``
+    is None, any nonempty exact path-to-digest mapping is accepted (historical
+    v1 tagged manifests whose bound set is smaller than the current era).
+    """
     if not isinstance(manifest, Mapping):
         raise RatificationError("manifest must be a mapping; block")
     unknown = sorted(set(manifest.keys()) - MANIFEST_TOP_LEVEL_KEYS)
@@ -535,26 +562,43 @@ def validate_ratification_manifest_mapping(manifest: Mapping[str, Any]) -> None:
     interp = manifest["interpretation_digests"]
     if not isinstance(interp, Mapping):
         raise RatificationError("interpretation_digests must be a mapping; block")
-    expected = set(LOAD_BEARING_RELATIVE_PATHS)
-    got = set(interp.keys())
-    if got != expected:
-        raise RatificationError(
-            "interpretation_digests paths must match load-bearing set exactly "
-            f"(missing={sorted(expected - got)}, extra={sorted(got - expected)}); block"
-        )
-    for rel in LOAD_BEARING_RELATIVE_PATHS:
+    if not interp:
+        raise RatificationError("interpretation_digests is empty; block")
+    for rel, digest in interp.items():
+        if not isinstance(rel, str) or not rel or rel != rel.strip() or ".." in Path(rel).parts:
+            raise RatificationError(
+                f"interpretation_digests has unsafe path {rel!r}; block"
+            )
         require_sha256_hex_digest(
-            interp[rel],
+            digest,
             field=f"interpretation_digests[{rel}]",
         )
+    if load_bearing is not None:
+        expected = set(load_bearing)
+        got = set(interp.keys())
+        if got != expected:
+            raise RatificationError(
+                "interpretation_digests paths must match load-bearing set exactly "
+                f"(missing={sorted(expected - got)}, extra={sorted(got - expected)}); block"
+            )
+        for rel in load_bearing:
+            require_sha256_hex_digest(
+                interp[rel],
+                field=f"interpretation_digests[{rel}]",
+            )
 
     if not isinstance(manifest["rulings_binding"], Mapping):
         raise RatificationError("rulings_binding must be a mapping; block")
     _validate_rulings_binding_shape(manifest["rulings_binding"])
 
 
-def load_ratification_manifest(repo_root: Path, *, at_ref: str) -> dict[str, Any]:
-    """Load manifest from a git ref (typically the prereg-rules-v1 tagged commit)."""
+def load_ratification_manifest(
+    repo_root: Path,
+    *,
+    at_ref: str,
+    load_bearing: Sequence[str] | None = LOAD_BEARING_RELATIVE_PATHS,
+) -> dict[str, Any]:
+    """Load manifest from a git ref (typically a prereg-rules-vN tagged commit)."""
     try:
         proc = _git(repo_root, "show", f"{at_ref}:{MANIFEST_RELATIVE.as_posix()}")
     except RatificationError as exc:
@@ -568,7 +612,7 @@ def load_ratification_manifest(repo_root: Path, *, at_ref: str) -> dict[str, Any
         raise RatificationError("manifest YAML unparseable; undecidable ⇒ block") from exc
     if not isinstance(data, dict):
         raise RatificationError("manifest must be a YAML mapping; block")
-    validate_ratification_manifest_mapping(data)
+    validate_ratification_manifest_mapping(data, load_bearing=load_bearing)
     return data
 
 
@@ -593,6 +637,163 @@ def is_descendant_commit(repo_root: Path, *, head: str, ancestor: str) -> bool:
     )
 
 
+def _list_tags(repo_root: Path) -> set[str]:
+    tag_proc = _git(repo_root, "tag", "-l")
+    return {t.strip() for t in tag_proc.stdout.splitlines() if t.strip()}
+
+
+def _resolve_tag_commit(repo_root: Path, tag: str) -> str:
+    tagged = _git(repo_root, "rev-list", "-n", "1", tag).stdout.strip()
+    if not tagged:
+        raise RatificationError(f"tag {tag} could not be resolved; block")
+    if re.fullmatch(r"[0-9a-fA-F]{40}", tagged):
+        return tagged.lower()
+    raise RatificationError(
+        f"tag {tag} resolved to non-40-hex {tagged!r}; undecidable ⇒ block"
+    )
+
+
+def _assert_v2_descends_from_v1(
+    repo_root: Path, *, tags: set[str]
+) -> tuple[str | None, str | None]:
+    """Return (v1_commit, v2_commit). Fail closed if v2 exists but is not off v1."""
+    v1_commit = _resolve_tag_commit(repo_root, PREREG_TAG_V1) if PREREG_TAG_V1 in tags else None
+    v2_commit = _resolve_tag_commit(repo_root, PREREG_TAG_V2) if PREREG_TAG_V2 in tags else None
+    if v2_commit is not None:
+        if v1_commit is None:
+            raise RatificationError(
+                f"tag {PREREG_TAG_V2} present but {PREREG_TAG_V1} absent; block"
+            )
+        if not is_descendant_commit(repo_root, head=v2_commit, ancestor=v1_commit):
+            raise RatificationError(
+                f"tag {PREREG_TAG_V2} ({v2_commit}) is not a descendant of "
+                f"{PREREG_TAG_V1} ({v1_commit}); block"
+            )
+    return v1_commit, v2_commit
+
+
+def select_authorizing_chain_tag(
+    repo_root: Path, *, head: str
+) -> tuple[str, str]:
+    """Newest chain tag whose tagged commit is an ancestor of ``head``.
+
+    v2, if present, must descend from v1. Config/manifest cannot choose the tag.
+    """
+    tags = _list_tags(repo_root)
+    if PREREG_TAG_V1 not in tags and PREREG_TAG_V2 not in tags:
+        raise RatificationError(f"tag {PREREG_TAG_V1} absent; block")
+    v1_commit, v2_commit = _assert_v2_descends_from_v1(repo_root, tags=tags)
+    selected: tuple[str, str] | None = None
+    for tag, commit in (
+        (PREREG_TAG_V1, v1_commit),
+        (PREREG_TAG_V2, v2_commit),
+    ):
+        if commit is None:
+            continue
+        if is_descendant_commit(repo_root, head=head, ancestor=commit):
+            selected = (tag, commit)
+    if selected is None:
+        raise RatificationError(
+            f"execution commit {head} is not a descendant of any prereg chain tag; block"
+        )
+    return selected
+
+
+def _authorize_against_tag(
+    repo_root: Path,
+    *,
+    head: str,
+    tag: str,
+    tagged_commit: str,
+    governing_adr: str,
+    cfg_path: Path,
+    require_current_load_bearing: bool,
+) -> SweepProvenance:
+    if not is_descendant_commit(repo_root, head=head, ancestor=tagged_commit):
+        raise RatificationError(
+            f"execution commit {head} is not a descendant of {tag} "
+            f"({tagged_commit}); block"
+        )
+
+    load_bearing: Sequence[str] | None = (
+        LOAD_BEARING_RELATIVE_PATHS if require_current_load_bearing else None
+    )
+    manifest = load_ratification_manifest(
+        repo_root, at_ref=tagged_commit, load_bearing=load_bearing
+    )
+    ratified_digest = require_sha256_hex_digest(
+        manifest.get("prereg_config_digest"),
+        field="prereg_config_digest",
+    )
+
+    live_digest = sha256_file(cfg_path)
+    if live_digest != ratified_digest:
+        raise RatificationError(
+            "live prereg config digest does not match ratified digest; block"
+        )
+
+    interp = manifest.get("interpretation_digests")
+    if not isinstance(interp, dict) or not interp:
+        raise RatificationError(
+            "manifest missing interpretation_digests; undecidable ⇒ block"
+        )
+    current_interp = build_interpretation_digests(repo_root)
+    bound_paths = tuple(interp.keys())
+    if require_current_load_bearing:
+        extra = sorted(set(bound_paths) - set(LOAD_BEARING_RELATIVE_PATHS))
+        missing = sorted(set(LOAD_BEARING_RELATIVE_PATHS) - set(bound_paths))
+        if extra or missing:
+            raise RatificationError(
+                "interpretation_digests paths must match load-bearing set exactly "
+                f"(missing={missing}, extra={extra}); block"
+            )
+        compare_paths: Sequence[str] = LOAD_BEARING_RELATIVE_PATHS
+    else:
+        compare_paths = bound_paths
+        unbound = sorted(set(bound_paths) - set(current_interp))
+        if unbound:
+            raise RatificationError(
+                f"manifest has extra interpretation paths {unbound}; block"
+            )
+
+    for rel in compare_paths:
+        if rel not in interp:
+            raise RatificationError(
+                f"manifest omits load-bearing path {rel}; block"
+            )
+        require_sha256_hex_digest(interp[rel], field=f"interpretation_digests[{rel}]")
+        if rel not in current_interp:
+            raise RatificationError(
+                f"load-bearing interpretation file missing: {rel}; undecidable ⇒ block"
+            )
+        if interp[rel] != current_interp[rel]:
+            raise RatificationError(
+                f"interpretation digest drift for {rel}; block "
+                "(ratified interpretation must match executing tree)"
+            )
+
+    manifest_adr = manifest.get("governing_adr")
+    if manifest_adr in (None, ""):
+        raise RatificationError("manifest missing governing_adr; block")
+    manifest_rel = canonicalize_governing_adr(repo_root, str(manifest_adr))
+    if manifest_rel != governing_adr:
+        raise RatificationError(
+            "manifest governing_adr does not match live config governing_adr; block"
+        )
+
+    rulings_binding = manifest.get("rulings_binding")
+    if not isinstance(rulings_binding, Mapping):
+        raise RatificationError("manifest missing rulings_binding; block")
+    assert_rulings_binding_holds(repo_root, rulings_binding)
+
+    return SweepProvenance(
+        prereg_tag=tag,
+        prereg_config_digest=live_digest,
+        execution_commit_sha=head,
+        governing_adr=governing_adr,
+    )
+
+
 def assert_sweep_authorized(
     repo_root: Path | None = None,
     *,
@@ -606,6 +807,12 @@ def assert_sweep_authorized(
     working-tree file must match the actual-HEAD blob byte-for-byte before
     those bytes are compared to the tagged manifest (restoring old ratified
     files over a drifted HEAD does not bypass).
+
+    Selects the newest chain tag whose tagged commit is an ancestor of HEAD.
+    v2 must descend from v1. Live bytes must match that tag's manifest exactly;
+    there is no fallback to an older tag after selection. Config/manifest cannot
+    self-select v2. Does not read episode entries, market outcomes, candidates,
+    or captures.
     """
     from grainsys.discovery.config import REPO_ROOT
 
@@ -634,6 +841,10 @@ def assert_sweep_authorized(
         cfg = load_prereg_rules(root)
     except DiscoveryConfigError as exc:
         raise RatificationError(f"prereg config load failed: {exc}; block") from exc
+    if "prereg_tag" in cfg or "authorizing_tag" in cfg:
+        raise RatificationError(
+            "live config cannot self-select a prereg tag; refuse unauthorized v2"
+        )
 
     governing_adr = canonicalize_governing_adr(root, str(cfg.get("governing_adr")))
     assert_load_bearing_adrs_accepted(root)
@@ -644,20 +855,6 @@ def assert_sweep_authorized(
             f"governing ADR status is {status!r}, not 'accepted'; block"
         )
 
-    tag_proc = _git(root, "tag", "-l", PREREG_TAG)
-    if PREREG_TAG not in {t.strip() for t in tag_proc.stdout.splitlines()}:
-        raise RatificationError(f"tag {PREREG_TAG} absent; block")
-
-    tagged = _git(root, "rev-list", "-n", "1", PREREG_TAG).stdout.strip()
-    if not tagged:
-        raise RatificationError(f"tag {PREREG_TAG} could not be resolved; block")
-
-    if not is_descendant_commit(root, head=head, ancestor=tagged):
-        raise RatificationError(
-            f"execution commit {head} is not a descendant of {PREREG_TAG} "
-            f"({tagged}); block"
-        )
-
     cfg_path = prereg_rules_path(root)
     cfg_rel = cfg_path.relative_to(root).as_posix()
     assert_paths_match_head_blobs(
@@ -666,60 +863,109 @@ def assert_sweep_authorized(
         rev=head,
     )
 
-    manifest = load_ratification_manifest(root, at_ref=tagged)
+    tag, tagged_commit = select_authorizing_chain_tag(root, head=head)
+    require_current = tag == PREREG_TAG_V2
+    return _authorize_against_tag(
+        root,
+        head=head,
+        tag=tag,
+        tagged_commit=tagged_commit,
+        governing_adr=governing_adr,
+        cfg_path=cfg_path,
+        require_current_load_bearing=require_current,
+    )
+
+
+def verify_historical_ratification(
+    repo_root: Path | None = None,
+    *,
+    tag: str = PREREG_TAG_V1,
+) -> SweepProvenance:
+    """Verify a historical chain tag from ``git show`` at that tagged commit.
+
+    Does not read the live working tree (except git). Used so v1 remains
+    verifiable after live bytes move to v2.
+    """
+    from grainsys.discovery.config import REPO_ROOT, DEFAULT_PREREG_RELATIVE
+
+    if not isinstance(tag, str) or tag not in ALLOWED_PREREG_TAGS:
+        raise RatificationError(
+            f"historical tag must be one of {sorted(ALLOWED_PREREG_TAGS)}; block"
+        )
+    root = repo_root if repo_root is not None else REPO_ROOT
+    tags = _list_tags(root)
+    if tag not in tags:
+        raise RatificationError(f"tag {tag} absent; block")
+    if tag == PREREG_TAG_V2:
+        _assert_v2_descends_from_v1(root, tags=tags)
+    tagged = _resolve_tag_commit(root, tag)
+    manifest = load_ratification_manifest(root, at_ref=tagged, load_bearing=None)
+    if "prereg_tag" in manifest or "authorizing_tag" in manifest:
+        raise RatificationError(
+            "manifest cannot self-select a prereg tag; refuse unauthorized v2"
+        )
+    cfg_rel = DEFAULT_PREREG_RELATIVE.as_posix()
+    cfg_bytes = git_show_blob_bytes(root, rev=tagged, relative_path=cfg_rel)
+    config_digest = sha256_bytes(cfg_bytes)
     ratified_digest = require_sha256_hex_digest(
         manifest.get("prereg_config_digest"),
         field="prereg_config_digest",
     )
-
-    live_digest = sha256_file(cfg_path)
-    if live_digest != ratified_digest:
+    if config_digest != ratified_digest:
         raise RatificationError(
-            "live prereg config digest does not match ratified digest; block"
+            f"historical {tag} config digest does not match tagged manifest; block"
         )
-
     interp = manifest.get("interpretation_digests")
     if not isinstance(interp, dict) or not interp:
         raise RatificationError(
-            "manifest missing interpretation_digests; undecidable ⇒ block"
+            "historical manifest missing interpretation_digests; block"
         )
-    current_interp = build_interpretation_digests(root)
-    for rel in LOAD_BEARING_RELATIVE_PATHS:
-        if rel not in interp:
+    for rel, digest in interp.items():
+        expected = require_sha256_hex_digest(
+            digest, field=f"interpretation_digests[{rel}]"
+        )
+        blob = git_show_blob_bytes(root, rev=tagged, relative_path=rel)
+        if sha256_bytes(blob) != expected:
             raise RatificationError(
-                f"manifest omits load-bearing path {rel}; block"
+                f"historical interpretation digest drift for {rel} at {tag}; block"
             )
-        require_sha256_hex_digest(interp[rel], field=f"interpretation_digests[{rel}]")
-        if interp[rel] != current_interp[rel]:
-            raise RatificationError(
-                f"interpretation digest drift for {rel}; block "
-                "(ratified interpretation must match executing tree)"
-            )
-    extra = sorted(set(interp) - set(LOAD_BEARING_RELATIVE_PATHS))
-    if extra:
-        raise RatificationError(
-            f"manifest has extra interpretation paths {extra}; block"
-        )
-
-    manifest_adr = manifest.get("governing_adr")
-    if manifest_adr in (None, ""):
-        raise RatificationError("manifest missing governing_adr; block")
-    manifest_rel = canonicalize_governing_adr(root, str(manifest_adr))
-    if manifest_rel != governing_adr:
-        raise RatificationError(
-            "manifest governing_adr does not match live config governing_adr; block"
-        )
-
     rulings_binding = manifest.get("rulings_binding")
     if not isinstance(rulings_binding, Mapping):
-        raise RatificationError("manifest missing rulings_binding; block")
-    assert_rulings_binding_holds(root, rulings_binding)
-
+        raise RatificationError("historical manifest missing rulings_binding; block")
+    bound_ids, bound_digests = _validate_rulings_binding_shape(rulings_binding)
+    rulings_bytes = git_show_blob_bytes(
+        root, rev=tagged, relative_path=RULINGS_PATH_CANONICAL
+    )
+    try:
+        rulings_text = rulings_bytes.decode("utf-8")
+    except UnicodeDecodeError as exc:
+        raise RatificationError(
+            "historical RULINGS.md is not UTF-8; undecidable ⇒ block"
+        ) from exc
+    sections = parse_ruling_sections(rulings_text)
+    current_ids = [s.ruling_id for s in sections]
+    current_digests = {s.ruling_id: s.digest for s in sections}
+    if len(current_ids) < len(bound_ids):
+        raise RatificationError(
+            "historical RULINGS bound prefix shortened/deleted; refuse (append-only)"
+        )
+    if current_ids[: len(bound_ids)] != list(bound_ids):
+        raise RatificationError(
+            "historical RULINGS bound prefix reordered or mutated; refuse (append-only)"
+        )
+    for rid in bound_ids:
+        if current_digests[rid] != bound_digests[rid]:
+            raise RatificationError(
+                f"historical bound ruling {rid} content digest drift; block"
+            )
+    governing = manifest.get("governing_adr")
+    if not isinstance(governing, str) or not governing:
+        raise RatificationError("historical manifest missing governing_adr; block")
     return SweepProvenance(
-        prereg_tag=PREREG_TAG,
-        prereg_config_digest=live_digest,
-        execution_commit_sha=head,
-        governing_adr=governing_adr,
+        prereg_tag=tag,
+        prereg_config_digest=config_digest,
+        execution_commit_sha=tagged,
+        governing_adr=governing,
     )
 
 
@@ -731,9 +977,9 @@ def make_sweep_provenance(
     prereg_tag: str = PREREG_TAG,
 ) -> SweepProvenance:
     """Helper for future Phase-1 emitters — does not write rows."""
-    if not isinstance(prereg_tag, str) or prereg_tag != PREREG_TAG:
+    if not isinstance(prereg_tag, str) or prereg_tag not in ALLOWED_PREREG_TAGS:
         raise RatificationError(
-            f"prereg_tag must be the canonical {PREREG_TAG!r} tag; refuse stamp"
+            f"prereg_tag must be one of {sorted(ALLOWED_PREREG_TAGS)}; refuse stamp"
         )
     digest = require_sha256_hex_digest(
         prereg_config_digest, field="prereg_config_digest"

@@ -2,8 +2,9 @@
 
 Does not search archives, open notices, or write episode ledger rows.
 Live sweeps require committed ``config/discovery/prereg_rules.yaml`` **and**
-the N3 ratification guard (accepted ADR, ``prereg-rules-v1`` tag, digests,
-descendant commit).
+the N3 ratification guard (accepted ADR, newest valid ``prereg-rules-v1`` /
+``prereg-rules-v2`` chain tag whose tagged commit is an ancestor of HEAD,
+matching digests, descendant commit). v1 remains historically verifiable.
 """
 
 from grainsys.discovery.archive_listing import (
@@ -58,6 +59,9 @@ from grainsys.discovery.coverage import (
 from grainsys.discovery.governance import (
     LOAD_BEARING_RELATIVE_PATHS,
     PREREG_TAG,
+    PREREG_TAG_CHAIN,
+    PREREG_TAG_V1,
+    PREREG_TAG_V2,
     RatificationError,
     SweepProvenance,
     assert_sweep_authorized,
@@ -65,6 +69,7 @@ from grainsys.discovery.governance import (
     emit_ratification_manifest_bytes,
     make_sweep_provenance,
     serialize_ratification_manifest,
+    verify_historical_ratification,
 )
 from grainsys.discovery.sweep import SweepEnumerator, SweepError
 
@@ -75,6 +80,9 @@ __all__ = [
     "FORBIDDEN_COVERAGE_FIELDS",
     "LOAD_BEARING_RELATIVE_PATHS",
     "PREREG_TAG",
+    "PREREG_TAG_CHAIN",
+    "PREREG_TAG_V1",
+    "PREREG_TAG_V2",
     "PROTOCOL_SWEEP_FAMILIES",
     "ArchiveListingError",
     "CandidateHit",
@@ -120,4 +128,5 @@ __all__ = [
     "validate_candidate_hit",
     "validate_coverage_collection",
     "validate_coverage_record",
+    "verify_historical_ratification",
 ]
