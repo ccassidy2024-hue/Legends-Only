@@ -1,0 +1,84 @@
+# D6 derived evidence-inventory schema (ADR-0010 / ADR-0013).
+#
+# SCHEMA/SHAPE DOCUMENTATION ONLY for the derived repo artifact.
+# Canonical raw evidence remains under $GRAIN_DATA_ROOT/sweeps/<sweep_id>/<capture_dir>/.
+# This inventory does NOT mint D5 candidate IDs, does NOT record episode membership,
+# and does NOT change candidate_universe_version / hit_set_digest / candidates_digest.
+
+schema_version: "1.0"
+record_kind: d6_evidence_inventory
+
+identity_copied_from_frozen_d5:
+  - candidate_universe_version
+  - hit_set_digest
+  - candidates_digest
+  - candidate_count
+
+csv_required_fields:
+  - candidate_id
+  - sweep_id
+  - raw_capture_pointer
+  - capture_dir
+  - expected_sha256
+  - pointer_status
+  - observed_sha256
+  - manifest_status
+  - i2_field_sufficiency
+  - driver_identity_sufficiency
+  - public_anchor_sufficiency
+  - event_mechanism_sufficiency
+  - enrichment_records_appended
+
+pointer_status_vocab:
+  - verified
+  - missing
+  - corrupt
+  - unknown
+
+manifest_status_vocab:
+  - verified
+  - missing
+  - mismatch
+  - unknown
+  - invalid_pointer
+
+field_sufficiency_vocab:
+  - unknown
+  - sufficient_from_hurdat2_registry
+  - sufficient_from_captured_notice_identity
+  - needs_additional_primary_operational
+  - body_present_not_adjudicated
+
+field_notes:
+  candidate_id: "Frozen D5 CAND ID; never minted here"
+  capture_dir: "Source-derived live capture dir (S1-<controlnumber>, S4-<storm>-<node>); not CAND-*"
+  pointer_status: "Object+manifest verification against raw_capture_pointer; unknown if data root unavailable"
+  i2_field_sufficiency: "Not an admission decision. S4 is always needs_additional_primary_operational (storm track is a driver)"
+  enrichment_records_appended: "Count of D6 append-only records added this run; 0 if none"
+
+forbidden_fields:
+  - episode_id
+  - event_name
+  - severity
+  - severity_class
+  - market_outcome
+  - market_outcomes_reviewed
+  - price
+  - futures
+  - basis
+  - decision
+  - accept
+  - reject
+  - reason_code
+  - h7
+  - cluster_id
+  - public_anchor
+
+semantics:
+  - keyed by frozen CAND ID
+  - UNKNOWN is not zero and not coverage-absent
+  - no exclusive episode ownership
+  - no physical MOVE
+  - no H1/H2/H4 grouping
+  - no storm-level pre-collapse of S4 hits
+  - not added to N3 LOAD_BEARING_RELATIVE_PATHS
