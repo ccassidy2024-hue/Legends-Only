@@ -296,9 +296,9 @@ def test_committed_inventory_is_d5_keyed_when_present() -> None:
     else:
         assert summary["access_gate"] == "ok"
         assert summary["pointer_counts"]["S4"]["verified"] == FROZEN_S4_COUNT
-        s1 = summary["pointer_counts"]["S1"]
-        assert s1["verified"] + s1["missing"] == FROZEN_S1_COUNT
-        assert s1["corrupt"] == 0
+        assert summary["pointer_counts"]["S1"]["verified"] == FROZEN_S1_COUNT
+        assert summary["pointer_counts"]["S1"]["missing"] == 0
+        assert summary["pointer_counts"]["S1"]["corrupt"] == 0
         for rec in summary["hurdat2_archives"]:
             assert rec["pointer_status"] == "verified"
 

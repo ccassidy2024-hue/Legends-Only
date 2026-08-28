@@ -5,7 +5,7 @@ hit_set_digest: 1cb416ee3b6e9103b4edd60748865d7dd147c80611adfb6c6b5b37eba5258d97
 candidates_digest: df7f7ffb41f339d75d6a8a2ef68ab113c70490822e03ad21c9ebd8e26dae2c66
 candidate_count: 4234
 inventory_csv_relative: research/episodes/discovery/d6_evidence_inventory.csv
-inventory_csv_digest: b373a8ab4e2a0f82d9b87bf6f153cfd0417df7e8cea0bb5732bfc03384553cb9
+inventory_csv_digest: 6f6aeb0e41aa8ead82374b3612d9d5cd3e91801efa39e28cb67aa7af062db238
 access_gate: ok
 data_root_status: explicit
 data_root: /tmp/grain_data_v2
@@ -13,8 +13,8 @@ searched_paths:
 - /tmp/grain_data_v2
 pointer_counts:
   S1:
-    verified: 0
-    missing: 37
+    verified: 37
+    missing: 0
     corrupt: 0
     unknown: 0
   S4:
@@ -74,8 +74,6 @@ s1_field_sufficiency:
   protocol_note: I1/I2/I3 admission is Phase 2. Inventory does not score or drop candidates.
 notes:
 - Pointer verification used live candidate-keyed capture dirs from GRAIN_DATA_ROOT.
-- Some frozen D5 pointers are missing on this capture root (S1 missing=37, S4 missing=0);
-  missing is not zero.
 - HURDAT2 public re-fetch verifies digest only and is not a new candidate.
 - S4 I2/public_anchor/event-mechanism remain needs_additional_primary_operational.
 - H1/H2/H4 grouping and episode admission are deferred to Phase 2.
