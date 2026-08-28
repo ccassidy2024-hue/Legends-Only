@@ -287,7 +287,7 @@ def test_committed_inventory_is_d5_keyed_when_present() -> None:
     for rec in summary["hurdat2_archives"]:
         assert rec["public_refetch_status"] == "verified"
         assert rec["public_observed_sha256"] == rec["expected_sha256"]
-    # Live capture root verifies S4 + HURDAT2; S1 objects may still be missing.
+    # Live capture root verifies S4 + HURDAT2; S1 originals may be restored.
     if summary["access_gate"] == BLOCKER_CAPTURE_STORE_MISSING:
         assert summary["pointer_counts"]["S1"]["unknown"] == FROZEN_S1_COUNT
         assert summary["pointer_counts"]["S4"]["unknown"] == FROZEN_S4_COUNT
@@ -296,7 +296,9 @@ def test_committed_inventory_is_d5_keyed_when_present() -> None:
     else:
         assert summary["access_gate"] == "ok"
         assert summary["pointer_counts"]["S4"]["verified"] == FROZEN_S4_COUNT
-        assert summary["pointer_counts"]["S1"]["missing"] == FROZEN_S1_COUNT
+        s1 = summary["pointer_counts"]["S1"]
+        assert s1["verified"] + s1["missing"] == FROZEN_S1_COUNT
+        assert s1["corrupt"] == 0
         for rec in summary["hurdat2_archives"]:
             assert rec["pointer_status"] == "verified"
 
