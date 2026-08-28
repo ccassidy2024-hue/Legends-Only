@@ -4,8 +4,8 @@
 project:
   name: Legends-Only
   package: grainsys
-  phase: milestone_0_foundation_complete
-  next_milestone: 1_episode_ledger
+  phase: milestone_1_negative_result_empty_ledger
+  next_milestone: 2_asof_panel
 
 paths:
   catalog_series: catalog/series

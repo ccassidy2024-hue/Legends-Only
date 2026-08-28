@@ -27,13 +27,34 @@ filtered through market salience.
 
 | Item | State |
 |---|---|
-| Protocol | drafted, pending ADR-0002 acceptance |
-| Phase 0 — rules pre-registered (thresholds, cutpoints, windows) | **not started** |
-| Phase 1 — source sweeps | not started |
-| Candidates recorded | 0 (plus 1 fictional example, excluded) |
-| Pre-registration freeze | **not frozen** — no market data may be opened |
-| Freeze tag | — |
-| Freeze commit | — |
+| Protocol | accepted (ADR-0002) |
+| Phase 0 — rules pre-registered (thresholds, cutpoints, windows) | committed (`prereg-rules-v1`); D12 cutpoints remain unregistered (R-003) |
+| Phase 1 — source sweeps | complete for frozen D5 (S1 + S4) |
+| Candidates recorded | **4234** frozen D5 candidates; **0** real episode YAML (plus 1 fictional example, excluded) |
+| Mechanical triage (I1/I2/I3) | **4234** no-episode dispositions; S1=37 R12; S4=4197 R3; **survivors=0** |
+| Admissible episode rows | **0** |
+| Pre-registration freeze | **M1 closed as empty-ledger negative result** — market data remains unopened |
+| Freeze tag | — (no admissible sample to tag) |
+| Freeze commit | `e213aab007150d5287b07e476d0bb438ad1374a9` (PR #50 merge; reviewed head `5a76e2e3c8e83aed0956f8b8804c043ae8729206`) |
+
+## M1 closeout (negative result)
+
+Mechanical Phase-2 I1/I2/I3 triage of frozen D5=4234 produced 0 survivors and
+therefore 0 admissible Episode Ledger rows. Sample P = 0 is below the
+`WORKFLOW.md` kill condition of 6 usable episodes.
+
+This is a **legitimate negative result** for Milestone 1 episode construction.
+It is **not** a finding that no physical disruption occurred:
+
+- UNKNOWN is not zero.
+- Missing I2 operational evidence is not proof of no physical disruption.
+- S4 POINT_ONLY 100NM HURDAT2 proximity is driver identity only in the absence of I2.
+
+No episode YAML was invented. Dropped D5 candidates were not resurrected.
+Market outcomes were not read. Disposition ledger:
+`research/episodes/discovery/candidates/no_episode_dispositions.csv`.
+
+Marker: `M1_CLOSEOUT_RETRY_AFTER_CURSOR_LAUNCH_FAILURE`
 
 ## Standing rules
 
@@ -68,7 +89,7 @@ stale, so the table is always reproducible from committed entries
 
 | episode_id | event_name | event_class | public_anchor | end_date | navigation_basin | severity_class | sample | status | outcomes_reviewed |
 |---|---|---|---|---|---|---|---|---|---|
-| *(none yet)* | | | | | | | | | *blank during pre-registration* |
+| *(none)* | | | | | | | | | *empty ledger; market outcomes unopened* |
 
 **Independence audit (protocol H.2)**
 
@@ -87,35 +108,35 @@ Excluded from counts: 1 fictional example entry/entries.
 
 ## Freeze record
 
-Completed at Phase 8. Until then this section stays empty.
+Empty-ledger closeout of Milestone 1. There is no admissible sample to freeze
+into a tagged episode set. Market outcomes remain unopened.
 
 | Item | Value |
 |---|---|
-| `preregistration_frozen_at` | — |
-| `freeze_commit` | — |
-| Git tag | — |
-| Accepted episodes / distinct drivers | — |
-| Sample P size | — |
-| Pre-registered event window and horizons | — |
-| Robustness anchor set | — |
+| `preregistration_frozen_at` | n/a — no admissible rows |
+| `freeze_commit` | `e213aab007150d5287b07e476d0bb438ad1374a9` |
+| Git tag | none (empty sample; do not treat as authorization to open market data) |
+| Accepted episodes / distinct drivers | 0 / 0 |
+| Sample P size | 0 (below kill condition of 6) |
+| Pre-registered event window and horizons | n/a — not estimable with 0 episodes |
+| Robustness anchor set | n/a |
 
 ## Adversarial pass (required before freeze)
 
-Verbatim response from a different model family, per `EPISODE_PROTOCOL.md` §L.4,
-with each point dispositioned.
-
-*(not yet run)*
+Not applicable: zero admissible rows; no sample to red-team. Honesty conditions
+are the Status / M1 closeout statements above (UNKNOWN ≠ 0; missing I2 ≠ proof
+of no disruption; S4 proximity is driver-only absent I2).
 
 ## Inter-rater agreement
 
-Recorded at freeze, per §K.3.
+Not applicable: 0 survivors, 0 admissible rows, 0 calibration-set entries.
 
 | Metric | Value |
 |---|---|
-| Exact anchor agreement | — |
-| Mean absolute anchor difference (days) | — |
-| Severity-class agreement | — |
-| Calibration-set entries dual-coded | — |
+| Exact anchor agreement | n/a |
+| Mean absolute anchor difference (days) | n/a |
+| Severity-class agreement | n/a |
+| Calibration-set entries dual-coded | 0 |
 
 ## Four-statement reminder
 
@@ -126,4 +147,4 @@ think it happens | what we expect next | how it could be traded.
 
 | date | episode_id | change | author |
 |------|------------|--------|--------|
-|      |            |        |        |
+| 2026-08-28 | — | M1 empty-ledger negative-result closeout: 4234 candidates mechanically triaged, 4234 no-episode dispositions, 0 survivors, 0 admissible episode rows. Marker `M1_CLOSEOUT_RETRY_AFTER_CURSOR_LAUNCH_FAILURE`. | A (agent) |

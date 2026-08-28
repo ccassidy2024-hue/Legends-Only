@@ -582,8 +582,8 @@ def render_summary(rows: list[dict[str, Any]], schema: dict[str, Any]) -> str:
     )
     if not real:
         body = (
-            "| *(none yet)* | | | | | | | | | "
-            "*blank during pre-registration* |\n"
+            "| *(none)* | | | | | | | | | "
+            "*empty ledger; market outcomes unopened* |\n"
         )
     else:
         body = ""

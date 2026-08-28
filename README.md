@@ -35,8 +35,8 @@ the later critique never existed.
 
 ## Research milestone order
 
-0. Repository / research setup ← **current foundation complete after reconciliation**
-1. Episode Ledger / pre-registration
+0. Repository / research setup ← foundation complete
+1. Episode Ledger / pre-registration ← **closed: empty-ledger negative result (0 admissible episodes)**
 2. As-of panel + leakage protection (real series)
 3. Exploratory screener with honest multiple-testing treatment
 4. Direct shock-response modeling / local projections
@@ -93,5 +93,10 @@ make all           # lint + tests (no proprietary data required)
 ## Status
 
 Research foundation is tested (synthetic panel, leakage, lag recovery).
-**Next human task:** begin Milestone 1 — populate the Episode Ledger from
-documented physical/logistics evidence only (market outcomes blank).
+**Milestone 1 closed** as a legitimate empty-ledger negative result: frozen
+D5=4234 candidates were mechanically triaged (S1=37 R12, S4=4197 R3);
+survivors=0; admissible episode rows=0. UNKNOWN is not zero; missing I2 is
+not proof of no physical disruption; S4 proximity is driver-only absent I2.
+Market outcomes remain unopened. See `research/episodes/EPISODE_LEDGER.md`.
+**Next:** Milestone 2 — as-of panel + leakage protection (real series), which
+is empty/not-estimable as an episode-anchored sample while N_episodes=0.
