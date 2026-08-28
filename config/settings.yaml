@@ -4,8 +4,8 @@
 project:
   name: Legends-Only
   package: grainsys
-  phase: milestones_2_5_empty_sample_closeout
-  next_milestone: 6_stronger_id
+  phase: m8_written_negative_result
+  next_milestone: none_kill_closed
 
 paths:
   catalog_series: catalog/series

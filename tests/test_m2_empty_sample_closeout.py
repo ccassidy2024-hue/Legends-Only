@@ -99,6 +99,6 @@ def test_m5_four_statements_and_honesty() -> None:
     assert "NOT_ESTIMABLE" in m34
     assert str(FROZEN_CANDIDATE_COUNT) in memo
     settings = yaml.safe_load(SETTINGS_PATH.read_text(encoding="utf-8"))
-    assert settings["project"]["phase"] == "milestones_2_5_empty_sample_closeout"
-    assert settings["project"]["next_milestone"] == "6_stronger_id"
+    assert settings["project"]["phase"] == "m8_written_negative_result"
+    assert settings["project"]["next_milestone"] == "none_kill_closed"
     assert settings["data_policy"]["invent_source_metadata"] is False

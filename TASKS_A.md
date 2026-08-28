@@ -30,12 +30,13 @@ Ship synthetic fixtures first so B is never blocked on real data.
 empty-ledger negative result (4234 no-episode dispositions, 0 survivors,
 0 admissible rows). Market outcomes remain unopened.
 
-**Milestones 2–5:** M2 is `M2_NEGATIVE_RESULT_EMPTY_SAMPLE` (0 catalogued
+**Milestones 2–8:** M2 is `M2_NEGATIVE_RESULT_EMPTY_SAMPLE` (0 catalogued
 real series; do not fabricate `release_ts` or resurrect dropped D5
 candidates). M3/M4 are written not-estimable (zero ledger windows / zero
-identified shocks). M5 four-statement memo is
-`research/memos/M5_EMPTY_SAMPLE_FOUR_STATEMENTS.md`. Synthetic `panel.py`
-plumbing stays; do not edit it for this closeout.
+identified shocks). M3 family size = 0 tests performed. M5 four-statement
+memo is `research/memos/M5_EMPTY_SAMPLE_FOUR_STATEMENTS.md`. M6/M7 skipped
+under the <6 kill. M8 is `M8_WRITTEN_NEGATIVE_RESULT_UNANSWERABLE`.
+Synthetic `panel.py` plumbing stays; do not edit it for this closeout.
 
 ## Review sensitivity
 

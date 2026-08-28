@@ -55,6 +55,7 @@ Market outcomes were not read. Disposition ledger:
 `research/episodes/discovery/candidates/no_episode_dispositions.csv`.
 
 Marker: `M1_CLOSEOUT_RETRY_AFTER_CURSOR_LAUNCH_FAILURE`
+Follow-on marker: `M1_CLOSEOUT_GROK_TAKEOVER`
 
 ## Standing rules
 
@@ -146,7 +147,9 @@ think it happens | what we expect next | how it could be traded.
 M1 merge: PR #51, `b7d402713ef5eaed33cdff44f4128382e3b38be7` (reviewed head
 `9812df348c053af3024fd007a4ee486494aac954`). Downstream empty-sample closeout
 (M2–M5) lives in `research/milestones/` and
-`research/memos/M5_EMPTY_SAMPLE_FOUR_STATEMENTS.md`. UNKNOWN is not zero.
+`research/memos/M5_EMPTY_SAMPLE_FOUR_STATEMENTS.md`. M6/M7 skipped under the
+<6 kill. M8 written negative result:
+`research/milestones/M8_WRITTEN_NEGATIVE_RESULT.md`. UNKNOWN is not zero.
 
 ## Change log
 
@@ -154,3 +157,4 @@ M1 merge: PR #51, `b7d402713ef5eaed33cdff44f4128382e3b38be7` (reviewed head
 |------|------------|--------|--------|
 | 2026-08-28 | — | M1 empty-ledger negative-result closeout: 4234 candidates mechanically triaged, 4234 no-episode dispositions, 0 survivors, 0 admissible episode rows. Marker `M1_CLOSEOUT_RETRY_AFTER_CURSOR_LAUNCH_FAILURE`. | A (agent) |
 | 2026-08-28 | — | M1 merged to main (PR #51). M2–M5 empty-sample closeout: `M2_NEGATIVE_RESULT_EMPTY_SAMPLE`; M3/M4 not-estimable; M5 four-statement memo. | A (agent) |
+| 2026-08-28 | — | Kill closeout: M3 family size = 0 tests performed (never-run); M6/M7 skipped; M8 written unanswerable result. Marker `M1_CLOSEOUT_GROK_TAKEOVER`. | A (agent) |
