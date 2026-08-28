@@ -973,6 +973,25 @@ def test_n3_v2_dirty_tree_fail_closed(tmp_path: Path) -> None:
         assert_sweep_authorized(root)
 
 
+def test_n3_v2_dirty_live_manifest_fail_closed(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    _git(root, "tag", PREREG_TAG_V2)
+    man_path = root / MANIFEST_RELATIVE
+    man_path.write_bytes(man_path.read_bytes() + b"\n")
+    with pytest.raises(RatificationError, match="working tree drift|CRLF|fresh normalized"):
+        assert_sweep_authorized(root)
+
+
+def test_n3_v2_crlf_live_manifest_fail_closed(tmp_path: Path) -> None:
+    root = _build_ratified_repo(tmp_path)
+    _git(root, "tag", PREREG_TAG_V2)
+    man_path = root / MANIFEST_RELATIVE
+    lf = man_path.read_bytes()
+    man_path.write_bytes(lf.replace(b"\n", b"\r\n") if b"\n" in lf else lf + b"\r\n")
+    with pytest.raises(RatificationError, match="working tree drift|CRLF|fresh normalized"):
+        assert_sweep_authorized(root)
+
+
 def test_n3_v2_unbound_interpretation_path_fail_closed(tmp_path: Path) -> None:
     root = _build_ratified_repo(tmp_path)
     man_path = root / MANIFEST_RELATIVE

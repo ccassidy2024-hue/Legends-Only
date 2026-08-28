@@ -660,6 +660,22 @@ def _authorize_against_tag(
             f"({tagged_commit}); block"
         )
 
+    live_manifest_path = repo_root / MANIFEST_RELATIVE
+    if not live_manifest_path.is_file():
+        raise RatificationError(
+            "live ratification manifest missing; fresh normalized checkout required; "
+            "block"
+        )
+    tagged_manifest_bytes = git_show_blob_bytes(
+        repo_root,
+        rev=tagged_commit,
+        relative_path=MANIFEST_RELATIVE.as_posix(),
+    )
+    if live_manifest_path.read_bytes() != tagged_manifest_bytes:
+        raise RatificationError(
+            "live ratification manifest does not match tagged manifest; block"
+        )
+
     load_bearing: Sequence[str] | None = (
         LOAD_BEARING_RELATIVE_PATHS if require_current_load_bearing else None
     )
@@ -798,9 +814,10 @@ def assert_sweep_authorized(
 
     cfg_path = prereg_rules_path(root)
     cfg_rel = cfg_path.relative_to(root).as_posix()
+    manifest_rel = MANIFEST_RELATIVE.as_posix()
     assert_paths_match_head_blobs(
         root,
-        (cfg_rel, *LOAD_BEARING_RELATIVE_PATHS),
+        (cfg_rel, manifest_rel, *LOAD_BEARING_RELATIVE_PATHS),
         rev=head,
     )
 
