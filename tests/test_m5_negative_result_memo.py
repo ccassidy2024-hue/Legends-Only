@@ -88,3 +88,11 @@ def test_m5_memo_does_not_invent_estimates() -> None:
     assert "Off-Farm_Grain_Stocks" in text
     assert "transportation-analysis/gtr" in text
     assert "hurdat2-format-atlantic.pdf" in text
+    assert "PENDING_DRAFT_FREEZE" not in text
+    assert "74c4120f195b701ed5f09a2c050c5d39abed1026" in text
+    assert "FAIL_MEMO_OVERCLAIMS" in text
+    assert "GPT-5.6" in text
+    assert "bc-459fb6f8-3172-50ba-971d-0bfb19da93ac" in text
+    doc = _closeout()
+    assert doc["m5"]["red_team_status"] == "inserted_gpt56_fail_memo_overclaims"
+    assert doc["m5"]["red_team_verdict"] == "FAIL_MEMO_OVERCLAIMS"

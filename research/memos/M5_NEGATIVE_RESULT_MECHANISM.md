@@ -110,8 +110,9 @@ This is a bounded institutional/method map, not an exhaustive review.
   the Inverse Carrying Charge in Futures Markets." *Journal of Farm Economics*
   30(1): 1–28. DOI [10.2307/1232678](https://doi.org/10.2307/1232678). Working,
   Holbrook. 1949. "The Theory of Price of Storage." *American Economic Review*
-  39(6): 1254–1262. JSTOR [1816601](https://www.jstor.org/stable/1816601)
-  (DOI 10.2307/1816601). These papers motivate why percent-of-full-carry is the
+  39(6): 1254–1262. JSTOR stable
+  [1816601](https://www.jstor.org/stable/1816601). Do not label `10.2307/1816601`
+  a resolving DOI. These papers motivate why percent-of-full-carry is the
   natural Y *if* a shock existed. They do not estimate this project's arrow.
 - **Local projections.** Jordà, Òscar. 2005. "Estimation and Inference of
   Impulse Responses by Local Projections." *American Economic Review* 95(1):
@@ -128,10 +129,15 @@ This is a bounded institutional/method map, not an exhaustive review.
   Query system: https://apps.fas.usda.gov/export-sales/
 - **FGIS inspections** are *physical shipments* under official inspection /
   weighing, not the same object as Export Sales (`BLUEPRINT_REVIEW.md` §8).
+  The AMS FGISonline page is the application portfolio for official inspection
+  and weighing processes, not a substitute for a weekly inspections series
+  YAML (none is catalogued).
   https://www.ams.usda.gov/services/fgisonline
 - **NASS Grain Stocks** is a quarterly Principal Federal Economic Indicator
-  (on- and off-farm), heavily revised; not a fresh weekly level
-  (`BLUEPRINT_REVIEW.md` §8).
+  (on- and off-farm; March/June/September/December reference dates). It is not
+  a fresh weekly level. `BLUEPRINT_REVIEW.md` §8 additionally warns of revision
+  behavior; that warning is a project rule, not a fact established by the NASS
+  survey page cited here.
   https://www.nass.usda.gov/Surveys/Guide_to_NASS_Surveys/Off-Farm_Grain_Stocks
 - **HURDAT2** is NHC best-track, used here only as S4 *driver identity*.
   Format: Landsea, Franklin, Beven, May 2015,
@@ -206,21 +212,38 @@ identity in disguise.
 
 Independent adversarial review from a **different non-Anthropic, non-Grok**
 model, launched read-only against the frozen *draft* SHA of this memo.
+The block below is verbatim. A later SHA may correct citation labels; it does
+not rewrite this critique.
 
-**Provenance (filled after draft freeze):**
+**Provenance**
 
-- Draft SHA: `PENDING_DRAFT_FREEZE`
-- Reviewer agent: `PENDING`
-- Reviewer model: `PENDING`
-- Date: `PENDING`
+- Draft SHA reviewed: `74c4120f195b701ed5f09a2c050c5d39abed1026`
+- Reviewer agent: `bc-459fb6f8-3172-50ba-971d-0bfb19da93ac`
+- Reviewer model: GPT-5.6 (`gpt-5.6-sol-high`)
+- Date: 2026-08-28
+- Verdict: `FAIL_MEMO_OVERCLAIMS`
 
-**Verbatim reviewer block:**
+**Verbatim reviewer block**
 
 ```
-PENDING_INDEPENDENT_RED_TEAM
+The narrow result holds: this frozen repository contains zero admissible episode rows, so no shock-to-flow estimate or trade thesis is authorized. The memo does not establish that no admissible shock exists. Its zero is primarily a source-discovery and provenance failure: 4,197 observations are storm-node proximity pairs—not independent episode candidates—and their identical R3 dispositions merely restate that HURDAT2 cannot supply operational evidence. The 37 S1 candidates were rejected because their capture bodies were fixture HTML rather than verifiable historical notices. S2 and S8 were not attempted, while several other families scanned listing pages but left underlying documents UNKNOWN. NTNI’s short retention window also creates severe survivorship bias. Describe this as “no episodes identified by this incomplete, positive-only evidence pipeline,” not a substantive negative result about disruptions.
+
+Hurricane Ida is correctly excluded, but calling it an illustrative natural experiment still imports a memory-selected positive mechanism. A storm track or NHC context does not prove a grain-logistics outage, public anchor, or usable instrument. Likewise, persistent spatial residuals, rail/PNW rerouting, and South American substitution remain conjectures. A positive residual could reflect mismatched locations, grades, timing, handling charges, tariff conversion, or omitted all-in freight costs—not binding capacity or delayed adaptation.
+
+Gate F is overstated. With no identified effect, no market outcomes, and no academic-database search, mispricing was not assessed. “No mispricing” may be a conservative decision rule, but it is not an evidentiary result. The defensible conclusion is “no trade authorized; Gate F not estimable.”
+
+The Working citations distinguish 1948 from 1949 correctly, but `1816601` is a JSTOR stable identifier; `https://doi.org/10.2307/1816601` does not resolve, so it should not be labeled a DOI. The NASS page supports quarterly publication and scheduled revisions, not the unqualified description “heavily revised.” The FGISonline URL describes an authenticated application portfolio and is weak support for the claim that inspections equal physical shipments; cite the actual export-inspection report or methodology. HURDAT2 is post-storm best-track data and cannot establish contemporaneous public knowledge.
+
+The falsification section also conflates invalid procedure with falsification: a future claim equating UNKNOWN with zero would invalidate the analysis, not falsify the current artifact count. The relevant falsifiers are a reproducible count mismatch or an admissible row produced from the same frozen universe and rules.
+
+RED-TEAM VERDICT: FAIL_MEMO_OVERCLAIMS
 ```
 
-Do not treat Gate C as signed until §9 human fields are filled by A and B.
+Author note (not part of the critique): Gate F #5 remains the closed-list
+*decision rule* from `BLUEPRINT_REVIEW.md` §7 and M8, not an estimated finding
+that markets are efficient. The empty ledger is an identification/pipeline
+result, not proof that disruptions did not occur. JSTOR 1816601 is not labeled
+a DOI in §4 of later SHAs. Ida stays out of the sample.
 
 ---
 
