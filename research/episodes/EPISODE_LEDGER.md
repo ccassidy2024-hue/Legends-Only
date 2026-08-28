@@ -27,13 +27,48 @@ filtered through market salience.
 
 | Item | State |
 |---|---|
-| Protocol | drafted, pending ADR-0002 acceptance |
-| Phase 0 — rules pre-registered (thresholds, cutpoints, windows) | **not started** |
-| Phase 1 — source sweeps | not started |
-| Candidates recorded | 0 (plus 1 fictional example, excluded) |
-| Pre-registration freeze | **not frozen** — no market data may be opened |
+| Protocol | in force (ADR-0002 and later closed ADRs) |
+| Phase 0 — rules pre-registered (thresholds, cutpoints, windows) | committed (`prereg-rules-v2`); D12 severity cutpoints remain unregistered |
+| Phase 1 — source sweeps | complete for frozen D5 (S1=37, S4=4197; S2–S8 added no D5 rows) |
+| Frozen D5 universe | 4234 candidates |
+| Phase 2 — I1/I2/I3 triage | complete (PR #50 head `5a76e2e3c8e83aed0956f8b8804c043ae8729206`) |
+| Candidates recorded | 4234 |
+| No-episode dispositions | 4234 (S1=37 R12; S4=4197 R3) |
+| Phase-2 survivors | 0 |
+| Admissible episode rows | **0** (fictional example `EP-0000-000` excluded, not counted) |
+| Pre-registration freeze | **not frozen** — no admissible sample to freeze; market data remains closed |
 | Freeze tag | — |
 | Freeze commit | — |
+| M1 result | **negative result** — Sample P = 0 < kill condition 6 |
+
+### M1 closeout — empty admissible Episode Ledger
+
+Mechanical I1/I2/I3 triage of the frozen 4234-candidate D5 universe produced
+**0** survivors and therefore **0** admissible Episode Ledger rows. This is a
+legitimate negative result. No episode YAML was authored to manufacture
+survivors. The fictional example `entries/EP-0000-000-example.yaml` remains
+protocol structure only (`example: true`).
+
+Repo-native empty-ledger representation:
+
+- `entries/` — no real episode YAML (accepted or rejected)
+- generated summary below — 0 accepted rows, Sample P = 0, kill condition true
+- `discovery/candidates/no_episode_dispositions.csv` — 4234 candidate-keyed
+  rows (ADR-0009: candidates that produce no episode must not disappear)
+- `python -m grainsys.episodes` enforces E ∪ N = C against that frozen universe
+
+**UNKNOWN is not zero.** Unverified, fixture-bound, or incomplete evidence is
+not a count of zero operational events.
+
+**S4 proximity is driver-only absent I2.** The 4197 S4 dispositions are R3
+(X1): POINT_ONLY 100NM HURDAT2 storm-node proximity is driver identity only.
+A storm track is not an episode. Lack of documented operational consequence
+is **not** proof of no physical disruption.
+
+**S1 R12 is unverifiable source, not a zero-event finding.** The 37 S1
+dispositions are R12 (X10): SHA-bound capture bodies are committed fixture
+HTML, not live NTNI notices. That does not prove the originating notices
+carried no operational restriction.
 
 ## Standing rules
 
@@ -68,7 +103,7 @@ stale, so the table is always reproducible from committed entries
 
 | episode_id | event_name | event_class | public_anchor | end_date | navigation_basin | severity_class | sample | status | outcomes_reviewed |
 |---|---|---|---|---|---|---|---|---|---|
-| *(none yet)* | | | | | | | | | *blank during pre-registration* |
+| *(none)* | | | | | | | | | *0 admissible rows; market outcomes unopened* |
 
 **Independence audit (protocol H.2)**
 
@@ -77,7 +112,7 @@ stale, so the table is always reproducible from committed entries
 - N_underlying_drivers (descriptive only): **0**
 - max episodes in one cluster: **0** · max episodes for one driver: **0**
 - primary sample (Sample P): **0** · extended (Sample X): **0**
-- shared driver present: **false** · below kill condition: **n/a**
+- shared driver present: **false** · below kill condition: **true**
 
 Primary reporting: N_episodes and N_independent_driver_clusters. Do not auto-drop physically distinct rows that share a driver.
 
@@ -87,7 +122,9 @@ Excluded from counts: 1 fictional example entry/entries.
 
 ## Freeze record
 
-Completed at Phase 8. Until then this section stays empty.
+Not completed. Phase 8 freeze would lock a sample and then permit opening
+market data. Sample P = 0, so there is no sample to freeze and market data
+stays closed. This section remains empty by protocol.
 
 | Item | Value |
 |---|---|
@@ -104,7 +141,8 @@ Completed at Phase 8. Until then this section stays empty.
 Verbatim response from a different model family, per `EPISODE_PROTOCOL.md` §L.4,
 with each point dispositioned.
 
-*(not yet run)*
+Not run. Adversarial pass is required before freeze (§L.4). M1 closed with
+0 admissible rows and no freeze tag; there is no ledger sample to red-team.
 
 ## Inter-rater agreement
 
@@ -112,10 +150,10 @@ Recorded at freeze, per §K.3.
 
 | Metric | Value |
 |---|---|
-| Exact anchor agreement | — |
-| Mean absolute anchor difference (days) | — |
-| Severity-class agreement | — |
-| Calibration-set entries dual-coded | — |
+| Exact anchor agreement | n/a — 0 admissible rows |
+| Mean absolute anchor difference (days) | n/a — 0 admissible rows |
+| Severity-class agreement | n/a — 0 admissible rows; D12 unregistered |
+| Calibration-set entries dual-coded | 0 |
 
 ## Four-statement reminder
 
@@ -126,4 +164,4 @@ think it happens | what we expect next | how it could be traded.
 
 | date | episode_id | change | author |
 |------|------------|--------|--------|
-|      |            |        |        |
+| 2026-08-28 | — | M1 empty-ledger closeout: 4234 triaged, 4234 no-episode dispositions, 0 survivors, 0 admissible rows. S4 R3 driver-only absent I2; UNKNOWN ≠ 0. No freeze tag. | M1 closeout |

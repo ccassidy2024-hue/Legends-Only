@@ -93,5 +93,10 @@ make all           # lint + tests (no proprietary data required)
 ## Status
 
 Research foundation is tested (synthetic panel, leakage, lag recovery).
-**Next human task:** begin Milestone 1 — populate the Episode Ledger from
-documented physical/logistics evidence only (market outcomes blank).
+**Milestone 1 closed as a negative result:** 4234 frozen D5 candidates
+mechanically triaged, 4234 no-episode dispositions, 0 I1/I2/I3 survivors,
+0 admissible Episode Ledger rows. Fictional example `EP-0000-000` remains
+excluded. UNKNOWN is not zero. S4 proximity is driver-only absent I2.
+No freeze tag; market data remains closed.
+**Next:** Milestone 2 as-of panel — real-series panel is not-estimable
+without catalogued series and genuine `release_ts` (do not invent observations).

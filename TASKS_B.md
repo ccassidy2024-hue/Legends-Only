@@ -31,8 +31,10 @@ Build against synthetic fixtures before real USDA/market panels exist.
 
 ## Current milestone focus
 
-Validate plumbing on synthetic data (done in foundation tests), then support
-Milestone 1–3 without running a real-data universe screen until authorized.
+Validate plumbing on synthetic data (done in foundation tests).
+Milestone 1 closed as a negative result (0 admissible episodes; Sample P = 0).
+Support Milestone 2–5 without fabricating observations or opening market data.
+An empty upstream sample may make M3–M4 not-estimable; write that down.
 
 ## Review sensitivity
 

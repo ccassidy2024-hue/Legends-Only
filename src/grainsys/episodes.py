@@ -31,6 +31,7 @@ import yaml
 
 from grainsys.lineage import (
     LineageError,
+    check_universe_accounting,
     validate_candidate_ids_shape,
     validate_candidate_universe_version,
 )
@@ -582,8 +583,8 @@ def render_summary(rows: list[dict[str, Any]], schema: dict[str, Any]) -> str:
     )
     if not real:
         body = (
-            "| *(none yet)* | | | | | | | | | "
-            "*blank during pre-registration* |\n"
+            "| *(none)* | | | | | | | | | "
+            "*0 admissible rows; market outcomes unopened* |\n"
         )
     else:
         body = ""
@@ -616,7 +617,7 @@ def render_summary(rows: list[dict[str, Any]], schema: dict[str, Any]) -> str:
         f"extended (Sample X): **{audit['n_extended_sample']}**",
         f"- shared driver present: **{str(audit['shared_driver_present']).lower()}** · "
         f"below kill condition: **"
-        f"{str(audit['below_kill_condition']).lower() if audit['n_episodes'] else 'n/a'}**",
+        f"{str(audit['below_kill_condition']).lower()}**",
         "",
         "Primary reporting: N_episodes and N_independent_driver_clusters. "
         "Do not auto-drop physically distinct rows that share a driver.",
@@ -641,6 +642,45 @@ def write_summary(rows: list[dict[str, Any]], schema: dict[str, Any], path: Path
         path.write_text(new, encoding="utf-8", newline="\n")
         return True
     return False
+
+
+def check_committed_universe_accounting(
+    rows: list[dict[str, Any]],
+    fx: Findings,
+    *,
+    repo_root: str | Path | None = None,
+) -> None:
+    """Enforce ADR-0009 E ∪ N = C when frozen D5 artifacts exist.
+
+    Ordinary synthetic validation against a temp entries dir does not require
+    a live candidate universe. Live `research/episodes/entries` closeout does.
+    """
+    from grainsys.discovery.candidate_universe import (
+        CANONICAL_CANDIDATE_UNIVERSE_MANIFEST_RELATIVE,
+        CANONICAL_CANDIDATES_RELATIVE,
+    )
+    from grainsys.discovery.phase2_triage import NO_EPISODE_DISPOSITIONS_RELATIVE
+
+    root = Path(repo_root) if repo_root is not None else Path(".")
+    cand = root / CANONICAL_CANDIDATES_RELATIVE
+    man = root / CANONICAL_CANDIDATE_UNIVERSE_MANIFEST_RELATIVE
+    disp = root / NO_EPISODE_DISPOSITIONS_RELATIVE
+    if not cand.is_file() or not man.is_file():
+        return
+    if not disp.is_file():
+        fx.error(
+            "<universe-accounting>",
+            "L15",
+            "frozen D5 present but no_episode_dispositions.csv missing",
+        )
+        return
+    lfx = check_universe_accounting(
+        rows,
+        candidates_csv=cand,
+        candidate_universe_manifest=man,
+        no_episode_dispositions=disp,
+    )
+    fx.errors.extend(lfx.errors)
 
 
 def check(
@@ -670,8 +710,10 @@ def check(
             "multiple accepted episodes share an underlying_driver_id; "
             "preserve rows; N_underlying_drivers is descriptive metadata",
         )
-    if audit["n_episodes"] and audit["below_kill_condition"]:
+    if audit["below_kill_condition"]:
         fx.warn("<ledger>", "W12", f"primary sample = {audit['n_primary_sample']} (kill condition)")
+    if Path(entries_dir).resolve() == ENTRIES_DIR.resolve():
+        check_committed_universe_accounting(rows, fx)
     lo, hi = schema["sample"]["target_accepted_min"], schema["sample"]["target_accepted_max"]
     if audit["n_episodes"] and not lo <= audit["n_episodes"] <= hi:
         fx.warn("<ledger>", "W10", f"accepted count {audit['n_episodes']} outside [{lo}, {hi}]")

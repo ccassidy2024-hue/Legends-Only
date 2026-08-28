@@ -26,13 +26,19 @@ Ship synthetic fixtures first so B is never blocked on real data.
 
 ## Current milestone focus
 
-**Milestone 1 — Episode Ledger / pre-registration**
+**Milestone 1 — Episode Ledger / pre-registration — CLOSED (negative result)**
 
-- Populate episodes from documented physical/logistics evidence only
-- Leave market outcomes blank
-- Record contemporaneous knowability and sources
+- Frozen D5 = 4234 candidates; Phase-2 I1/I2/I3 triage: 4234 no-episode
+  dispositions, 0 survivors, 0 admissible episode rows
+- Do not invent episode YAML or reopen discovery to manufacture survivors
+- UNKNOWN is not zero; S4 proximity is driver-only absent I2
 
-Then **Milestone 2 — As-of panel + leakage protection** on real series once catalogued.
+**Milestone 2 — As-of panel + leakage protection**
+
+- Synthetic `panel.py` + leakage tests already exist
+- Real as-of panel requires catalogued series with genuine `release_ts`
+- Do not invent source IDs, release delays, or observations
+- Do not resurrect dropped M1 candidates as panel rows
 
 ## Review sensitivity
 
