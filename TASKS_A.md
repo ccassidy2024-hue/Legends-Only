@@ -26,13 +26,14 @@ Ship synthetic fixtures first so B is never blocked on real data.
 
 ## Current milestone focus
 
-**Milestone 1 — Episode Ledger / pre-registration**
+**Milestone 1 — Episode Ledger / pre-registration:** closed as an
+empty-ledger negative result (4234 no-episode dispositions, 0 survivors,
+0 admissible rows). Market outcomes remain unopened.
 
-- Populate episodes from documented physical/logistics evidence only
-- Leave market outcomes blank
-- Record contemporaneous knowability and sources
-
-Then **Milestone 2 — As-of panel + leakage protection** on real series once catalogued.
+**Milestone 2 — As-of panel + leakage protection** on real series once
+catalogued. With 0 admissible episodes the episode-anchored sample is
+empty/not-estimable; do not fabricate rows or resurrect dropped D5
+candidates.
 
 ## Review sensitivity
 
