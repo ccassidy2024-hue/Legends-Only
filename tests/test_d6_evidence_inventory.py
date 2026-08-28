@@ -282,7 +282,6 @@ def test_committed_inventory_is_d5_keyed_when_present() -> None:
     assert len(s4) == FROZEN_S4_COUNT
     assert all(r["i2_field_sufficiency"] == I2_NEEDS_PRIMARY for r in s4)
     assert not any(r["capture_dir"].startswith("CAND-") for r in rows)
-    assert not (REPO / "research/episodes/discovery/candidates/no_episode_dispositions.csv").exists()
     assert summary.get("hurdat2_public_verified") == 2
     for rec in summary["hurdat2_archives"]:
         assert rec["public_refetch_status"] == "verified"

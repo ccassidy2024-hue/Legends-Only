@@ -1,7 +1,8 @@
 # No-episode disposition ledger schema (ADR-0009 scaffolding).
 #
 # Records every frozen candidate that never appears in episode YAML ancestry.
-# SCHEMA ONLY — no live no_episode_dispositions.csv in this repository yet.
+# Live ledger: research/episodes/discovery/candidates/no_episode_dispositions.csv
+# (Phase-2 I1/I2/I3 triage). Schema fields unchanged.
 #
 # The ledger is interpreted against the one adjacent frozen candidate universe
 # represented by research/episodes/discovery/candidates/candidate_universe.yaml

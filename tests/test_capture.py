@@ -333,14 +333,8 @@ def test_d5_artifacts_exist_and_not_modified_by_capture(tmp_path: Path) -> None:
 
 
 def test_real_candidate_artifact_exists_but_no_episode_artifact_in_repo() -> None:
-    """Verify D5 candidates exist but no real episodes yet."""
-    # D5 candidates exist after authorized build
+    """D5 candidates exist; Phase-2 may drop them; no accepted episode YAML yet."""
     assert (REPO / CANONICAL_CANDIDATES_RELATIVE).exists()
-    # No episode dispositions yet (created later in workflow)
-    assert not (
-        REPO / "research/episodes/discovery/candidates/no_episode_dispositions.csv"
-    ).exists()
-    # No real episode entries yet (only example entries)
     real_eps = [
         p
         for p in (REPO / "research/episodes/entries").glob("*.yaml")
