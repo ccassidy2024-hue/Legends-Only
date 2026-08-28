@@ -550,8 +550,8 @@ def test_live_candidates_and_manifest_exist_in_repo() -> None:
     import yaml
     with (repo / CANONICAL_CANDIDATE_UNIVERSE_MANIFEST_RELATIVE).open() as f:
         manifest = yaml.safe_load(f)
-    assert manifest["candidate_count"] == 37
-    assert manifest["required_sweep_families"] == ["S1"]
+    assert manifest["candidate_count"] == 4234
+    assert manifest["required_sweep_families"] == ["S1", "S4"]
 
 
 def test_future_canonical_manifest_path_constant() -> None:

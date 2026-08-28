@@ -1,0 +1,17 @@
+schema_version: '0.2'
+record_kind: source_coverage
+source_family: S4
+authority: National Hurricane Center / NOAA
+district: NHC
+vehicle: HURDAT2 Atlantic and NE/NC Pacific best track archives
+endpoint: https://www.nhc.noaa.gov/data/hurdat/hurdat2-1851-2025-02272026.txt
+earliest_available: null
+latest_available: null
+retrieved_on: '2026-08-28'
+coverage_status: present
+sweep_status: enumerated
+records_matched: 4197
+scope_start: '2010-01-01'
+scope_end: '2024-12-31'
+notes: POINT_ONLY Haversine NM-sphere, radius_m=185200 inclusive, sample-period positions=17078,
+  storm-node pairs within 100NM=4197. No interpolation. Digest-verified HURDAT2 bytes.

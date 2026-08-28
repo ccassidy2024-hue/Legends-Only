@@ -1,0 +1,18 @@
+schema_version: '0.2'
+record_kind: source_coverage
+source_family: S2
+authority: USGS/AHPS
+district: registered_gauges
+vehicle: gauge registry corroboration only
+endpoint: null
+earliest_available: null
+latest_available: null
+retrieved_on: '2026-08-28'
+coverage_status: unknown
+sweep_status: not_attempted
+records_matched: null
+scope_start: null
+scope_end: null
+notes: S2 is registry-only OPERATIONAL_RESTRICTION_ONLY corroboration. No archive
+  endpoint is registered. Independent candidates are not generated from raw stage.
+  UNKNOWN is not zero.

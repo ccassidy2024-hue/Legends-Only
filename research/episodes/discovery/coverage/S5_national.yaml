@@ -1,0 +1,17 @@
+schema_version: '0.2'
+record_kind: source_coverage
+source_family: S5
+authority: USDA Agricultural Marketing Service
+district: national
+vehicle: Grain Transportation Report weekly releases
+endpoint: https://www.ams.usda.gov/services/transportation-analysis/gtr
+earliest_available: null
+latest_available: null
+retrieved_on: '2026-08-28'
+coverage_status: present
+sweep_status: enumerated
+records_matched: 0
+scope_start: '2010-01-01'
+scope_end: '2024-12-31'
+notes: Listing-page keyword scan only. Inner PDF/document full_text extraction is
+  UNKNOWN. listed_inner_rows=0. matched_terms=[].
