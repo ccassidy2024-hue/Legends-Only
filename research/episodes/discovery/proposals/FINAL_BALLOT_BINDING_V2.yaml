@@ -1,0 +1,616 @@
+# FINAL BALLOT BINDING V2
+#
+# Status: HUMAN_BALLOT_EXACT_READY_V2
+# Date: 2026-08-27
+# Marker: M1_FINAL_BALLOT_BINDING_ACTIVE
+#
+# This document contains exact bindings for the v2 amendment ballot.
+# Three decisions required; execution proceeds immediately after vote if B selected.
+
+schema_version: "2.0"
+ballot_id: M1_AMENDMENT_BALLOT_V2
+ballot_date: "2026-08-27"
+base_commit: a6f1b81c40f15a6f986ecbbe4e2e3128242a3b9c
+
+# ============================================================================
+# DECISION A: S2 MECHANICS
+# ============================================================================
+
+decision_a_s2_mechanics:
+  description: "S2 sweep interpretation under §J and D8"
+  
+  canonical_text_j_s2: >-
+    "S2 | USGS/AHPS gauges at pre-registered navigation gauges | 
+    Programmatic threshold breach detection over the full period"
+    — EPISODE_PROTOCOL.md line 997
+    
+  canonical_text_d8: >-
+    "physical_thresholds:
+      mode: binding_operational_restriction_only
+      class_thresholds: []"
+    — config/discovery/prereg_rules.yaml lines 145-147
+
+  options:
+    REOPEN_SCIENCE:
+      description: >-
+        Reopen science to define a new full-universe threshold rule that covers
+        all 10 gauges with appropriate datums for each hydraulic regime.
+      consequence: >-
+        S2 execution blocked until a new exact threshold rule is ratified.
+        Another A+B ratification required before S2 can generate candidates.
+      executable_now: false
+      
+    USE_B_OPERATIONAL_RESTRICTION_ONLY:
+      description: >-
+        S2 triggers only when S1/S3 documents an operational restriction at
+        a registered gauge. S2 does not generate independent candidates from
+        raw stage data; it corroborates S1/S3 binding operational restrictions.
+      consequence: >-
+        S2 candidate generation: NONE independent. Gauge readings corroborate
+        S1/S3 evidence only. No numeric stage threshold applied. Under D8
+        mode=binding_operational_restriction_only, only documented binding
+        operational restrictions (closure, draft restriction, etc.) qualify.
+      executable_now: true
+
+# ============================================================================
+# EXACT 10 S2 GAUGE ROWS WITH OFFICIAL EVIDENCE
+# ============================================================================
+
+s2_gauges_exact_binding:
+  row_count: 10
+  
+  rows:
+    - row: 1
+      station_id: "07010000"
+      official_name: "Mississippi River at St. Louis, MO"
+      d2_basin: middle_mississippi
+      d2_corridor: "Middle Mississippi River"
+      hydraulic_regime: free_flowing
+      official_evidence:
+        source: "USGS NWIS + USACE St. Louis District"
+        nwis_url: "https://waterdata.usgs.gov/monitoring-location/USGS-07010000/"
+        rivergages_url: "https://rivergages.mvr.usace.army.mil/"
+      variant_a_datum:
+        status: DEFINED
+        lwrp_value: "-6.0 ft"
+        lwrp_datum: "CRD (Cairo River Datum)"
+        lwrp_version: "LWRP14"
+        
+    - row: 2
+      station_id: "07022000"
+      official_name: "Mississippi River at Thebes, IL"
+      d2_basin: middle_mississippi
+      d2_corridor: "Middle Mississippi River"
+      hydraulic_regime: free_flowing
+      official_evidence:
+        source: "USGS NWIS + USACE St. Louis District"
+        nwis_url: "https://waterdata.usgs.gov/monitoring-location/USGS-07022000/"
+      variant_a_datum:
+        status: DEFINED
+        lwrp_value: "-4.0 ft"
+        lwrp_datum: "CRD (Cairo River Datum)"
+        lwrp_version: "LWRP14"
+        
+    - row: 3
+      station_id: "07032000"
+      official_name: "Mississippi River at Memphis, TN"
+      d2_basin: lower_mississippi
+      d2_corridor: "Lower Mississippi River"
+      hydraulic_regime: free_flowing
+      official_evidence:
+        source: "USGS NWIS + USACE Memphis District"
+        nwis_url: "https://waterdata.usgs.gov/monitoring-location/USGS-07032000/"
+      variant_a_datum:
+        status: DEFINED
+        lwrp_value: "-10.0 ft"
+        lwrp_datum: "Memphis Datum"
+        lwrp_version: "LWRP05"
+        
+    - row: 4
+      station_id: "07289000"
+      official_name: "Mississippi River at Vicksburg, MS"
+      d2_basin: lower_mississippi
+      d2_corridor: "Lower Mississippi River"
+      hydraulic_regime: free_flowing
+      official_evidence:
+        source: "USGS NWIS + USACE Vicksburg District"
+        nwis_url: "https://waterdata.usgs.gov/monitoring-location/USGS-07289000/"
+      variant_a_datum:
+        status: DEFINED
+        lwrp_value: "-2.0 ft"
+        lwrp_datum: "MSL"
+        lwrp_version: "LWRP"
+        
+    - row: 5
+      station_id: "07374000"
+      official_name: "Mississippi River at Baton Rouge, LA"
+      d2_basin: lower_mississippi
+      d2_corridor: "Lower Mississippi River"
+      hydraulic_regime: free_flowing_tidal_influenced
+      official_evidence:
+        source: "USGS NWIS + USACE New Orleans District"
+        nwis_url: "https://waterdata.usgs.gov/monitoring-location/USGS-07374000/"
+        rivergages_id: "01160"
+      variant_a_datum:
+        status: DEFINED
+        lwrp_value: "NAVD88 - 2.5 ft"
+        lwrp_datum: "NAVD88"
+        lwrp_version: "LWRP07"
+        source_memo: "LWRP Datum Clarification Memo 2020"
+        
+    - row: 6
+      station_id: "07374510"
+      official_name: "Mississippi River at New Orleans, LA (Carrollton)"
+      d2_basin: lower_mississippi
+      d2_corridor: "Lower Mississippi River"
+      hydraulic_regime: free_flowing_tidal_influenced
+      official_evidence:
+        source: "USGS NWIS + USACE New Orleans District"
+        nwis_url: "https://waterdata.usgs.gov/monitoring-location/USGS-07374510/"
+        rivergages_id: "01300"
+      variant_a_datum:
+        status: DEFINED
+        lwrp_value: "NAVD88 - 0.6 ft"
+        lwrp_datum: "NAVD88"
+        lwrp_version: "LWRP07"
+        source_memo: "LWRP Datum Clarification Memo 2020"
+        
+    - row: 7
+      station_id: "03612500"
+      official_name: "Ohio River at Cairo, IL"
+      d2_basin: ohio
+      d2_corridor: "Ohio River"
+      hydraulic_regime: backwater_confluence
+      official_evidence:
+        source: "USACE Louisville District"
+        rivergages_id: "OH111"
+        rivergages_url: "https://rivergages.mvr.usace.army.mil/WaterControl/stationinfo2.cfm?sid=OH111"
+        gage_zero: "270.47 ft NGVD29"
+      variant_a_datum:
+        status: NOT_APPLICABLE
+        reason: >-
+          Backwater-affected confluence area. No maintained pool, no LWRP.
+          LWRP is defined only for free-flowing river reaches (97% exceedance
+          discharge). Cairo gauge is in Mississippi River backwater zone.
+        searched_surfaces:
+          - "USACE rivergages OH111 station info"
+          - "MRG&P Tech Note No. 9 (USACE datum documentation)"
+          - "ORSANCO Ohio River Navigation Dams tables"
+          
+    - row: 8
+      station_id: "03611500"
+      official_name: "Ohio River at Metropolis, IL"
+      d2_basin: ohio
+      d2_corridor: "Ohio River"
+      hydraulic_regime: backwater_below_last_dam
+      official_evidence:
+        source: "USGS NWIS + USACE"
+        nwis_url: "https://waterdata.usgs.gov/monitoring-location/USGS-03611500/"
+        river_mile: 45.2
+      variant_a_datum:
+        status: NOT_APPLICABLE
+        reason: >-
+          Below Lock and Dam 53 (last Ohio River dam at mile 962.6).
+          Backwater-affected by Mississippi confluence. Pool elevation
+          of L&D 53 is 290.0 ft MSL but Metropolis is not in a controlled pool.
+        searched_surfaces:
+          - "USACE Great Lakes and Ohio River Division navigation info"
+          - "ORSANCO Ohio River Fact Book 1994"
+          - "Ohio River Navigation Dams table"
+          
+    - row: 9
+      station_id: "05586100"
+      official_name: "Illinois River at Valley City, IL"
+      d2_basin: illinois
+      d2_corridor: "Illinois Waterway"
+      hydraulic_regime: free_backwater_below_last_dam
+      official_evidence:
+        source: "USGS NWIS + USACE St. Louis District"
+        nwis_url: "https://waterdata.usgs.gov/monitoring-location/USGS-05586100/"
+        rivergages_id: "VALI2"
+        gage_zero: "418.00 ft NGVD29"
+        river_mile: 61.3
+      variant_a_datum:
+        status: NOT_APPLICABLE
+        reason: >-
+          Below La Grange Lock (last ILW dam). Free-flowing/backwater reach
+          to Mississippi confluence. Illinois Waterway uses "Low Operating
+          Level (LOL)" / "Flat Pool Elevation" for pooled reaches, not LWRP.
+          Valley City is below all pools.
+        searched_surfaces:
+          - "USACE MVR Illinois Waterway Navigation Charts"
+          - "Illinois River Gage Sheet"
+          - "USACE rivergages VALI2 station info"
+          
+    - row: 10
+      station_id: "05558300"
+      official_name: "Illinois River near Henry, IL"
+      d2_basin: illinois
+      d2_corridor: "Illinois Waterway"
+      hydraulic_regime: pooled_dam_controlled
+      official_evidence:
+        source: "USGS NWIS + USACE Rock Island District"
+        nwis_url: "https://waterdata.usgs.gov/monitoring-location/USGS-05558300/"
+        rivergages_id: "HNYI2"
+        gage_zero: "425.88 ft NGVD29"
+        flat_pool_elevation: "440.0 ft NGVD29"
+        river_mile: 196.0
+      variant_a_datum:
+        status: NOT_APPLICABLE
+        reason: >-
+          In Peoria Lock pool (controlled). Illinois Waterway is a pooled
+          system using "Flat Pool Elevation" not LWRP. Henry gauge at mile 196
+          is within the Peoria Pool. LWRP concept (97% exceedance discharge)
+          does not apply to dam-controlled pool systems.
+        searched_surfaces:
+          - "USACE MVR Illinois Waterway Navigation Information"
+          - "Illinois River Gage Sheet (flat pool = 440.0 at Henry)"
+          - "USACE rivergages HNYI2 station info"
+
+  variant_a_summary:
+    executable: false
+    gauges_with_lwrp: 6
+    gauges_without_lwrp: 4
+    reason: >-
+      LWRP (Low Water Reference Plane) is a hydraulic datum defined as the 97%
+      exceedance discharge water surface profile. It exists ONLY for free-flowing
+      river reaches. Four gauges (7-10) are in pooled or backwater-affected reaches
+      where LWRP is definitionally not applicable. No amount of research can produce
+      an LWRP for these gauges because the concept does not apply to their hydraulic
+      regime.
+
+  variant_b_summary:
+    executable: true
+    candidate_generation: >-
+      S2 does NOT generate independent candidates from stage readings. Under
+      D8 mode=binding_operational_restriction_only, S2 gauge readings serve only
+      to corroborate S1/S3 documented binding operational restrictions. A stage
+      reading alone, regardless of value, does not trigger an S2 candidate.
+    d8_interpretation: >-
+      §J S2 "programmatic threshold breach detection" is satisfied by detecting
+      when S1/S3 operational restrictions reference specific gauges. The
+      "threshold" is the documented operational restriction itself, not a
+      numeric stage value. This is consistent with D8 mode=binding_operational_
+      restriction_only and class_thresholds=[].
+
+# ============================================================================
+# DECISION B: S4 RADIUS
+# ============================================================================
+
+decision_b_s4_radius:
+  description: "S4 NHC storm proximity radius for export node triggering"
+  
+  options:
+    50_NM:
+      radius_nm: 50
+      interpretation: "Conservative — direct landfalls only"
+      
+    100_NM:
+      radius_nm: 100
+      interpretation: "Standard — includes near-miss disruptions"
+
+  distance_convention:
+    unit: "nautical miles"
+    geodesic: "great-circle distance"
+    calculation: >-
+      Haversine formula on WGS84 ellipsoid between storm center position
+      (lat/lon from HURDAT2 best track) and node coordinates.
+    storm_position_source: "NHC HURDAT2 best track database"
+    storm_position_url: "https://www.nhc.noaa.gov/data/hurdat/"
+    
+  variant_difference: >-
+    50nm and 100nm proposal artifacts are byte-identical except for:
+    (1) proximity_radius_nm value, (2) proximity_radius_interpretation text,
+    (3) trigger_condition text, (4) proposal_id, (5) marker. All 10 node
+    rows are identical between variants.
+
+# ============================================================================
+# EXACT 10 S4 PHYSICAL NODE ROWS WITH OFFICIAL EVIDENCE
+# ============================================================================
+
+s4_nodes_exact_binding:
+  row_count: 10
+  
+  rows:
+    - row: 1
+      node_id: "GULF-01"
+      physical_facility: "South Louisiana Export Region (FGIS centroid)"
+      latitude: 29.9500
+      longitude: -90.0500
+      d2_corridor: "Lower Mississippi River / Gulf Export"
+      fgis_port_region: "MISSISSIPPI_RIVER"
+      official_evidence:
+        source: "USDA FGIS Export Region Definition Tables"
+        url: "https://fgisonline.ams.usda.gov/F_DEC/exportRegionDefinitionTables0801.pdf"
+        definition: "Export port locations on the Mississippi River in Louisiana"
+        
+    - row: 2
+      node_id: "GULF-02"
+      physical_facility: "New Orleans (Carrollton Gage)"
+      latitude: 29.9545
+      longitude: -90.0750
+      d2_corridor: "Lower Mississippi River / Gulf Export"
+      fgis_port_region: "MISSISSIPPI_RIVER"
+      official_evidence:
+        source: "USACE New Orleans District gage 01300"
+        url: "https://rivergages.mvr.usace.army.mil/WaterControl/stationinfo2.cfm?sid=01300"
+        river_mile: 102.8
+        
+    - row: 3
+      node_id: "GULF-03"
+      physical_facility: "Port of Houston / Houston Ship Channel"
+      latitude: 29.7604
+      longitude: -95.3698
+      d2_corridor: "Texas Gulf Export"
+      fgis_port_region: "NORTH_TEXAS"
+      official_evidence:
+        source: "Port of Houston Authority"
+        url: "https://porthouston.com/"
+        fgis_definition: "Houston and points north, plus west of Mississippi River in Louisiana"
+        
+    - row: 4
+      node_id: "GULF-04"
+      physical_facility: "Port of Corpus Christi"
+      latitude: 27.8006
+      longitude: -97.3964
+      d2_corridor: "Texas Gulf Export"
+      fgis_port_region: "SOUTH_TEXAS"
+      official_evidence:
+        source: "Port of Corpus Christi Authority"
+        url: "https://portofcc.com/"
+        fgis_definition: "Geographically south of Houston, Texas on Gulf of Mexico"
+        
+    - row: 5
+      node_id: "GULF-05"
+      physical_facility: "Port of Galveston"
+      latitude: 29.3013
+      longitude: -94.7977
+      d2_corridor: "Texas Gulf Export"
+      fgis_port_region: "NORTH_TEXAS"
+      official_evidence:
+        source: "Port of Galveston"
+        url: "https://portofgalveston.com/"
+        
+    - row: 6
+      node_id: "PNW-01"
+      physical_facility: "Port of Portland, OR"
+      latitude: 45.5152
+      longitude: -122.6784
+      d2_corridor: "Columbia-Snake / PNW Export"
+      fgis_port_region: "COLUMBIA_RIVER"
+      official_evidence:
+        source: "Port of Portland"
+        url: "https://www.portofportland.com/"
+        fgis_definition: "Along Columbia River system in Pacific Northwest"
+        
+    - row: 7
+      node_id: "PNW-02"
+      physical_facility: "Port of Vancouver USA, WA"
+      latitude: 45.6388
+      longitude: -122.6614
+      d2_corridor: "Columbia-Snake / PNW Export"
+      fgis_port_region: "COLUMBIA_RIVER"
+      official_evidence:
+        source: "Port of Vancouver USA"
+        url: "https://www.portvanusa.com/"
+        
+    - row: 8
+      node_id: "PNW-03"
+      physical_facility: "Port of Longview, WA"
+      latitude: 46.1382
+      longitude: -122.9382
+      d2_corridor: "Columbia-Snake / PNW Export"
+      fgis_port_region: "COLUMBIA_RIVER"
+      official_evidence:
+        source: "Port of Longview"
+        url: "https://www.portoflongview.com/"
+        
+    - row: 9
+      node_id: "PNW-04"
+      physical_facility: "Port of Seattle, WA"
+      latitude: 47.6062
+      longitude: -122.3321
+      d2_corridor: "PNW Export"
+      fgis_port_region: "PUGET_SOUND"
+      official_evidence:
+        source: "Port of Seattle"
+        url: "https://www.portseattle.org/"
+        fgis_definition: "Waterways of Puget Sound in Washington"
+        
+    - row: 10
+      node_id: "PNW-05"
+      physical_facility: "Port of Tacoma, WA"
+      latitude: 47.2529
+      longitude: -122.4443
+      d2_corridor: "PNW Export"
+      fgis_port_region: "PUGET_SOUND"
+      official_evidence:
+        source: "Port of Tacoma"
+        url: "https://www.portoftacoma.com/"
+
+# ============================================================================
+# DECISION C: V2 GOVERNANCE AMENDMENT APPROVAL
+# ============================================================================
+
+decision_c_v2_governance:
+  description: "Approve exact v2 governance amendment bound to selected full-config digest"
+  
+  v2_manifest_binding:
+    manifest_path: "config/discovery/prereg_ratification_manifest.yaml"
+    content_update: >-
+      New manifest will include interpretation_digests for S3/S5/S6/S7/S8
+      adapter files plus updated prereg_config_digest for the selected
+      full-config (B50 or B100).
+      
+  prereg_rules_v2_tag:
+    tag_name: "prereg-rules-v2"
+    target_rule: >-
+      Tag MUST point to the exact commit containing the ratified full-config
+      with the selected S2 (B) and S4 (50nm or 100nm) choices materialized
+      in config/discovery/prereg_rules.yaml.
+      
+  v1_historical_verification:
+    behavior: >-
+      prereg-rules-v1 tag at a74e3fb925b80f308407cc2f1508d6aecd868326 remains
+      historically valid for any commit that descends from it with unchanged
+      v1-era prereg_rules.yaml. v1 ratification is not invalidated by v2.
+      
+  supersession_behavior: >-
+    v2 authorization supersedes v1 for sweeps that require the v2-added
+    source families (S2-S8). S1 sweeps remain valid under v1 authorization.
+    v2 execution requires HEAD to descend from v2 tag with matching digests.
+
+# ============================================================================
+# EXECUTABLE BALLOT COMBINATIONS
+# ============================================================================
+
+executable_combinations:
+  note: >-
+    Since S2 Variant A is NON_EXECUTABLE, only B50 and B100 are valid
+    authorization targets. A50 and A100 artifacts exist for audit but
+    their digests are NOT authorization targets.
+
+  B50:
+    s2_choice: B_OPERATIONAL_RESTRICTION_ONLY
+    s4_choice: 50_NM
+    executable: true
+    full_config_description: >-
+      prereg_rules.yaml with S2 gauge registry (B mode), S4 node registry
+      (50nm radius), and S3/S5/S6/S7/S8 source archive entries.
+    full_config_path: "research/episodes/discovery/proposals/FULL_CONFIG_B50.yaml"
+    full_config_sha256: "01c67678db7441d9ad0f76a8d0fa48a3f9ec0d4398d2b2e40740e66cbf2c9a1e"
+    
+  B100:
+    s2_choice: B_OPERATIONAL_RESTRICTION_ONLY
+    s4_choice: 100_NM
+    executable: true
+    full_config_description: >-
+      prereg_rules.yaml with S2 gauge registry (B mode), S4 node registry
+      (100nm radius), and S3/S5/S6/S7/S8 source archive entries.
+    full_config_path: "research/episodes/discovery/proposals/FULL_CONFIG_B100.yaml"
+    full_config_sha256: "9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1"
+
+  A50:
+    s2_choice: A_LWRP_THRESHOLD
+    s4_choice: 50_NM
+    executable: false
+    reason: "S2 Variant A non-executable (LWRP not applicable to 4 gauges)"
+    audit_artifact_path: "research/episodes/discovery/proposals/S2_GAUGE_PROPOSAL_A_LWRP.yaml"
+    
+  A100:
+    s2_choice: A_LWRP_THRESHOLD
+    s4_choice: 100_NM
+    executable: false
+    reason: "S2 Variant A non-executable (LWRP not applicable to 4 gauges)"
+    audit_artifact_path: "research/episodes/discovery/proposals/S2_GAUGE_PROPOSAL_A_LWRP.yaml"
+
+# ============================================================================
+# FUTURE B-RED ACCEPTANCE CONTRACT
+# ============================================================================
+
+b_red_acceptance_contract:
+  description: >-
+    After v2 authorization, these tests must pass for any changes to
+    N3/authorization guard files.
+    
+  guard_files_expected_to_change:
+    - path: "config/discovery/prereg_rules.yaml"
+      change: "Add S2 gauge registry, S4 node registry, S3/S5/S6/S7/S8 source entries"
+    - path: "config/discovery/prereg_ratification_manifest.yaml"
+      change: "Update interpretation_digests with new adapter files, update prereg_config_digest"
+      
+  guard_files_unchanged:
+    - path: "src/grainsys/discovery/governance.py"
+      reason: "N3 authorization logic unchanged; only config/manifest updated"
+      
+  acceptance_tests:
+    v1_historical_verification:
+      test: "assert_sweep_authorized() passes on v1 tag descendant with v1 config"
+      expected: PASS
+      
+    v2_exact_tag_digest_authorization:
+      test: "assert_sweep_authorized() passes on v2 tag descendant with exact v2 config digest"
+      expected: PASS
+      
+    fail_closed_dirty_tree:
+      test: "assert_sweep_authorized() fails if working tree differs from HEAD blob"
+      expected: FAIL_CLOSED
+      
+    fail_closed_wrong_digest:
+      test: "assert_sweep_authorized() fails if live config digest != ratified digest"
+      expected: FAIL_CLOSED
+      
+    fail_closed_wrong_tag:
+      test: "assert_sweep_authorized() fails if HEAD does not descend from required tag"
+      expected: FAIL_CLOSED
+      
+    fail_closed_unbound_path:
+      test: "assert_sweep_authorized() fails if interpretation path not in manifest"
+      expected: FAIL_CLOSED
+
+# ============================================================================
+# S3/S5/S6/S7/S8 AUTHORIZATION STATUS
+# ============================================================================
+
+s3_s8_authorization_status:
+  note: >-
+    S3/S5/S6/S7/S8 adapters exist on main but CANNOT execute before v2
+    authorization because they are not in the v1-ratified source_archives.
+    
+  S3_USCG_MSIB:
+    adapter_exists: true
+    in_v1_source_archives: false
+    can_execute_before_v2: false
+    blocker: "Not in prereg-rules-v1 ratified source_archives"
+    
+  S5_AMS_GTR:
+    adapter_exists: true
+    in_v1_source_archives: false
+    can_execute_before_v2: false
+    blocker: "Not in prereg-rules-v1 ratified source_archives"
+    
+  S6_USACE_LPMS:
+    adapter_exists: true
+    in_v1_source_archives: false
+    can_execute_before_v2: false
+    blocker: "Not in prereg-rules-v1 ratified source_archives"
+    
+  S7_STB_DOCKETS:
+    adapter_exists: true
+    in_v1_source_archives: false
+    can_execute_before_v2: false
+    blocker: "Not in prereg-rules-v1 ratified source_archives"
+    
+  S8_PORT_ADVISORY:
+    adapter_exists: true
+    in_v1_source_archives: false
+    can_execute_before_v2: false
+    blocker: "Not in prereg-rules-v1 ratified source_archives; also requires S4 ratification"
+
+# ============================================================================
+# POST-VOTE PERSISTENCE SEQUENCE
+# ============================================================================
+
+post_vote_sequence:
+  if_b_selected:
+    - step: 1
+      action: "Materialize selected full-config (B50 or B100) into config/discovery/prereg_rules.yaml"
+    - step: 2
+      action: "Build new ratification manifest with updated digests"
+    - step: 3
+      action: "Commit to main branch"
+    - step: 4
+      action: "Create prereg-rules-v2 tag on that commit"
+    - step: 5
+      action: "S2/S3/S4/S5/S6/S7/S8 sweeps authorized on v2 descendants"
+      
+  if_reopen_science_selected:
+    - step: 1
+      action: "S2 execution remains blocked"
+    - step: 2
+      action: "New A+B ratification required to define full-universe threshold rule"
+    - step: 3
+      action: "S4/S3/S5/S6/S7/S8 can proceed to v2 if S2 is decoupled"
+      note: "Requires decision on whether to decouple S2 from v2 or wait"
+
+marker: "M1_FINAL_BALLOT_BINDING_COMPLETE"

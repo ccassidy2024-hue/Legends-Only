@@ -1,0 +1,144 @@
+# ============================================================================
+# M1 AMENDMENT BALLOT - COMPACT A+B APPROVAL TEMPLATE
+# ============================================================================
+#
+# Status: HUMAN_BALLOT_EXACT_READY_V2
+# PR: #42
+# Packet Head: SEE_FINAL_COMMIT_IN_PR42
+#
+# This ballot requires THREE decisions. Execution proceeds immediately after
+# vote if B is selected for Decision A.
+#
+# ============================================================================
+
+ballot_version: "2.0"
+ballot_date: "2026-08-27"
+marker: "M1_AMENDMENT_BALLOT_TEMPLATE_V2"
+
+# ============================================================================
+# DECISION A: S2 NAVIGATION GAUGE INTERPRETATION
+# ============================================================================
+#
+# Variant A (LWRP threshold detection) is NOT EXECUTABLE because LWRP is
+# definitionally inapplicable to 4 of 10 gauges (Ohio River at Cairo/Metropolis,
+# Illinois River at Valley City/Henry) due to their hydraulic regime.
+
+decision_a:
+  title: "S2 Navigation Gauge Interpretation"
+  
+  option_1:
+    value: "REOPEN_SCIENCE"
+    description: >-
+      Reopen science to define a new full-universe threshold rule that covers
+      all 10 gauges with appropriate datums for each hydraulic regime.
+    consequence: >-
+      S2 execution blocked until new threshold rule ratified. Another A+B
+      ratification required before S2 can generate candidates.
+    executable_now: false
+    
+  option_2:
+    value: "USE_B_OPERATIONAL_RESTRICTION_ONLY"
+    description: >-
+      S2 triggers only when S1/S3 documents an operational restriction at a
+      registered gauge. No independent numeric stage-threshold candidates.
+    consequence: >-
+      S2 corroborates S1/S3 restrictions only. Execution proceeds immediately
+      after v2 authorization with selected S4 radius.
+    executable_now: true
+
+  # A+B SELECTION (fill exactly one):
+  selected: _______________  # REOPEN_SCIENCE or USE_B_OPERATIONAL_RESTRICTION_ONLY
+
+# ============================================================================
+# DECISION B: S4 STORM PROXIMITY RADIUS
+# ============================================================================
+
+decision_b:
+  title: "S4 NHC Storm Proximity Radius"
+  
+  option_1:
+    value: "50_NM"
+    description: "Conservative radius — direct landfalls only"
+    full_config_digest: "01c67678db7441d9ad0f76a8d0fa48a3f9ec0d4398d2b2e40740e66cbf2c9a1e"
+    
+  option_2:
+    value: "100_NM"
+    description: "Standard radius — includes near-miss disruptions"
+    full_config_digest: "9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1"
+
+  # A+B SELECTION (fill exactly one):
+  selected: _______________  # 50_NM or 100_NM
+
+# ============================================================================
+# DECISION C: V2 GOVERNANCE AMENDMENT APPROVAL
+# ============================================================================
+
+decision_c:
+  title: "Approve v2 Governance Amendment"
+  
+  description: >-
+    Approve prereg-rules-v2 authorization bound to the selected executable
+    full-config digest. If Decision A selects USE_B_OPERATIONAL_RESTRICTION_ONLY,
+    the full-config digest is determined by Decision B (50nm or 100nm).
+    If Decision A selects REOPEN_SCIENCE, v2 authorization proceeds for
+    S3/S4/S5/S6/S7/S8 but S2 remains blocked pending new threshold ratification.
+    
+  v2_authorization_semantics:
+    - "prereg-rules-v2 tag created at commit with selected full-config"
+    - "v1 remains historically valid for S1-only sweeps"
+    - "v2 descendants with matching digest authorized for S2-S8 sweeps"
+    - "N3 guard fail-closed on wrong-tag, wrong-digest, dirty-tree"
+    
+  # A+B SELECTION:
+  approved: _______________  # YES or NO
+
+# ============================================================================
+# AUTHORIZATION TARGET SUMMARY
+# ============================================================================
+#
+# If Decision A = USE_B and Decision B = 50_NM:
+#   Authorization target: FULL_CONFIG_B50.yaml
+#   SHA256: 01c67678db7441d9ad0f76a8d0fa48a3f9ec0d4398d2b2e40740e66cbf2c9a1e
+#
+# If Decision A = USE_B and Decision B = 100_NM:
+#   Authorization target: FULL_CONFIG_B100.yaml
+#   SHA256: 9e937523d31bc324d9b33628ffd81c78fb74e5141aab2d18174a1677da8ce3c1
+#
+# If Decision A = REOPEN_SCIENCE:
+#   S2 blocked. S3/S4/S5/S6/S7/S8 can proceed with selected S4 radius.
+#   Another threshold ratification required for S2 execution.
+
+# ============================================================================
+# COMPONENT ARTIFACT DIGESTS (for audit)
+# ============================================================================
+
+component_artifacts:
+  S2_GAUGE_PROPOSAL_A_LWRP:
+    path: "research/episodes/discovery/proposals/S2_GAUGE_PROPOSAL_A_LWRP.yaml"
+    sha256: "764baff93f4d306b67857eaf93fd54b39fe1f0ab72f03e01a58caaaa4a55362e"
+    status: NON_EXECUTABLE_AS_DEFINED
+    
+  S2_GAUGE_PROPOSAL_B_OPERATIONAL:
+    path: "research/episodes/discovery/proposals/S2_GAUGE_PROPOSAL_B_OPERATIONAL.yaml"
+    sha256: "20c269d8b00ba8d058b75409480d67eaea7ef63c15b56cb5d98c297f34cc9a64"
+    status: EXECUTABLE
+    
+  S4_NODE_PROPOSAL_50NM:
+    path: "research/episodes/discovery/proposals/S4_NODE_PROPOSAL_50NM.yaml"
+    sha256: "10dfd19fe8b0853bbf000d6d056458d183c9bed6483bad49c4ad4439e062cb99"
+    status: EXECUTABLE
+    
+  S4_NODE_PROPOSAL_100NM:
+    path: "research/episodes/discovery/proposals/S4_NODE_PROPOSAL_100NM.yaml"
+    sha256: "d6879e10b53b61f838c901d6bfcc50765f57bb4445a6cc2ddeb28e2cc312ce50"
+    status: EXECUTABLE
+
+# ============================================================================
+# SIGNATURES
+# ============================================================================
+
+ratification:
+  a_signature: _______________
+  a_date: _______________
+  b_signature: _______________
+  b_date: _______________

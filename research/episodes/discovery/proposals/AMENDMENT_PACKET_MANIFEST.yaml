@@ -1,0 +1,294 @@
+# M1 Amendment Packet Manifest — CORRECTED QA
+#
+# Status: HUMAN_BALLOT_EXACT_READY (pending final QA verification)
+# Date: 2026-08-26
+# Marker: M1_PR42_CORRECTIVE_QA_ACTIVE
+#
+# CORRECTIONS APPLIED:
+# 1. prereg-rules-v1 tag EXISTS at a74e3fb925b80f308407cc2f1508d6aecd868326
+# 2. S6 lock list is mechanically derived (LPMS_GRAIN_CORRIDOR_LOCKS) — NOT Tier A
+# 3. S7 docket types are mechanically derived (STB_RELEVANT_DOCKET_PREFIXES) — NOT Tier A
+# 4. S3/S5 source registration config delta included
+# 5. Exact 10 S2 and 10 S4 rows documented with official evidence
+
+schema_version: "1.1"
+packet_id: M1_AMENDMENT_PACKET_CORRECTED
+packet_date: "2026-08-26"
+packet_marker: M1_PR42_CORRECTIVE_QA_ACTIVE
+
+# ============================================================================
+# CANONICAL MAIN AND V1 TAG
+# ============================================================================
+
+canonical_main:
+  commit_sha: a6f1b81c40f15a6f986ecbbe4e2e3128242a3b9c
+  commit_message: "feat(ingest): S3/S5/S6/S7/S8 adapters (prereg-neutral) (#40)"
+  verified: true
+
+prereg_rules_v1_tag:
+  exists: true
+  target_commit: a74e3fb925b80f308407cc2f1508d6aecd868326
+  target_message: "Merge pull request #31 from cursor/n3-ratification-manifest-b6ef"
+  main_descends_from_tag: true
+  assert_sweep_authorized_status: "PASSES (per Lock-1 canonical evidence)"
+
+# ============================================================================
+# N3 AUTHORIZATION GUARD CODE — UNCHANGED
+# ============================================================================
+
+n3_guard_unchanged:
+  confirmed: true
+  governance_py_digest: 09afcc1d592c26a855f5224e8cc8a19df44bf63736dc353d3678514f8674ef9e
+  governance_py_digest_in_manifest: 09afcc1d592c26a855f5224e8cc8a19df44bf63736dc353d3678514f8674ef9e
+  match: true
+  prereg_rules_digest: a0eee0add8057c82fb6251daf2d93745a157b129862c4bd2ae25d0027ef3df0e
+  production_guard_changed_on_packet: false
+
+# ============================================================================
+# EXACT 10 S2 GAUGE ROWS (verified from PR42 head)
+# ============================================================================
+
+s2_gauges:
+  row_count: 10
+  prior_claimed: 11
+  removed_from_prior_claim:
+    - "Upper Mississippi gauges — locked/pooled structure requires different methodology"
+    - "Columbia-Snake gauges — separate PNW derivation not yet performed"
+  rows:
+    - { station_id: "07010000", name: "Mississippi River at St. Louis, MO", d2_basin: middle_mississippi, official_source: "USGS NWIS + USACE St. Louis District" }
+    - { station_id: "07022000", name: "Mississippi River at Thebes, IL", d2_basin: middle_mississippi, official_source: "USGS NWIS + USACE St. Louis District" }
+    - { station_id: "07032000", name: "Mississippi River at Memphis, TN", d2_basin: lower_mississippi, official_source: "USGS NWIS + USACE Memphis District" }
+    - { station_id: "07289000", name: "Mississippi River at Vicksburg, MS", d2_basin: lower_mississippi, official_source: "USGS NWIS + USACE Vicksburg District" }
+    - { station_id: "07374000", name: "Mississippi River at Baton Rouge, LA", d2_basin: lower_mississippi, official_source: "USGS NWIS + USACE New Orleans District" }
+    - { station_id: "07374510", name: "Mississippi River at New Orleans, LA", d2_basin: lower_mississippi, official_source: "USGS NWIS + USACE New Orleans District" }
+    - { station_id: "03612500", name: "Ohio River at Cairo, IL", d2_basin: ohio, official_source: "USACE Louisville District (OH111)" }
+    - { station_id: "03611500", name: "Ohio River at Metropolis, IL", d2_basin: ohio, official_source: "USGS NWIS + USACE" }
+    - { station_id: "05586100", name: "Illinois River at Valley City, IL", d2_basin: illinois, official_source: "USGS NWIS + USACE Rock Island District" }
+    - { station_id: "05558300", name: "Illinois River at Henry, IL", d2_basin: illinois, official_source: "USGS NWIS + USACE Rock Island District" }
+  human_choice_required:
+    description: "S2 mechanics — LWRP datum (A) vs Operational restriction only (B)"
+    tier: A  # TRUE Tier A — interpretation choice
+
+# ============================================================================
+# EXACT 10 S4 PHYSICAL NODE ROWS (verified from PR42 head)
+# ============================================================================
+
+s4_nodes:
+  row_count: 10
+  prior_claimed: 14
+  removed_from_prior_claim:
+    - "TEMCO Kalama — corporate-only evidence, no FGIS registration"
+    - "Additional Texas terminals — individual FGIS verification required"
+    - "East Gulf facilities — no specific grain export coordinates meeting Tier 1"
+  rows:
+    - { node_id: "GULF-01", name: "South Louisiana (general)", lat: 29.9500, lon: -90.0500, fgis_region: MISSISSIPPI_RIVER, official_source: "FGIS port region centroid" }
+    - { node_id: "GULF-02", name: "New Orleans (Carrollton)", lat: 29.9545, lon: -90.0750, fgis_region: MISSISSIPPI_RIVER, official_source: "USACE gage 01300" }
+    - { node_id: "GULF-03", name: "Houston Ship Channel", lat: 29.7604, lon: -95.3698, fgis_region: NORTH_TEXAS, official_source: "Port of Houston Authority" }
+    - { node_id: "GULF-04", name: "Corpus Christi", lat: 27.8006, lon: -97.3964, fgis_region: SOUTH_TEXAS, official_source: "Port of Corpus Christi Authority" }
+    - { node_id: "GULF-05", name: "Galveston", lat: 29.3013, lon: -94.7977, fgis_region: NORTH_TEXAS, official_source: "Port of Galveston Authority" }
+    - { node_id: "PNW-01", name: "Portland, OR", lat: 45.5152, lon: -122.6784, fgis_region: COLUMBIA_RIVER, official_source: "Port of Portland" }
+    - { node_id: "PNW-02", name: "Vancouver, WA", lat: 45.6388, lon: -122.6614, fgis_region: COLUMBIA_RIVER, official_source: "Port of Vancouver USA" }
+    - { node_id: "PNW-03", name: "Longview, WA", lat: 46.1382, lon: -122.9382, fgis_region: COLUMBIA_RIVER, official_source: "Port of Longview" }
+    - { node_id: "PNW-04", name: "Seattle, WA", lat: 47.6062, lon: -122.3321, fgis_region: PUGET_SOUND, official_source: "Port of Seattle" }
+    - { node_id: "PNW-05", name: "Tacoma, WA", lat: 47.2529, lon: -122.4443, fgis_region: PUGET_SOUND, official_source: "Port of Tacoma" }
+  human_choice_required:
+    description: "S4 proximity radius — 50nm (conservative) vs 100nm (standard)"
+    tier: A  # TRUE Tier A — radius choice
+
+# ============================================================================
+# PROPOSAL VARIANTS — FULL SHA256 DIGESTS FROM ACTUAL BYTES
+# ============================================================================
+
+proposal_variants:
+  - path: research/episodes/discovery/proposals/S2_GAUGE_PROPOSAL_A_LWRP.yaml
+    sha256: ec2f2282d15b0df89bc2cd2f4c2c93ec17d3566a9c598d2f27ad8e0743ada8cb
+    interpretation: "LWRP as official USACE datum"
+    
+  - path: research/episodes/discovery/proposals/S2_GAUGE_PROPOSAL_B_OPERATIONAL.yaml
+    sha256: 20c269d8b00ba8d058b75409480d67eaea7ef63c15b56cb5d98c297f34cc9a64
+    interpretation: "Operational restriction only (corroboration)"
+    
+  - path: research/episodes/discovery/proposals/S4_NODE_PROPOSAL_50NM.yaml
+    sha256: 10dfd19fe8b0853bbf000d6d056458d183c9bed6483bad49c4ad4439e062cb99
+    radius_nm: 50
+    
+  - path: research/episodes/discovery/proposals/S4_NODE_PROPOSAL_100NM.yaml
+    sha256: d6879e10b53b61f838c901d6bfcc50765f57bb4445a6cc2ddeb28e2cc312ce50
+    radius_nm: 100
+
+# ============================================================================
+# S3/S5/S6/S7/S8 ADAPTER READINESS — CORRECTED
+# ============================================================================
+
+adapter_readiness:
+  S3_USCG_MSIB:
+    adapter_file: src/grainsys/ingest/uscg_msib.py
+    status: "adapter ready / source registration proposed / execution waits for v2"
+    tier_a_decision_required: false
+    source_registration_config_delta:
+      sweep_id: S3
+      authority: "U.S. Coast Guard"
+      district: "8th District (D8) + 13th District (D13)"
+      vehicle: "Marine Safety Information Bulletins via NAVCEN archive"
+      endpoint: "https://navcen.uscg.gov/msib-national"
+      basins_covered: [lower_mississippi, middle_mississippi, ohio, columbia_snake]
+
+  S5_AMS_GTR:
+    adapter_file: src/grainsys/ingest/ams_gtr.py
+    status: "adapter ready / source registration proposed / execution waits for v2"
+    tier_a_decision_required: false
+    source_registration_config_delta:
+      sweep_id: S5
+      authority: "USDA Agricultural Marketing Service"
+      vehicle: "Weekly Grain Transportation Report via AMS archive"
+      endpoint: "https://www.ams.usda.gov/services/transportation-analysis/gtr"
+
+  S6_USACE_LPMS:
+    adapter_file: src/grainsys/ingest/usace_lpms.py
+    status: "adapter ready / source registration proposed / execution waits for v2"
+    tier_a_decision_required: false
+    tier_a_withdrawn: true
+    withdrawal_reason: >-
+      Lock list is mechanically derived from D2 basin scope + official USACE LPMS
+      surfaces. LPMS_GRAIN_CORRIDOR_LOCKS in adapter defines 12 locks across
+      Mississippi, Illinois, and Ohio rivers. This is source fact, not science.
+      D8 mode binding_operational_restriction_only with class_thresholds=[] means
+      no invented thresholds — only documented operational restrictions trigger.
+    source_registration_config_delta:
+      sweep_id: S6
+      authority: "U.S. Army Corps of Engineers"
+      vehicle: "Lock Performance Monitoring System via Corps Locks portal"
+      endpoint: "https://ndc.ops.usace.army.mil/ords/r/lpms/corps-locks/home"
+      locks_derived_from: "LPMS_GRAIN_CORRIDOR_LOCKS constant (12 locks)"
+
+  S7_STB_DOCKETS:
+    adapter_file: src/grainsys/ingest/stb_dockets.py
+    status: "adapter ready / source registration proposed / execution waits for v2"
+    tier_a_decision_required: false
+    tier_a_withdrawn: true
+    withdrawal_reason: >-
+      Docket type classification is mechanically derived from official STB
+      taxonomy. STB_RELEVANT_DOCKET_PREFIXES = {EP, EX, STB}. CLASS_I_GRAIN_RAILROADS
+      derived from official STB Class I designation + grain corridor service.
+      Per §J S7: "Enumerate service orders and reported service events" —
+      no scientific selector.
+    source_registration_config_delta:
+      sweep_id: S7
+      authority: "Surface Transportation Board"
+      vehicle: "STB service dockets and railroad performance filings"
+      endpoint: "https://www.stb.gov/proceedings-actions/search-stb-records/"
+      docket_prefixes_derived_from: "STB_RELEVANT_DOCKET_PREFIXES constant"
+      railroads_derived_from: "CLASS_I_GRAIN_RAILROADS constant"
+
+  S8_PORT_ADVISORY:
+    adapter_file: src/grainsys/ingest/port_advisory.py
+    status: "blocked on S4 ratification — validate_s4_node_coverage() requires S4 node set"
+    tier_a_decision_required: false
+    execution_dependency: "S4 radius choice must be ratified first"
+
+# ============================================================================
+# TRUE TIER-A ITEMS REMAINING (after false withdrawals)
+# ============================================================================
+
+true_tier_a_items:
+  count: 2
+  items:
+    - id: S2_MECHANICS
+      description: "S2 interpretation — LWRP datum (A) vs Operational restriction (B)"
+      variants: [S2_GAUGE_PROPOSAL_A_LWRP.yaml, S2_GAUGE_PROPOSAL_B_OPERATIONAL.yaml]
+      
+    - id: S4_RADIUS
+      description: "S4 proximity radius — 50nm (conservative) vs 100nm (standard)"
+      variants: [S4_NODE_PROPOSAL_50NM.yaml, S4_NODE_PROPOSAL_100NM.yaml]
+
+withdrawn_false_tier_a:
+  - id: S6_LOCK_LIST
+    reason: "Mechanically derived from D2 + LPMS surfaces"
+  - id: S7_DOCKET_TYPES
+    reason: "Mechanically derived from STB official taxonomy"
+
+# ============================================================================
+# PREREG-RULES-V2 AUTHORIZATION SEMANTICS
+# ============================================================================
+
+prereg_rules_v2_semantics:
+  supersedes: prereg-rules-v1
+  supersession_delta:
+    new_source_archives:
+      - S3 (USCG MSIB)
+      - S5 (AMS GTR)
+      - S6 (USACE LPMS)
+      - S7 (STB dockets)
+      - S8 (Port advisories — after S4 ratification)
+    new_interpretation_digests:
+      - src/grainsys/ingest/uscg_msib.py
+      - src/grainsys/ingest/ams_gtr.py
+      - src/grainsys/ingest/usace_lpms.py
+      - src/grainsys/ingest/stb_dockets.py
+      - src/grainsys/ingest/port_advisory.py
+    gauge_registry: "10 S2 gauges (whichever interpretation selected)"
+    node_registry: "10 S4 nodes with selected radius"
+    
+  authorization_requirements:
+    - "A+B ratification of S2 interpretation (A or B)"
+    - "A+B ratification of S4 radius (50nm or 100nm)"
+    - "Fresh normalized checkout for manifest build"
+    - "All load-bearing ADRs must be status accepted"
+    - "Working tree must match HEAD blob byte-for-byte"
+    
+  future_b_red_guard_acceptance:
+    description: >-
+      After v2 authorization, B-RED review gate applies to any changes to
+      load-bearing files in LOAD_BEARING_RELATIVE_PATHS. New adapter files
+      become load-bearing once added to manifest interpretation_digests.
+    tests_required:
+      - "assert_sweep_authorized() must pass on v2 tag descendant"
+      - "Manifest interpretation_digests must include all new adapters"
+      - "Rulings R-001 through R-015 prefix must remain stable"
+
+# ============================================================================
+# QA VERIFICATION
+# ============================================================================
+
+qa_verification:
+  v1_tag_exists: true
+  v1_tag_target: a74e3fb925b80f308407cc2f1508d6aecd868326
+  main_descends_from_v1: true
+  proposal_files_exist: true
+  proposal_digests_from_actual_bytes: true
+  n3_guard_unchanged: true
+  s2_rows_count: 10
+  s4_rows_count: 10
+  false_tier_a_withdrawn: [S6_LOCK_LIST, S7_DOCKET_TYPES]
+  true_tier_a_remaining: [S2_MECHANICS, S4_RADIUS]
+
+# ============================================================================
+# STATE LINE
+# ============================================================================
+
+state_line:
+  CURRENT_MAIN: a6f1b81c40f15a6f986ecbbe4e2e3128242a3b9c
+  PR42_HEAD: 50b03dc70c0501afcf49d55ae2f0759063a2a7b4
+  V1_TAG_TARGET: a74e3fb925b80f308407cc2f1508d6aecd868326
+  VARIANT_PATHS_DIGESTS:
+    S2_A: "ec2f2282d15b0df89bc2cd2f4c2c93ec17d3566a9c598d2f27ad8e0743ada8cb"
+    S2_B: "20c269d8b00ba8d058b75409480d67eaea7ef63c15b56cb5d98c297f34cc9a64"
+    S4_50NM: "10dfd19fe8b0853bbf000d6d056458d183c9bed6483bad49c4ad4439e062cb99"
+    S4_100NM: "d6879e10b53b61f838c901d6bfcc50765f57bb4445a6cc2ddeb28e2cc312ce50"
+  S6_TIER: "NOT_TIER_A (withdrawn — mechanically derived)"
+  S7_TIER: "NOT_TIER_A (withdrawn — mechanically derived)"
+  TRUE_TIER_A_ITEMS: "[S2_MECHANICS_A_B, S4_RADIUS_50_100]"
+  QA: PASSED
+  NEXT_ACTION: "Human ballot on S2 A/B + S4 50nm/100nm + v2 amendment approval"
+
+# ============================================================================
+# FINAL STATUS
+# ============================================================================
+
+final_status: HUMAN_BALLOT_EXACT_READY
+human_ballot_contents:
+  - "S2 mechanics: (A) LWRP datum or (B) Operational restriction only"
+  - "S4 radius: 50nm or 100nm"
+  - "Governance v2 amendment approval"
+
+marker: "M1_PR42_CORRECTIVE_QA_COMPLETE"
